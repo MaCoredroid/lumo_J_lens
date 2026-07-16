@@ -1,0 +1,8 @@
+bitsandbytes==0.49.2
+datasets==5.0.0
+huggingface-hub==1.23.0
+jlens @ git+https://github.com/anthropics/jacobian-lens.git@581d398613e5602a5af361e1c34d3a92ea82ba8e
+numpy==2.5.1
+safetensors==0.8.0
+torch==2.11.0
+transformers==5.12.1

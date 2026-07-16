@@ -23,6 +23,7 @@ from download_jlens import (
     LENS_REVISION,
     verify_checkpoint,
     verify_file,
+    verify_local_fit_artifact,
 )
 
 MODEL_REPO = "nvidia/Qwen3.6-27B-NVFP4"
@@ -424,6 +425,22 @@ def _load_prompts(args: argparse.Namespace) -> list[dict[str, str]]:
     return [{"id": "currency_boot", "text": DEFAULT_PROMPT}]
 
 
+def lens_artifact_mode(args: argparse.Namespace) -> str:
+    """Classify lens CLI arguments without inspecting artifact bytes."""
+    has_path = args.lens_path is not None
+    has_sha256 = args.lens_sha256 is not None
+    has_provenance = args.lens_provenance is not None
+    if has_sha256 != has_provenance:
+        raise ValueError(
+            "local lenses require both --lens-sha256 and --lens-provenance"
+        )
+    if (has_sha256 or has_provenance) and not has_path:
+        raise ValueError("local lens metadata requires --lens-path")
+    if has_path and has_sha256 and has_provenance:
+        return "local_fit"
+    return "public"
+
+
 def _package_versions() -> dict[str, str]:
     packages = ["vllm", "torch", "transformers", "huggingface-hub", "triton"]
     return {name: importlib.metadata.version(name) for name in packages}
@@ -453,7 +470,20 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--positions", default="-1", help="comma list of token positions")
     parser.add_argument("--top-k", type=int, default=10)
     parser.add_argument("--output", type=Path)
-    parser.add_argument("--lens-path", type=Path)
+    parser.add_argument(
+        "--lens-path",
+        type=Path,
+        help="pinned public artifact override, or a local fit with both metadata flags",
+    )
+    parser.add_argument(
+        "--lens-sha256",
+        help="required expected SHA-256 when --lens-path is a local fitted lens",
+    )
+    parser.add_argument(
+        "--lens-provenance",
+        type=Path,
+        help="required completed fit provenance when --lens-path is a local fitted lens",
+    )
     parser.add_argument("--max-model-len", type=int, default=256)
     parser.add_argument("--gpu-memory-utilization", type=float, default=0.82)
     return parser
@@ -467,6 +497,7 @@ def main() -> int:
         raise ValueError("--top-k must be in 1..100")
     if not 0.70 <= args.gpu_memory_utilization <= 0.90:
         raise ValueError("--gpu-memory-utilization must be in 0.70..0.90")
+    lens_mode = lens_artifact_mode(args)
 
     started_at = datetime.now(timezone.utc)
     started = time.perf_counter()
@@ -476,6 +507,39 @@ def main() -> int:
 
     from huggingface_hub import hf_hub_download, snapshot_download
 
+    if lens_mode == "local_fit":
+        lens_path = args.lens_path.resolve()
+        lens_record = verify_local_fit_artifact(
+            lens_path,
+            expected_sha256=args.lens_sha256,
+            provenance_path=args.lens_provenance.resolve(),
+            check_finite=True,
+        )
+        lens_application = (
+            f"{lens_record['fit_quantization']} fitted lens applied to "
+            "pinned NVIDIA NVFP4/FP8 residuals"
+        )
+    else:
+        if args.lens_path:
+            lens_path = args.lens_path.resolve()
+        else:
+            lens_path = Path(
+                hf_hub_download(
+                    LENS_REPO,
+                    LENS_FILENAME,
+                    revision=LENS_REVISION,
+                    local_files_only=True,
+                )
+            )
+        lens_record = {
+            "repo_id": LENS_REPO,
+            "revision": LENS_REVISION,
+            "filename": LENS_FILENAME,
+            **verify_file(lens_path),
+            **verify_checkpoint(lens_path, check_finite=False),
+        }
+        lens_application = "BF16-fitted lens applied to NVFP4/FP8 residuals"
+
     model_path = Path(
         snapshot_download(
             MODEL_REPO,
@@ -483,20 +547,6 @@ def main() -> int:
             local_files_only=True,
         )
     )
-    if args.lens_path:
-        lens_path = args.lens_path.resolve()
-    else:
-        lens_path = Path(
-            hf_hub_download(
-                LENS_REPO,
-                LENS_FILENAME,
-                revision=LENS_REVISION,
-                local_files_only=True,
-            )
-        )
-
-    lens_file = verify_file(lens_path)
-    lens_metadata = verify_checkpoint(lens_path, check_finite=False)
     model_config_path = model_path / "config.json"
     model_index_path = model_path / "model.safetensors.index.json"
     model_config_sha256 = sha256_file(model_config_path)
@@ -668,12 +718,8 @@ def main() -> int:
             "model_info": model_info,
         },
         "lens": {
-            "repo_id": LENS_REPO,
-            "revision": LENS_REVISION,
-            "filename": LENS_FILENAME,
-            **lens_file,
-            **lens_metadata,
-            "application": "BF16-fitted lens applied to NVFP4/FP8 residuals",
+            **lens_record,
+            "application": lens_application,
         },
         "runtime": {
             "mtp_enabled": False,

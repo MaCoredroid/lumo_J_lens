@@ -78,6 +78,51 @@ class JacobianLensHelpersTest(unittest.TestCase):
             "Fact: The currency used in the country shaped like a boot is",
         )
 
+    def test_default_and_path_only_lenses_use_public_verifier(self):
+        parser = MODULE.build_parser()
+        self.assertEqual(
+            MODULE.lens_artifact_mode(parser.parse_args([])), "public"
+        )
+        self.assertEqual(
+            MODULE.lens_artifact_mode(
+                parser.parse_args(["--lens-path", "public.pt"])
+            ),
+            "public",
+        )
+
+    def test_local_lens_requires_path_hash_and_provenance(self):
+        parser = MODULE.build_parser()
+        local = parser.parse_args(
+            [
+                "--lens-path",
+                "local.pt",
+                "--lens-sha256",
+                "a" * 64,
+                "--lens-provenance",
+                "local.pt.provenance.json",
+            ]
+        )
+        self.assertEqual(MODULE.lens_artifact_mode(local), "local_fit")
+
+        incomplete = (
+            ["--lens-path", "local.pt", "--lens-sha256", "a" * 64],
+            [
+                "--lens-path",
+                "local.pt",
+                "--lens-provenance",
+                "local.pt.provenance.json",
+            ],
+            [
+                "--lens-sha256",
+                "a" * 64,
+                "--lens-provenance",
+                "local.pt.provenance.json",
+            ],
+        )
+        for arguments in incomplete:
+            with self.subTest(arguments=arguments), self.assertRaises(ValueError):
+                MODULE.lens_artifact_mode(parser.parse_args(arguments))
+
 
 if __name__ == "__main__":
     unittest.main()
