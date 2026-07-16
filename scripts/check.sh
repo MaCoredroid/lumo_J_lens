@@ -16,6 +16,7 @@ done
   "$ROOT/scripts/run_jlens_nvfp4.py" \
   "$ROOT/scripts/check_endpoint.py" \
   "$ROOT/scripts/check_jlens_result.py" \
+  "$ROOT/scripts/check_jlens_nf4_result.py" \
   "$ROOT/scripts/check_validation.py" \
   "$ROOT/scripts/materialize_verified_dataset.py" \
   "$ROOT/scripts/resolve_swe_image.py" \
@@ -24,15 +25,19 @@ done
   "$ROOT/tests/test_proxy_context_clamp.py" \
   "$ROOT/tests/test_check_endpoint.py" \
   "$ROOT/tests/test_runner_safety.py" \
-  "$ROOT/tests/test_jlens_nvfp4.py"
+  "$ROOT/tests/test_jlens_nvfp4.py" \
+  "$ROOT/tests/test_check_jlens_nf4_result.py"
 "$PYTHON_BIN" "$ROOT/tests/test_proxy_envelope.py"
 "$PYTHON_BIN" -m unittest discover -s "$ROOT/tests" -p 'test_*.py'
 "$PYTHON_BIN" "$ROOT/scripts/check_validation.py"
 "$PYTHON_BIN" "$ROOT/scripts/check_jlens_result.py"
+"$PYTHON_BIN" "$ROOT/scripts/check_jlens_nf4_result.py"
 (
   cd "$ROOT"
   sha256sum --check validation/jlens-nvfp4-2026-07-16.sha256
   sha256sum --check validation/jlens-source-manifest.sha256
+  sha256sum --check validation/jlens-nf4-evidence.sha256
+  sha256sum --check validation/jlens-nf4-source-manifest.sha256
 )
 
 if [[ -x "$ROOT/node_modules/.bin/qwen" ]]; then

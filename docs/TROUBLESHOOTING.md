@@ -141,6 +141,65 @@ Both virtual environments are exact syncs, not minimum-version installs. Rerun
 the recorded versions. `scripts/check.sh` fails if either environment's sorted
 freeze differs or `uv pip check` reports an incompatibility.
 
+## NF4 loader fails before model construction because Accelerate is missing
+
+Symptom: `fit_jlens_nf4.py` writes initial state, but `model_execution` remains
+null and Transformers stops while processing `device_map={"": 0}` or
+`low_cpu_mem_usage=True`. The abandoned first diagnostic records:
+
+```json
+{"versions": {"accelerate": "missing"}}
+```
+
+Cause: Transformers' quantized single-device loader delegates placement to
+Accelerate. The initial fit environment omitted it.
+
+Fix:
+
+```bash
+scripts/setup_fit.sh
+.venv-fit/bin/python -c 'import accelerate; print(accelerate.__version__)'
+scripts/check_fit.sh
+```
+
+The pinned version is `accelerate==1.14.0`. Start the retry with a fresh
+`--work-dir`; do not resume the pre-fix state. Fit resume intentionally binds
+the package contract, so installing Accelerate changes the runtime identity.
+
+## `jlens.fit` cannot backpropagate through the NVIDIA NVFP4 checkpoint
+
+Cause: the vLLM ModelOpt/Marlin NVFP4 and FP8 deployment kernels expose the
+serving forward but not the residual activation backward required by the
+Anthropic estimator. FP8 activation rounding also needs an explicitly declared
+surrogate derivative. Disabling MTP does not change this.
+
+Current resolution: fit against the pinned BF16 source checkpoint quantized at
+load time to bitsandbytes NF4, freeze all weights, and force the ordinary
+differentiable PyTorch GDN path. Use `scripts/setup_fit.sh` and
+`scripts/fit_jlens_nf4.py`. Label the result as an NF4 fit. Native fitting
+through `nvidia/Qwen3.6-27B-NVFP4` remains unreproduced; applying an NF4-fitted
+lens to NVFP4 activations is cross-quantization, not a fix for the missing
+native backward.
+
+## Strict NVFP4 adapter certificate fails on held-out prompts
+
+The four-prompt held-out run completed readout, but returned status `failed`.
+Rows 3, 18, and 49 had full-logit max error `0.125`, above the `0.0625` gate;
+row 42 was exactly at the allowed maximum. All logit RMS errors were below
+`0.01`, and all greedy top-1 checks passed. Row 18 also had final-norm max
+error `0.25 > 0.125` and a nonmatching top-5 prefix.
+
+This is not specific to the local NF4 lens. Repeating the identical prompts
+with the public lens produced the same reconstruction errors because adapter
+parity is evaluated before applying a lens matrix. Do not weaken the gates or
+mark the local cross-application certified. Preserve both failed records:
+
+- `validation/jlens-nf4-on-nvfp4-2026-07-16.json`
+- `validation/jlens-public-on-nvfp4-heldout-2026-07-16.json`
+
+The original two-prompt public-lens baseline is a distinct passing regression,
+not evidence that every prompt satisfies the adapter's strict max-error bound.
+
 ## Scorer has no report
 
 Confirm:

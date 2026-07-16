@@ -3,8 +3,9 @@
 Reproducible serving, evaluation, and Jacobian Lens inspection for
 `nvidia/Qwen3.6-27B-NVFP4` on one RTX 5090. The serving path uses native MTP
 speculative decoding, GDN-aware prefix caching, Qwen Code, and the official
-SWE-bench Verified container runtime. The lens path reads all 63 fitted source
-layers through the same packed NVFP4/FP8 target model.
+SWE-bench Verified container runtime. The public and locally fitted lens paths
+read all 63 source layers through the packed NVFP4/FP8 target model for
+forward-only inspection. A separate differentiable NF4 path fits a new lens.
 
 This repository is the cleaned, standalone extraction of a July 8, 2026 Claude
 Code setup session. It includes the fixes found during that session, not just
@@ -18,7 +19,9 @@ the final command. On July 15, 2026 the extracted stack was rerun end to end:
 See [VALIDATION.md](VALIDATION.md) for the evidence and [SPEC.md](SPEC.md) for
 the serving/SWE setup rationale. See
 [docs/JLENS_NVFP4_REPRODUCTION.md](docs/JLENS_NVFP4_REPRODUCTION.md) for the
-Jacobian Lens specification and measured experiment.
+public-lens NVFP4 application and
+[docs/JLENS_NF4_EXPERIMENT.md](docs/JLENS_NF4_EXPERIMENT.md) for the fresh-fit
+experiment.
 
 ## Requirements
 
@@ -81,14 +84,64 @@ scripts/run_jlens_nvfp4.sh \
   --output validation/jlens-nvfp4-local.json
 ```
 
-The July 16 reference run passed the independent final-residual parity gate for
-both prompts, showed the expected `Italy`/`Italian` to `euro` layer progression,
-reserved 27.60 GiB peak CUDA memory, and completed its measured artifact-gate
-through readout lifecycle in 13.97 seconds. It uses the
+The recertified July 16 reference run passed the independent final-residual
+parity gate for both prompts, showed the expected `Italy`/`Italian` to `euro`
+layer progression, allocated/reserved 25.62/27.60 GiB peak CUDA memory, loaded
+the model in 8.846 seconds, and completed its measured artifact-gate through
+readout lifecycle in 16.300 seconds. It uses the
 exact NVIDIA ModelOpt checkpoint but disables MTP for eager residual capture;
 MTP is a separate draft-token serving optimization, not part of the 64-layer
 target-model lens. This is application of a BF16-fitted lens to quantized
 activations, not an NVFP4 refit.
+
+### Fresh NF4 fit
+
+A new exact, dense `n=10` lens was fitted successfully on the RTX 5090 against
+`Qwen/Qwen3.6-27B` revision `6a9e13bd...`, quantized at load time to
+bitsandbytes NF4 with double quantization and BF16 compute. The run used the
+Anthropic future-summed VJP estimator, source layers `0..62`, target block 63,
+128-token prompts, `skip_first=16`, and cotangent batches of 32. It completed
+in 6,367.6 estimator seconds and 6,496.5 cumulative in-process invocation
+seconds (1:48:16.5), with 23.25/24.20 GiB peak CUDA allocated/reserved. The
+start/completion timestamps span 6,566.9 seconds including the deliberate
+pause before resume.
+
+The measured run deliberately stopped after its first committed prompt and
+then exercised deterministic resume:
+
+```bash
+scripts/setup_fit.sh
+scripts/check_fit.sh
+
+.venv-fit/bin/python scripts/fit_jlens_nf4.py \
+  --work-dir .cache/jlens-nf4-production-n10-c32 \
+  --output .cache/Qwen3.6-27B-jlens-nf4-n10-fp32.pt \
+  --provenance .cache/Qwen3.6-27B-jlens-nf4-n10-fp32.provenance.json \
+  --max-prompts 1 --output-dtype float32
+
+.venv-fit/bin/python scripts/fit_jlens_nf4.py \
+  --work-dir .cache/jlens-nf4-production-n10-c32 \
+  --output .cache/Qwen3.6-27B-jlens-nf4-n10-fp32.pt \
+  --provenance .cache/Qwen3.6-27B-jlens-nf4-n10-fp32.provenance.json \
+  --resume --output-dtype float32
+```
+
+The 6.152 GiB FP32 artifact has SHA-256
+`54d95f9626d8d120d56c161cfc8943ec76fd77172a9c0c54d5d913a5a639424f`;
+all 63 `[5120, 5120]` matrices passed the finite, shape, metadata, and provenance
+gates. Held-out NF4 evaluation also completed. The local lens was then applied
+to NVFP4 residuals, but that paired strict adapter certificate **failed**, as
+did the public lens on the same four prompts: three full-logit max errors were
+`0.125`, above the `0.0625` limit. All full-logit RMS checks and all greedy
+top-1 checks passed; row 18 additionally failed the final-norm max and top-5
+prefix gates. Because the adapter failures are identical with either lens,
+they do not diagnose lens quality, but they do prevent certification of this
+cross-quantization application.
+
+Native fitting through the NVIDIA packed NVFP4/FP8 checkpoint remains
+**unreproduced**. The successful result is an NF4 fit, not an NVFP4 fit. Exact
+evidence and interpretation are in [VALIDATION.md](VALIDATION.md) and the
+[NF4 experiment report](docs/JLENS_NF4_EXPERIMENT.md).
 
 ## Manual Lifecycle
 
@@ -137,6 +190,9 @@ only Git-tracked files after reviewing `git status` and `git ls-files`.
 - `scripts/download_jlens.py`: immutable 3.3 GB lens download and tensor gate
 - `scripts/run_jlens_nvfp4.sh`: CUDA environment and offline lens launcher
 - `scripts/run_jlens_nvfp4.py`: vLLM residual adapter and all-layer readout
+- `scripts/fit_jlens_nf4.py`: resumable exact dense NF4 fitter
+- `scripts/evaluate_jlens_nf4.py`: held-out NF4 local/public/logit evaluation
+- `scripts/compare_jlens_artifacts.py`: dense local/public matrix comparison
 - `scripts/qwen_code_proxy.py`: thinking/envelope injection and context-fit retry
 - `scripts/run_swe_verified.py`: Qwen Code plus official-container episode runner
 - `scripts/score_verified.sh`: official SWE-bench scoring
@@ -144,6 +200,9 @@ only Git-tracked files after reviewing `git status` and `git ls-files`.
 - `configs/swe_image_digests.json`: certified task-image digest map
 - `validation/`: exact package freezes and sanitized certified-run evidence
 - `validation/jlens-nvfp4-2026-07-16.json`: complete lens experiment output
+- `validation/jlens-nf4-fit-provenance-2026-07-16.json`: completed `n=10` fit certificate
+- `validation/jlens-nf4-evidence.sha256`: hashes for the fresh-fit evidence set
+- `validation/jlens-nf4-source-manifest.sha256`: hashes for fit/evaluation sources
 - `validation/jlens-source-manifest.sha256`: lens runner/evidence source tie
 - `validation/runtime-source-manifest.sha256`: hashes for the certified runtime
 - `docs/SESSION_RECONSTRUCTION.md`: source-session and commit chronology

@@ -4,6 +4,40 @@ This document defines what counts as fitting a new Jacobian Lens for
 Qwen3.6-27B on this host. Applying the public BF16-fitted lens to NVFP4
 activations does not satisfy this contract.
 
+## Measured implementation status
+
+On July 16, 2026, this contract was satisfied at the **minimum usable new
+lens** level with a differentiable bitsandbytes NF4 forward:
+
+- Model: `Qwen/Qwen3.6-27B` at revision
+  `6a9e13bd6fc8f0983b9b99948120bc37f49c13e9`.
+- Quantization: 496 NF4 linears, double quantization, BF16 compute, 64-element
+  blocks, and 256-element nested blocks.
+- Estimator: exact Anthropic future-summed VJP, ten 128-token prompts,
+  `skip_first=16`, cotangent batch 32, source layers `0..62`, target block 63,
+  and all 5,120 rows.
+- Result: 63 finite FP32 `[5120,5120]` matrices in a
+  6,606,048,039-byte artifact with SHA-256
+  `54d95f9626d8d120d56c161cfc8943ec76fd77172a9c0c54d5d913a5a639424f`.
+- Time: 6,367.555 estimator seconds and 6,496.513 cumulative in-process
+  invocation seconds (1:48:16.5). The timestamps span 6,566.933 seconds,
+  including the deliberate pause between a one-prompt stop and nine-prompt
+  resume.
+- Peak CUDA memory: 23.252 GiB allocated and 24.201 GiB reserved.
+
+The complete certificate is
+[`validation/jlens-nf4-fit-provenance-2026-07-16.json`](../validation/jlens-nf4-fit-provenance-2026-07-16.json),
+and the independent artifact record is
+[`validation/jlens-nf4-artifact-verification-2026-07-16.json`](../validation/jlens-nf4-artifact-verification-2026-07-16.json).
+The full procedure and evaluation are in
+[`JLENS_NF4_EXPERIMENT.md`](JLENS_NF4_EXPERIMENT.md).
+
+This result does **not** satisfy the strict NVFP4 fit contract below. Native
+fitting through `nvidia/Qwen3.6-27B-NVFP4` remains unreproduced. The local NF4
+lens was cross-applied to that checkpoint, but its strict paired adapter
+certificate failed; the public-lens control failed with the same adapter
+errors. Therefore the cross-application is also not certified.
+
 ## Reference estimator
 
 The normative implementation is `anthropics/jacobian-lens` at commit
@@ -87,6 +121,13 @@ Transformers' quantized single-device loader uses `device_map` and therefore
 also requires the pinned Accelerate runtime. The certified fit environment
 uses `accelerate==1.14.0`; omitting it fails before model construction.
 
+That failure occurred in the first `C=4` diagnostic attempt. Its state records
+`"accelerate": "missing"`, no `model_execution` record, and no committed
+work. Running `scripts/setup_fit.sh` installed the pinned
+`accelerate==1.14.0`; the diagnostic was then restarted in a fresh work
+directory and completed. A stale pre-fix work directory must not be resumed,
+because the resume contract intentionally binds package versions.
+
 This produces a lens fitted to an NF4 forward. It is a valid reproduction of
 the fitting method on a differentiable 4-bit Qwen3.6 model, but applying that
 lens to `nvidia/Qwen3.6-27B-NVFP4` is still cross-quantization. Do not label it
@@ -151,8 +192,9 @@ For `d_model=5120`:
   performs 5,120. The leading backward FLOPs are similar, but the lower batch
   substantially reduces peak activation and returned-gradient memory. The
   production contract on this host uses `dim_batch=32`: its real 27B
-  diagnostic reserved 24.16 GiB and matched sequential VJPs exactly for 32
-  rows at both source layers 61 and 62.
+  diagnostic allocated/reserved 23.21/24.16 GiB and matched sequential VJPs
+  exactly for 32 rows at both source layers 61 and 62. The `C=4`, `C=8`, and
+  `C=32` diagnostics completed in approximately 23.6, 24.5, and 28.7 seconds.
 
 The upstream in-memory accumulator can simultaneously retain the running
 sum, the current prompt matrices, and the final mean. That approaches 18.5
@@ -261,6 +303,17 @@ result. Kernel equivalence, estimator completeness, artifact provenance, and
 held-out behavior are the pass/fail gates; public-lens similarity is a
 reported scientific result. The frozen currency and France prompts remain
 useful regressions, but two semantic examples alone do not validate a fit.
+
+The completed `n=10` artifact measured global Frobenius cosine `0.750216`,
+mean per-layer cosine `0.820655`, and global relative Frobenius difference
+`0.865690` against the public `n=1000` lens. Held-out NF4 evaluation completed
+over all 63 layers and 16 observations per layer. When cross-applied to NVFP4,
+three of four prompts exceeded the strict full-logit max threshold
+(`0.125 > 0.0625`), although every full-logit RMS and greedy top-1 check
+passed. One prompt also failed final-norm max and top-5 prefix. The public lens
+control reproduced those exact adapter errors, so this failure does not reject
+the NF4 fitting method, but it does reject certification of the NVFP4
+cross-application.
 
 ## Sketches and low-rank methods
 

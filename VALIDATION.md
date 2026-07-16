@@ -1,5 +1,93 @@
 # Validation
 
+## Jacobian Lens Fit And Transfer
+
+Date: 2026-07-16 (America/Los_Angeles)
+
+The fresh-fit result is a **completed exact dense NF4 fit**, not a native
+NVFP4 fit. Native fitting through the packed NVIDIA ModelOpt NVFP4/FP8
+checkpoint remains **unreproduced**.
+
+| Claim | Result | Evidence |
+|---|---|---|
+| Real-model batched-VJP diagnostics (`C=4,8,32`) | PASS; exact equality to sequential autograd on source layers 61/62 | [`c4`](validation/jlens-nf4-diagnostic-c4-2026-07-16.json), [`c8`](validation/jlens-nf4-diagnostic-c8-2026-07-16.json), [`c32`](validation/jlens-nf4-diagnostic-c32-2026-07-16.json) |
+| Exact `n=10` NF4 fit, layers `0..62` to target 63 | PASS; status `completed`, `complete=true` | [`fit provenance`](validation/jlens-nf4-fit-provenance-2026-07-16.json) |
+| Published local artifact | PASS; 63 finite FP32 `[5120,5120]` matrices | [`artifact verification`](validation/jlens-nf4-artifact-verification-2026-07-16.json) |
+| Held-out NF4 readout evaluation | COMPLETED; four prompts, four positions, all 63 layers | [`evaluation`](validation/jlens-nf4-eval-2026-07-16.json) |
+| Dense local/public matrix comparison | REPORTED; no post-hoc similarity threshold | [`comparison`](validation/jlens-nf4-vs-public-2026-07-16.json) |
+| Local NF4 lens applied to NVFP4, strict paired adapter gate | **FAIL**; cross-application is not certified | [`local lens run`](validation/jlens-nf4-on-nvfp4-2026-07-16.json) |
+| Public lens on the same four NVFP4 prompts, control gate | **FAIL** with the same adapter errors | [`public control`](validation/jlens-public-on-nvfp4-heldout-2026-07-16.json) |
+| Public lens on the original two semantic prompts | PASS after recertification | [`public baseline`](validation/jlens-nvfp4-2026-07-16.json) |
+
+The fit used `Qwen/Qwen3.6-27B` revision `6a9e13bd...`, 496
+bitsandbytes NF4 linears, double quantization, BF16 compute, a 128-token
+sequence, `skip_first=16`, cotangent batch 32, and the full 5,120 rows for all
+63 source matrices. The estimator took 6,367.555 seconds; cumulative
+in-process invocation time was 6,496.513 seconds (1:48:16.5). The timestamps
+span 6,566.933 seconds including the pause before resume. Peak CUDA
+allocation/reservation was 23.252/24.201 GiB. The resulting 6,606,048,039-byte
+artifact has SHA-256
+`54d95f9626d8d120d56c161cfc8943ec76fd77172a9c0c54d5d913a5a639424f`.
+
+The measured fit commands were:
+
+```bash
+scripts/setup_fit.sh
+scripts/check_fit.sh
+
+.venv-fit/bin/python scripts/fit_jlens_nf4.py \
+  --work-dir .cache/jlens-nf4-production-n10-c32 \
+  --output .cache/Qwen3.6-27B-jlens-nf4-n10-fp32.pt \
+  --provenance .cache/Qwen3.6-27B-jlens-nf4-n10-fp32.provenance.json \
+  --max-prompts 1 --output-dtype float32
+
+.venv-fit/bin/python scripts/fit_jlens_nf4.py \
+  --work-dir .cache/jlens-nf4-production-n10-c32 \
+  --output .cache/Qwen3.6-27B-jlens-nf4-n10-fp32.pt \
+  --provenance .cache/Qwen3.6-27B-jlens-nf4-n10-fp32.provenance.json \
+  --resume --output-dtype float32
+```
+
+The first invocation committed one prompt in 657.335 seconds and stopped by
+contract. The resumed invocation completed the other nine in 5,839.178
+seconds. Held-out NF4 evaluation then completed in 15.363 seconds and matched
+the fit's aggregate NF4 weight hash exactly. The dense comparison with the
+public `n=1000` BF16 lens measured global Frobenius cosine `0.750216`, mean
+per-layer cosine `0.820655`, and global relative Frobenius difference
+`0.865690`; these are descriptive measurements, not equivalence gates.
+
+The local artifact was successfully loaded and read through every NVFP4 layer,
+but the strict certificate ended with status `failed` after 33.328 seconds.
+On Wikitext validation rows 3, 18, and 49, full-logit max error was `0.125`,
+above the `0.0625` limit; row 42 was exactly at the limit. All four full-logit
+RMS errors were below `0.01`, and all four reconstructed top-1 tokens matched
+greedy generation. Row 18 also exceeded the final-norm max limit
+(`0.25 > 0.125`) and missed the exact top-5 prefix. Repeating the run with the
+public lens produced the identical reconstruction errors, demonstrating that
+this strict failure is in the residual adapter check rather than the fitted
+lens. It does not make the local NVFP4 cross-application certified.
+
+As a descriptive cross-model readout comparison over the same 1,008
+layer/position observations, local-lens NF4 versus NVFP4 outputs averaged
+`0.769841` top-1 agreement, `0.816468` top-5 overlap, and `0.974066` Spearman
+target-rank correlation. The public-lens control measured `0.755952`,
+`0.818452`, and `0.979986`. These measurements do not override the failed
+adapter certificate.
+
+The original two-prompt public-lens baseline remains a separate passing run.
+It was recertified in 16.300 seconds, including an 8.846-second model load,
+with 25.618/27.596 GiB peak CUDA allocated/reserved. Both prompts had full-logit
+max error `0.0625` at the allowed boundary, RMS errors `0.008794` and
+`0.008464`, exact top-5 prefixes, and greedy top-1 agreement.
+
+The detailed method, commands, result interpretation, and limitations are in
+[`docs/JLENS_NF4_EXPERIMENT.md`](docs/JLENS_NF4_EXPERIMENT.md). Evidence-file
+hashes are pinned in
+[`validation/jlens-nf4-evidence.sha256`](validation/jlens-nf4-evidence.sha256).
+The corresponding fit, evaluation, runner, checker, test, contract, and freeze
+files are pinned in
+[`validation/jlens-nf4-source-manifest.sha256`](validation/jlens-nf4-source-manifest.sha256).
+
 ## Publication-Certified Run
 
 Date: 2026-07-15 (America/Los_Angeles)

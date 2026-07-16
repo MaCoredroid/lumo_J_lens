@@ -1,11 +1,30 @@
 # Qwen3.6-27B NVFP4 + MTP + Qwen Code SWE-bench Specification
 
-The Jacobian Lens workflow is intentionally specified separately because it
-uses eager, single-process target-model inference without MTP. See
-[`docs/JLENS_NVFP4_REPRODUCTION.md`](docs/JLENS_NVFP4_REPRODUCTION.md) for its
-source pins, residual mapping, commands, acceptance gates, measurements, and
-fit limitations. Both workflows use the same pinned NVIDIA checkpoint and
-frozen vLLM environment.
+The Jacobian Lens workflows are intentionally specified separately because
+they use eager, single-process inference without MTP. The public-lens
+application uses the same pinned NVIDIA checkpoint and frozen vLLM environment
+as serving; see
+[`docs/JLENS_NVFP4_REPRODUCTION.md`](docs/JLENS_NVFP4_REPRODUCTION.md). The
+fresh-fit path instead quantizes pinned `Qwen/Qwen3.6-27B` BF16 source weights
+to differentiable NF4; see
+[`docs/NF4_FIT_CONTRACT.md`](docs/NF4_FIT_CONTRACT.md) and
+[`docs/JLENS_NF4_EXPERIMENT.md`](docs/JLENS_NF4_EXPERIMENT.md).
+
+## Jacobian Lens Scope
+
+The July 16 experiment completed and verified an exact dense `n=10` NF4 fit
+for all 63 source layers on this RTX 5090. It did **not** fit through the
+NVIDIA packed NVFP4/FP8 checkpoint: native NVFP4 fitting remains
+unreproduced.
+
+The local NF4 lens was cross-applied to NVFP4 activations, but it is not a
+certified NVFP4 application. Its strict four-prompt residual-adapter
+certificate failed, and the public lens control failed identically on the same
+prompts: three full-logit max errors were `0.125 > 0.0625`. All full-logit RMS
+and greedy top-1 checks passed; one prompt also failed final-norm max and exact
+top-5 prefix. The older two-prompt public-lens NVFP4 baseline remains a
+separate passing result. See [`VALIDATION.md`](VALIDATION.md) for the evidence
+matrix and timings.
 
 ## 1. Purpose
 
@@ -23,6 +42,9 @@ generic multi-GPU deployment guide and does not claim that every flag is optimal
 on another GPU, CUDA toolchain, or vLLM release.
 
 ## 2. Acceptance Criteria
+
+These criteria certify the MTP serving and SWE-bench workflow, not either lens
+fit or cross-quantization transfer.
 
 The setup is successful only when all of the following hold:
 

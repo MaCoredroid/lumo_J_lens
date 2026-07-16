@@ -1,0 +1,2904 @@
+{
+  "aggregate": {
+    "all_rows_cosine": {
+      "count": 322560,
+      "mean": 0.7896859073094723,
+      "quantiles": {
+        "p000": -0.12188471756289941,
+        "p005": 0.4266887215533322,
+        "p025": 0.6844485334217114,
+        "p050": 0.8339973892186996,
+        "p075": 0.9394121819821172,
+        "p095": 0.992119211521272,
+        "p100": 0.9984631091787969
+      },
+      "standard_deviation": 0.1803295529415571
+    },
+    "difference_total_frobenius_norm": 454.3154330456617,
+    "global_frobenius_cosine": 0.7502156929781574,
+    "global_relative_frobenius_difference": 0.8656903740845163,
+    "layer_count": 63,
+    "local_total_frobenius_norm": 686.9665480087046,
+    "per_layer_frobenius_cosine": {
+      "count": 63,
+      "mean": 0.8206546529535934,
+      "quantiles": {
+        "p000": 0.42775755119098174,
+        "p005": 0.5213113211276905,
+        "p025": 0.7485295059828079,
+        "p050": 0.8602959198167885,
+        "p075": 0.9350481960446547,
+        "p095": 0.9906421935123773,
+        "p100": 0.9976192523023991
+      },
+      "standard_deviation": 0.14806340788009179
+    },
+    "per_layer_relative_frobenius_difference": {
+      "count": 63,
+      "mean": 0.6819988769629054,
+      "quantiles": {
+        "p000": 0.06929228047722527,
+        "p005": 0.1393080316758448,
+        "p025": 0.403151030499625,
+        "p050": 0.6057613433799839,
+        "p075": 0.8871135372730614,
+        "p095": 1.4555022067232086,
+        "p100": 1.6524705404622806
+      },
+      "standard_deviation": 0.39619376820580815
+    },
+    "public_total_frobenius_norm": 524.8012992244585
+  },
+  "artifacts": {
+    "local": {
+      "checkpoint_keys": [
+        "J",
+        "d_model",
+        "metadata",
+        "n_prompts",
+        "source_layers"
+      ],
+      "contract_sha256": "2a720e5193f0e6cc733521392ee1ce3d38f8afa8425ff954f14cc1d25dd5553d",
+      "d_model": 5120,
+      "finite_checked": true,
+      "fit_estimator": "anthropic-future-summed",
+      "fit_model": "Qwen/Qwen3.6-27B",
+      "fit_model_revision": "6a9e13bd6fc8f0983b9b99948120bc37f49c13e9",
+      "fit_quantization": "bitsandbytes-nf4-double-quant-bfloat16",
+      "kind": "local_fit",
+      "n_prompts": 10,
+      "path": "/home/mark/lumo_J_lens/.cache/Qwen3.6-27B-jlens-nf4-n10-fp32.pt",
+      "provenance_path": "/home/mark/lumo_J_lens/.cache/Qwen3.6-27B-jlens-nf4-n10-fp32.provenance.json",
+      "provenance_sha256": "08dfe022cc74bab226308dcd77a3901ec18806f8832dc8dec46524374fa3b1e7",
+      "provenance_size_bytes": 1261860,
+      "sha256": "54d95f9626d8d120d56c161cfc8943ec76fd77172a9c0c54d5d913a5a639424f",
+      "size_bytes": 6606048039,
+      "source_layers": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62
+      ],
+      "target_layer": 63,
+      "tensor_dtype": "torch.float32",
+      "tensor_shape": [
+        5120,
+        5120
+      ]
+    },
+    "public": {
+      "checkpoint_keys": [
+        "J",
+        "d_model",
+        "n_prompts",
+        "source_layers"
+      ],
+      "d_model": 5120,
+      "filename": "qwen3.6-27b/jlens/Salesforce-wikitext/Qwen3.6-27B_jacobian_lens_n1000.pt",
+      "finite_checked": false,
+      "kind": "pinned_public",
+      "n_prompts": 1000,
+      "path": "/home/mark/.cache/huggingface/hub/models--neuronpedia--jacobian-lens/blobs/1718c8c52dd8a9dad03738d4d625937c1fbba10be325b872ed446c7290fc11e1",
+      "repo_id": "neuronpedia/jacobian-lens",
+      "revision": "a4114d7752d11eb546e6cf372213d7e75526d3a1",
+      "sha256": "1718c8c52dd8a9dad03738d4d625937c1fbba10be325b872ed446c7290fc11e1",
+      "size_bytes": 3303032772,
+      "source_layers": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62
+      ],
+      "tensor_dtype": "torch.float16",
+      "tensor_shape": [
+        5120,
+        5120
+      ]
+    }
+  },
+  "configuration": {
+    "d_model": 5120,
+    "relative_difference_reference": "public lens",
+    "row_chunk": 16,
+    "row_cosine_quantiles": [
+      0.0,
+      0.05,
+      0.25,
+      0.5,
+      0.75,
+      0.95,
+      1.0
+    ],
+    "source_layers": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62
+    ]
+  },
+  "generated_at": "2026-07-16T18:09:49.011696+00:00",
+  "layers": [
+    {
+      "difference_frobenius_norm": 217.74793744386338,
+      "frobenius_cosine": 0.42775755119098174,
+      "layer": 0,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.0011303903518447532,
+          "frobenius_norm": 8.023740896030246,
+          "residual_relative_norm": 0.9994346450109458,
+          "scalar": 0.11213518798355437
+        },
+        "frobenius_norm": 238.65067930943138,
+        "trace": 574.1321624757984
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.0030010038719219386,
+          "frobenius_norm": 7.218610386024871,
+          "residual_relative_norm": 0.9984983706186397,
+          "scalar": 0.10088314703898504
+        },
+        "frobenius_norm": 131.7711463606172,
+        "trace": 516.5217128396034
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 1.6524705404622806,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.38252971124281887,
+        "quantiles": {
+          "p000": -0.06082007014941281,
+          "p005": 0.20847867200712197,
+          "p025": 0.30405413508482554,
+          "p050": 0.37338190492806195,
+          "p075": 0.4505449252352529,
+          "p095": 0.5777150744916875,
+          "p100": 0.9780247822562806
+        },
+        "standard_deviation": 0.11900708233762464
+      }
+    },
+    {
+      "difference_frobenius_norm": 185.44052424094033,
+      "frobenius_cosine": 0.4410213845368348,
+      "layer": 1,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.0013576085638972331,
+          "frobenius_norm": 7.555209060308734,
+          "residual_relative_norm": 0.9993209651739038,
+          "scalar": 0.10558725651920398
+        },
+        "frobenius_norm": 205.04973000257408,
+        "trace": 540.6067533783244
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.0035036325943560735,
+          "frobenius_norm": 6.703341388593506,
+          "residual_relative_norm": 0.998246646578712,
+          "scalar": 0.09368204388301819
+        },
+        "frobenius_norm": 113.24839579561619,
+        "trace": 479.65206468105316
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 1.6374671176412257,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.38650637681334715,
+        "quantiles": {
+          "p000": -0.12188471756289941,
+          "p005": 0.20145452623781274,
+          "p025": 0.3031092421841454,
+          "p050": 0.37478054053888277,
+          "p075": 0.458399472942688,
+          "p095": 0.5983519367372477,
+          "p100": 0.9754549494961184
+        },
+        "standard_deviation": 0.12725106917677026
+      }
+    },
+    {
+      "difference_frobenius_norm": 153.56941572750677,
+      "frobenius_cosine": 0.4925816359532724,
+      "layer": 2,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.0018163264918998373,
+          "frobenius_norm": 7.489711422668062,
+          "residual_relative_norm": 0.9990914239988752,
+          "scalar": 0.10467189920589029
+        },
+        "frobenius_norm": 175.73898997373084,
+        "trace": 535.9201239341583
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.004324694757422435,
+          "frobenius_norm": 6.606401023808579,
+          "residual_relative_norm": 0.9978353096791963,
+          "scalar": 0.09232726109912619
+        },
+        "frobenius_norm": 100.45861883555921,
+        "trace": 472.7155768275261
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 1.528683327598647,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.4353026459162499,
+        "quantiles": {
+          "p000": -0.05102997172774629,
+          "p005": 0.24947286281950984,
+          "p025": 0.3580573938850938,
+          "p050": 0.4273376731536733,
+          "p075": 0.5070034644139015,
+          "p095": 0.6379324448723966,
+          "p100": 0.9811260238819103
+        },
+        "standard_deviation": 0.12406176393649829
+      }
+    },
+    {
+      "difference_frobenius_norm": 126.97988713636161,
+      "frobenius_cosine": 0.5186767241225574,
+      "layer": 3,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.002477642665660317,
+          "frobenius_norm": 7.370025445526817,
+          "residual_relative_norm": 0.9987604103759519,
+          "scalar": 0.1029992368256321
+        },
+        "frobenius_norm": 148.06405929948937,
+        "trace": 527.3560925472364
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.005683696368189101,
+          "frobenius_norm": 6.5390058636939035,
+          "residual_relative_norm": 0.9971541022489006,
+          "scalar": 0.09138538510305808
+        },
+        "frobenius_norm": 86.73538133315553,
+        "trace": 467.8931717276573
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 1.4639918010923898,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.4652027969999236,
+        "quantiles": {
+          "p000": 0.12106506202117819,
+          "p005": 0.31312273357065434,
+          "p025": 0.3982424998668947,
+          "p050": 0.4601999693524962,
+          "p075": 0.520079300662255,
+          "p095": 0.6250627068041086,
+          "p100": 0.9870380993221074
+        },
+        "standard_deviation": 0.10477141447916058
+      }
+    },
+    {
+      "difference_frobenius_norm": 109.00971744974048,
+      "frobenius_cosine": 0.5725112544499531,
+      "layer": 4,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.00301072462710806,
+          "frobenius_norm": 7.28740343281268,
+          "residual_relative_norm": 0.9984935029197195,
+          "scalar": 0.10184455909521546
+        },
+        "frobenius_norm": 132.81199345991263,
+        "trace": 521.4441425675031
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.006389349634924353,
+          "frobenius_norm": 6.482446536394414,
+          "residual_relative_norm": 0.9968002058412084,
+          "scalar": 0.09059494447428733
+        },
+        "frobenius_norm": 81.09808825815563,
+        "trace": 463.84611570835114
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 1.3441712349955168,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.5172329466283269,
+        "quantiles": {
+          "p000": 0.18099002518681556,
+          "p005": 0.3642589146132659,
+          "p025": 0.4520659050145198,
+          "p050": 0.5147643821341443,
+          "p075": 0.5716355794351319,
+          "p095": 0.6740039480430876,
+          "p100": 0.9909245647436719
+        },
+        "standard_deviation": 0.10201332601790568
+      }
+    },
+    {
+      "difference_frobenius_norm": 93.68109980241958,
+      "frobenius_cosine": 0.6217792191940743,
+      "layer": 5,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.003656313586323531,
+          "frobenius_norm": 7.229761231894581,
+          "residual_relative_norm": 0.9981701690662151,
+          "scalar": 0.10103898484755565
+        },
+        "frobenius_norm": 119.56449572912197,
+        "trace": 517.3196024194849
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.007005603112171216,
+          "frobenius_norm": 6.44889482717311,
+          "residual_relative_norm": 0.9964910420509704,
+          "scalar": 0.09012604508316144
+        },
+        "frobenius_norm": 77.04820571855467,
+        "trace": 461.4453508257866
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 1.2158764623880058,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.5663142114224431,
+        "quantiles": {
+          "p000": 0.23248539898382115,
+          "p005": 0.4129938332102513,
+          "p025": 0.5044713613143237,
+          "p050": 0.5654921754590019,
+          "p075": 0.6213154817894262,
+          "p095": 0.7158061011324449,
+          "p100": 0.9927448339344713
+        },
+        "standard_deviation": 0.09828379277444799
+      }
+    },
+    {
+      "difference_frobenius_norm": 78.79408163207768,
+      "frobenius_cosine": 0.5450226941738882,
+      "layer": 6,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.0037257761644046176,
+          "frobenius_norm": 5.719379732560712,
+          "residual_relative_norm": 0.9981353735018088,
+          "scalar": 0.07993076169462698
+        },
+        "frobenius_norm": 93.70020737616254,
+        "trace": 409.24549987649016
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.008136340397677596,
+          "frobenius_norm": 5.153635499551628,
+          "residual_relative_norm": 0.9959235209604814,
+          "scalar": 0.07202424567658454
+        },
+        "frobenius_norm": 57.13459380596976,
+        "trace": 368.76413786411285
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 1.3790958574005792,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.48395768555077706,
+        "quantiles": {
+          "p000": 0.07279046523670267,
+          "p005": 0.3195837587380448,
+          "p025": 0.4121505581400488,
+          "p050": 0.47557926097505454,
+          "p075": 0.5418301870835105,
+          "p095": 0.6757314885879807,
+          "p100": 0.9841017507427952
+        },
+        "standard_deviation": 0.11339762691416144
+      }
+    },
+    {
+      "difference_frobenius_norm": 72.16180970804406,
+      "frobenius_cosine": 0.5796268677989754,
+      "layer": 7,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.004239401728771504,
+          "frobenius_norm": 5.757556769509867,
+          "residual_relative_norm": 0.9978780477950341,
+          "scalar": 0.08046430200586344
+        },
+        "frobenius_norm": 88.42721404551735,
+        "trace": 411.97722627002076
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.008863864243634773,
+          "frobenius_norm": 5.190272146005744,
+          "residual_relative_norm": 0.9955582030983248,
+          "scalar": 0.07253625837620348
+        },
+        "frobenius_norm": 55.128805461387394,
+        "trace": 371.3856428861618
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 1.3089674101243987,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.5179533852725997,
+        "quantiles": {
+          "p000": 0.08372093937019212,
+          "p005": 0.3532668169447275,
+          "p025": 0.44853980459651893,
+          "p050": 0.5110429112010284,
+          "p075": 0.5758977021672519,
+          "p095": 0.7028100203387372,
+          "p100": 0.9873575929937726
+        },
+        "standard_deviation": 0.11048293607076674
+      }
+    },
+    {
+      "difference_frobenius_norm": 66.55420557535729,
+      "frobenius_cosine": 0.6109772433793096,
+      "layer": 8,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.004705671879491871,
+          "frobenius_norm": 5.764078776402435,
+          "residual_relative_norm": 0.9976443896100996,
+          "scalar": 0.08055544982312286
+        },
+        "frobenius_norm": 84.02704425958517,
+        "trace": 412.44390309438904
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.009443628814857085,
+          "frobenius_norm": 5.196771236324978,
+          "residual_relative_norm": 0.9952669848764918,
+          "scalar": 0.07262708592461423
+        },
+        "frobenius_norm": 53.476644052539946,
+        "trace": 371.8506799340248
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 1.2445471617472639,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.5490938382377035,
+        "quantiles": {
+          "p000": 0.09276089031555203,
+          "p005": 0.3844613314999552,
+          "p025": 0.48282487431905335,
+          "p050": 0.5449010030954136,
+          "p075": 0.607142845175161,
+          "p095": 0.7261399982020946,
+          "p100": 0.989150217315827
+        },
+        "standard_deviation": 0.10755925040556844
+      }
+    },
+    {
+      "difference_frobenius_norm": 59.58822593179086,
+      "frobenius_cosine": 0.6402021778568068,
+      "layer": 9,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.005466956850806673,
+          "frobenius_norm": 5.73252902114411,
+          "residual_relative_norm": 0.9972627753752735,
+          "scalar": 0.08011452858917849
+        },
+        "frobenius_norm": 77.53065249147943,
+        "trace": 410.1863863765939
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.010186138664251504,
+          "frobenius_norm": 5.196071521126144,
+          "residual_relative_norm": 0.9948938945112431,
+          "scalar": 0.07261730710742995
+        },
+        "frobenius_norm": 51.48376843959323,
+        "trace": 371.80061239004135
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 1.15741772092124,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.5782617183178874,
+        "quantiles": {
+          "p000": 0.1599910009209789,
+          "p005": 0.4201508927872128,
+          "p025": 0.5166304160901856,
+          "p050": 0.5757885132598417,
+          "p075": 0.6319945258839991,
+          "p095": 0.7463108809874801,
+          "p100": 0.9910830769348061
+        },
+        "standard_deviation": 0.10191280674773759
+      }
+    },
+    {
+      "difference_frobenius_norm": 53.9672980554748,
+      "frobenius_cosine": 0.6638006673502335,
+      "layer": 10,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.006093520700770554,
+          "frobenius_norm": 5.631341110454458,
+          "residual_relative_norm": 0.9969485840800565,
+          "scalar": 0.07870038454665824
+        },
+        "frobenius_norm": 72.14025771801333,
+        "trace": 402.9459688788902
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.010882353575235452,
+          "frobenius_norm": 5.11861584066538,
+          "residual_relative_norm": 0.9945439389110793,
+          "scalar": 0.07153483106521889
+        },
+        "frobenius_norm": 49.06718241415747,
+        "trace": 366.25833505392075
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 1.0998654375537056,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.6032052018671695,
+        "quantiles": {
+          "p000": 0.2133478462913106,
+          "p005": 0.44956678751602236,
+          "p025": 0.5442126285452829,
+          "p050": 0.6013157428811696,
+          "p075": 0.6555801802801008,
+          "p095": 0.7636907836063469,
+          "p100": 0.9923923404544689
+        },
+        "standard_deviation": 0.09814671098952639
+      }
+    },
+    {
+      "difference_frobenius_norm": 50.78086374447719,
+      "frobenius_cosine": 0.6795598959476304,
+      "layer": 11,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.006691686881384214,
+          "frobenius_norm": 5.6615225579204775,
+          "residual_relative_norm": 0.9966485404186453,
+          "scalar": 0.07912218309786674
+        },
+        "frobenius_norm": 69.20945613777191,
+        "trace": 405.1055774610777
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.011588537713513753,
+          "frobenius_norm": 5.156445050238972,
+          "residual_relative_norm": 0.9941888463901042,
+          "scalar": 0.07206351034110411
+        },
+        "frobenius_norm": 47.90006191852495,
+        "trace": 368.9651729464531
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 1.060141922798603,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.6206862353755997,
+        "quantiles": {
+          "p000": 0.25568186076469834,
+          "p005": 0.4774699154808159,
+          "p025": 0.5648559050428998,
+          "p050": 0.6180449110605568,
+          "p075": 0.6693449533053943,
+          "p095": 0.7742219665743952,
+          "p100": 0.9931002493880561
+        },
+        "standard_deviation": 0.0921390628904245
+      }
+    },
+    {
+      "difference_frobenius_norm": 47.115723990150734,
+      "frobenius_cosine": 0.7013240113896485,
+      "layer": 12,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.0072634773048962775,
+          "frobenius_norm": 5.632856144399349,
+          "residual_relative_norm": 0.9963616425249939,
+          "scalar": 0.07872155778971447
+        },
+        "frobenius_norm": 66.09313741266342,
+        "trace": 403.0543758833381
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.01209729282865851,
+          "frobenius_norm": 5.142472445918392,
+          "residual_relative_norm": 0.9939329490319463,
+          "scalar": 0.07186823725933209
+        },
+        "frobenius_norm": 46.754980120858654,
+        "trace": 367.9653747677803
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 1.0077156244823455,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.6432237540788236,
+        "quantiles": {
+          "p000": 0.273110659753559,
+          "p005": 0.5018952491447825,
+          "p025": 0.5893044300621633,
+          "p050": 0.6412338906122345,
+          "p075": 0.691742881654718,
+          "p095": 0.7918854151334875,
+          "p100": 0.9938476986668904
+        },
+        "standard_deviation": 0.09036122979913781
+      }
+    },
+    {
+      "difference_frobenius_norm": 45.32409831004997,
+      "frobenius_cosine": 0.7133172003997053,
+      "layer": 13,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.0076811466947111235,
+          "frobenius_norm": 5.667868481825254,
+          "residual_relative_norm": 0.9961520231898788,
+          "scalar": 0.07921087008056124
+        },
+        "frobenius_norm": 64.67057681701357,
+        "trace": 405.5596548124736
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.012489235768396549,
+          "frobenius_norm": 5.17330823284569,
+          "residual_relative_norm": 0.9937357617755354,
+          "scalar": 0.0722991804825142
+        },
+        "frobenius_norm": 46.29141146060602,
+        "trace": 370.1718040704727
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.9791038311419984,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.6573326453642657,
+        "quantiles": {
+          "p000": 0.27709545748848147,
+          "p005": 0.5184197394879153,
+          "p025": 0.6047489490024965,
+          "p050": 0.6563123101547669,
+          "p075": 0.7046574906545839,
+          "p095": 0.8022061037885824,
+          "p100": 0.9941975725376783
+        },
+        "standard_deviation": 0.08816731519702535
+      }
+    },
+    {
+      "difference_frobenius_norm": 43.723631732415456,
+      "frobenius_cosine": 0.7240579664627268,
+      "layer": 14,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.008109634695403435,
+          "frobenius_norm": 5.708621936841541,
+          "residual_relative_norm": 0.9959369283767906,
+          "scalar": 0.07978041692890123
+        },
+        "frobenius_norm": 63.39144277162897,
+        "trace": 408.4757346759743
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.01292420586211331,
+          "frobenius_norm": 5.208911962341239,
+          "residual_relative_norm": 0.9935168816572202,
+          "scalar": 0.07279675772879272
+        },
+        "frobenius_norm": 45.81894485850361,
+        "trace": 372.71939957141876
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.9542697211260794,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.6703305222184689,
+        "quantiles": {
+          "p000": 0.28707983026993944,
+          "p005": 0.5346547549367443,
+          "p025": 0.619170265504397,
+          "p050": 0.6695681457977503,
+          "p075": 0.7167737596629008,
+          "p095": 0.8105100205549561,
+          "p100": 0.9944334644641415
+        },
+        "standard_deviation": 0.08601063091968468
+      }
+    },
+    {
+      "difference_frobenius_norm": 42.597132051109014,
+      "frobenius_cosine": 0.7359565339435701,
+      "layer": 15,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.008396765554007906,
+          "frobenius_norm": 5.765169765273799,
+          "residual_relative_norm": 0.99579276681747,
+          "scalar": 0.08057069685611701
+        },
+        "frobenius_norm": 62.915273178075,
+        "trace": 412.5219679033191
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.01312087755202445,
+          "frobenius_norm": 5.260484929413035,
+          "residual_relative_norm": 0.9934178991985073,
+          "scalar": 0.07351751185487956
+        },
+        "frobenius_norm": 45.924489723754355,
+        "trace": 376.40966069698334
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.9275472042768442,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.6849661551212111,
+        "quantiles": {
+          "p000": 0.29537471241738694,
+          "p005": 0.5504838182243617,
+          "p025": 0.6345916570931939,
+          "p050": 0.6850971106144013,
+          "p075": 0.731969898631798,
+          "p095": 0.8230072690034761,
+          "p100": 0.9944911664992034
+        },
+        "standard_deviation": 0.08463670301827164
+      }
+    },
+    {
+      "difference_frobenius_norm": 36.71001529456187,
+      "frobenius_cosine": 0.7668373655782966,
+      "layer": 16,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.009859446316647091,
+          "frobenius_norm": 5.678624861495083,
+          "residual_relative_norm": 0.9950580654832928,
+          "scalar": 0.07936119505639586
+        },
+        "frobenius_norm": 57.18958119151637,
+        "trace": 406.32931868874675
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.014506685420471678,
+          "frobenius_norm": 5.22215102582247,
+          "residual_relative_norm": 0.9927201592490847,
+          "scalar": 0.07298177926568314
+        },
+        "frobenius_norm": 43.357609627457656,
+        "trace": 373.6667098402977
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.8466798702692785,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.7166162432776847,
+        "quantiles": {
+          "p000": 0.323433556496747,
+          "p005": 0.5900591816742432,
+          "p025": 0.6711208596023958,
+          "p050": 0.717277641345301,
+          "p075": 0.7597992153440128,
+          "p095": 0.84172311424212,
+          "p100": 0.99536948306968
+        },
+        "standard_deviation": 0.07845260168972773
+      }
+    },
+    {
+      "difference_frobenius_norm": 32.98605495448411,
+      "frobenius_cosine": 0.7921549580784477,
+      "layer": 17,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.010873322513328601,
+          "frobenius_norm": 5.633956605553855,
+          "residual_relative_norm": 0.9945484792038403,
+          "scalar": 0.07873693720188993
+        },
+        "frobenius_norm": 54.02967593446745,
+        "trace": 403.1331184736764
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.01540091335035658,
+          "frobenius_norm": 5.207408254475237,
+          "residual_relative_norm": 0.992269664279647,
+          "scalar": 0.07277574277250096
+        },
+        "frobenius_norm": 41.961247234988456,
+        "trace": 372.6118029952049
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.7861075904097393,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.7451515772244226,
+        "quantiles": {
+          "p000": 0.3915520290723388,
+          "p005": 0.6303889851460829,
+          "p025": 0.7051583925613242,
+          "p050": 0.7454184656482666,
+          "p075": 0.7846647409144809,
+          "p095": 0.8594008921059538,
+          "p100": 0.9957992091505735
+        },
+        "standard_deviation": 0.07149550922083103
+      }
+    },
+    {
+      "difference_frobenius_norm": 29.51513071275676,
+      "frobenius_cosine": 0.7611024780220458,
+      "layer": 18,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.012525401599361398,
+          "frobenius_norm": 5.092364007952468,
+          "residual_relative_norm": 0.9937175647036931,
+          "scalar": 0.07116795054971874
+        },
+        "frobenius_norm": 45.50127960442984,
+        "trace": 364.37990681455994
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.018191730138038816,
+          "frobenius_norm": 4.711871381588641,
+          "residual_relative_norm": 0.9908623869448073,
+          "scalar": 0.06585040444042534
+        },
+        "frobenius_norm": 34.93465226352673,
+        "trace": 337.1540707349777
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.8448668814594676,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.7094055610144084,
+        "quantiles": {
+          "p000": 0.2943839945360386,
+          "p005": 0.5730509672251142,
+          "p025": 0.6624437132507519,
+          "p050": 0.7098928549455841,
+          "p075": 0.7535890040235997,
+          "p095": 0.8537470348509307,
+          "p100": 0.9907366044000188
+        },
+        "standard_deviation": 0.08443654505200748
+      }
+    },
+    {
+      "difference_frobenius_norm": 28.5880715418479,
+      "frobenius_cosine": 0.7627896383602314,
+      "layer": 19,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.013045863964095293,
+          "frobenius_norm": 5.048404130606905,
+          "residual_relative_norm": 0.9934556537842566,
+          "scalar": 0.07055359258704855
+        },
+        "frobenius_norm": 44.19953400417885,
+        "trace": 361.23439404568853
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.018556165186421565,
+          "frobenius_norm": 4.676285559099129,
+          "residual_relative_norm": 0.9906784719643293,
+          "scalar": 0.06535307745216415
+        },
+        "frobenius_norm": 34.32866453454704,
+        "trace": 334.6077565550804
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.8327755224231916,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.7112869160280909,
+        "quantiles": {
+          "p000": 0.27393768301319527,
+          "p005": 0.5666562080650334,
+          "p025": 0.6640947638186677,
+          "p050": 0.714021844779384,
+          "p075": 0.7591059465611527,
+          "p095": 0.855601051194191,
+          "p100": 0.9914636668536685
+        },
+        "standard_deviation": 0.08710151702843086
+      }
+    },
+    {
+      "difference_frobenius_norm": 26.827997496855357,
+      "frobenius_cosine": 0.7831557091294004,
+      "layer": 20,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.014503583816688469,
+          "frobenius_norm": 5.195004301957989,
+          "residual_relative_norm": 0.9927217214221272,
+          "scalar": 0.07260239226613692
+        },
+        "frobenius_norm": 43.136831994414315,
+        "trace": 371.724248402621
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.01985424723845794,
+          "frobenius_norm": 4.828708150226549,
+          "residual_relative_norm": 0.9900231071856566,
+          "scalar": 0.06748324792133645
+        },
+        "frobenius_norm": 34.26922195350454,
+        "trace": 345.5142293572426
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.7828598365394692,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.7327842375130956,
+        "quantiles": {
+          "p000": 0.28707448342059055,
+          "p005": 0.5951676182046552,
+          "p025": 0.6886896116696191,
+          "p050": 0.735740178576288,
+          "p075": 0.7794656983884932,
+          "p095": 0.8699905409450492,
+          "p100": 0.9924439319557512
+        },
+        "standard_deviation": 0.0834443257279424
+      }
+    },
+    {
+      "difference_frobenius_norm": 24.974459473156543,
+      "frobenius_cosine": 0.7998395847633182,
+      "layer": 21,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.016730506769359752,
+          "frobenius_norm": 5.381899809628924,
+          "residual_relative_norm": 0.9915994620967885,
+          "scalar": 0.07521433639014656
+        },
+        "frobenius_norm": 41.60840428729409,
+        "trace": 385.0974023175504
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.02276649468387402,
+          "frobenius_norm": 4.997169204581689,
+          "residual_relative_norm": 0.9885512153227702,
+          "scalar": 0.06983756272820756
+        },
+        "frobenius_norm": 33.11890510833472,
+        "trace": 357.5683211684227
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.75408469547719,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.7508168647593416,
+        "quantiles": {
+          "p000": 0.36819701001141364,
+          "p005": 0.6422497467205067,
+          "p025": 0.7116902908742889,
+          "p050": 0.7498385370469225,
+          "p075": 0.7872049379934642,
+          "p095": 0.8751611585759065,
+          "p100": 0.9931046978131176
+        },
+        "standard_deviation": 0.06999509927843565
+      }
+    },
+    {
+      "difference_frobenius_norm": 25.223614033939228,
+      "frobenius_cosine": 0.7976726698123442,
+      "layer": 22,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.01789429533392708,
+          "frobenius_norm": 5.594740308137814,
+          "residual_relative_norm": 0.9910124644352728,
+          "scalar": 0.07818887278408919
+        },
+        "frobenius_norm": 41.8237174771318,
+        "trace": 400.32702865453666
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.024096231954944522,
+          "frobenius_norm": 5.190880666837924,
+          "residual_relative_norm": 0.9878784176431104,
+          "scalar": 0.07254476271336899
+        },
+        "frobenius_norm": 33.4400160664184,
+        "trace": 371.4291850924492
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.7542943156438743,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.748509480902124,
+        "quantiles": {
+          "p000": 0.3477198586880854,
+          "p005": 0.6313636084709746,
+          "p025": 0.7078743899915576,
+          "p050": 0.7486748969572963,
+          "p075": 0.7876263751064326,
+          "p095": 0.8756633940921673,
+          "p100": 0.9933905313238468
+        },
+        "standard_deviation": 0.07348194456688373
+      }
+    },
+    {
+      "difference_frobenius_norm": 25.744934864076807,
+      "frobenius_cosine": 0.803635488374084,
+      "layer": 23,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.01983818391577569,
+          "frobenius_norm": 6.092904637665307,
+          "residual_relative_norm": 0.9900312197522987,
+          "scalar": 0.08515093093902096
+        },
+        "frobenius_norm": 43.25869609395784,
+        "trace": 435.9727664077873
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.02639175644173043,
+          "frobenius_norm": 5.679349677678286,
+          "residual_relative_norm": 0.9867158879628267,
+          "scalar": 0.07937132467050105
+        },
+        "frobenius_norm": 34.95943955436438,
+        "trace": 406.3811823129654
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.7364229859589605,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.755779699786656,
+        "quantiles": {
+          "p000": 0.3418030365076652,
+          "p005": 0.6369885070165662,
+          "p025": 0.7152070660348195,
+          "p050": 0.7561190367539588,
+          "p075": 0.7964925368080964,
+          "p095": 0.8817349273859777,
+          "p100": 0.993399985363641
+        },
+        "standard_deviation": 0.07371952222682476
+      }
+    },
+    {
+      "difference_frobenius_norm": 25.315220478796686,
+      "frobenius_cosine": 0.8150053450114325,
+      "layer": 24,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.023234100260241617,
+          "frobenius_norm": 6.6585770071200665,
+          "residual_relative_norm": 0.9883146764769601,
+          "scalar": 0.09305644263335981
+        },
+        "frobenius_norm": 43.68360759381463,
+        "trace": 476.44898628280225
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.031171634383165978,
+          "frobenius_norm": 6.2216701561334,
+          "residual_relative_norm": 0.984290793219582,
+          "scalar": 0.08695048376685008
+        },
+        "frobenius_norm": 35.23929378089572,
+        "trace": 445.18647688627243
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.7183804714191186,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.770401313937927,
+        "quantiles": {
+          "p000": 0.3587048562759687,
+          "p005": 0.6690465685995562,
+          "p025": 0.7326447107737654,
+          "p050": 0.7680683680245688,
+          "p075": 0.8050911645596829,
+          "p095": 0.88537779851136,
+          "p100": 0.9936481030805997
+        },
+        "standard_deviation": 0.06538470850694074
+      }
+    },
+    {
+      "difference_frobenius_norm": 25.105248040004142,
+      "frobenius_cosine": 0.8280486824446333,
+      "layer": 25,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.026084525246049848,
+          "frobenius_norm": 7.230545391023628,
+          "residual_relative_norm": 0.9868715594006903,
+          "scalar": 0.10104994380454144
+        },
+        "frobenius_norm": 44.76922624614032,
+        "trace": 517.3757122792522
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.0343454692595625,
+          "frobenius_norm": 6.7764031310962265,
+          "residual_relative_norm": 0.9826772261228187,
+          "scalar": 0.09470311277545988
+        },
+        "frobenius_norm": 36.56490986627712,
+        "trace": 484.8799374103546
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.6865940086224052,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.7849825402246243,
+        "quantiles": {
+          "p000": 0.38213042290942817,
+          "p005": 0.686776880000688,
+          "p025": 0.7483429191307586,
+          "p050": 0.7829534225219594,
+          "p075": 0.8192317190273706,
+          "p095": 0.8962207418237138,
+          "p100": 0.993715260923243
+        },
+        "standard_deviation": 0.06317547632703488
+      }
+    },
+    {
+      "difference_frobenius_norm": 24.77697011440995,
+      "frobenius_cosine": 0.8370732816327119,
+      "layer": 26,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.02884764232693292,
+          "frobenius_norm": 7.6904502957072385,
+          "residual_relative_norm": 0.9854706275039693,
+          "scalar": 0.10747731024240466
+        },
+        "frobenius_norm": 45.27897711307058,
+        "trace": 550.2838284411118
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.03723683116404055,
+          "frobenius_norm": 7.215350542066855,
+          "residual_relative_norm": 0.981204957608735,
+          "scalar": 0.10083758933469653
+        },
+        "frobenius_norm": 37.39134413727347,
+        "trace": 516.2884573936462
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.6626391932701634,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.7947763931673792,
+        "quantiles": {
+          "p000": 0.3689715141709751,
+          "p005": 0.6950622341898766,
+          "p025": 0.7588502743725332,
+          "p050": 0.7936168404688916,
+          "p075": 0.8295346654846488,
+          "p095": 0.9029750060952806,
+          "p100": 0.9942707822625567
+        },
+        "standard_deviation": 0.06269893213215551
+      }
+    },
+    {
+      "difference_frobenius_norm": 25.61330375405798,
+      "frobenius_cosine": 0.8408220740042383,
+      "layer": 27,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.03159042499705061,
+          "frobenius_norm": 8.40861431358976,
+          "residual_relative_norm": 0.9840780329846559,
+          "scalar": 0.11751395751102774
+        },
+        "frobenius_norm": 47.30931919567806,
+        "trace": 601.671462456462
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.04010898782989763,
+          "frobenius_norm": 7.87345339412327,
+          "residual_relative_norm": 0.9797402779155823,
+          "scalar": 0.11003485629335046
+        },
+        "frobenius_norm": 39.31374440788846,
+        "trace": 563.3784642219543
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.6515101560491036,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.7983823389121744,
+        "quantiles": {
+          "p000": 0.3499367913470265,
+          "p005": 0.6957613450223772,
+          "p025": 0.76312697402659,
+          "p050": 0.7981508334882874,
+          "p075": 0.8347934208077282,
+          "p095": 0.9056647638657953,
+          "p100": 0.9940415306771627
+        },
+        "standard_deviation": 0.06367312242888147
+      }
+    },
+    {
+      "difference_frobenius_norm": 25.809986674474086,
+      "frobenius_cosine": 0.8487427885598405,
+      "layer": 28,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.03429617494968515,
+          "frobenius_norm": 9.037349804512306,
+          "residual_relative_norm": 0.9827023074412286,
+          "scalar": 0.1263008031208372
+        },
+        "frobenius_norm": 48.79982332538142,
+        "trace": 646.6601119786865
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.04290160678361086,
+          "frobenius_norm": 8.480719541359003,
+          "residual_relative_norm": 0.9783140565362378,
+          "scalar": 0.1185216587036848
+        },
+        "frobenius_norm": 40.94453301881218,
+        "trace": 606.8308925628662
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.6303646609576803,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.8064537607386765,
+        "quantiles": {
+          "p000": 0.3723932666701271,
+          "p005": 0.7045078046261963,
+          "p025": 0.771874747862666,
+          "p050": 0.8068071295024413,
+          "p075": 0.8432376179944169,
+          "p095": 0.9108627332963773,
+          "p100": 0.9940215376734729
+        },
+        "standard_deviation": 0.0629691587576072
+      }
+    },
+    {
+      "difference_frobenius_norm": 26.321772422043253,
+      "frobenius_cosine": 0.8519474228935702,
+      "layer": 29,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.03658640912377384,
+          "frobenius_norm": 9.612369694134378,
+          "residual_relative_norm": 0.9815363421067129,
+          "scalar": 0.13433695038089583
+        },
+        "frobenius_norm": 50.253992691982354,
+        "trace": 687.8051859501866
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.045684676608281814,
+          "frobenius_norm": 9.017533414288074,
+          "residual_relative_norm": 0.9768906404463695,
+          "scalar": 0.12602386064827442
+        },
+        "frobenius_norm": 42.18931584358909,
+        "trace": 645.242166519165
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.6238966405529659,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.8094905852781455,
+        "quantiles": {
+          "p000": 0.36870362669602164,
+          "p005": 0.7077325947049787,
+          "p025": 0.7743176345599286,
+          "p050": 0.8101170675855789,
+          "p075": 0.8471640563223684,
+          "p095": 0.9129038327591275,
+          "p100": 0.9940024598087261
+        },
+        "standard_deviation": 0.06307424225470273
+      }
+    },
+    {
+      "difference_frobenius_norm": 26.2870758836591,
+      "frobenius_cosine": 0.8568423757503227,
+      "layer": 30,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.0393155085789895,
+          "frobenius_norm": 10.102264182725996,
+          "residual_relative_norm": 0.9801451379367295,
+          "scalar": 0.14118343399522928
+        },
+        "frobenius_norm": 50.949130004154185,
+        "trace": 722.8591820555739
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.0493769293446493,
+          "frobenius_norm": 9.47973657578069,
+          "residual_relative_norm": 0.9749990105919856,
+          "scalar": 0.13248334620147945
+        },
+        "frobenius_norm": 42.661314207084146,
+        "trace": 678.3147325515747
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.6161806398194359,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.8139818431721724,
+        "quantiles": {
+          "p000": 0.3760788774220364,
+          "p005": 0.7145717908335434,
+          "p025": 0.7788207688917566,
+          "p050": 0.8149731136032867,
+          "p075": 0.8513421952219526,
+          "p095": 0.9155074043328308,
+          "p100": 0.994097111620884
+        },
+        "standard_deviation": 0.061983325261550114
+      }
+    },
+    {
+      "difference_frobenius_norm": 27.148656337016675,
+      "frobenius_cosine": 0.8602959198167885,
+      "layer": 31,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.041625745404788826,
+          "frobenius_norm": 10.858196741373435,
+          "residual_relative_norm": 0.9789659108443006,
+          "scalar": 0.15174791266736065
+        },
+        "frobenius_norm": 53.22022357048925,
+        "trace": 776.9493128568865
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.0517991238157715,
+          "frobenius_norm": 10.200183657710921,
+          "residual_relative_norm": 0.9737560660577312,
+          "scalar": 0.14255190026015044
+        },
+        "frobenius_norm": 44.81741305170538,
+        "trace": 729.8657293319702
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.6057613433799839,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.8157586374872118,
+        "quantiles": {
+          "p000": 0.3629640744793362,
+          "p005": 0.7116658558190971,
+          "p025": 0.7792611821116556,
+          "p050": 0.8177322936932905,
+          "p075": 0.855313456954078,
+          "p095": 0.9180386434382288,
+          "p100": 0.9938612544795303
+        },
+        "standard_deviation": 0.06386383615921983
+      }
+    },
+    {
+      "difference_frobenius_norm": 26.106227833511966,
+      "frobenius_cosine": 0.8699079515990603,
+      "layer": 32,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.04890807875844499,
+          "frobenius_norm": 11.687878034014796,
+          "residual_relative_norm": 0.9752394173953158,
+          "scalar": 0.163343061229898
+        },
+        "frobenius_norm": 52.85004598550306,
+        "trace": 836.3164734970778
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.061087662895432174,
+          "frobenius_norm": 11.006730793401633,
+          "residual_relative_norm": 0.9689748898214895,
+          "scalar": 0.15382373915053904
+        },
+        "frobenius_norm": 44.53296274822106,
+        "trace": 787.5775444507599
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.5862225691362702,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.8271146086749835,
+        "quantiles": {
+          "p000": 0.4311641629976039,
+          "p005": 0.7331683266922814,
+          "p025": 0.7937100094797664,
+          "p050": 0.8272521368966352,
+          "p075": 0.8619561623185205,
+          "p095": 0.924738806132552,
+          "p100": 0.9939732376306664
+        },
+        "standard_deviation": 0.05863041166550422
+      }
+    },
+    {
+      "difference_frobenius_norm": 24.841043934672385,
+      "frobenius_cosine": 0.8699846548399227,
+      "layer": 33,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.06339559403666589,
+          "frobenius_norm": 12.654603605614609,
+          "residual_relative_norm": 0.9677832432747191,
+          "scalar": 0.17685346181542627
+        },
+        "frobenius_norm": 50.25959769890966,
+        "trace": 905.4897244949825
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.08074863761636682,
+          "frobenius_norm": 11.938409231756557,
+          "residual_relative_norm": 0.9587759709043783,
+          "scalar": 0.16684434115886687
+        },
+        "frobenius_norm": 42.01253235757704,
+        "trace": 854.2430267333984
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.5912769961887874,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.8343828528536565,
+        "quantiles": {
+          "p000": 0.5937370448390663,
+          "p005": 0.7664092160560829,
+          "p025": 0.8045530037091536,
+          "p050": 0.8285866279324632,
+          "p075": 0.8590777485164486,
+          "p095": 0.9262654719667971,
+          "p100": 0.9939193942842902
+        },
+        "standard_deviation": 0.04782383323466774
+      }
+    },
+    {
+      "difference_frobenius_norm": 23.64162442395014,
+      "frobenius_cosine": 0.8706495221731946,
+      "layer": 34,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.0789781041553836,
+          "frobenius_norm": 13.47423690758703,
+          "residual_relative_norm": 0.9596988568528235,
+          "scalar": 0.18830818543938221
+        },
+        "frobenius_norm": 47.945828406239265,
+        "trace": 964.1379094496369
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.10112284626633383,
+          "frobenius_norm": 12.753300867326628,
+          "residual_relative_norm": 0.9480913214103724,
+          "scalar": 0.17823279798030853
+        },
+        "frobenius_norm": 40.10494848987859,
+        "trace": 912.5519256591797
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.589493948107592,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.8388967646450836,
+        "quantiles": {
+          "p000": 0.6438809355110612,
+          "p005": 0.7785648982561674,
+          "p025": 0.8101075328956401,
+          "p050": 0.8316821837977074,
+          "p075": 0.8609687111950688,
+          "p095": 0.928783676213459,
+          "p100": 0.9920840060040265
+        },
+        "standard_deviation": 0.044561963054209806
+      }
+    },
+    {
+      "difference_frobenius_norm": 23.73340838580849,
+      "frobenius_cosine": 0.8743497467159695,
+      "layer": 35,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.09177500820252382,
+          "frobenius_norm": 14.779174514472354,
+          "residual_relative_norm": 0.9530083902030854,
+          "scalar": 0.20654524291057896
+        },
+        "frobenius_norm": 48.78518557788734,
+        "trace": 1057.5116437021643
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.11572701063945597,
+          "frobenius_norm": 13.945999505944151,
+          "residual_relative_norm": 0.9403579049279822,
+          "scalar": 0.19490126818418502
+        },
+        "frobenius_norm": 40.9951309500578,
+        "trace": 997.8944931030273
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.5789323716204651,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.8461963260231282,
+        "quantiles": {
+          "p000": 0.6686253701589069,
+          "p005": 0.7902975449996393,
+          "p025": 0.8192684743994364,
+          "p050": 0.8390588252005414,
+          "p075": 0.8667320730941873,
+          "p095": 0.9301976811250876,
+          "p100": 0.9917174384113556
+        },
+        "standard_deviation": 0.04151415700897473
+      }
+    },
+    {
+      "difference_frobenius_norm": 23.766810959460834,
+      "frobenius_cosine": 0.8820031077400909,
+      "layer": 36,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.10462771481759871,
+          "frobenius_norm": 16.267509983030408,
+          "residual_relative_norm": 0.9462411347972574,
+          "scalar": 0.22734536341695274
+        },
+        "frobenius_norm": 50.29186162432703,
+        "trace": 1164.008260694798
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.12957163945393452,
+          "frobenius_norm": 15.324604391290254,
+          "residual_relative_norm": 0.9329675024062014,
+          "scalar": 0.21416785717010497
+        },
+        "frobenius_norm": 42.57300394070031,
+        "trace": 1096.5394287109375
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.5582601357556419,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.8574096005770919,
+        "quantiles": {
+          "p000": 0.691517295592512,
+          "p005": 0.8057956652670812,
+          "p025": 0.8323872558692426,
+          "p050": 0.8506239544293164,
+          "p075": 0.8771683165691812,
+          "p095": 0.9339709951985512,
+          "p100": 0.9914983003235491
+        },
+        "standard_deviation": 0.038401631172420465
+      }
+    },
+    {
+      "difference_frobenius_norm": 23.98447648346148,
+      "frobenius_cosine": 0.8869663633051601,
+      "layer": 37,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.11508101787392978,
+          "frobenius_norm": 17.563546245431855,
+          "residual_relative_norm": 0.9407013246116274,
+          "scalar": 0.24545802081716772
+        },
+        "frobenius_norm": 51.77383810117456,
+        "trace": 1256.7450665838987
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.1407272956940012,
+          "frobenius_norm": 16.522763566355863,
+          "residual_relative_norm": 0.9269696350506843,
+          "scalar": 0.23091264069080353
+        },
+        "frobenius_norm": 44.04468590982199,
+        "trace": 1182.272720336914
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.5445487006665866,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.865025372611228,
+        "quantiles": {
+          "p000": 0.7111138854665929,
+          "p005": 0.8156458454918482,
+          "p025": 0.8409849430434624,
+          "p050": 0.858447939040505,
+          "p075": 0.8851045016929476,
+          "p095": 0.9371283452146388,
+          "p100": 0.9910773108972124
+        },
+        "standard_deviation": 0.03636944342000433
+      }
+    },
+    {
+      "difference_frobenius_norm": 25.33721557181989,
+      "frobenius_cosine": 0.8912969288502253,
+      "layer": 38,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.12682991196391963,
+          "frobenius_norm": 19.82476567763122,
+          "residual_relative_norm": 0.9344357056727233,
+          "scalar": 0.2770595230824256
+        },
+        "frobenius_norm": 55.666923133490585,
+        "trace": 1418.544758182019
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.153569092811713,
+          "frobenius_norm": 18.576655645440443,
+          "residual_relative_norm": 0.9200167972315979,
+          "scalar": 0.2596166551113129
+        },
+        "frobenius_norm": 47.404068968054005,
+        "trace": 1329.2372741699219
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.5344945301825219,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.8723871885818062,
+        "quantiles": {
+          "p000": 0.7400222680380452,
+          "p005": 0.8255642535603857,
+          "p025": 0.8493394638307719,
+          "p050": 0.8663477076856203,
+          "p075": 0.8918355857665264,
+          "p095": 0.9377621920438673,
+          "p100": 0.9902179130200965
+        },
+        "standard_deviation": 0.03393009434414218
+      }
+    },
+    {
+      "difference_frobenius_norm": 26.31233758890016,
+      "frobenius_cosine": 0.8999021209325819,
+      "layer": 39,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.13877470096111988,
+          "frobenius_norm": 22.376102905768303,
+          "residual_relative_norm": 0.9280222513705585,
+          "scalar": 0.31271554480517805
+        },
+        "frobenius_norm": 60.066081436708984,
+        "trace": 1601.1035894025117
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.1655553178663643,
+          "frobenius_norm": 20.98078233984819,
+          "residual_relative_norm": 0.9134794371706654,
+          "scalar": 0.29321534708142283
+        },
+        "frobenius_norm": 51.56441684649553,
+        "trace": 1501.2625770568848
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.5102809107146612,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.8832039883988717,
+        "quantiles": {
+          "p000": 0.7664928662886938,
+          "p005": 0.8387660383091561,
+          "p025": 0.8610145906777158,
+          "p050": 0.8773364011927809,
+          "p075": 0.9033675985285183,
+          "p095": 0.9430334498915951,
+          "p100": 0.9897317410334058
+        },
+        "standard_deviation": 0.031949640162757025
+      }
+    },
+    {
+      "difference_frobenius_norm": 28.245044528948856,
+      "frobenius_cosine": 0.908849170046943,
+      "layer": 40,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.15305806929481372,
+          "frobenius_norm": 26.325207523960316,
+          "residual_relative_norm": 0.9202944804274262,
+          "scalar": 0.3679059596585262
+        },
+        "frobenius_norm": 67.28894017744346,
+        "trace": 1883.678513451654
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.17983107278194396,
+          "frobenius_norm": 24.594505662394972,
+          "residual_relative_norm": 0.9056317834628245,
+          "scalar": 0.34371866583824157
+        },
+        "frobenius_norm": 57.997026824157814,
+        "trace": 1759.8395690917969
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.4870084912212051,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.8948441845360104,
+        "quantiles": {
+          "p000": 0.7953231838717615,
+          "p005": 0.8528825415047988,
+          "p025": 0.8735998662601346,
+          "p050": 0.889909645626032,
+          "p075": 0.9151841429668206,
+          "p095": 0.9481266976318531,
+          "p100": 0.9885493736168225
+        },
+        "standard_deviation": 0.029634905458585922
+      }
+    },
+    {
+      "difference_frobenius_norm": 29.413938612674926,
+      "frobenius_cosine": 0.9167777648982531,
+      "layer": 41,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.16812698393970538,
+          "frobenius_norm": 29.958627696782457,
+          "residual_relative_norm": 0.91207072974649,
+          "scalar": 0.41868455026633455
+        },
+        "frobenius_norm": 73.0639596579215,
+        "trace": 2143.664897363633
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.19521924643135632,
+          "frobenius_norm": 27.965371485136433,
+          "residual_relative_norm": 0.897095732666611,
+          "scalar": 0.39082794785499575
+        },
+        "frobenius_norm": 63.29352402204809,
+        "trace": 2001.0390930175781
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.4647227195380791,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.9048591882083283,
+        "quantiles": {
+          "p000": 0.8172111269822968,
+          "p005": 0.8648028984593863,
+          "p025": 0.8846249690830117,
+          "p050": 0.9004735294552728,
+          "p075": 0.9250540128989959,
+          "p095": 0.9537258511505696,
+          "p100": 0.9877497421756645
+        },
+        "standard_deviation": 0.02765084307130407
+      }
+    },
+    {
+      "difference_frobenius_norm": 29.69677044433513,
+      "frobenius_cosine": 0.9218152294384814,
+      "layer": 42,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.1845595637015851,
+          "frobenius_norm": 32.623426353674404,
+          "residual_relative_norm": 0.9030174064205047,
+          "scalar": 0.4559262436610879
+        },
+        "frobenius_norm": 75.93837413149569,
+        "trace": 2334.3423675447702
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.21269763371372474,
+          "frobenius_norm": 30.472771176211516,
+          "residual_relative_norm": 0.8873006064949326,
+          "scalar": 0.42586992383003236
+        },
+        "frobenius_norm": 66.07400339703548,
+        "trace": 2180.4540100097656
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.4494471186479904,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.9110741580377205,
+        "quantiles": {
+          "p000": 0.8322387473616012,
+          "p005": 0.8726484506591673,
+          "p025": 0.8917892321971786,
+          "p050": 0.9071284606170256,
+          "p075": 0.9303110861714678,
+          "p095": 0.9570035376398184,
+          "p100": 0.9878096642667765
+        },
+        "standard_deviation": 0.026183283874543134
+      }
+    },
+    {
+      "difference_frobenius_norm": 30.366393526220495,
+      "frobenius_cosine": 0.9258446285637448,
+      "layer": 43,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.20372893769040618,
+          "frobenius_norm": 35.948642166693716,
+          "residual_relative_norm": 0.892340216682849,
+          "scalar": 0.5023975473971405
+        },
+        "frobenius_norm": 79.64456246410599,
+        "trace": 2572.275442673359
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.232660669517135,
+          "frobenius_norm": 33.62469153723426,
+          "residual_relative_norm": 0.8759790696602658,
+          "scalar": 0.4699193499982357
+        },
+        "frobenius_norm": 69.71027920548846,
+        "trace": 2405.987071990967
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.4356085482989957,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.9162742477479462,
+        "quantiles": {
+          "p000": 0.8422847524248411,
+          "p005": 0.8799711910283374,
+          "p025": 0.8981838750207725,
+          "p050": 0.9128721622605259,
+          "p075": 0.934256908254885,
+          "p095": 0.9593639732009749,
+          "p100": 0.9870990626771521
+        },
+        "standard_deviation": 0.02453010333223662
+      }
+    },
+    {
+      "difference_frobenius_norm": 30.789964737709127,
+      "frobenius_cosine": 0.9291494215514915,
+      "layer": 44,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.2250321653677359,
+          "frobenius_norm": 39.183892784391674,
+          "residual_relative_norm": 0.8803225741921333,
+          "scalar": 0.5476115493060206
+        },
+        "frobenius_norm": 82.60099520159346,
+        "trace": 2803.7711324468255
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.2547800730530048,
+          "frobenius_norm": 36.75509015767481,
+          "residual_relative_norm": 0.8632612159404564,
+          "scalar": 0.5136680006980896
+        },
+        "frobenius_norm": 72.81733216419319,
+        "trace": 2629.9801635742188
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.42283840704685444,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.9205797121607132,
+        "quantiles": {
+          "p000": 0.8473234232083742,
+          "p005": 0.886377295926858,
+          "p025": 0.9039644959657915,
+          "p050": 0.9174783483137299,
+          "p075": 0.9375863124842447,
+          "p095": 0.9608553532502885,
+          "p100": 0.9868111868816338
+        },
+        "standard_deviation": 0.02295467431341936
+      }
+    },
+    {
+      "difference_frobenius_norm": 31.279313721753457,
+      "frobenius_cosine": 0.931424975748825,
+      "layer": 45,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.24797354752655926,
+          "frobenius_norm": 42.431539428393066,
+          "residual_relative_norm": 0.8671945874332015,
+          "scalar": 0.5929987909490592
+        },
+        "frobenius_norm": 85.2091260201173,
+        "trace": 3036.153809659183
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.28000575310597203,
+          "frobenius_norm": 39.831409230038446,
+          "residual_relative_norm": 0.8485247473668803,
+          "scalar": 0.5566608667373657
+        },
+        "frobenius_norm": 75.27351468301318,
+        "trace": 2850.1036376953125
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.4155420914444453,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.9239803582393499,
+        "quantiles": {
+          "p000": 0.8611827135819324,
+          "p005": 0.8927878429444464,
+          "p025": 0.9084304939461707,
+          "p050": 0.9209089688897575,
+          "p075": 0.9394644513433317,
+          "p095": 0.9614090342897429,
+          "p100": 0.9864323533435153
+        },
+        "standard_deviation": 0.021228794355755684
+      }
+    },
+    {
+      "difference_frobenius_norm": 31.50589521608016,
+      "frobenius_cosine": 0.9339610032522943,
+      "layer": 46,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.27397281286101066,
+          "frobenius_norm": 45.72475517655236,
+          "residual_relative_norm": 0.8520722898551445,
+          "scalar": 0.6390228801831654
+        },
+        "frobenius_norm": 87.35698860716153,
+        "trace": 3271.797146537807
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.30881874490272637,
+          "frobenius_norm": 42.98306596314703,
+          "residual_relative_norm": 0.8313731142497174,
+          "scalar": 0.6007066085934639
+        },
+        "frobenius_norm": 77.34737218921931,
+        "trace": 3075.617835998535
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.4073298720350251,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.927686375768781,
+        "quantiles": {
+          "p000": 0.8681042502528736,
+          "p005": 0.8991473230058179,
+          "p025": 0.9130146883334045,
+          "p050": 0.924730140715306,
+          "p075": 0.9418420473171039,
+          "p095": 0.9623491275641223,
+          "p100": 0.9863974112133864
+        },
+        "standard_deviation": 0.01958287501686445
+      }
+    },
+    {
+      "difference_frobenius_norm": 32.028584054075225,
+      "frobenius_cosine": 0.9361353888370152,
+      "layer": 47,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.29959189617068394,
+          "frobenius_norm": 49.41602625886566,
+          "residual_relative_norm": 0.836903879683513,
+          "scalar": 0.6906099618296139
+        },
+        "frobenius_norm": 90.28233612409892,
+        "trace": 3535.923004567623
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.33637592151003215,
+          "frobenius_norm": 46.55942049534174,
+          "residual_relative_norm": 0.814631253077101,
+          "scalar": 0.6506876826286316
+        },
+        "frobenius_norm": 80.27773599263877,
+        "trace": 3331.5209350585938
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.3989721889642248,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.9305385264609605,
+        "quantiles": {
+          "p000": 0.8727392035522193,
+          "p005": 0.9039261949284081,
+          "p025": 0.9167963672109709,
+          "p050": 0.9276512892908394,
+          "p075": 0.9434907662151248,
+          "p095": 0.9634650172477214,
+          "p100": 0.9860910151888763
+        },
+        "standard_deviation": 0.018357807729599593
+      }
+    },
+    {
+      "difference_frobenius_norm": 30.970950606401797,
+      "frobenius_cosine": 0.9399102619204142,
+      "layer": 48,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.34492941077509676,
+          "frobenius_norm": 52.85368567717044,
+          "residual_relative_norm": 0.8093643118058167,
+          "scalar": 0.7386527127222507
+        },
+        "frobenius_norm": 89.99329729019973,
+        "trace": 3781.9018891379237
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.38480739052997076,
+          "frobenius_norm": 50.057644030453716,
+          "residual_relative_norm": 0.784342150767144,
+          "scalar": 0.6995768427848816
+        },
+        "frobenius_norm": 80.69538601360179,
+        "trace": 3581.8334350585938
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.38380076156004034,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.9352654086512331,
+        "quantiles": {
+          "p000": 0.8827192751864115,
+          "p005": 0.9117498734139271,
+          "p025": 0.9229965532899713,
+          "p050": 0.9323113621429522,
+          "p075": 0.9466333552450901,
+          "p095": 0.9659219350098588,
+          "p100": 0.9869441017429386
+        },
+        "standard_deviation": 0.01659228625684395
+      }
+    },
+    {
+      "difference_frobenius_norm": 30.464240705685278,
+      "frobenius_cosine": 0.9428921351387396,
+      "layer": 49,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.3922162180786245,
+          "frobenius_norm": 56.93105519406765,
+          "residual_relative_norm": 0.779604888338558,
+          "scalar": 0.7956356840295484
+        },
+        "frobenius_norm": 90.90472545098135,
+        "trace": 4073.654702231288
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.4349785761406343,
+          "frobenius_norm": 54.32527594891704,
+          "residual_relative_norm": 0.7516790697228211,
+          "scalar": 0.7592188119888306
+        },
+        "frobenius_norm": 82.36979921915142,
+        "trace": 3887.2003173828125
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.3698472133534372,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.9392087365540986,
+        "quantiles": {
+          "p000": 0.8903724606607522,
+          "p005": 0.9185010260294318,
+          "p025": 0.9281376769488212,
+          "p050": 0.9362334199169806,
+          "p075": 0.9491127393395563,
+          "p095": 0.9675548582527194,
+          "p100": 0.9866931990453075
+        },
+        "standard_deviation": 0.015007560271464462
+      }
+    },
+    {
+      "difference_frobenius_norm": 28.949741613983946,
+      "frobenius_cosine": 0.9473460421332615,
+      "layer": 50,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.4578621912904242,
+          "frobenius_norm": 60.86981610602352,
+          "residual_relative_norm": 0.7363000806122295,
+          "scalar": 0.8506815411936259
+        },
+        "frobenius_norm": 89.95692437221665,
+        "trace": 4355.489490911365
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.506407081567995,
+          "frobenius_norm": 58.58902163473514,
+          "residual_relative_norm": 0.7025616830086915,
+          "scalar": 0.8188064694404602
+        },
+        "frobenius_norm": 82.33156310421384,
+        "trace": 4192.289123535156
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.3516238550862914,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.944837808207132,
+        "quantiles": {
+          "p000": 0.9050266334813206,
+          "p005": 0.9277294503137437,
+          "p025": 0.9355179623038772,
+          "p050": 0.9418702094255282,
+          "p075": 0.9528995546469091,
+          "p095": 0.969903293821048,
+          "p100": 0.985721429601099
+        },
+        "standard_deviation": 0.01286860019144523
+      }
+    },
+    {
+      "difference_frobenius_norm": 27.03862082745988,
+      "frobenius_cosine": 0.9535409589629502,
+      "layer": 51,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.5352432170745834,
+          "frobenius_norm": 65.42404452983122,
+          "residual_relative_norm": 0.6817307261121627,
+          "scalar": 0.9143288183229743
+        },
+        "frobenius_norm": 89.42558762519249,
+        "trace": 4681.363549813628
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.5829391468996421,
+          "frobenius_norm": 63.34903308780389,
+          "residual_relative_norm": 0.6458024876851729,
+          "scalar": 0.8853296518325806
+        },
+        "frobenius_norm": 82.97139271450534,
+        "trace": 4532.8878173828125
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.3258788353775927,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.9525996328441131,
+        "quantiles": {
+          "p000": 0.9233304022781781,
+          "p005": 0.9407502493681891,
+          "p025": 0.9460949587344525,
+          "p050": 0.9504166638354569,
+          "p075": 0.9577492528526956,
+          "p095": 0.9717028179685026,
+          "p100": 0.986395715437659
+        },
+        "standard_deviation": 0.009360214358763313
+      }
+    },
+    {
+      "difference_frobenius_norm": 25.32083362722058,
+      "frobenius_cosine": 0.960833454931573,
+      "layer": 52,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.5859605108617802,
+          "frobenius_norm": 69.67650663167193,
+          "residual_relative_norm": 0.6434590034634838,
+          "scalar": 0.9737587828945834
+        },
+        "frobenius_norm": 91.02321978868224,
+        "trace": 4985.644968420267
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.6325059981715141,
+          "frobenius_norm": 67.80477197297486,
+          "residual_relative_norm": 0.606212835420437,
+          "scalar": 0.947600495815277
+        },
+        "frobenius_norm": 85.25658555797773,
+        "trace": 4851.714538574219
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.2969956333754587,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.9605413279063297,
+        "quantiles": {
+          "p000": 0.9388873845487092,
+          "p005": 0.9518662262637234,
+          "p025": 0.9557179083581097,
+          "p050": 0.9587004029556738,
+          "p075": 0.9638427198386846,
+          "p095": 0.9753602764657788,
+          "p100": 0.9881128204808143
+        },
+        "standard_deviation": 0.007095760128148988
+      }
+    },
+    {
+      "difference_frobenius_norm": 24.368563820666626,
+      "frobenius_cosine": 0.964802818591966,
+      "layer": 53,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.6210850669356789,
+          "frobenius_norm": 72.77772539155725,
+          "residual_relative_norm": 0.6155606656246979,
+          "scalar": 1.0170996326458408
+        },
+        "frobenius_norm": 92.34703036368595,
+        "trace": 5207.550119146705
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.6669874983345307,
+          "frobenius_norm": 71.11693316377836,
+          "residual_relative_norm": 0.5770723539258047,
+          "scalar": 0.9938893556594849
+        },
+        "frobenius_norm": 87.07914837045581,
+        "trace": 5088.7135009765625
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.2798438463935918,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.9648177816517812,
+        "quantiles": {
+          "p000": 0.9480958584390027,
+          "p005": 0.9575691946083005,
+          "p025": 0.960910911914308,
+          "p050": 0.963312877136875,
+          "p075": 0.9674290422076176,
+          "p095": 0.9774045111791303,
+          "p100": 0.9888780090189372
+        },
+        "standard_deviation": 0.005908323371053237
+      }
+    },
+    {
+      "difference_frobenius_norm": 23.59512458613026,
+      "frobenius_cosine": 0.9682675170128072,
+      "layer": 54,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.651639625569456,
+          "frobenius_norm": 76.00395853523516,
+          "residual_relative_norm": 0.5902206150504606,
+          "scalar": 1.062187611524132
+        },
+        "frobenius_norm": 94.15263298934396,
+        "trace": 5438.400571003556
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.6963330914145586,
+          "frobenius_norm": 74.6149681876053,
+          "residual_relative_norm": 0.55105980490818,
+          "scalar": 1.0427758812904357
+        },
+        "frobenius_norm": 89.41645358187701,
+        "trace": 5339.012512207031
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.2638790025878698,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.9685207569368053,
+        "quantiles": {
+          "p000": 0.9504346473924667,
+          "p005": 0.9627667773022904,
+          "p025": 0.9654460750313244,
+          "p050": 0.9673439442319225,
+          "p075": 0.9704378400486681,
+          "p095": 0.9789080900863198,
+          "p100": 0.9883264126490335
+        },
+        "standard_deviation": 0.004797456435882723
+      }
+    },
+    {
+      "difference_frobenius_norm": 21.718265865423845,
+      "frobenius_cosine": 0.9732578982537078,
+      "layer": 55,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.689393787711413,
+          "frobenius_norm": 78.30337710935085,
+          "residual_relative_norm": 0.5573205651046685,
+          "scalar": 1.0943229630269342
+        },
+        "frobenius_norm": 94.30762548750451,
+        "trace": 5602.933570697904
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.7276090332808332,
+          "frobenius_norm": 76.98308106983414,
+          "residual_relative_norm": 0.5219108800544081,
+          "scalar": 1.0758712649345399
+        },
+        "frobenius_norm": 90.24979989358881,
+        "trace": 5508.460876464844
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.24064613872863194,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.9736227185689961,
+        "quantiles": {
+          "p000": 0.9500798026381824,
+          "p005": 0.9692444106843066,
+          "p025": 0.9713121976303873,
+          "p050": 0.9727247270765741,
+          "p075": 0.9749307872661159,
+          "p095": 0.9818186964349097,
+          "p100": 0.990004209307942
+        },
+        "standard_deviation": 0.003761210570978842
+      }
+    },
+    {
+      "difference_frobenius_norm": 18.99959444861107,
+      "frobenius_cosine": 0.979511553624024,
+      "layer": 56,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.7188060590138838,
+          "frobenius_norm": 79.75760656925287,
+          "residual_relative_norm": 0.5302772303108216,
+          "scalar": 1.1146464375720826
+        },
+        "frobenius_norm": 94.0732716885011,
+        "trace": 5706.989760369062
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.7503722591727966,
+          "frobenius_norm": 78.57625647301226,
+          "residual_relative_norm": 0.4996276021470425,
+          "scalar": 1.098136568069458
+        },
+        "frobenius_norm": 90.70953680781707,
+        "trace": 5622.459228515625
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.2094553132694835,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.979919460047036,
+        "quantiles": {
+          "p000": 0.9510230351194255,
+          "p005": 0.9768951046661096,
+          "p025": 0.9783463340092602,
+          "p050": 0.9793824771347674,
+          "p075": 0.9808265621709714,
+          "p095": 0.9856788926600337,
+          "p100": 0.9915639808081937
+        },
+        "standard_deviation": 0.0027418274071030163
+      }
+    },
+    {
+      "difference_frobenius_norm": 17.01263281249275,
+      "frobenius_cosine": 0.9835176288249915,
+      "layer": 57,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.7367774786528535,
+          "frobenius_norm": 80.52267928363732,
+          "residual_relative_norm": 0.5130521624037331,
+          "scalar": 1.1253386538039194
+        },
+        "frobenius_norm": 93.81019656121853,
+        "trace": 5761.7339074760675
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.7635238761832805,
+          "frobenius_norm": 79.47446071365069,
+          "residual_relative_norm": 0.48628810782983317,
+          "scalar": 1.110689353942871
+        },
+        "frobenius_norm": 90.95284292302377,
+        "trace": 5686.7294921875
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.18704893949154588,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.9839348322879404,
+        "quantiles": {
+          "p000": 0.9521364716641475,
+          "p005": 0.9815661317774461,
+          "p025": 0.9828627812791395,
+          "p050": 0.9836480940215238,
+          "p075": 0.9846703836839126,
+          "p095": 0.9880789788325237,
+          "p100": 0.9927807905278381
+        },
+        "standard_deviation": 0.0021791983738039438
+      }
+    },
+    {
+      "difference_frobenius_norm": 15.104156289931394,
+      "frobenius_cosine": 0.9869886385412022,
+      "layer": 58,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.7536814467348056,
+          "frobenius_norm": 81.28443440507301,
+          "residual_relative_norm": 0.49630489949747064,
+          "scalar": 1.135984505264787
+        },
+        "frobenius_norm": 93.62966638580465,
+        "trace": 5816.2406669557095
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.7758319604299452,
+          "frobenius_norm": 80.32163554652622,
+          "residual_relative_norm": 0.47346387356381775,
+          "scalar": 1.1225289821624755
+        },
+        "frobenius_norm": 91.19031375921372,
+        "trace": 5747.348388671875
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.1656333405082214,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.9873933875789028,
+        "quantiles": {
+          "p000": 0.9538089095563435,
+          "p005": 0.9856198358299011,
+          "p025": 0.986740981329589,
+          "p050": 0.9873304339395602,
+          "p075": 0.9879980491667303,
+          "p095": 0.9901622994650212,
+          "p100": 0.9939647330130597
+        },
+        "standard_deviation": 0.0017970960006349131
+      }
+    },
+    {
+      "difference_frobenius_norm": 12.274058576850635,
+      "frobenius_cosine": 0.9910481440647301,
+      "layer": 59,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.7850079018735822,
+          "frobenius_norm": 81.24643971708737,
+          "residual_relative_norm": 0.463672403887074,
+          "scalar": 1.1354535133577883
+        },
+        "frobenius_norm": 91.69957540297126,
+        "trace": 5813.521988391876
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.7984023255125616,
+          "frobenius_norm": 80.4153316261315,
+          "residual_relative_norm": 0.448996296741341,
+          "scalar": 1.1238384246826172
+        },
+        "frobenius_norm": 89.9969850666169,
+        "trace": 5754.052734375
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.1363829973611363,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.9914228392209916,
+        "quantiles": {
+          "p000": 0.96116962157472,
+          "p005": 0.9900567600362521,
+          "p025": 0.991135885622569,
+          "p050": 0.9915538005893451,
+          "p075": 0.9919844290821395,
+          "p095": 0.9929811877192833,
+          "p100": 0.9953233447678207
+        },
+        "standard_deviation": 0.0015604741924428666
+      }
+    },
+    {
+      "difference_frobenius_norm": 10.017048775804657,
+      "frobenius_cosine": 0.9933501089295362,
+      "layer": 60,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.8104909370903195,
+          "frobenius_norm": 78.17704179127169,
+          "residual_relative_norm": 0.4353263866453313,
+          "scalar": 1.092557373282034
+        },
+        "frobenius_norm": 86.8370679904527,
+        "trace": 5593.893751204014
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.8199654161847727,
+          "frobenius_norm": 77.54762289494725,
+          "residual_relative_norm": 0.42430482417152326,
+          "scalar": 1.0837609767913818
+        },
+        "frobenius_norm": 85.63882934197369,
+        "trace": 5548.856201171875
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.11696853930364337,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.9937183199010965,
+        "quantiles": {
+          "p000": 0.9667141454202255,
+          "p005": 0.9925147250031616,
+          "p025": 0.9935724546191034,
+          "p050": 0.9939126549799298,
+          "p075": 0.9942268534067,
+          "p095": 0.9947932974992463,
+          "p100": 0.9963558087561829
+        },
+        "standard_deviation": 0.001452108037645565
+      }
+    },
+    {
+      "difference_frobenius_norm": 8.122506731243114,
+      "frobenius_cosine": 0.9951999339689496,
+      "layer": 61,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.8362175301113831,
+          "frobenius_norm": 75.81438774533746,
+          "residual_relative_norm": 0.40470046934568404,
+          "scalar": 1.0595382791943848
+        },
+        "frobenius_norm": 82.90715230455767,
+        "trace": 5424.83598947525
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.8430497129046436,
+          "frobenius_norm": 75.40716852360816,
+          "residual_relative_norm": 0.39616951812999995,
+          "scalar": 1.0538472175598144
+        },
+        "frobenius_norm": 82.12701558561993,
+        "trace": 5395.69775390625
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.09890176421636984,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.9955593560766477,
+        "quantiles": {
+          "p000": 0.9727010297452785,
+          "p005": 0.9944564839639288,
+          "p025": 0.9954875827501201,
+          "p050": 0.9957784424204077,
+          "p075": 0.9960186589008116,
+          "p095": 0.9963703119940063,
+          "p100": 0.9971447270821605
+        },
+        "standard_deviation": 0.0013008536344894736
+      }
+    },
+    {
+      "difference_frobenius_norm": 5.347391516231461,
+      "frobenius_cosine": 0.9976192523023991,
+      "layer": 62,
+      "local": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.8724953952724984,
+          "frobenius_norm": 72.39908470542353,
+          "residual_relative_norm": 0.3570778692771391,
+          "scalar": 1.0118079681880772
+        },
+        "frobenius_norm": 77.5088875922227,
+        "trace": 5180.456797122955
+      },
+      "public": {
+        "best_scalar_identity": {
+          "energy_fraction": 0.8756074548491108,
+          "frobenius_norm": 72.21241233171943,
+          "residual_relative_norm": 0.3526932734698653,
+          "scalar": 1.0091991424560547
+        },
+        "frobenius_norm": 77.1715330972405,
+        "trace": 5167.099609375
+      },
+      "relative_difference_denominator": "public_frobenius_norm",
+      "relative_frobenius_difference": 0.06929228047722527,
+      "row_wise_cosine": {
+        "count": 5120,
+        "mean": 0.9977185166862444,
+        "quantiles": {
+          "p000": 0.9861578158185714,
+          "p005": 0.9970433892960239,
+          "p025": 0.9976535480864197,
+          "p050": 0.9978266011166947,
+          "p075": 0.9979586500210056,
+          "p095": 0.9981344897574371,
+          "p100": 0.9984631091787969
+        },
+        "standard_deviation": 0.0005391805680250428
+      }
+    }
+  ],
+  "schema_version": 1,
+  "scope": "numeric matrix comparison only; no held-out token or logit evaluation"
+}

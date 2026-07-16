@@ -2,16 +2,16 @@
 
 ## 1. Result
 
-This repository reproduces the forward-only Jacobian Lens on the local RTX
-5090 using the exact NVIDIA serving checkpoint already certified by this
-project:
+This document records the passing **public pre-fitted lens** baseline on the
+local RTX 5090 using the exact NVIDIA serving checkpoint already certified by
+this project:
 
 ```text
 nvidia/Qwen3.6-27B-NVFP4
 revision: 0893e1606ff3d5f97a441f405d5fc541a6bdf404
 ```
 
-The successful run occurred on July 16, 2026. It applied a pinned, pre-fitted
+The run was recertified on July 16, 2026. It applied a pinned, pre-fitted
 1,000-prompt lens to residuals produced by the GPU-resident ModelOpt
 NVFP4/FP8 model, decoded both the vanilla logit lens and Jacobian Lens through
 the checkpoint's own quantized LM head, and covered every fitted source layer
@@ -22,17 +22,30 @@ The complete machine-readable result is
 Its SHA-256 is:
 
 ```text
-0a9787534f38f867b6c48e3edfcb9d5ee946dd2113ccbcdfdcdfda7873ed866d
+8e9eac05a23899ddb3d3b69c752cfe17c52977c8bbaee371db07724ebf390963
 ```
 
-[`validation/jlens-source-manifest.sha256`](../validation/jlens-source-manifest.sha256)
-ties that result to the exact runner, launcher, prompt set, verifier, tests, and
-vLLM dependency freeze that produced and checks it.
+The sibling
+[`validation/jlens-nvfp4-2026-07-16.sha256`](../validation/jlens-nvfp4-2026-07-16.sha256)
+pins that result. The source manifest records the runner, launcher, prompt set,
+verifier, tests, and vLLM dependency freeze used by the experiment.
 
 This is a **cross-precision application**, not an NVFP4 fit. The public lens
 was fitted against differentiable model weights and is applied here to
 quantized forward activations. That distinction matters for interpreting
 rank and score differences.
+
+A separate experiment subsequently fitted a complete dense `n=10` lens on the
+same RTX 5090 using differentiable bitsandbytes NF4. That fit succeeded and is
+documented in [`JLENS_NF4_EXPERIMENT.md`](JLENS_NF4_EXPERIMENT.md). It is an
+NF4 fit, not an NVFP4 fit: native fitting through the packed NVIDIA
+NVFP4/FP8 checkpoint remains unreproduced.
+
+The locally fitted NF4 lens was also applied to the NVFP4 checkpoint, but its
+strict four-prompt adapter certificate failed. A paired public-lens control
+failed identically on those prompts, so the NF4-to-NVFP4 cross-application is
+not certified. That failed paired experiment does not invalidate the separate
+passing two-prompt public baseline described in this document.
 
 ## 2. Source Pins
 
@@ -195,10 +208,10 @@ layer rows, passed all adapter gates, and again released GPU memory to 383 MiB.
 | VRAM | 32,607 MiB |
 | Driver | 595.71.05 |
 | vLLM / PyTorch | 0.23.0 / 2.11.0+cu130 |
-| Model load | 7.439 s |
-| Currency prompt generation / all-layer readout | 0.097 s / 1.090 s |
-| France prompt generation / all-layer readout | 0.063 s / 0.988 s |
-| Artifact gates through readout | 13.967 s |
+| Model load | 8.846 s |
+| Currency prompt generation / all-layer readout | 0.093 s / 1.099 s |
+| France prompt generation / all-layer readout | 0.065 s / 1.005 s |
+| Artifact gates through readout | 16.300 s |
 | Peak CUDA allocated / reserved | 25.62 GiB / 27.60 GiB |
 
 vLLM resolved the checkpoint as ModelOpt mixed quantization. On this consumer
@@ -245,6 +258,29 @@ reconstructed block-63 residual also returned ` Paris`. Against the real fused
 final path, reconstructed final-norm RMS error was `0.00524` (0.274% relative),
 full-vocabulary logit RMS error was `0.00846`, and the top five IDs were exact.
 
+### Paired held-out adapter result
+
+The local `n=10` NF4 lens and the public `n=1000` lens were each run on the
+same four Wikitext validation prompts through the NVFP4 adapter. Both strict
+certificates failed with identical reconstruction values, because this parity
+gate is computed before applying the lens matrix:
+
+| Validation row | Logit max error | Logit RMS | Greedy top-1 | Other failure |
+|---:|---:|---:|---|---|
+| 3 | `0.125` | `0.008130` | pass | none |
+| 18 | `0.125` | `0.008393` | pass | norm max `0.25`; top-5 prefix |
+| 42 | `0.0625` | `0.008663` | pass | none |
+| 49 | `0.125` | `0.007698` | pass | none |
+
+The full-logit max limit is `0.0625`; three rows exceeded it. All full-logit
+RMS values passed the `0.01` limit and all greedy top-1 checks passed. The
+local run took 33.328 seconds, including a 12.384-second model load; the public
+control took 23.291 seconds. These are failed certificates, not qualified
+passes. See
+[`validation/jlens-nf4-on-nvfp4-2026-07-16.json`](../validation/jlens-nf4-on-nvfp4-2026-07-16.json)
+and
+[`validation/jlens-public-on-nvfp4-heldout-2026-07-16.json`](../validation/jlens-public-on-nvfp4-heldout-2026-07-16.json).
+
 ## 7. MTP And Serving Context
 
 The production profile in this repository serves the same checkpoint with its
@@ -282,13 +318,17 @@ diagnostic readout of the same NVFP4 target model.
   position slices as separate processes. The final prompt position is captured
   implicitly for the adapter parity gate when it is not part of the requested
   slice; that extra row is not added to the requested layer grid.
-- Fitting a new lens on this machine is not feasible with the exact checkpoint:
+- Native fitting with the exact NVIDIA checkpoint remains unreproduced:
   vLLM's packed ModelOpt/Marlin/GDN deployment kernels do not provide the
-  activation backward path required by `jlens.fit`, and BF16 model weights
-  alone require roughly 54 GB. A fresh fit needs a differentiable BF16 model
-  on larger or multi-GPU hardware, or a separately validated CUDA analytic
-  GDN backward implementation.
+  activation backward path required by `jlens.fit`, and FP8 activation
+  quantization requires an explicitly declared surrogate derivative.
+- A new fit is feasible on this host through a different quantized forward.
+  The completed NF4 route loads pinned BF16 source weights, quantizes 496
+  linears with bitsandbytes, and forces differentiable PyTorch GDN. Its
+  63-matrix FP32 artifact used 1:48:16.5 of cumulative invocation time, with
+  24.20 GiB peak reserved CUDA memory. It must remain labeled NF4, including
+  when applied to NVFP4.
 
-The experiment therefore establishes the practical rung that fits this host:
-verified application of the stronger 1,000-prompt lens to the exact local
-NVFP4 target model.
+This experiment therefore establishes a verified public-lens application to
+the exact local NVFP4 target model on its two frozen semantic prompts. It does
+not establish native NVFP4 fitting or certify the local NF4 lens on NVFP4.

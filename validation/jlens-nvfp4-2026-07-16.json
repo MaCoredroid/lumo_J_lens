@@ -6,8 +6,8 @@
     "lens_metadata_matches": true,
     "model_architecture_matches": true
   },
-  "completed_at": "2026-07-16T07:34:40.465417+00:00",
-  "elapsed_seconds": 13.966594,
+  "completed_at": "2026-07-16T18:20:33.935411+00:00",
+  "elapsed_seconds": 16.29974,
   "experiments": [
     {
       "capture_positions_resolved": [
@@ -126,7 +126,7 @@
       "generated_text": " the",
       "generated_token": " the",
       "generated_token_id": 279,
-      "generation_seconds": 0.096761,
+      "generation_seconds": 0.093161,
       "id": "currency_boot",
       "layers": [
         {
@@ -6092,7 +6092,7 @@
         " boot",
         " is"
       ],
-      "readout_seconds": 1.089935
+      "readout_seconds": 1.098588
     },
     {
       "capture_positions_resolved": [
@@ -6211,7 +6211,7 @@
       "generated_text": " Paris",
       "generated_token": " Paris",
       "generated_token_id": 11751,
-      "generation_seconds": 0.06346,
+      "generation_seconds": 0.065194,
       "id": "capital_france",
       "layers": [
         {
@@ -12183,7 +12183,7 @@
         " France",
         " is"
       ],
-      "readout_seconds": 0.987781
+      "readout_seconds": 1.00527
     }
   ],
   "host": {
@@ -12315,13 +12315,13 @@
     "gpu_memory_utilization": 0.82,
     "language_model_only": true,
     "max_model_len": 256,
-    "model_load_seconds": 7.43917,
+    "model_load_seconds": 8.845616,
     "mtp_enabled": false,
     "readout_dtype": "torch.bfloat16",
     "timing_scope": "artifact resolution and validation through readout",
     "transport_dtype": "torch.float32"
   },
   "schema_version": 2,
-  "started_at": "2026-07-16T07:34:26.498831+00:00",
+  "started_at": "2026-07-16T18:20:17.635682+00:00",
   "status": "passed"
 }
