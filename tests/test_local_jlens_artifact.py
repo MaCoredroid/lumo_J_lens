@@ -56,7 +56,7 @@ def make_contract(*, d_model: int = 2, source_layers: tuple[int, ...] = (0, 1)):
             "target_layer": len(source_layers),
             "max_seq_len": 128,
             "skip_first": 16,
-            "cotangent_batch": 4,
+            "cotangent_batch": MODULE.LOCAL_FIT_COTANGENT_BATCH,
             "row_limit": d_model,
             "input_batch": 1,
             "is_grads_batched": True,

@@ -139,6 +139,7 @@ PROMPT_MANIFEST_SCHEMA = 1
 F32_DTYPE = np.dtype("<f4")
 NF4_BLOCKSIZE = 64
 NF4_NESTED_BLOCKSIZE = 256
+PRODUCTION_COTANGENT_BATCH = 32
 CUBLAS_WORKSPACE_CONFIG = ":4096:8"
 SOURCE_TREE_FILES = (
     "configs/jlens_nf4_fit_prompts.json",
@@ -1945,7 +1946,9 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--allow-short-prompts", action="store_true")
     parser.add_argument("--max-seq-len", type=int, default=128)
     parser.add_argument("--skip-first", type=int, default=16)
-    parser.add_argument("--cotangent-batch", type=int, default=4)
+    parser.add_argument(
+        "--cotangent-batch", type=int, default=PRODUCTION_COTANGENT_BATCH
+    )
     parser.add_argument(
         "--row-limit",
         type=int,

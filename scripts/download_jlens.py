@@ -37,6 +37,7 @@ LOCAL_FIT_SOURCE_LAYERS = tuple(range(63))
 LOCAL_FIT_TARGET_LAYER = 63
 LOCAL_FIT_D_MODEL = 5120
 LOCAL_FIT_N_PROMPTS = 10
+LOCAL_FIT_COTANGENT_BATCH = 32
 LOCAL_FIT_PROMPT_MANIFEST_SHA256 = (
     "2c36f17dee7287c096f7d1fdb7f8d7ecb8372c6cf8d13d7af8cfaed820439d3b"
 )
@@ -361,7 +362,7 @@ def _verify_local_provenance(
     if estimator.get("max_seq_len") != 128 or estimator.get("skip_first") != 16:
         raise ValueError("local lens estimator token window mismatch")
     if (
-        estimator.get("cotangent_batch") != 4
+        estimator.get("cotangent_batch") != LOCAL_FIT_COTANGENT_BATCH
         or estimator.get("input_batch") != 1
         or estimator.get("is_grads_batched") is not True
     ):

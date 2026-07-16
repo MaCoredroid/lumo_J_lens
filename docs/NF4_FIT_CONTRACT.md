@@ -146,11 +146,13 @@ For `d_model=5120`:
 - One dense FP16 matrix is exactly 50 MiB.
 - 63 FP32 matrices are 6,300 MiB (6.152 GiB).
 - 63 FP16 matrices are 3,150 MiB (3.076 GiB).
-- With `dim_batch=8`, fitting performs 640 VJPs per prompt; with
-  `dim_batch=4`, 1,280; with `dim_batch=1`, it performs 5,120. The leading
-  backward FLOPs are similar, but the lower batch substantially reduces peak
-  activation and returned-gradient memory. The production contract on this
-  host uses `dim_batch=4`.
+- With `dim_batch=32`, fitting performs 160 VJPs per prompt; with
+  `dim_batch=8`, 640; with `dim_batch=4`, 1,280; with `dim_batch=1`, it
+  performs 5,120. The leading backward FLOPs are similar, but the lower batch
+  substantially reduces peak activation and returned-gradient memory. The
+  production contract on this host uses `dim_batch=32`: its real 27B
+  diagnostic reserved 24.16 GiB and matched sequential VJPs exactly for 32
+  rows at both source layers 61 and 62.
 
 The upstream in-memory accumulator can simultaneously retain the running
 sum, the current prompt matrices, and the final mean. That approaches 18.5
