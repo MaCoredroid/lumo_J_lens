@@ -8,6 +8,9 @@ upstream projects:
 - SWE-bench: `princeton-nlp/SWE-bench`
 - Qwen3.6-27B-NVFP4 checkpoint: `nvidia/Qwen3.6-27B-NVFP4`
 - SymPy: `sympy/sympy`
+- Anthropic Jacobian Lens reference implementation: `anthropics/jacobian-lens`
+- Neuronpedia pre-fitted lens collection: `neuronpedia/jacobian-lens`
+- Qwen3.6 Apple/MLX architecture reference: `WeZZard/jlens-qwen36`
 
 The chat template is not vendored. `scripts/fetch_chat_template.sh` retrieves it
 from the public `MaCoredroid/Lumo_FlyWheel` repository at immutable commit
@@ -25,3 +28,7 @@ terms. `validation/sympy__sympy-13480.patch` includes a small SymPy source diff
 as exact run evidence and is covered by the SymPy BSD license reproduced in
 `validation/SYMPY_LICENSE`. The repository's original scripts and documentation
 are MIT licensed.
+
+The Neuronpedia lens is downloaded on demand and is not committed. The
+Anthropic and WeZZard repositories are Apache-2.0 references; no MLX/Metal
+implementation is vendored or executed by this project.

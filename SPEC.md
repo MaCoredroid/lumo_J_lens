@@ -1,5 +1,12 @@
 # Qwen3.6-27B NVFP4 + MTP + Qwen Code SWE-bench Specification
 
+The Jacobian Lens workflow is intentionally specified separately because it
+uses eager, single-process target-model inference without MTP. See
+[`docs/JLENS_NVFP4_REPRODUCTION.md`](docs/JLENS_NVFP4_REPRODUCTION.md) for its
+source pins, residual mapping, commands, acceptance gates, measurements, and
+fit limitations. Both workflows use the same pinned NVIDIA checkpoint and
+frozen vLLM environment.
+
 ## 1. Purpose
 
 This specification defines a reproducible, single-GPU path for:

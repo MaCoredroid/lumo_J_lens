@@ -1,8 +1,10 @@
 # lumo_J_lens
 
-Reproducible serving and evaluation for `nvidia/Qwen3.6-27B-NVFP4` with native
-MTP speculative decoding, GDN-aware prefix caching, Qwen Code, and the
-official SWE-bench Verified container runtime.
+Reproducible serving, evaluation, and Jacobian Lens inspection for
+`nvidia/Qwen3.6-27B-NVFP4` on one RTX 5090. The serving path uses native MTP
+speculative decoding, GDN-aware prefix caching, Qwen Code, and the official
+SWE-bench Verified container runtime. The lens path reads all 63 fitted source
+layers through the same packed NVFP4/FP8 target model.
 
 This repository is the cleaned, standalone extraction of a July 8, 2026 Claude
 Code setup session. It includes the fixes found during that session, not just
@@ -14,7 +16,9 @@ the final command. On July 15, 2026 the extracted stack was rerun end to end:
 - Live MTP draft acceptance ranged from 92.8% to 93.3% during the episode.
 
 See [VALIDATION.md](VALIDATION.md) for the evidence and [SPEC.md](SPEC.md) for
-the complete setup rationale.
+the serving/SWE setup rationale. See
+[docs/JLENS_NVFP4_REPRODUCTION.md](docs/JLENS_NVFP4_REPRODUCTION.md) for the
+Jacobian Lens specification and measured experiment.
 
 ## Requirements
 
@@ -64,6 +68,28 @@ Run the portable static checks independently of the GPU workflow:
 scripts/check.sh
 ```
 
+## Jacobian Lens On The RTX 5090
+
+Download and fully verify the pinned 1,000-prompt lens, then apply it to every
+source layer for the two frozen completion prompts:
+
+```bash
+.venv-vllm/bin/python scripts/download_jlens.py
+scripts/run_jlens_nvfp4.sh \
+  --prompts-file configs/jlens_prompts.json \
+  --layers all --positions=-1 --top-k 10 \
+  --output validation/jlens-nvfp4-local.json
+```
+
+The July 16 reference run passed the independent final-residual parity gate for
+both prompts, showed the expected `Italy`/`Italian` to `euro` layer progression,
+reserved 27.60 GiB peak CUDA memory, and completed its measured artifact-gate
+through readout lifecycle in 13.97 seconds. It uses the
+exact NVIDIA ModelOpt checkpoint but disables MTP for eager residual capture;
+MTP is a separate draft-token serving optimization, not part of the 64-layer
+target-model lens. This is application of a BF16-fitted lens to quantized
+activations, not an NVFP4 refit.
+
 ## Manual Lifecycle
 
 ```bash
@@ -108,12 +134,17 @@ only Git-tracked files after reviewing `git status` and `git ls-files`.
 ## Repository Map
 
 - `scripts/serve_qwen36_27b_nvfp4_mtp.sh`: frozen vLLM server profile
+- `scripts/download_jlens.py`: immutable 3.3 GB lens download and tensor gate
+- `scripts/run_jlens_nvfp4.sh`: CUDA environment and offline lens launcher
+- `scripts/run_jlens_nvfp4.py`: vLLM residual adapter and all-layer readout
 - `scripts/qwen_code_proxy.py`: thinking/envelope injection and context-fit retry
 - `scripts/run_swe_verified.py`: Qwen Code plus official-container episode runner
 - `scripts/score_verified.sh`: official SWE-bench scoring
 - `scripts/fetch_chat_template.sh`: immutable, SHA-verified template fetch
 - `configs/swe_image_digests.json`: certified task-image digest map
 - `validation/`: exact package freezes and sanitized certified-run evidence
+- `validation/jlens-nvfp4-2026-07-16.json`: complete lens experiment output
+- `validation/jlens-source-manifest.sha256`: lens runner/evidence source tie
 - `validation/runtime-source-manifest.sha256`: hashes for the certified runtime
 - `docs/SESSION_RECONSTRUCTION.md`: source-session and commit chronology
 - `docs/TROUBLESHOOTING.md`: every boot/runtime failure found and its fix
