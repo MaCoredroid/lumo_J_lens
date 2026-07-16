@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "images": {
+    "sympy__sympy-13480": {
+      "x86_64": {
+        "reference": "swebench/sweb.eval.x86_64.sympy_1776_sympy-13480@sha256:3a985bfd2f3430af337ad8f34793964d1f8845485fcee129c3f166dfba6c5e43",
+        "image_id": "sha256:3a985bfd2f3430af337ad8f34793964d1f8845485fcee129c3f166dfba6c5e43"
+      }
+    }
+  }
+}

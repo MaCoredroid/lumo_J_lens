@@ -1,0 +1,11 @@
+{
+  "name": "lumo-j-lens",
+  "private": true,
+  "description": "Reproducible Qwen3.6-27B NVFP4 + MTP serving and SWE-bench Verified runner",
+  "scripts": {
+    "qwen": "qwen"
+  },
+  "devDependencies": {
+    "@qwen-code/qwen-code": "0.19.4"
+  }
+}

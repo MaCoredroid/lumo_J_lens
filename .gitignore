@@ -1,0 +1,11 @@
+.env
+.venv*
+.cache/
+node_modules/
+runs/
+__pycache__/
+*.py[cod]
+*.log
+.server-state
+.pytest_cache/
+/configs/qwen3-openai-codex.jinja

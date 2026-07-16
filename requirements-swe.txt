@@ -1,0 +1,4 @@
+datasets==5.0.0
+docker==7.1.0
+huggingface-hub==1.22.0
+swebench==4.1.0

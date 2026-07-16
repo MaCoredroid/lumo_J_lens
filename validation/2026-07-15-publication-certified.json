@@ -1,0 +1,118 @@
+{
+  "schema_version": 3,
+  "date": "2026-07-15",
+  "timezone": "America/Los_Angeles",
+  "run_name": "publication_certified_v2_20260715",
+  "result": "PASS",
+  "host": {
+    "os": "Ubuntu 26.04 LTS",
+    "kernel": "7.0.0-27-generic",
+    "arch": "x86_64",
+    "gpu": "NVIDIA GeForce RTX 5090",
+    "gpu_memory_mib": 32607,
+    "compute_capability": "12.0",
+    "driver": "595.71.05",
+    "ram_gib": 30,
+    "swap_gib": 8
+  },
+  "software": {
+    "python": "3.12.13",
+    "vllm": "0.23.0",
+    "torch": "2.11.0+cu130",
+    "transformers": "5.12.1",
+    "flashinfer": "0.6.12",
+    "triton": "3.6.0",
+    "qwen_code": "0.19.4",
+    "swebench": "4.1.0",
+    "datasets": "5.0.0",
+    "docker": "29.1.3"
+  },
+  "pins": {
+    "model_repo_id": "nvidia/Qwen3.6-27B-NVFP4",
+    "model_revision": "0893e1606ff3d5f97a441f405d5fc541a6bdf404",
+    "dataset_repo_id": "princeton-nlp/SWE-bench_Verified",
+    "dataset_revision": "c104f840cc67f8b6eec6f759ebc8b2693d585d4a",
+    "chat_template_sha256": "c166a05aaf5ad4b807a7c46497f92180e3df24e64d4b54d27fd26ec61bec38da",
+    "task_image": "swebench/sweb.eval.x86_64.sympy_1776_sympy-13480@sha256:3a985bfd2f3430af337ad8f34793964d1f8845485fcee129c3f166dfba6c5e43",
+    "task_image_id": "sha256:3a985bfd2f3430af337ad8f34793964d1f8845485fcee129c3f166dfba6c5e43"
+  },
+  "model": {
+    "served_name": "qwen3.6-27b-nvfp4",
+    "quantization_requested": "modelopt_fp4",
+    "quantization_resolved": "modelopt_mixed",
+    "kv_cache_dtype": "fp8_e4m3",
+    "config_sha256": "c04a19ba293737ad7be4f6e96d6666cb7e479cbe19ecc0c289fad267135b0338",
+    "quant_config_sha256": "fd7200cd8bca2a8a5d777061521abf83e2deb97ab6bc2f04e7a0a3d3f8ecd5c1",
+    "index_sha256": "7aa103a2582b7d26631988de33dea19e8a308ee9c239e8e14feb374af30905e2"
+  },
+  "server": {
+    "max_model_len": 32768,
+    "max_num_seqs": 2,
+    "max_num_batched_tokens": 4096,
+    "gpu_memory_utilization": 0.85,
+    "gpu_kv_cache_tokens": 83012,
+    "engine_initialization_seconds": 10.0,
+    "compilation_seconds": 5.14,
+    "compilation_cache": "warm",
+    "mtp_method_resolved": "mtp",
+    "num_speculative_tokens": 1,
+    "mtp_acceptance_samples": [0.928, 0.933],
+    "prefix_cache_hit_rate_samples": [0.517, 0.663],
+    "generation_throughput_samples_tokens_per_second": [48.6, 51.7],
+    "gpu_memory_mib_after_shutdown": 383
+  },
+  "agent_boundary": {
+    "environment_scrubbed": true,
+    "isolated_home": true,
+    "isolated_cwd": true,
+    "task_container_network": "none",
+    "task_container_memory": "6g",
+    "task_container_memory_swap": "8g",
+    "task_container_pids_limit": 1024,
+    "declared_tools": ["run_shell_command"],
+    "forwarded_requests": 9,
+    "every_forwarded_tool_schema_exact": true,
+    "successful_shell_calls": 9,
+    "other_tool_attempts": 0
+  },
+  "agent": {
+    "thinking": true,
+    "temperature": 1.0,
+    "top_p": 0.95,
+    "top_k": 20,
+    "min_p": 0.0,
+    "presence_penalty": 0.0,
+    "initial_seed": 880001234,
+    "final_seed": 880001242,
+    "turns": 9,
+    "elapsed_seconds": 32.406,
+    "exit_code": 0,
+    "input_tokens": 124864,
+    "output_tokens": 1439,
+    "total_tokens": 126303
+  },
+  "task": {
+    "instance_id": "sympy__sympy-13480",
+    "base_commit": "f57fe3f4b3f2cab225749e1b3b38ae1bf80b62f0",
+    "patch_bytes": 590,
+    "patch_sha256": "98e80f91393e76fc6323eeb0a7582aa89f1db717932ea5742eed467d692d024d",
+    "predictions_sha256": "7ea5811e0765855a1a817a06e975893368cc4304e24d093cfb4cc7d857fab4bb",
+    "dataset_sha256": "e8d93ec886c5d367e412c2ec04c7a7696af3c821ab9fb3f0e03261a7743445e2"
+  },
+  "official_harness": {
+    "submitted": 1,
+    "completed": 1,
+    "resolved": 1,
+    "unresolved": 0,
+    "empty_patch": 0,
+    "errors": 0,
+    "report_sha256": "6f0e1c2ce449d411df0f2f8ffaf2680f1178ced057cee156c989a53732b0f7f8"
+  },
+  "dependency_lock_sha256": {
+    "vllm_freeze": "a073a0a7f7e47df1676fb1d94f3322149e0a7892786c0cb3a781929d1a1cb688",
+    "swe_freeze": "fdbe378ff64595ee34e8fe04217cad6c96e519180f5b88a31834a11e8c0c131d",
+    "package_lock": "8c379d18df779352d8b57239c4594c6ee0aab236a23b9bca71e0c03e49b9f479",
+    "image_digest_map": "214dbcd730d588eabddfbac2fb89c982e27285c9d2fd5988247faf70888358f2"
+  },
+  "runtime_source_manifest_sha256": "9537252ade61d1c58350b77b182180d8e09ea2a445d42d98218a210641f2bfcd"
+}
