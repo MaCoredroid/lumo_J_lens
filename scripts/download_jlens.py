@@ -45,7 +45,7 @@ LOCAL_FIT_MODEL_ARTIFACTS_SHA256 = (
     "03759870202250dcf41726d3b312a7555ba0a7bfa25721cb384b20821dbec8f0"
 )
 LOCAL_FIT_VERSIONS = {
-    "accelerate": "missing",
+    "accelerate": "1.14.0",
     "bitsandbytes": "0.49.2",
     "huggingface_hub": "1.23.0",
     "jlens": "0.1.0",

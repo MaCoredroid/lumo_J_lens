@@ -83,6 +83,10 @@ gradients with respect to residual activations, not weight gradients. Pin the
 source BF16 revision, quantizer/library version, compute dtype, double-quant
 setting, block size, and the serialized NF4 artifact hashes.
 
+Transformers' quantized single-device loader uses `device_map` and therefore
+also requires the pinned Accelerate runtime. The certified fit environment
+uses `accelerate==1.14.0`; omitting it fails before model construction.
+
 This produces a lens fitted to an NF4 forward. It is a valid reproduction of
 the fitting method on a differentiable 4-bit Qwen3.6 model, but applying that
 lens to `nvidia/Qwen3.6-27B-NVFP4` is still cross-quantization. Do not label it

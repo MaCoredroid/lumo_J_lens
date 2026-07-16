@@ -35,7 +35,7 @@ bash -n scripts/setup_fit.sh scripts/check_fit.sh
   tests/test_fit_jlens_nf4.py \
   tests/test_materialize_jlens_fit_prompts.py \
   tests/test_local_jlens_artifact.py
-"$FIT_PYTHON" -c 'import bitsandbytes, datasets, torch, transformers'
+"$FIT_PYTHON" -c 'import accelerate, bitsandbytes, datasets, torch, transformers'
 "$FIT_PYTHON" -m unittest -v \
   tests/test_compare_jlens_artifacts.py \
   tests/test_evaluate_jlens_nf4.py \

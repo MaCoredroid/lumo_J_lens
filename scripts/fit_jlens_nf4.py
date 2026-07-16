@@ -526,6 +526,7 @@ def tested_versions() -> dict[str, Any]:
 def require_runtime() -> dict[str, Any]:
     versions = tested_versions()
     required = {
+        "accelerate": "1.14.0",
         "transformers": "5.12.1",
         "bitsandbytes": "0.49.2",
         "jlens": "0.1.0",
