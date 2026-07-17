@@ -92,12 +92,18 @@ def target_token_ids_for_positions(
     prompt_token_ids: list[int],
     resolved_positions: list[int],
     generated_token_id: int,
+    *,
+    target_token_id_override: int | None = None,
 ) -> tuple[int, ...]:
     final_position = len(prompt_token_ids) - 1
     if final_position not in resolved_positions:
         raise ValueError("resolved positions must include the prompt's final position")
     return tuple(
-        generated_token_id
+        (
+            generated_token_id
+            if target_token_id_override is None
+            else target_token_id_override
+        )
         if position == final_position
         else prompt_token_ids[position + 1]
         for position in resolved_positions
@@ -121,6 +127,28 @@ def capture_positions_with_final(
 def reconstruct_post_block(block_output: tuple[Any, Any]) -> Any:
     branch_output, residual = block_output
     return branch_output + residual
+
+
+def _capture_rows(
+    tensor: Any,
+    *,
+    positions: tuple[int, ...],
+    stream_final_only: bool,
+) -> Any:
+    """Select capture rows, treating each streamed prefill chunk as local."""
+
+    if stream_final_only:
+        if len(positions) != 1:
+            raise ValueError("stream-final-only capture requires exactly one position")
+        if tensor.shape[0] < 1:
+            raise RuntimeError("cannot capture the tail of an empty forward")
+        return tensor[-1:]
+    max_position = max(positions)
+    if max_position >= tensor.shape[0]:
+        raise RuntimeError(
+            f"capture position {max_position} exceeds forward rows {tensor.shape[0]}"
+        )
+    return tensor[list(positions)]
 
 
 def transport_residual(residual: Any, jacobian: Any) -> Any:
@@ -156,6 +184,7 @@ def _install_capture_hooks(model: Any) -> dict[str, object]:
     model._jlens_positions = ()
     model._jlens_handles = []
     model._jlens_capture_active = False
+    model._jlens_stream_final_only = False
     model._jlens_final_normalized = None
 
     def make_hook(layer: int):
@@ -164,14 +193,15 @@ def _install_capture_hooks(model: Any) -> dict[str, object]:
                 return
             branch_output, residual = output
             post_block = reconstruct_post_block((branch_output, residual))
-            max_position = max(model._jlens_positions)
-            if max_position >= post_block.shape[0]:
-                raise RuntimeError(
-                    f"capture position {max_position} exceeds forward rows "
-                    f"{post_block.shape[0]}"
-                )
             model._jlens_captures[layer] = (
-                post_block[list(model._jlens_positions)].detach().float().cpu()
+                _capture_rows(
+                    post_block,
+                    positions=model._jlens_positions,
+                    stream_final_only=model._jlens_stream_final_only,
+                )
+                .detach()
+                .float()
+                .cpu()
             )
 
         return hook
@@ -185,7 +215,14 @@ def _install_capture_hooks(model: Any) -> dict[str, object]:
             return
         normalized = output if torch.is_tensor(output) else output[0]
         model._jlens_final_normalized = (
-            normalized[list(model._jlens_positions)].detach().float().cpu()
+            _capture_rows(
+                normalized,
+                positions=model._jlens_positions,
+                stream_final_only=model._jlens_stream_final_only,
+            )
+            .detach()
+            .float()
+            .cpu()
         )
 
     model._jlens_handles.append(text_model.norm.register_forward_hook(final_norm_hook))
@@ -201,9 +238,17 @@ def _install_capture_hooks(model: Any) -> dict[str, object]:
     }
 
 
-def _prepare_capture(model: Any, *, positions: tuple[int, ...]) -> None:
+def _prepare_capture(
+    model: Any,
+    *,
+    positions: tuple[int, ...],
+    stream_final_only: bool = False,
+) -> None:
+    if stream_final_only and len(positions) != 1:
+        raise ValueError("stream-final-only capture requires exactly one position")
     model._jlens_captures = {}
     model._jlens_positions = positions
+    model._jlens_stream_final_only = stream_final_only
     model._jlens_final_normalized = None
     model._jlens_capture_active = True
 
@@ -231,12 +276,14 @@ def _compact_topk(
     logits = logits.detach().float()
     values, token_ids = torch.topk(logits, top_k)
     target_score = logits[target_token_id]
+    target_logprob = torch.log_softmax(logits, dim=-1)[target_token_id]
     target_rank = int((logits > target_score).sum().item()) + 1
     return {
         "token_ids": token_ids.cpu().tolist(),
         "scores": [float(value) for value in values.cpu().tolist()],
         "target_token_id": target_token_id,
         "target_score": float(target_score),
+        "target_logprob": float(target_logprob),
         "target_rank": target_rank,
     }
 
@@ -483,7 +530,7 @@ def _decorate_readout(tokenizer: Any, readout: dict[str, object]) -> None:
     ]
 
 
-def _load_prompts(args: argparse.Namespace) -> list[dict[str, str]]:
+def _load_prompts(args: argparse.Namespace) -> list[dict[str, object]]:
     if args.prompt:
         return [{"id": "cli", "text": args.prompt}]
     if args.prompts_file:
@@ -492,11 +539,103 @@ def _load_prompts(args: argparse.Namespace) -> list[dict[str, str]]:
             raise ValueError("prompts file must contain a nonempty JSON list")
         prompts = []
         for index, item in enumerate(data):
-            if not isinstance(item, dict) or not isinstance(item.get("text"), str):
+            if not isinstance(item, dict):
                 raise ValueError(f"invalid prompt entry at index {index}")
-            prompts.append({"id": str(item.get("id", index)), "text": item["text"]})
+            text = item.get("text")
+            token_ids = item.get("token_ids")
+            if text is not None and not isinstance(text, str):
+                raise ValueError(f"invalid prompt text at index {index}")
+            if token_ids is not None and (
+                not isinstance(token_ids, list)
+                or not token_ids
+                or any(
+                    isinstance(token_id, bool)
+                    or not isinstance(token_id, int)
+                    or token_id < 0
+                    for token_id in token_ids
+                )
+            ):
+                raise ValueError(f"invalid prompt token_ids at index {index}")
+            if text is None and token_ids is None:
+                raise ValueError(
+                    f"prompt entry at index {index} requires text or token_ids"
+                )
+            target_token_id = item.get("target_token_id")
+            if target_token_id is not None and (
+                isinstance(target_token_id, bool)
+                or not isinstance(target_token_id, int)
+                or target_token_id < 0
+            ):
+                raise ValueError(f"invalid target_token_id at index {index}")
+
+            prompt: dict[str, object] = {"id": str(item.get("id", index))}
+            if text is not None:
+                prompt["text"] = text
+            if token_ids is not None:
+                prompt["token_ids"] = list(token_ids)
+            if target_token_id is not None:
+                prompt["target_token_id"] = target_token_id
+            if "metadata" in item:
+                prompt["metadata"] = item["metadata"]
+            prompts.append(prompt)
         return prompts
     return [{"id": "currency_boot", "text": DEFAULT_PROMPT}]
+
+
+def _resolve_prompt_input(
+    tokenizer: Any, prompt_spec: dict[str, object]
+) -> tuple[list[int], str]:
+    exact_token_ids = prompt_spec.get("token_ids")
+    text = prompt_spec.get("text")
+    if exact_token_ids is not None:
+        token_ids = list(exact_token_ids)
+        prompt_text = (
+            text
+            if isinstance(text, str)
+            else tokenizer.decode(
+                token_ids,
+                skip_special_tokens=False,
+                clean_up_tokenization_spaces=False,
+            )
+        )
+        return token_ids, prompt_text
+    if not isinstance(text, str):
+        raise ValueError("normalized prompt requires text or exact token_ids")
+    return tokenizer.encode(text, add_special_tokens=True), text
+
+
+def _validate_vocabulary_ids(
+    tokenizer: Any,
+    *,
+    prompt_id: object,
+    token_ids: list[int],
+    target_token_id: int | None,
+) -> None:
+    vocabulary_size = len(tokenizer)
+    invalid_prompt_ids = [
+        token_id for token_id in token_ids if token_id >= vocabulary_size
+    ]
+    if invalid_prompt_ids:
+        raise ValueError(
+            f"prompt {prompt_id} contains token IDs outside vocabulary size "
+            f"{vocabulary_size}: {invalid_prompt_ids[:8]}"
+        )
+    if target_token_id is not None and target_token_id >= vocabulary_size:
+        raise ValueError(
+            f"prompt {prompt_id} target token ID {target_token_id} is outside "
+            f"vocabulary size {vocabulary_size}"
+        )
+
+
+def _require_stream_final_position(
+    resolved_positions: list[int], token_count: int
+) -> None:
+    final_position = token_count - 1
+    if resolved_positions != [final_position]:
+        raise ValueError(
+            "--stream-final-only requires --positions to resolve exactly to the "
+            f"final prompt position {final_position}"
+        )
 
 
 def lens_artifact_mode(args: argparse.Namespace) -> str:
@@ -645,8 +784,59 @@ def build_parser() -> argparse.ArgumentParser:
         help="required expected SHA-256 of --lens-state for exact-run verification",
     )
     parser.add_argument("--max-model-len", type=int, default=256)
+    parser.add_argument(
+        "--max-num-batched-tokens",
+        type=int,
+        help="vLLM prefill token budget; defaults to --max-model-len",
+    )
+    parser.add_argument(
+        "--mamba-block-size",
+        type=int,
+        help="vLLM Mamba cache block size; requires prefix caching",
+    )
+    parser.add_argument(
+        "--enable-prefix-caching",
+        action="store_true",
+        help="enable vLLM prefix caching, as used by the certified SWE server",
+    )
+    parser.add_argument("--kv-cache-dtype", default="auto")
+    parser.add_argument(
+        "--stream-final-only",
+        action="store_true",
+        help="capture only each prefill chunk tail, retaining the final chunk",
+    )
     parser.add_argument("--gpu-memory-utilization", type=float, default=0.82)
     return parser
+
+
+def _runtime_pins(args: argparse.Namespace) -> dict[str, object]:
+    max_model_len = args.max_model_len
+    max_num_batched_tokens = (
+        max_model_len
+        if args.max_num_batched_tokens is None
+        else args.max_num_batched_tokens
+    )
+    mamba_block_size = args.mamba_block_size
+    if max_model_len < 2:
+        raise ValueError("--max-model-len must be at least 2")
+    if max_num_batched_tokens < 1:
+        raise ValueError("--max-num-batched-tokens must be positive")
+    if mamba_block_size is not None and mamba_block_size < 1:
+        raise ValueError("--mamba-block-size must be positive")
+    if mamba_block_size is not None and not args.enable_prefix_caching:
+        raise ValueError(
+            "--mamba-block-size requires --enable-prefix-caching in pinned vLLM"
+        )
+    if not args.kv_cache_dtype:
+        raise ValueError("--kv-cache-dtype must not be empty")
+    return {
+        "max_model_len": max_model_len,
+        "max_num_batched_tokens": max_num_batched_tokens,
+        "mamba_block_size": mamba_block_size,
+        "enable_prefix_caching": args.enable_prefix_caching,
+        "kv_cache_dtype": args.kv_cache_dtype,
+        "stream_final_only": args.stream_final_only,
+    }
 
 
 def main() -> int:
@@ -657,6 +847,7 @@ def main() -> int:
         raise ValueError("--top-k must be in 1..100")
     if not 0.70 <= args.gpu_memory_utilization <= 0.90:
         raise ValueError("--gpu-memory-utilization must be in 0.70..0.90")
+    _runtime_pins(args)
     lens_mode = lens_artifact_mode(args)
 
     with ExitStack() as resources:
@@ -672,6 +863,7 @@ def _run(
     layers = validate_layers(parse_integer_list(args.layers, allow_all=True))
     positions = parse_integer_list(args.positions)
     prompts = _load_prompts(args)
+    runtime_pins = _runtime_pins(args)
 
     from huggingface_hub import hf_hub_download, snapshot_download
 
@@ -780,29 +972,32 @@ def _run(
 
     torch.cuda.reset_peak_memory_stats()
     load_started = time.perf_counter()
-    llm = LLM(
+    llm_kwargs = dict(
         model=str(model_path),
         tokenizer=str(model_path),
         dtype="bfloat16",
         quantization="modelopt_fp4",
         gpu_memory_utilization=args.gpu_memory_utilization,
-        max_model_len=args.max_model_len,
-        max_num_batched_tokens=args.max_model_len,
+        max_model_len=runtime_pins["max_model_len"],
+        max_num_batched_tokens=runtime_pins["max_num_batched_tokens"],
         max_num_seqs=1,
         enforce_eager=True,
         enable_chunked_prefill=True,
-        enable_prefix_caching=False,
+        enable_prefix_caching=runtime_pins["enable_prefix_caching"],
         language_model_only=True,
         gdn_prefill_backend="triton",
         mamba_cache_mode="align",
-        mamba_block_size=args.max_model_len,
         mamba_ssm_cache_dtype="float32",
+        kv_cache_dtype=runtime_pins["kv_cache_dtype"],
         attention_backend="TRITON_ATTN",
         limit_mm_per_prompt={"image": 0, "video": 0},
         enable_flashinfer_autotune=False,
         async_scheduling=False,
         seed=0,
     )
+    if runtime_pins["mamba_block_size"] is not None:
+        llm_kwargs["mamba_block_size"] = runtime_pins["mamba_block_size"]
+    llm = LLM(**llm_kwargs)
     model_load_seconds = time.perf_counter() - load_started
     model_info = llm.apply_model(_install_capture_hooks)[0]
     tokenizer = llm.get_tokenizer()
@@ -812,22 +1007,35 @@ def _run(
     all_final_top1_matches = True
     all_final_norm_matches = True
     for prompt_spec in prompts:
-        token_ids = tokenizer.encode(prompt_spec["text"], add_special_tokens=True)
+        token_ids, prompt_text = _resolve_prompt_input(tokenizer, prompt_spec)
+        target_token_id_override = prompt_spec.get("target_token_id")
+        _validate_vocabulary_ids(
+            tokenizer,
+            prompt_id=prompt_spec["id"],
+            token_ids=token_ids,
+            target_token_id=target_token_id_override,
+        )
         if len(token_ids) + 1 > args.max_model_len:
             raise ValueError(
                 f"prompt {prompt_spec['id']} has {len(token_ids)} tokens, "
                 f"which leaves no generation slot under max {args.max_model_len}"
             )
         resolved = resolve_positions(positions, len(token_ids))
+        if args.stream_final_only:
+            _require_stream_final_position(resolved, len(token_ids))
         final_token_position = len(token_ids) - 1
         capture_positions = capture_positions_with_final(resolved, len(token_ids))
         llm.apply_model(
-            functools.partial(_prepare_capture, positions=tuple(capture_positions))
+            functools.partial(
+                _prepare_capture,
+                positions=tuple(capture_positions),
+                stream_final_only=args.stream_final_only,
+            )
         )
 
         prompt_started = time.perf_counter()
         outputs = llm.generate(
-            [TokensPrompt(prompt_token_ids=token_ids, prompt=prompt_spec["text"])],
+            [TokensPrompt(prompt_token_ids=token_ids, prompt=prompt_text)],
             sampling,
             use_tqdm=False,
         )
@@ -838,7 +1046,10 @@ def _run(
         generated_token_id = output.outputs[0].token_ids[0]
         llm.apply_model(_freeze_capture)
         target_token_ids = target_token_ids_for_positions(
-            token_ids, capture_positions, generated_token_id
+            token_ids,
+            capture_positions,
+            generated_token_id,
+            target_token_id_override=target_token_id_override,
         )
 
         readout = llm.apply_model(
@@ -873,25 +1084,32 @@ def _run(
                 if position["token_position"] in resolved
             ]
 
-        experiment_results.append(
-            {
-                "id": prompt_spec["id"],
-                "prompt": prompt_spec["text"],
-                "prompt_token_ids": token_ids,
-                "prompt_tokens": [tokenizer.decode([token_id]) for token_id in token_ids],
-                "positions_requested": positions,
-                "positions_resolved": resolved,
-                "capture_positions_resolved": capture_positions,
-                "final_validation_position": final_token_position,
-                "position_tokens": [tokenizer.decode([token_ids[pos]]) for pos in resolved],
-                "generated_token_id": generated_token_id,
-                "generated_token": tokenizer.decode([generated_token_id]),
-                "generated_text": output.outputs[0].text,
-                "generation_seconds": round(generation_seconds, 6),
-                "final_layer_top1_matches_greedy": final_matches,
-                **readout,
-            }
-        )
+        experiment_result = {
+            "id": prompt_spec["id"],
+            "prompt": prompt_text,
+            "prompt_token_ids": token_ids,
+            "prompt_tokens": [
+                tokenizer.decode([token_id]) for token_id in token_ids
+            ],
+            "positions_requested": positions,
+            "positions_resolved": resolved,
+            "capture_positions_resolved": capture_positions,
+            "final_validation_position": final_token_position,
+            "position_tokens": [
+                tokenizer.decode([token_ids[pos]]) for pos in resolved
+            ],
+            "generated_token_id": generated_token_id,
+            "generated_token": tokenizer.decode([generated_token_id]),
+            "generated_text": output.outputs[0].text,
+            "generation_seconds": round(generation_seconds, 6),
+            "final_layer_top1_matches_greedy": final_matches,
+            **readout,
+        }
+        if "metadata" in prompt_spec:
+            experiment_result["metadata"] = prompt_spec["metadata"]
+        if target_token_id_override is not None:
+            experiment_result["target_token_id_override"] = target_token_id_override
+        experiment_results.append(experiment_result)
 
     llm.apply_model(_remove_capture_hooks)
     revalidate_pinned_model_checkpoint(
@@ -932,7 +1150,7 @@ def _run(
             "mtp_enabled": False,
             "enforce_eager": True,
             "language_model_only": True,
-            "max_model_len": args.max_model_len,
+            **runtime_pins,
             "gpu_memory_utilization": args.gpu_memory_utilization,
             "capture_adapter": "vLLM apply_model forward hooks",
             "transport_dtype": "torch.float32",

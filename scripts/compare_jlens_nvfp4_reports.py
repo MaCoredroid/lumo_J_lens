@@ -142,6 +142,13 @@ RUNTIME_IDENTITY_FIELDS = (
     "transport_dtype",
     "readout_dtype",
 )
+OPTIONAL_RUNTIME_IDENTITY_FIELDS = (
+    "max_num_batched_tokens",
+    "mamba_block_size",
+    "enable_prefix_caching",
+    "kv_cache_dtype",
+    "stream_final_only",
+)
 EXPECTED_CHECKPOINT_INTEGRITY = {
     "policy": "ModelOptCheckpoint(strict_pinned=True)",
     "validated_before_model_load": True,
@@ -927,11 +934,25 @@ def _validate_model_identity(report: Mapping[str, Any], label: str) -> dict[str,
 
 
 def _validate_runtime_identity(report: Mapping[str, Any], label: str) -> dict[str, Any]:
+    raw_runtime = _mapping(report.get("runtime"), f"{label}.runtime")
     runtime = _identity(
-        _mapping(report.get("runtime"), f"{label}.runtime"),
+        raw_runtime,
         RUNTIME_IDENTITY_FIELDS,
         f"{label}.runtime",
     )
+    optional_fields_present = [
+        field for field in OPTIONAL_RUNTIME_IDENTITY_FIELDS if field in raw_runtime
+    ]
+    if optional_fields_present and len(optional_fields_present) != len(
+        OPTIONAL_RUNTIME_IDENTITY_FIELDS
+    ):
+        missing = sorted(set(OPTIONAL_RUNTIME_IDENTITY_FIELDS) - set(optional_fields_present))
+        raise ValueError(
+            f"{label}.runtime must include the complete long-context runtime identity; "
+            f"missing fields: {missing}"
+        )
+    for field in optional_fields_present:
+        runtime[field] = raw_runtime[field]
     _require_exact_fields(
         runtime, EXPECTED_RUNTIME_SEMANTICS, f"{label}.runtime"
     )
@@ -948,6 +969,30 @@ def _validate_runtime_identity(report: Mapping[str, Any], label: str) -> dict[st
         )
     runtime["max_model_len"] = max_model_len
     runtime["gpu_memory_utilization"] = gpu_utilization
+    if optional_fields_present:
+        runtime["max_num_batched_tokens"] = _positive_integer(
+            runtime["max_num_batched_tokens"],
+            f"{label}.runtime.max_num_batched_tokens",
+        )
+        mamba_block_size = runtime["mamba_block_size"]
+        if mamba_block_size is not None:
+            runtime["mamba_block_size"] = _positive_integer(
+                mamba_block_size, f"{label}.runtime.mamba_block_size"
+            )
+        if not isinstance(runtime["enable_prefix_caching"], bool):
+            raise ValueError(f"{label}.runtime.enable_prefix_caching must be boolean")
+        if runtime["mamba_block_size"] is not None and not runtime["enable_prefix_caching"]:
+            raise ValueError(
+                f"{label}.runtime.enable_prefix_caching must be true when "
+                "mamba_block_size is explicit"
+            )
+        if (
+            not isinstance(runtime["kv_cache_dtype"], str)
+            or not runtime["kv_cache_dtype"]
+        ):
+            raise ValueError(f"{label}.runtime.kv_cache_dtype must be a nonempty string")
+        if not isinstance(runtime["stream_final_only"], bool):
+            raise ValueError(f"{label}.runtime.stream_final_only must be boolean")
     return runtime
 
 
@@ -1035,7 +1080,11 @@ def _macro_comparisons(layers: Sequence[dict[str, Any]]) -> dict[str, Any]:
     return result
 
 
-def compare_reports(native: Mapping[str, Any], public: Mapping[str, Any]) -> dict[str, Any]:
+def validate_paired_report_identities(
+    native: Mapping[str, Any], public: Mapping[str, Any]
+) -> dict[str, Any]:
+    """Validate and normalize identities shared by any native/public report pair."""
+
     for label, report in (("native", native), ("public", public)):
         if report.get("schema_version") != INPUT_SCHEMA_VERSION:
             raise ValueError(f"{label} report schema_version must be {INPUT_SCHEMA_VERSION}")
@@ -1057,6 +1106,23 @@ def compare_reports(native: Mapping[str, Any], public: Mapping[str, Any]) -> dic
     public_host = _validate_host_identity(public, "public")
     if native_host != public_host:
         raise ValueError("paired pinned host identity mismatch")
+    return {
+        "native_lens": deepcopy(native_lens),
+        "public_lens": deepcopy(public_lens),
+        "model": deepcopy(native_model),
+        "runtime": deepcopy(native_runtime),
+        "host": deepcopy(native_host),
+    }
+
+
+def compare_reports(native: Mapping[str, Any], public: Mapping[str, Any]) -> dict[str, Any]:
+    identities = validate_paired_report_identities(native, public)
+    native_lens = identities["native_lens"]
+    public_lens = identities["public_lens"]
+    native_model = identities["model"]
+    public_model = identities["model"]
+    native_runtime = identities["runtime"]
+    native_host = identities["host"]
 
     native_experiments = _list(native.get("experiments"), "native.experiments")
     public_experiments = _list(public.get("experiments"), "public.experiments")

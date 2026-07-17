@@ -387,6 +387,65 @@ class PairedReportUnitTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "0.70..0.90"):
             self.compare()
 
+    def test_complete_long_context_runtime_identity_is_paired(self) -> None:
+        long_context_runtime = {
+            "max_num_batched_tokens": 4096,
+            "mamba_block_size": 1024,
+            "enable_prefix_caching": True,
+            "kv_cache_dtype": "fp8_e4m3",
+            "stream_final_only": True,
+        }
+        for report_value in (self.native, self.public):
+            report_value["runtime"].update(long_context_runtime)
+
+        result = self.compare()
+        for field, value in long_context_runtime.items():
+            self.assertEqual(result["pairing"]["runtime"][field], value)
+
+        for field, value in (
+            ("max_num_batched_tokens", 2048),
+            ("mamba_block_size", 512),
+            ("enable_prefix_caching", False),
+            ("kv_cache_dtype", "auto"),
+            ("stream_final_only", False),
+        ):
+            self.setUp()
+            for report_value in (self.native, self.public):
+                report_value["runtime"].update(long_context_runtime)
+            self.public["runtime"][field] = value
+            with self.subTest(field=field), self.assertRaisesRegex(
+                ValueError, "paired runtime identity mismatch|enable_prefix_caching"
+            ):
+                self.compare()
+
+    def test_partial_or_invalid_long_context_runtime_identity_is_rejected(self) -> None:
+        for report_value in (self.native, self.public):
+            report_value["runtime"]["max_num_batched_tokens"] = 4096
+        with self.assertRaisesRegex(ValueError, "complete long-context runtime identity"):
+            self.compare()
+
+        long_context_runtime = {
+            "max_num_batched_tokens": 4096,
+            "mamba_block_size": 1024,
+            "enable_prefix_caching": True,
+            "kv_cache_dtype": "fp8_e4m3",
+            "stream_final_only": True,
+        }
+        invalid_values = (
+            ("max_num_batched_tokens", 0, "positive integer"),
+            ("mamba_block_size", 0, "positive integer"),
+            ("enable_prefix_caching", 1, "boolean"),
+            ("kv_cache_dtype", "", "nonempty string"),
+            ("stream_final_only", 1, "boolean"),
+        )
+        for field, value, message in invalid_values:
+            self.setUp()
+            for report_value in (self.native, self.public):
+                report_value["runtime"].update(long_context_runtime)
+                report_value["runtime"][field] = value
+            with self.subTest(field=field), self.assertRaisesRegex(ValueError, message):
+                self.compare()
+
     def test_host_gpu_driver_and_packages_are_pinned(self) -> None:
         mutations = (
             ("gpu", "name", "arbitrary GPU", "host.gpu.name"),

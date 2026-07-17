@@ -1,0 +1,160 @@
+{
+  "kind": "certified_swe_jlens_prompt_bundle",
+  "outputs": {
+    "candidate_prompts": {
+      "bytes": 1025653,
+      "candidate_count": 2,
+      "entry_count": 5,
+      "path": "swe_jlens_candidate_prompts.json",
+      "sha256": "1f8a303c3b02688c0511506ed4d3d80a27bb5708d81ddc8cf106a3ffd93d91ae",
+      "target_token_id_overrides": 5
+    },
+    "stage_prompts": {
+      "bytes": 1999166,
+      "entry_count": 9,
+      "path": "swe_jlens_stage_prompts.json",
+      "sha256": "5044dff697ac55971c090ab8fa2b744df912d5acd784e9641d7b800ba9bedf1c",
+      "target_token_id_overrides": 0
+    }
+  },
+  "provenance_id": "72da18d1cead29ce7c4fe2627608040599c5f43c9e2b589855f89efa39afe038",
+  "schema_version": 1,
+  "source_contract": {
+    "candidate_probe": {
+      "candidates": [
+        "cothm",
+        "cotm"
+      ],
+      "method": "teacher-force the certified turn-3 reasoning to the semantic slot; tokenize full context-plus-candidate strings and emit one runner prompt per candidate BPE step",
+      "slot_marker": "but the variable is actually `",
+      "stage_index": 3
+    },
+    "chat_template": {
+      "bytes": 11526,
+      "path": "configs/qwen3-openai-codex.jinja",
+      "sha256": "c166a05aaf5ad4b807a7c46497f92180e3df24e64d4b54d27fd26ec61bec38da"
+    },
+    "episode": "publication_certified_v2_20260715/sympy__sympy-13480",
+    "kind": "certified_swe_jlens_prompt_source_contract",
+    "renderer": {
+      "add_generation_prompt": true,
+      "enable_thinking": true,
+      "expected_prompt_token_counts": [
+        11861,
+        12148,
+        12743,
+        13629,
+        13883,
+        14522,
+        15073,
+        15327,
+        15678
+      ],
+      "tokenize_rendered_text_with_add_special_tokens": false,
+      "tool_call_argument_normalization": "JSON-decode every string function.arguments and require an object"
+    },
+    "requests": [
+      {
+        "bytes": 52109,
+        "path": "runs/publication_certified_v2_20260715/proxy_dumps/chat_0001.json",
+        "sha256": "559e3357e4bf869ce5d842abf8872a779a5db1c9336db44344e8ad53559978fc"
+      },
+      {
+        "bytes": 53745,
+        "path": "runs/publication_certified_v2_20260715/proxy_dumps/chat_0002.json",
+        "sha256": "68eec2079c2e7698cb888ae9f89a67c35e163a47c0eb3e325ac13070785f87c0"
+      },
+      {
+        "bytes": 56363,
+        "path": "runs/publication_certified_v2_20260715/proxy_dumps/chat_0003.json",
+        "sha256": "ac6114406541945afd712e6bf6d51206291bdbe4159ca04f01b064514c015044"
+      },
+      {
+        "bytes": 59823,
+        "path": "runs/publication_certified_v2_20260715/proxy_dumps/chat_0004.json",
+        "sha256": "40fa434ffd4c89feb49199aaa37b02cd649df80ec0cbf5cbe07ada4218e21d79"
+      },
+      {
+        "bytes": 61040,
+        "path": "runs/publication_certified_v2_20260715/proxy_dumps/chat_0005.json",
+        "sha256": "ec7ba71d34ea26e84870a94096fbea7c3a913b047cb0b24cf0c25a631a38758b"
+      },
+      {
+        "bytes": 63928,
+        "path": "runs/publication_certified_v2_20260715/proxy_dumps/chat_0006.json",
+        "sha256": "f37c38768c8d8d501c51d493f47881248189870fbedc0426ab972b1843e0c92f"
+      },
+      {
+        "bytes": 65955,
+        "path": "runs/publication_certified_v2_20260715/proxy_dumps/chat_0007.json",
+        "sha256": "2432af56b74ff60662a0654bf15ad90da3fbea159b68891f2a7e28a32d8361fb"
+      },
+      {
+        "bytes": 67291,
+        "path": "runs/publication_certified_v2_20260715/proxy_dumps/chat_0008.json",
+        "sha256": "db38f1f0e22e328c1209ba3066421d0876e7411257f7464efeec5e445e191f79"
+      },
+      {
+        "bytes": 68967,
+        "path": "runs/publication_certified_v2_20260715/proxy_dumps/chat_0009.json",
+        "sha256": "91b4fa6f7220131c6a2d930c2c9526093d38a936fc9fbdcf0bbb9d81d6e5df50"
+      }
+    ],
+    "schema_version": 1,
+    "token_id_digest_encoding": "canonical compact sorted-key JSON",
+    "tokenizer": {
+      "bos_token_id": null,
+      "class": "Qwen2Tokenizer",
+      "eos_token_id": 248046,
+      "files": {
+        "tokenizer.json": {
+          "bytes": 12807982,
+          "path": "tokenizer.json",
+          "sha256": "5f9e4d4901a92b997e463c1f46055088b6cca5ca61a6522d1b9f64c4bb81cb42"
+        },
+        "tokenizer_config.json": {
+          "bytes": 16718,
+          "path": "tokenizer_config.json",
+          "sha256": "5186f0defcd7f232382c7f0aebcd2252d073bb921ab240e407b7ae8745d2b29b"
+        },
+        "vocab.json": {
+          "bytes": 6722759,
+          "path": "vocab.json",
+          "sha256": "ce99b4cb2983d118806ce0a8b777a35b093e2000a503ebde25853284c9dfa003"
+        }
+      },
+      "length": 248077,
+      "model_metadata_files": {
+        "config.json": {
+          "bytes": 88567,
+          "path": "config.json",
+          "sha256": "c04a19ba293737ad7be4f6e96d6666cb7e479cbe19ecc0c289fad267135b0338"
+        },
+        "model.safetensors.index.json": {
+          "bytes": 214866,
+          "path": "model.safetensors.index.json",
+          "sha256": "7aa103a2582b7d26631988de33dea19e8a308ee9c239e8e14feb374af30905e2"
+        }
+      },
+      "repo": "nvidia/Qwen3.6-27B-NVFP4",
+      "revision": "0893e1606ff3d5f97a441f405d5fc541a6bdf404",
+      "truncation_side": "right",
+      "vocab_size": 248044
+    },
+    "trace": {
+      "bytes": 25254,
+      "path": "runs/publication_certified_v2_20260715/generation/verified/per_task/sympy__sympy-13480/qwen_trace.json",
+      "sha256": "3e39701da94a3f590e62efc9e67aa22220e155b385cceb27cbecc4d9a56d632a"
+    },
+    "trace_binding": {
+      "required_thinking_blocks": 9,
+      "sampled_next_boundary_method": "tokenize rendered_prompt + exact thinking text and remove the verified rendered_prompt token prefix"
+    },
+    "usage": {
+      "bytes": 1325,
+      "path": "runs/publication_certified_v2_20260715/proxy_dumps/usage.jsonl",
+      "sha256": "60757ba7d953c5378392bf2a4d3fe8812ef739645a7977a9eeff311f0d1313e9"
+    }
+  },
+  "source_contract_sha256": "72da18d1cead29ce7c4fe2627608040599c5f43c9e2b589855f89efa39afe038"
+}

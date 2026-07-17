@@ -26,6 +26,8 @@ the serving/SWE setup rationale. See
 public FP16 lens of unpublished fit precision applied to NVFP4,
 [docs/JLENS_NVFP4_STE_EXPERIMENT.md](docs/JLENS_NVFP4_STE_EXPERIMENT.md) for
 the completed native NVIDIA fit contract and production evidence, and
+[docs/JLENS_SWE_QWEN_CODE_EXPERIMENT.md](docs/JLENS_SWE_QWEN_CODE_EXPERIMENT.md)
+for the layer-by-layer replay of the certified Qwen Code episode, and
 [docs/JLENS_NF4_EXPERIMENT.md](docs/JLENS_NF4_EXPERIMENT.md) for the fresh-fit
 experiment.
 
@@ -153,6 +155,47 @@ Both independently run adapter certificates failed with identical residual
 manifests and reconstruction values. That certificate is evaluated before
 either lens is applied and remains separate from lens-quality metrics.
 
+### J-lens on the certified SWE episode
+
+The exact nine request contexts from the successful Qwen Code run were
+re-rendered with the pinned template and tokenizer. Their lengths exactly
+match the server ledger (`11,861` through `15,678` tokens). The native
+NVFP4/FP8-STE lens and the public `n=1000` control were applied to all 63 source
+layers at each next-token boundary; independently replayed residual manifests
+and the logit-lens baselines match exactly.
+
+Selected later-half top-10 readouts contain task-relevant vocabulary. After
+the source was inspected, native layers 39/40 include `obvious` and `clearly`;
+after reproducing the error they include `confirm` and `confirming`.
+Subsequent stages contain repair/success terms and then `lack`/`unavailable`
+when `pytest` is missing. These are vocabulary readouts, not literal hidden
+thoughts.
+
+At the exact original reasoning boundary after `the variable is actually `,
+the same-context candidate probe compares the correct first token `co`
+(`cothm`) with buggy `cot` (`cotm`). The native J-lens log-probability margin is
+`+2.0664` at layer 31, `+1.9922` at layer 32, `+3.0391` at layer 35, and
+`+2.3984` at layer 40. The public lens also favors `co` at every layer in the
+fixed exploratory reporting slice. Both tokens are still outside the top 10
+in that slice, so this
+is a relative preference rather than a direct decode of `cothm`. At layer 62
+the native/public margins reach `+13.5625`/`+14.25`; the final model margin is
+`+13.50` and ranks the generated token `co` first. The original trace then
+continues to `cothm`. Independently, the official scorer resolved the original
+run's one-character `cotm` to `cothm` patch: `1/1`.
+
+The ordinary logit-lens baseline also favors `co` at all nine middle layers,
+with a larger mean margin (`+3.2440`) than either J-lens. The preference is
+therefore not uniquely revealed by Jacobian transport.
+
+This is an eager, MTP-disabled replay of frozen contexts because the original
+compiled server did not retain hidden states. The strict multi-stage adapter
+status is `failed`: five stages reached BF16 max logit error `0.125` against a
+`0.0625` threshold. All nine final top-1 tokens, top-5 prefixes, final-norm RMS
+checks, and full-logit RMS checks passed, and the longest-context preflight
+passed the complete strict gate. Treat the lens result as a reproducible
+descriptive analysis, not a strict adapter certification.
+
 ### Fresh NF4 fit
 
 A new exact, dense `n=10` lens was fitted successfully on the RTX 5090 against
@@ -260,12 +303,15 @@ only Git-tracked files after reviewing `git status` and `git ls-files`.
 - `scripts/fit_jlens_nf4.py`: resumable exact dense NF4 fitter
 - `scripts/evaluate_jlens_nf4.py`: held-out NF4 local/public/logit evaluation
 - `scripts/compare_jlens_artifacts.py`: dense local/public matrix comparison
+- `scripts/materialize_swe_jlens_prompts.py`: exact certified-request renderer
+- `scripts/analyze_swe_jlens_report.py`: bound middle-layer/candidate analysis
 - `scripts/qwen_code_proxy.py`: thinking/envelope injection and context-fit retry
 - `scripts/run_swe_verified.py`: Qwen Code plus official-container episode runner
 - `scripts/score_verified.sh`: official SWE-bench scoring
 - `scripts/fetch_chat_template.sh`: immutable, SHA-verified template fetch
 - `configs/swe_image_digests.json`: certified task-image digest map
-- `validation/`: exact package freezes and sanitized certified-run evidence
+- `validation/`: exact freezes, sanitized certified records, and publication-reviewed
+  SWE J-lens reports whose exact prompts and token IDs are intentionally reversible
 - `validation/jlens-nvfp4-2026-07-16.json`: complete lens experiment output
 - `validation/jlens-nf4-fit-provenance-2026-07-16.json`: completed `n=10` fit certificate
 - `validation/jlens-nf4-evidence.sha256`: hashes for the fresh-fit evidence set
@@ -279,10 +325,14 @@ only Git-tracked files after reviewing `git status` and `git ls-files`.
 - `validation/jlens-native-nvfp4-ste-on-nvfp4-heldout-2026-07-17.json`: native schema-3 readout
 - `validation/jlens-public-schema3-on-nvfp4-heldout-2026-07-17.json`: paired public control
 - `validation/jlens-nvfp4-ste-vs-public-heldout-2026-07-17.json`: offline paired metrics
+- `validation/jlens-swe-qwen-code-analysis-2026-07-17.json`: compact SWE layer findings
+- `validation/jlens-swe-qwen-code-native-nvfp4-ste-2026-07-17.json`: native all-layer replay
+- `validation/jlens-swe-qwen-code-public-2026-07-17.json`: public all-layer control
 - `validation/jlens-source-manifest.sha256`: lens runner/evidence source tie
 - `validation/runtime-source-manifest.sha256`: hashes for the certified runtime
 - `docs/SESSION_RECONSTRUCTION.md`: source-session and commit chronology
 - `docs/JLENS_NVFP4_STE_EXPERIMENT.md`: native fit contract, evidence, and runbook
+- `docs/JLENS_SWE_QWEN_CODE_EXPERIMENT.md`: certified SWE layer analysis and runbook
 - `docs/TROUBLESHOOTING.md`: every boot/runtime failure found and its fix
 
 ## Security Boundary

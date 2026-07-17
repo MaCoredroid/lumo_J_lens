@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
 import importlib.util
+import json
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -57,6 +59,17 @@ class JacobianLensHelpersTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             MODULE.target_token_ids_for_positions([10, 20, 30], [0, 1], 99)
 
+    def test_target_token_override_applies_only_to_final_position(self):
+        self.assertEqual(
+            MODULE.target_token_ids_for_positions(
+                [10, 20, 30],
+                [0, 2],
+                99,
+                target_token_id_override=77,
+            ),
+            (20, 77),
+        )
+
     def test_capture_positions_add_final_implicitly(self):
         self.assertEqual(MODULE.capture_positions_with_final([1, 3], 6), [1, 3, 5])
 
@@ -91,6 +104,234 @@ class JacobianLensHelpersTest(unittest.TestCase):
         self.assertEqual(result["scores"][0], float(logits[1]))
         self.assertEqual(result["target_score"], float(logits[0]))
         self.assertNotEqual(result["target_score"], round(float(logits[0]), 6))
+
+    def test_compact_topk_records_exact_float32_target_logprob(self):
+        import torch
+
+        logits = torch.tensor([0.123456791, 1.987654328, -2.0], dtype=torch.float32)
+        result = MODULE._compact_topk(logits, top_k=2, target_token_id=0)
+        expected = torch.log_softmax(logits.float(), dim=-1)[0]
+        self.assertEqual(result["target_logprob"], float(expected))
+        self.assertNotEqual(result["target_logprob"], round(float(expected), 6))
+
+    def test_stream_capture_selects_each_chunk_tail(self):
+        import torch
+
+        first = torch.arange(12, dtype=torch.float32).reshape(3, 4)
+        second = torch.arange(8, dtype=torch.float32).reshape(2, 4) + 100
+        captured = MODULE._capture_rows(
+            first, positions=(4,), stream_final_only=True
+        )
+        captured = MODULE._capture_rows(
+            second, positions=(4,), stream_final_only=True
+        )
+        self.assertTrue(torch.equal(captured, second[-1:]))
+
+    def test_default_capture_still_uses_absolute_forward_rows(self):
+        import torch
+
+        tensor = torch.arange(12, dtype=torch.float32).reshape(3, 4)
+        captured = MODULE._capture_rows(
+            tensor, positions=(0, 2), stream_final_only=False
+        )
+        self.assertTrue(torch.equal(captured, tensor[[0, 2]]))
+
+    def test_installed_stream_hooks_overwrite_with_latest_chunk_tail(self):
+        import torch
+
+        class Handle:
+            def remove(self):
+                return None
+
+        class Hookable:
+            def __init__(self):
+                self.hooks = []
+
+            def register_forward_hook(self, hook):
+                self.hooks.append(hook)
+                return Handle()
+
+        class Config:
+            hidden_size = 4
+
+        class TextModel:
+            def __init__(self):
+                self.layers = [Hookable() for _ in range(64)]
+                self.norm = Hookable()
+                self.config = Config()
+
+        class LanguageModel:
+            def __init__(self):
+                self.model = TextModel()
+                self.lm_head = object()
+
+        class Model:
+            def __init__(self):
+                self.language_model = LanguageModel()
+
+        model = Model()
+        grad_enabled = torch.is_grad_enabled()
+        try:
+            MODULE._install_capture_hooks(model)
+            MODULE._prepare_capture(
+                model, positions=(99,), stream_final_only=True
+            )
+            first = torch.arange(12, dtype=torch.float32).reshape(3, 4)
+            second = torch.arange(8, dtype=torch.float32).reshape(2, 4) + 100
+            zero_first = torch.zeros_like(first)
+            zero_second = torch.zeros_like(second)
+            layer_hook = model.language_model.model.layers[0].hooks[0]
+            norm_hook = model.language_model.model.norm.hooks[0]
+            layer_hook(None, None, (first, zero_first))
+            norm_hook(None, None, first)
+            layer_hook(None, None, (second, zero_second))
+            norm_hook(None, None, second)
+            self.assertTrue(
+                torch.equal(model._jlens_captures[0], second[-1:])
+            )
+            self.assertTrue(
+                torch.equal(model._jlens_final_normalized, second[-1:])
+            )
+        finally:
+            torch.set_grad_enabled(grad_enabled)
+
+    def test_stream_capture_rejects_multiple_positions(self):
+        import torch
+
+        with self.assertRaisesRegex(ValueError, "exactly one position"):
+            MODULE._capture_rows(
+                torch.zeros(2, 4),
+                positions=(2, 3),
+                stream_final_only=True,
+            )
+
+    def test_stream_mode_requires_final_requested_position_only(self):
+        MODULE._require_stream_final_position([7], 8)
+        with self.assertRaisesRegex(ValueError, "final prompt position 7"):
+            MODULE._require_stream_final_position([3, 7], 8)
+        with self.assertRaisesRegex(ValueError, "final prompt position 7"):
+            MODULE._require_stream_final_position([6], 8)
+
+    def test_prompt_file_preserves_exact_ids_target_and_metadata(self):
+        payload = [
+            {
+                "id": "swe-task",
+                "text": "display text",
+                "token_ids": [3, 5, 8],
+                "target_token_id": 13,
+                "metadata": {"instance_id": "sympy__sympy-123"},
+            }
+        ]
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "prompts.json"
+            path.write_text(json.dumps(payload))
+            args = MODULE.build_parser().parse_args(["--prompts-file", str(path)])
+            self.assertEqual(MODULE._load_prompts(args), payload)
+
+    def test_exact_prompt_ids_are_authoritative_over_text_tokenization(self):
+        class Tokenizer:
+            def encode(self, text, *, add_special_tokens):
+                raise AssertionError("exact token IDs must bypass tokenization")
+
+            def decode(self, token_ids, **kwargs):
+                return "decoded"
+
+        token_ids, text = MODULE._resolve_prompt_input(
+            Tokenizer(), {"id": "p", "text": "original", "token_ids": [7, 9]}
+        )
+        self.assertEqual(token_ids, [7, 9])
+        self.assertEqual(text, "original")
+
+    def test_exact_prompt_without_text_uses_deterministic_decode(self):
+        calls = []
+
+        class Tokenizer:
+            def decode(self, token_ids, **kwargs):
+                calls.append((token_ids, kwargs))
+                return "decoded exact IDs"
+
+        token_ids, text = MODULE._resolve_prompt_input(
+            Tokenizer(), {"id": "p", "token_ids": [7, 9]}
+        )
+        self.assertEqual(token_ids, [7, 9])
+        self.assertEqual(text, "decoded exact IDs")
+        self.assertEqual(
+            calls,
+            [
+                (
+                    [7, 9],
+                    {
+                        "skip_special_tokens": False,
+                        "clean_up_tokenization_spaces": False,
+                    },
+                )
+            ],
+        )
+
+    def test_prompt_file_rejects_invalid_exact_ids_and_targets(self):
+        invalid_entries = (
+            {"token_ids": []},
+            {"token_ids": [1, True]},
+            {"token_ids": [1], "target_token_id": -1},
+            {"metadata": {"missing": "input"}},
+        )
+        for entry in invalid_entries:
+            with self.subTest(
+                entry=entry
+            ), tempfile.TemporaryDirectory() as directory:
+                path = Path(directory) / "prompts.json"
+                path.write_text(json.dumps([entry]))
+                args = MODULE.build_parser().parse_args(
+                    ["--prompts-file", str(path)]
+                )
+                with self.assertRaises(ValueError):
+                    MODULE._load_prompts(args)
+
+    def test_runtime_pin_defaults_disable_prefix_cache_settings(self):
+        args = MODULE.build_parser().parse_args([])
+        self.assertEqual(
+            MODULE._runtime_pins(args),
+            {
+                "max_model_len": 256,
+                "max_num_batched_tokens": 256,
+                "mamba_block_size": None,
+                "enable_prefix_caching": False,
+                "kv_cache_dtype": "auto",
+                "stream_final_only": False,
+            },
+        )
+
+    def test_runtime_pins_accept_long_context_chunking_values(self):
+        args = MODULE.build_parser().parse_args(
+            [
+                "--max-model-len",
+                "32768",
+                "--max-num-batched-tokens",
+                "4096",
+                "--mamba-block-size",
+                "4096",
+                "--enable-prefix-caching",
+                "--kv-cache-dtype",
+                "fp8",
+                "--stream-final-only",
+            ]
+        )
+        self.assertEqual(
+            MODULE._runtime_pins(args),
+            {
+                "max_model_len": 32768,
+                "max_num_batched_tokens": 4096,
+                "mamba_block_size": 4096,
+                "enable_prefix_caching": True,
+                "kv_cache_dtype": "fp8",
+                "stream_final_only": True,
+            },
+        )
+
+    def test_mamba_block_size_requires_prefix_caching(self):
+        args = MODULE.build_parser().parse_args(["--mamba-block-size", "1024"])
+        with self.assertRaisesRegex(ValueError, "requires --enable-prefix-caching"):
+            MODULE._runtime_pins(args)
 
     def test_residual_capture_manifest_binds_positions_and_bytes(self):
         import torch

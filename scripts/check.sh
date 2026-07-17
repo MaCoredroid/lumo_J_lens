@@ -2,7 +2,13 @@
 set -euo pipefail
 
 ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
-PYTHON_BIN=${PYTHON_BIN:-python3}
+if [[ -z ${PYTHON_BIN+x} ]]; then
+  if [[ -x "$ROOT/.venv-vllm/bin/python" ]]; then
+    PYTHON_BIN="$ROOT/.venv-vllm/bin/python"
+  else
+    PYTHON_BIN=python3
+  fi
+fi
 tmp_dir=$(mktemp -d)
 trap 'rm -rf "$tmp_dir"' EXIT
 
@@ -20,6 +26,7 @@ mapfile -t python_sources < <(
 "$PYTHON_BIN" "$ROOT/scripts/check_jlens_result.py"
 "$PYTHON_BIN" "$ROOT/scripts/check_jlens_nf4_result.py"
 "$PYTHON_BIN" "$ROOT/scripts/check_jlens_nvfp4_ste_result.py"
+"$PYTHON_BIN" "$ROOT/scripts/analyze_swe_jlens_report.py" --check
 (
   cd "$ROOT"
   sha256sum --check validation/jlens-nvfp4-2026-07-16.sha256
@@ -27,6 +34,8 @@ mapfile -t python_sources < <(
   sha256sum --check validation/jlens-nvfp4-ste-evidence-2026-07-17.sha256
   sha256sum --check validation/jlens-nvfp4-ste-source-manifest.sha256
   sha256sum --check validation/jlens-source-manifest.sha256
+  sha256sum --check validation/jlens-swe-qwen-code-evidence-2026-07-17.sha256
+  sha256sum --check validation/jlens-swe-qwen-code-source-manifest.sha256
   sha256sum --check validation/jlens-nf4-evidence.sha256
   sha256sum --check validation/jlens-nf4-source-manifest.sha256
 )

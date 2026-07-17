@@ -170,6 +170,76 @@ The corresponding fit, evaluation, runner, checker, test, contract, and freeze
 files are pinned in
 [`validation/jlens-nf4-source-manifest.sha256`](validation/jlens-nf4-source-manifest.sha256).
 
+## SWE Episode Jacobian-Lens Replay
+
+Date: 2026-07-17 (America/Los_Angeles)
+
+This experiment replays the nine exact next-token contexts from the certified
+Qwen Code episode through the pinned deployed NVFP4/FP8 target model. It is not
+a retrospective capture of the original hidden states: that server ran the
+compiled MTP profile and did not retain activations. Replay uses eager hooks,
+one-token greedy generation, and no MTP draft block. Prefix caching, chunked
+prefill, FP8 E4M3 KV, and the original 1,024-token Mamba cache block remain
+enabled.
+
+| Claim | Result | Evidence |
+|---|---|---|
+| Exact prompt reconstruction | PASS; all nine template renders match recorded counts `11,861..15,678` | [`provenance`](validation/jlens-swe-qwen-code-prompt-provenance-2026-07-17.json) |
+| Longest-context capture preflight | PASS; 15,678 tokens, layers 31/32, strict adapter gate and final top-1 | [`preflight`](validation/jlens-swe-qwen-code-longest-preflight-2026-07-17.json) |
+| Native NVFP4/FP8-STE all-layer replay | COMPLETED; nine prompts x 63 layers | [`native report`](validation/jlens-swe-qwen-code-native-nvfp4-ste-2026-07-17.json) |
+| Public `n=1000` all-layer control | COMPLETED on independently replayed, byte-identical residual manifests | [`public report`](validation/jlens-swe-qwen-code-public-2026-07-17.json) |
+| Paired native/public comparison | REPORTED; 567 paired observations and exact logit-lens identity | [`paired report`](validation/jlens-swe-qwen-code-native-vs-public-2026-07-17.json) |
+| Same-context `co` versus `cot` probe | REPORTED for both native and public lenses over all 63 layers | [`native`](validation/jlens-swe-qwen-code-candidate-probe-2026-07-17.json), [`public`](validation/jlens-swe-qwen-code-candidate-probe-public-2026-07-17.json) |
+| Official task outcome | PASS; `sympy__sympy-13480`, 1/1 resolved, zero errors | [`certified record`](validation/2026-07-15-publication-certified.json), [`patch`](validation/sympy__sympy-13480.patch) |
+
+At stages 3 and 4, after source inspection and failure reproduction, native
+layers 39/40 decode semantically clustered vocabulary such as
+`obvious`/`clearly` and `confirm`/`confirming`. Later stages move through
+repair/success terms, while the missing-`pytest` stage moves toward
+`lack`/`unavailable`. The public control shows the same broad transitions.
+These are decoded token distributions, not claims that a hidden state contains
+literal English thoughts.
+
+The primary candidate contrast uses an identical 12,775-token context for both
+alternatives. It compares `co`, the first BPE token of correct `cothm`, against
+`cot`, the first token of buggy `cotm`. Native J-lens margins (`co - cot`) are
+`+2.06640625` at layer 31, `+1.9921875` at 32, `+3.0390625` at 35,
+`+3.2578125` at 36, `+1.75` at 39, and `+2.3984375` at 40. The public lens
+favors `co` at all nine layers in the fixed exploratory reporting slice;
+native does so at eight of nine. At layer 62 native/public margins are
+`+13.5625`/`+14.25`. The final
+model margin is `+13.4999996424`, with `co` rank 1 and `cot` rank 2. Both
+candidate runs have identical residual manifests for all five teacher-forced
+steps. Both candidate tokens remain outside the top 10 through the middle
+slice, whose leading tokens are mostly formatting or discourse vocabulary;
+the contrast is a relative preference, not a claim that `cothm` is directly
+decoded there. Full-string sequence totals are secondary because `cothm` uses
+three BPE tokens while `cotm` uses two.
+
+The fixed-middle native/public mean J-lens margins are `+1.6732` and `+1.5686`
+respectively. The ordinary logit lens is positive at all nine layers with a
+larger `+3.2440` mean. The correct first-token preference is therefore not a
+signal uniquely exposed by J-lens transport.
+
+The paired stage report measures native/public target-rank Spearman
+`0.8239592012`, top-1 agreement `0.4268077601`, and mean top-5 overlap
+`0.4800705467` over 567 observations. Greedy replay matches the original
+temperature-1 sampled first token on eight of nine stages. The strict native
+and public stage reports still have status `failed`: five stages have full-logit
+maximum error `0.125` above the `0.0625` limit. Every stage passes final-norm
+RMS, full-logit RMS, top-5 prefix, and greedy top-1 checks, and all paired
+pre-lens residual/logit fields match. This remains descriptive evidence rather
+than a passing strict adapter certificate.
+
+The benchmark prompt already identified the undefined `cotm`, its file, and
+line number. The run therefore does not demonstrate open-ended fault
+localization. The narrower supported observation is that, after reading the
+source and seeing `cothm = coth(m)` immediately above the bad reference, the
+replay measures a preference for the correct first def-use token. The original
+run ultimately emitted the successful one-character fix. Full commands,
+artifact hashes, public-checkout prompt extraction, and limitations are in
+[`docs/JLENS_SWE_QWEN_CODE_EXPERIMENT.md`](docs/JLENS_SWE_QWEN_CODE_EXPERIMENT.md).
+
 ## Publication-Certified Run
 
 Date: 2026-07-15 (America/Los_Angeles)

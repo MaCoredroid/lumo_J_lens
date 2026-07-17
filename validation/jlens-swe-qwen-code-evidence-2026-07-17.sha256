@@ -1,0 +1,11 @@
+1da4939bd32393423075b2812c8d00d28506dcd5598948caa39e6258bd8332da  validation/2026-07-15-publication-certified.json
+6f0e1c2ce449d411df0f2f8ffaf2680f1178ced057cee156c989a53732b0f7f8  validation/official-report.json
+98e80f91393e76fc6323eeb0a7582aa89f1db717932ea5742eed467d692d024d  validation/sympy__sympy-13480.patch
+739a1963410d4043f95c4c1757cd00d3e743bcaeb59747f9cf4654f84ae91af8  validation/jlens-swe-qwen-code-analysis-2026-07-17.json
+6273844f62b19b0060eff958b920d54cf0d969dea6cb85e999bcb72e14d98edc  validation/jlens-swe-qwen-code-candidate-probe-2026-07-17.json
+cf29a51f6267b0a3692362e3a0a3d860accbe1a4d3bc6c86f3115cac89e05153  validation/jlens-swe-qwen-code-candidate-probe-public-2026-07-17.json
+e6a064ee99177372ac14bd62a33cbd069c210699a45b4845a62522950b5c6886  validation/jlens-swe-qwen-code-longest-preflight-2026-07-17.json
+94f3963be698b0e6e86d3878ba69efa53a94059e5520f292a97f344d6bed6fab  validation/jlens-swe-qwen-code-native-nvfp4-ste-2026-07-17.json
+495b7e043d83b0ce47f81687c763bdee3306b94f897aeea88f50be95d318fe93  validation/jlens-swe-qwen-code-native-vs-public-2026-07-17.json
+8426064cf82c48961433987e04b43cbc9f54375feb8e326c60496215835dfc1e  validation/jlens-swe-qwen-code-prompt-provenance-2026-07-17.json
+b3a4e43bf379dca4a630002644e824956e1bf6ca5b3533480ff80bd0dc2e2a97  validation/jlens-swe-qwen-code-public-2026-07-17.json
