@@ -171,15 +171,62 @@ the package contract, so installing Accelerate changes the runtime identity.
 Cause: the vLLM ModelOpt/Marlin NVFP4 and FP8 deployment kernels expose the
 serving forward but not the residual activation backward required by the
 Anthropic estimator. FP8 activation rounding also needs an explicitly declared
-surrogate derivative. Disabling MTP does not change this.
+surrogate derivative. Disabling MTP does not create autograd support.
 
-Current resolution: fit against the pinned BF16 source checkpoint quantized at
-load time to bitsandbytes NF4, freeze all weights, and force the ordinary
-differentiable PyTorch GDN path. Use `scripts/setup_fit.sh` and
-`scripts/fit_jlens_nf4.py`. Label the result as an NF4 fit. Native fitting
-through `nvidia/Qwen3.6-27B-NVFP4` remains unreproduced; applying an NF4-fitted
-lens to NVFP4 activations is cross-quantization, not a fix for the missing
-native backward.
+There are now two distinct resolutions:
+
+- For a differentiable fallback, fit the pinned BF16 source checkpoint after
+  load-time bitsandbytes NF4 quantization. Use `scripts/setup_fit.sh` and
+  `scripts/fit_jlens_nf4.py`, and label the result NF4. Applying it to NVFP4
+  activations remains cross-quantization.
+- For the native NVIDIA path, use `scripts/run_nvfp4_ste_fit.py`. It captures
+  the exact compiled NVFP4/FP8 forward, then replays packed ModelOpt W4 and
+  live post-load FP8 input VJPs with identity STE and analytic GDN. Label the
+  result `NVFP4/FP8-STE`; it is not the literal derivative of rounding. Its
+  real-hardware operation gates pass, while the strict per-prompt captures and
+  complete ten-prompt artifact remain pending. Existing exploratory capture
+  evidence predates hardened model-identity/shard binding and is not reusable.
+
+Do not point the native runner at a different quantized checkpoint. Its model
+identity, metadata, all three shard hashes, prompt manifest, and source contract
+are pinned and revalidated before prompt commit.
+
+## Native NVFP4 capture is large or appears to run twice
+
+This is expected. Every prompt uses isolated unmodified compiled-baseline and
+compiled-observer processes. The baseline proves the serving endpoint; the
+observer adds the 432 linear/SwiGLU/post-block boundaries needed by reverse
+replay. The verifier directly compares 688 shared GDN/attention tensors and all
+785 replay parameters, then deletes the large baseline tensor payload after
+recording its hash. Only the observer payload is retained for fitting.
+
+Do not interpret the 432 observer-only tensors as direct baseline equality.
+They are absent from the baseline by design. Their evidence is required
+completeness plus exact endpoint generation parity and the 688 direct internal
+comparisons for the same prompt and runtime shape.
+
+## Native NVFP4 fit was interrupted
+
+Resume the same work directory:
+
+```bash
+.venv-vllm/bin/python scripts/run_nvfp4_ste_fit.py \
+  --work-dir .cache/nvfp4_ste_fit \
+  --resume
+```
+
+Do not delete or edit `state.json`, `current/`, `sum-NNNNNN/`, or the retained
+prompt capture. Resume validates the contract, completed row-chunk hashes,
+committed sums, checkpoint shards, and capture binding before doing more work.
+A contract mismatch is a fail-closed provenance error, not a reason to edit the
+state file.
+
+## Native fitter rejects multimodal MRoPE positions
+
+The production contract is text-only. Equal triplicated MRoPE axes reduce to
+the text position vector, but divergent three-axis image/video positions are
+rejected because that derivative path has not been validated. Use text-only
+128-token fit prompts; do not bypass the check and call the result reproduced.
 
 ## Strict NVFP4 adapter certificate fails on held-out prompts
 

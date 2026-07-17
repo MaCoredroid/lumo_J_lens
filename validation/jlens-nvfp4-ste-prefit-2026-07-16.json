@@ -1,0 +1,366 @@
+{
+  "artifact_type": "jlens_nvfp4_ste_prefit_hardware_evidence",
+  "assembled_at": "2026-07-17T07:50:51Z",
+  "caveats": [
+    "This is pre-fit hardware evidence. It does not assert that the 10-prompt, 63-matrix Jacobian Lens fit has completed or that a final lens artifact exists.",
+    "The capture proofs directly compare 688 shared GDN/attention tensors. The 432 compiled-linear-output, SwiGLU-output, and post-block tensors exist only in the observer capture and therefore are not directly compared; exact endpoint generation-record parity discharges observer modification only indirectly.",
+    "Both capture proofs are limited to one pinned prompt and runtime shape with MTP disabled. They do not establish MTP draft/decode parity or parity for other prompt shapes.",
+    "These exploratory captures predate the hardened model.identity payload and strict content-hash validation now required by the production runner. In particular, the 128-token prompt-00 capture must not be adopted as a production fit capture even though its source reports pin the expected repository, revision, path, sizes, and hashes.",
+    "The packed-versus-dense comparison validates two surrogate VJP implementations against each other. Neither is the literal derivative of the quantizer; the production surrogate policy is identity STE.",
+    "The 256-row timing extrapolation excludes capture, proof, checkpoint-integrity rehashing, final artifact hashing, and evaluation. It is a planning estimate, not a completed-fit duration."
+  ],
+  "capture_proofs": {
+    "fit_prompt_00_128_tokens": {
+      "direct_shared_tensor_parity": {
+        "all_bit_exact": true,
+        "category_counts": {
+          "full_attention_internal": 64,
+          "gdn_internal": 624
+        },
+        "logical_bytes": 892731392,
+        "shared_tensor_count": 688,
+        "tensor_manifest_sha256": "bda9c604ff8f2fa032c4f6ee64970dbee6997eff8b0270487149e18bf010c720"
+      },
+      "generation_record_parity": {
+        "exact": true,
+        "record_sha256": "3e0a0b86683079d688fbae75b9ae9743e440d847da17143fca19a2e8ed85cc50"
+      },
+      "model_identity_schema": "legacy_repo_revision_only_not_production_adoptable",
+      "observer_only_tensors": {
+        "category_counts": {
+          "compiled_linear_output": 304,
+          "post_block_h": 64,
+          "swiglu_output": 64
+        },
+        "compile_visible_names_complete": true,
+        "required_missing": [],
+        "tensor_count": 432
+      },
+      "prompt_token_count": 128,
+      "replay_parameter_parity": {
+        "all_content_hashes_equal": true,
+        "parameter_count": 785,
+        "parameter_manifest_sha256": "3c3c8239a29d4dadb4bc4b5cc4c45210456a17da9861e3792d0fff778854854a"
+      },
+      "scope": "exact compiled main-model prefill for this prompt and runtime shape",
+      "status": "passed",
+      "target_main_model_layers": 64
+    },
+    "short_prompt_13_tokens": {
+      "direct_shared_tensor_parity": {
+        "all_bit_exact": true,
+        "category_counts": {
+          "full_attention_internal": 64,
+          "gdn_internal": 624
+        },
+        "logical_bytes": 361987072,
+        "shared_tensor_count": 688,
+        "tensor_manifest_sha256": "319c0e1401b5fe366782f73168df5b338a068692303097282089148bba00a8cd"
+      },
+      "generation_record_parity": {
+        "exact": true,
+        "record_sha256": "58dcd61230add0ab82d77e00d684cc53a951d40bfbee7d7b19aea96296d62de8"
+      },
+      "model_identity_schema": "legacy_repo_revision_only_not_production_adoptable",
+      "observer_only_tensors": {
+        "category_counts": {
+          "compiled_linear_output": 304,
+          "post_block_h": 64,
+          "swiglu_output": 64
+        },
+        "compile_visible_names_complete": true,
+        "required_missing": [],
+        "tensor_count": 432
+      },
+      "prompt_token_count": 13,
+      "replay_parameter_parity": {
+        "all_content_hashes_equal": true,
+        "logical_bytes": 7266685440,
+        "parameter_count": 785,
+        "parameter_manifest_sha256": "3c3c8239a29d4dadb4bc4b5cc4c45210456a17da9861e3792d0fff778854854a"
+      },
+      "scope": "exact compiled main-model prefill for this prompt and runtime shape",
+      "status": "passed",
+      "target_main_model_layers": 64
+    }
+  },
+  "environment": {
+    "compute_capability": [
+      12,
+      0
+    ],
+    "cuda_device": "NVIDIA GeForce RTX 5090",
+    "model_repo": "nvidia/Qwen3.6-27B-NVFP4",
+    "model_revision": "0893e1606ff3d5f97a441f405d5fc541a6bdf404",
+    "mtp_enabled": false,
+    "python": "3.12.13",
+    "torch": "2.11.0+cu130",
+    "triton": "3.6.0"
+  },
+  "fit_status": {
+    "final_nvfp4_ste_lens_artifact_exists": false,
+    "full_10_prompt_fit_complete": false,
+    "phase": "prefit_validation",
+    "validated_source_matrix_count": 63
+  },
+  "layer_62_vjp_validation": {
+    "live_fp8": {
+      "activation_saturation": {
+        "clipped_values": 0,
+        "finite_values": 66560,
+        "fraction_clipped": 0.0,
+        "max_abs": 41.75,
+        "nonfinite_values": 0
+      },
+      "captured_exact_forward_identity_vjp": {
+        "forward_bitwise_exact": true,
+        "gradient_relative_rms_vs_dense_bf16": 0.00006964057027179997,
+        "passed": true
+      },
+      "kernel_vjp_vs_dense_bf16_dequant": {
+        "finite": true,
+        "max_abs": 0.000013828277587890625,
+        "maximum_relative_rms": 0.00001,
+        "passed": true,
+        "relative_rms": 7.840402830782684e-7,
+        "rms": 0.0000015954801710904576
+      },
+      "module": "layers.62.linear_attn.in_proj_qkvz",
+      "performance": {
+        "dense_reference_ms": 56.3721923828125,
+        "triton_median_ms": 0.15516799688339233,
+        "triton_peak_allocated_delta_bytes": 163840
+      },
+      "problem_m_k_n": [
+        8,
+        5120,
+        16384
+      ],
+      "production_ste_policy": "identity",
+      "runtime_weight_dtype": "torch.float8_e4m3fn",
+      "status": "passed"
+    },
+    "packed_nvfp4_w4": {
+      "block_scale_shape": [
+        5120,
+        1088
+      ],
+      "block_size": 16,
+      "kernel_vjp_vs_dense_bf16_dequant": {
+        "finite": true,
+        "max_abs": 0.0000021457672119140625,
+        "maximum_relative_rms": 0.00001,
+        "passed": true,
+        "relative_rms": 1.2548824019346012e-7,
+        "rms": 1.0583154619325796e-7
+      },
+      "module": "model.language_model.layers.62.mlp.down_proj",
+      "packed_shape": [
+        5120,
+        8704
+      ],
+      "performance": {
+        "dense_reference_ms": 115.05718231201172,
+        "triton_median_ms": 0.5221760272979736,
+        "triton_peak_allocated_delta_bytes": 557056
+      },
+      "problem_m_k_n": [
+        8,
+        17408,
+        5120
+      ],
+      "status": "passed"
+    }
+  },
+  "packed_live_all_63_row_comparison": {
+    "all_layers_within_tolerance": true,
+    "backend": "packed NVFP4 W4 plus live runtime FP8 streaming VJP",
+    "certificate_layer_count": 63,
+    "dense_certificate_hash_match_count": 63,
+    "dense_validation": {
+      "elapsed_seconds": 48.31021084904205,
+      "max_cuda_allocated_bytes": 897454592,
+      "max_cuda_reserved_bytes": 1082130432
+    },
+    "estimator": "future-summed VJP; mean over matching source positions",
+    "forward": "exact deployed compiled NVFP4/FP8 capture per block",
+    "max_observed_abs": 0.00661599263548851,
+    "max_observed_relative_rms": 0.017468319791263922,
+    "max_relative_rms_tolerance": 0.03,
+    "packed_live": {
+      "elapsed_seconds": 6.356911054928787,
+      "max_cuda_allocated_bytes": 399186432,
+      "max_cuda_reserved_bytes": 488636416
+    },
+    "prompt_token_count": 128,
+    "row_interval": [
+      0,
+      1
+    ],
+    "skip_first_positions": 16,
+    "source_layer_count": 63,
+    "status": "passed",
+    "ste_policy": "identity",
+    "valid_position_count": 111,
+    "worst_layer": {
+      "dense_certificate_hash_equal": true,
+      "layer": 2,
+      "max_abs": 0.003517359495162964,
+      "relative_rms": 0.017468319791263922,
+      "rms": 0.000859895721077919
+    }
+  },
+  "projection_batch_sweep": {
+    "derived_timing_estimate_from_batch_256": {
+      "basis_rows_per_matrix": 5120,
+      "chunks_per_prompt": 20,
+      "formula": "20 * measured_batch_256_elapsed_seconds; then multiply by 10 prompts",
+      "one_prompt_minutes": 76.0717323673113,
+      "one_prompt_seconds": 4564.303942038678,
+      "ten_prompt_hours": 12.67862206121855,
+      "ten_prompt_seconds": 45643.039420386776
+    },
+    "measurement_scope": "one projection-row interval across all 63 source matrices on the same 128-token prompt",
+    "points": [
+      {
+        "elapsed_seconds": 7.4268050158862025,
+        "max_cuda_allocated_bytes": 438031360,
+        "max_cuda_reserved_bytes": 612368384,
+        "projection_batch_rows": 4,
+        "projection_rows_per_second": 0.5385896077039665
+      },
+      {
+        "elapsed_seconds": 9.89553260395769,
+        "max_cuda_allocated_bytes": 557158912,
+        "max_cuda_reserved_bytes": 897581056,
+        "projection_batch_rows": 8,
+        "projection_rows_per_second": 0.8084456208855724
+      },
+      {
+        "elapsed_seconds": 16.458220347063616,
+        "max_cuda_allocated_bytes": 827003392,
+        "max_cuda_reserved_bytes": 1386217472,
+        "projection_batch_rows": 16,
+        "projection_rows_per_second": 0.972158572591637
+      },
+      {
+        "elapsed_seconds": 30.73924259399064,
+        "max_cuda_allocated_bytes": 1366618624,
+        "max_cuda_reserved_bytes": 2483027968,
+        "projection_batch_rows": 32,
+        "projection_rows_per_second": 1.0410145891576337
+      },
+      {
+        "elapsed_seconds": 59.49500635091681,
+        "max_cuda_allocated_bytes": 2454856192,
+        "max_cuda_reserved_bytes": 3126853632,
+        "projection_batch_rows": 64,
+        "projection_rows_per_second": 1.0757205339640032
+      },
+      {
+        "elapsed_seconds": 115.36883244803175,
+        "max_cuda_allocated_bytes": 4615700992,
+        "max_cuda_reserved_bytes": 5882511360,
+        "projection_batch_rows": 128,
+        "projection_rows_per_second": 1.1094850947517216
+      },
+      {
+        "elapsed_seconds": 228.21519710193388,
+        "max_cuda_allocated_bytes": 8936882688,
+        "max_cuda_reserved_bytes": 11391729664,
+        "projection_batch_rows": 256,
+        "projection_rows_per_second": 1.1217482588841612
+      }
+    ],
+    "prompt_token_count": 128,
+    "recommended_projection_batch_rows_from_sweep": 256,
+    "source_layer_count": 63,
+    "ste_policy": "identity"
+  },
+  "schema_version": 1,
+  "source_artifacts": {
+    "all_layers_capture_proof_short_prompt": {
+      "bytes": 9240,
+      "path": ".cache/runtime_capture/all_layers_capture_proof.json",
+      "sha256": "e9444fd16f94c7848abc6639448c6954c43039c48b7ec07e8361019311533e90"
+    },
+    "batch_004": {
+      "bytes": 23470,
+      "path": ".cache/nvfp4_fit/bench-packed-4.json",
+      "sha256": "aa6fa255bb41b46253ff01f5b20884e42f507f42bd40a68c170d0e3f9c3a938b"
+    },
+    "batch_008": {
+      "bytes": 23468,
+      "path": ".cache/nvfp4_fit/bench-packed-8.json",
+      "sha256": "3dde8113daf36c0f7529a6d4f9bb6536a6fc7ec0b8800cbde157ef29e887ebaa"
+    },
+    "batch_016": {
+      "bytes": 23530,
+      "path": ".cache/nvfp4_fit/bench-packed-16.json",
+      "sha256": "c5269c5c8922d0751a4f30318a4b5f52449921ded14e22482dc4efb0b242c604"
+    },
+    "batch_032": {
+      "bytes": 23517,
+      "path": ".cache/nvfp4_fit/bench-packed-32.json",
+      "sha256": "1d4c7cf940434927f588a70cbfbde1209c356134fedf743e0c20683d5596a73e"
+    },
+    "batch_064": {
+      "bytes": 23512,
+      "path": ".cache/nvfp4_fit/bench-packed-64.json",
+      "sha256": "673fe87fde216b15912fb492ca6382ead9a990516cf79b19df0b160fd2d6d583"
+    },
+    "batch_128": {
+      "bytes": 23561,
+      "path": ".cache/nvfp4_fit/bench-packed-128.json",
+      "sha256": "6d95c0ed25ef8bc8dac7bacfa5b1310f306fe59125e56221875e716bb9a80dab"
+    },
+    "batch_256": {
+      "bytes": 23550,
+      "path": ".cache/nvfp4_fit/bench-packed-256.json",
+      "sha256": "7b627995f8f5b5bb5a38fd2ab4f1238bfdd345f10cc467f3635a7afb922720b4"
+    },
+    "fit_prompt_capture_proof": {
+      "bytes": 16215,
+      "path": ".cache/nvfp4_fit/prompt-00-capture-proof.json",
+      "sha256": "e53f4dba3484a3b46a355fee033e1fd3c7e027503fdad22aa50c23814f92495c"
+    },
+    "layer_62_live_fp8_vjp": {
+      "bytes": 4955,
+      "path": ".cache/runtime_capture/layer62_live_fp8_vjp.json",
+      "sha256": "b538a63e73df50778f502144423ac5a737c8eff0b5ebfa48680a7811186bd957"
+    },
+    "layer_62_packed_nvfp4_vjp": {
+      "bytes": 3110,
+      "path": ".cache/runtime_capture/layer62_packed_nvfp4_vjp.json",
+      "sha256": "84420a25281551591b91225fb078a2fd853a7b36c029183afac1be12811dadeb"
+    },
+    "prompt_00_dense_row_reference": {
+      "bytes": 23462,
+      "path": ".cache/nvfp4_fit/prompt-00-dense-row1.json",
+      "sha256": "b6c65684a098fcde0a3cee41a5261fc7cd39c209655c41593c091c79c43091db"
+    },
+    "prompt_00_packed_row_comparison": {
+      "bytes": 68111,
+      "path": ".cache/nvfp4_fit/prompt-00-packed-row1.json",
+      "sha256": "859b8f0321ecba45a273849a1f51ec89abf5e67895f5a2f5079c33c5b38bbaf4"
+    }
+  },
+  "status": "prefit_hardware_validation_passed_full_fit_pending",
+  "upstream_payload_bindings_recorded_by_source_proofs": {
+    "fit_prompt_00_observer_capture": {
+      "bytes": 9528588490,
+      "path": ".cache/nvfp4_fit/prompt-00-compiled-observer.pt",
+      "sha256": "bf435b452267c5aef1b4872c88c2a705108b76092fa8f634518a6e31b36729d2"
+    },
+    "short_prompt_baseline_capture": {
+      "bytes": 7629170361,
+      "path": ".cache/runtime_capture/all_layers_compiled_baseline.pt",
+      "sha256": "fcbf180daa48e6c30bb57fe81e36e170adac3dfef6543151942afd6325f1d511"
+    },
+    "short_prompt_observer_capture": {
+      "bytes": 7768307621,
+      "path": ".cache/runtime_capture/all_layers_compiled_observer.pt",
+      "sha256": "76ccd6c4f26da159f83f5237a07d295ad8927fd47882f8daaf985a14c55058cd"
+    }
+  }
+}

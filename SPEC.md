@@ -1,21 +1,32 @@
 # Qwen3.6-27B NVFP4 + MTP + Qwen Code SWE-bench Specification
 
-The Jacobian Lens workflows are intentionally specified separately because
-they use eager, single-process inference without MTP. The public-lens
-application uses the same pinned NVIDIA checkpoint and frozen vLLM environment
-as serving; see
+The Jacobian Lens workflows are intentionally specified separately from MTP
+serving. The public-lens application uses eager, single-process inference on
+the same pinned NVIDIA checkpoint; see
 [`docs/JLENS_NVFP4_REPRODUCTION.md`](docs/JLENS_NVFP4_REPRODUCTION.md). The
-fresh-fit path instead quantizes pinned `Qwen/Qwen3.6-27B` BF16 source weights
-to differentiable NF4; see
+native fitter uses isolated compiled main-model captures with MTP disabled,
+then packed/live surrogate VJPs; see
+[`docs/JLENS_NVFP4_STE_EXPERIMENT.md`](docs/JLENS_NVFP4_STE_EXPERIMENT.md).
+The completed alternative fit quantizes pinned `Qwen/Qwen3.6-27B` BF16 source
+weights to differentiable NF4; see
 [`docs/NF4_FIT_CONTRACT.md`](docs/NF4_FIT_CONTRACT.md) and
 [`docs/JLENS_NF4_EXPERIMENT.md`](docs/JLENS_NF4_EXPERIMENT.md).
 
 ## Jacobian Lens Scope
 
 The July 16 experiment completed and verified an exact dense `n=10` NF4 fit
-for all 63 source layers on this RTX 5090. It did **not** fit through the
-NVIDIA packed NVFP4/FP8 checkpoint: native NVFP4 fitting remains
-unreproduced.
+for all 63 source layers on this RTX 5090. It remains an NF4 result, not an
+NVFP4 fit.
+
+On July 17, the native NVIDIA path passed packed W4, live FP8, analytic GDN,
+late-suffix, and one-row all-layer hardware gates. The existing prompt-0 and
+short all-layer capture proofs are exploratory and predate the hardened
+`model.identity`/shard binding, so production refuses to reuse them and will
+recapture every prompt. The path uses identity STE for FP8 activation
+quantization and therefore must be labeled an `NVFP4/FP8-STE` Jacobian, not the
+literal derivative of rounding. The strict ten-prompt captures and complete
+63-matrix artifact are still pending; no completed native fit or quality result
+is claimed.
 
 The local NF4 lens was cross-applied to NVFP4 activations, but it is not a
 certified NVFP4 application. Its strict four-prompt residual-adapter
@@ -43,8 +54,8 @@ on another GPU, CUDA toolchain, or vLLM release.
 
 ## 2. Acceptance Criteria
 
-These criteria certify the MTP serving and SWE-bench workflow, not either lens
-fit or cross-quantization transfer.
+These criteria certify the MTP serving and SWE-bench workflow, not any lens fit
+or cross-quantization transfer.
 
 The setup is successful only when all of the following hold:
 

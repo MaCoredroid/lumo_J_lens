@@ -4,8 +4,11 @@ Reproducible serving, evaluation, and Jacobian Lens inspection for
 `nvidia/Qwen3.6-27B-NVFP4` on one RTX 5090. The serving path uses native MTP
 speculative decoding, GDN-aware prefix caching, Qwen Code, and the official
 SWE-bench Verified container runtime. The public and locally fitted lens paths
-read all 63 source layers through the packed NVFP4/FP8 target model for
-forward-only inspection. A separate differentiable NF4 path fits a new lens.
+read all 63 source layers through the packed NVFP4/FP8 target model. The
+repository now also contains a native exact-forward NVFP4/FP8-STE fitter with
+packed/live input VJPs, analytic GDN, and transactional dense output; its
+complete ten-prompt artifact is still pending. A separate differentiable NF4
+path has already produced an `n=10` lens.
 
 This repository is the cleaned, standalone extraction of a July 8, 2026 Claude
 Code setup session. It includes the fixes found during that session, not just
@@ -19,7 +22,9 @@ the final command. On July 15, 2026 the extracted stack was rerun end to end:
 See [VALIDATION.md](VALIDATION.md) for the evidence and [SPEC.md](SPEC.md) for
 the serving/SWE setup rationale. See
 [docs/JLENS_NVFP4_REPRODUCTION.md](docs/JLENS_NVFP4_REPRODUCTION.md) for the
-public-lens NVFP4 application and
+public BF16-fitted lens applied to NVFP4,
+[docs/JLENS_NVFP4_STE_EXPERIMENT.md](docs/JLENS_NVFP4_STE_EXPERIMENT.md) for
+the native NVIDIA fit contract and current hardware evidence, and
 [docs/JLENS_NF4_EXPERIMENT.md](docs/JLENS_NF4_EXPERIMENT.md) for the fresh-fit
 experiment.
 
@@ -94,6 +99,49 @@ MTP is a separate draft-token serving optimization, not part of the 64-layer
 target-model lens. This is application of a BF16-fitted lens to quantized
 activations, not an NVFP4 refit.
 
+### Native NVFP4/FP8-STE fit
+
+The NVIDIA checkpoint cannot be passed directly to `jlens.fit`: vLLM executes
+packed ModelOpt/Marlin W4 and Cutlass FP8 serving kernels without the residual
+activation backward, and FP8 rounding needs an explicit surrogate. The native
+path instead captures the actual compiled NVFP4/FP8 forward and supplies
+packed W4, live post-load FP8, analytic GDN, and full-attention input VJPs. It
+uses identity STE for FP8 activation quantization, so this is an exact-forward
+surrogate Jacobian rather than the literal derivative of rounding.
+
+Real RTX 5090 engineering gates passed on the local pinned checkpoint: 688
+shared internal tensors were bit-exact between isolated baseline and observer
+runs, all 432 observer-only boundaries were present, all 785 replay parameters
+matched by content hash, and a real estimator row completed for every source
+layer `0..62`. The 432 observer-only values cannot be directly compared to
+absent baseline tensors; exact endpoint generation parity and the 688 direct
+comparisons provide the bounded indirect evidence for the observer graph.
+
+Those prompt-0 and short all-layer records are exploratory: they predate the
+hardened `model.identity` and shard-hash binding, so production refuses to
+reuse them. The ten-prompt runner recaptures and reproves every prompt under the
+strict checkpoint identity before committing any rows.
+
+Plan, run, or resume the frozen ten-prompt production contract with:
+
+```bash
+.venv-vllm/bin/python scripts/run_nvfp4_ste_fit.py \
+  --work-dir .cache/nvfp4_ste_fit --plan-only
+
+.venv-vllm/bin/python scripts/run_nvfp4_ste_fit.py \
+  --work-dir .cache/nvfp4_ste_fit
+
+.venv-vllm/bin/python scripts/run_nvfp4_ste_fit.py \
+  --work-dir .cache/nvfp4_ste_fit --resume
+```
+
+The contract is ten frozen 128-token prompts, `skip_first=16`, all 63 source
+matrices, target block 63, and 5,120 rows per matrix. MTP is disabled because
+it is a draft-token serving optimization outside the target-model lens. The
+measured batch-256 estimator rate projects to about 12.7 hours for ten prompts,
+plus isolated captures, hashes, commits, and finalization. The full `n=10`
+artifact and its held-out evaluation are explicitly **pending**.
+
 ### Fresh NF4 fit
 
 A new exact, dense `n=10` lens was fitted successfully on the RTX 5090 against
@@ -138,10 +186,12 @@ prefix gates. Because the adapter failures are identical with either lens,
 they do not diagnose lens quality, but they do prevent certification of this
 cross-quantization application.
 
-Native fitting through the NVIDIA packed NVFP4/FP8 checkpoint remains
-**unreproduced**. The successful result is an NF4 fit, not an NVFP4 fit. Exact
+The successful NF4 result remains an NF4 fit, not an NVFP4 fit. It is separate
+from the native exact-forward NVFP4/FP8-STE implementation above. Exact NF4
 evidence and interpretation are in [VALIDATION.md](VALIDATION.md) and the
-[NF4 experiment report](docs/JLENS_NF4_EXPERIMENT.md).
+[NF4 experiment report](docs/JLENS_NF4_EXPERIMENT.md); native-path evidence and
+the pending production status are in the
+[NVFP4/FP8-STE report](docs/JLENS_NVFP4_STE_EXPERIMENT.md).
 
 ## Manual Lifecycle
 
@@ -190,6 +240,12 @@ only Git-tracked files after reviewing `git status` and `git ls-files`.
 - `scripts/download_jlens.py`: immutable 3.3 GB lens download and tensor gate
 - `scripts/run_jlens_nvfp4.sh`: CUDA environment and offline lens launcher
 - `scripts/run_jlens_nvfp4.py`: vLLM residual adapter and all-layer readout
+- `scripts/run_nvfp4_ste_fit.py`: pinned, resumable native NVFP4/FP8-STE fitter
+- `scripts/export_nvfp4_ste_lens.py`: validated upstream-compatible lens exporter
+- `scripts/capture_nvfp4_fit_prompt.py`: isolated compiled capture/proof orchestration
+- `scripts/nvfp4_packed_vjp.py`: memory-bounded raw ModelOpt W4 input VJP
+- `scripts/fp8_live_vjp.py`: memory-bounded post-load FP8 input VJP
+- `scripts/nvfp4_gdn.py`: analytic Gated DeltaNet recurrence and VJP
 - `scripts/fit_jlens_nf4.py`: resumable exact dense NF4 fitter
 - `scripts/evaluate_jlens_nf4.py`: held-out NF4 local/public/logit evaluation
 - `scripts/compare_jlens_artifacts.py`: dense local/public matrix comparison
@@ -203,9 +259,11 @@ only Git-tracked files after reviewing `git status` and `git ls-files`.
 - `validation/jlens-nf4-fit-provenance-2026-07-16.json`: completed `n=10` fit certificate
 - `validation/jlens-nf4-evidence.sha256`: hashes for the fresh-fit evidence set
 - `validation/jlens-nf4-source-manifest.sha256`: hashes for fit/evaluation sources
+- `validation/jlens-nvfp4-ste-source-manifest.sha256`: hashes for native fitter sources
 - `validation/jlens-source-manifest.sha256`: lens runner/evidence source tie
 - `validation/runtime-source-manifest.sha256`: hashes for the certified runtime
 - `docs/SESSION_RECONSTRUCTION.md`: source-session and commit chronology
+- `docs/JLENS_NVFP4_STE_EXPERIMENT.md`: native fit contract, evidence, and runbook
 - `docs/TROUBLESHOOTING.md`: every boot/runtime failure found and its fix
 
 ## Security Boundary

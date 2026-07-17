@@ -30,16 +30,24 @@ The sibling
 pins that result. The source manifest records the runner, launcher, prompt set,
 verifier, tests, and vLLM dependency freeze used by the experiment.
 
-This is a **cross-precision application**, not an NVFP4 fit. The public lens
-was fitted against differentiable model weights and is applied here to
-quantized forward activations. That distinction matters for interpreting
-rank and score differences.
+This is a **cross-precision application**, not an NVFP4 fit. The public Qwen
+lens was fitted against the differentiable BF16 model and is applied here to
+quantized forward activations. Its matrices are stored as FP16, which is
+separate from the precision of the fitting model. That distinction matters for
+interpreting rank and score differences.
 
 A separate experiment subsequently fitted a complete dense `n=10` lens on the
 same RTX 5090 using differentiable bitsandbytes NF4. That fit succeeded and is
 documented in [`JLENS_NF4_EXPERIMENT.md`](JLENS_NF4_EXPERIMENT.md). It is an
-NF4 fit, not an NVFP4 fit: native fitting through the packed NVIDIA
-NVFP4/FP8 checkpoint remains unreproduced.
+NF4 fit, not an NVFP4 fit.
+
+A third, NVIDIA-native path now captures the actual compiled ModelOpt
+NVFP4/FP8 forward and supplies packed W4, live FP8 identity-STE, analytic GDN,
+and full-attention VJPs. Its real-hardware operation and all-layer gates pass;
+the existing prompt-0 capture proof is exploratory and predates the hardened
+model-identity binding, so the strict production run will recapture every
+prompt. The full ten-prompt artifact remains pending. See
+[`JLENS_NVFP4_STE_EXPERIMENT.md`](JLENS_NVFP4_STE_EXPERIMENT.md).
 
 The locally fitted NF4 lens was also applied to the NVFP4 checkpoint, but its
 strict four-prompt adapter certificate failed. A paired public-lens control
@@ -318,12 +326,14 @@ diagnostic readout of the same NVFP4 target model.
   position slices as separate processes. The final prompt position is captured
   implicitly for the adapter parity gate when it is not part of the requested
   slice; that extra row is not added to the requested layer grid.
-- Native fitting with the exact NVIDIA checkpoint remains unreproduced:
-  vLLM's packed ModelOpt/Marlin/GDN deployment kernels do not provide the
-  activation backward path required by `jlens.fit`, and FP8 activation
-  quantization requires an explicitly declared surrogate derivative.
-- A new fit is feasible on this host through a different quantized forward.
-  The completed NF4 route loads pinned BF16 source weights, quantizes 496
+- Direct `jlens.fit` autograd through the exact NVIDIA checkpoint remains
+  unavailable: vLLM's packed ModelOpt/Marlin/GDN deployment kernels do not
+  expose that activation backward. The native fitter works around this by
+  preserving exact compiled forward captures and supplying an explicitly
+  declared identity-STE surrogate backward. Its full `n=10` artifact is
+  pending, so no completed native-lens quality claim is made here.
+- An independently completed alternative fit uses a different quantized
+  forward. The NF4 route loads pinned BF16 source weights, quantizes 496
   linears with bitsandbytes, and forces differentiable PyTorch GDN. Its
   63-matrix FP32 artifact used 1:48:16.5 of cumulative invocation time, with
   24.20 GiB peak reserved CUDA memory. It must remain labeled NF4, including
@@ -331,4 +341,6 @@ diagnostic readout of the same NVFP4 target model.
 
 This experiment therefore establishes a verified public-lens application to
 the exact local NVFP4 target model on its two frozen semantic prompts. It does
-not establish native NVFP4 fitting or certify the local NF4 lens on NVFP4.
+not itself establish a completed native fit or certify the local NF4 lens on
+NVFP4; the separately validated native fitter and its pending production run
+are documented in the NVFP4/FP8-STE report.

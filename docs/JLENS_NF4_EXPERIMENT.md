@@ -4,13 +4,21 @@ Date: 2026-07-16
 
 ## Outcome
 
-The strict native-NVFP4 goal was **not reproduced**. No Jacobian Lens was
-fitted through the packed `nvidia/Qwen3.6-27B-NVFP4` forward. Its ModelOpt
-serving graph combines NVFP4 weight-only operations with FP8
-weight-and-activation operations, vLLM exposes inference kernels rather than
-an autograd graph, and no validated CUDA input VJP plus explicit FP8
-straight-through surrogate was implemented. Applying another lens to NVFP4
-residuals is not an NVFP4 fit.
+At the time of this July 16 experiment, the strict native-NVFP4 goal was **not
+reproduced**. No Jacobian Lens had been fitted through the packed
+`nvidia/Qwen3.6-27B-NVFP4` forward. Its ModelOpt serving graph combines NVFP4
+weight-only operations with FP8 weight-and-activation operations, while vLLM
+exposes inference kernels rather than an autograd graph. Applying another lens
+to NVFP4 residuals is not an NVFP4 fit.
+
+The subsequent native implementation now has validated packed/live input VJPs,
+an explicit identity-STE contract, analytic GDN, exact compiled forward
+capture mechanics, and a passing exploratory one-row all-layer hardware proof.
+The existing proof predates hardened model-identity/shard binding and will not
+be reused by production. Its strict captures and full ten-prompt artifact
+remain pending. That later work is documented separately in
+[`JLENS_NVFP4_STE_EXPERIMENT.md`](JLENS_NVFP4_STE_EXPERIMENT.md) and does not
+change the provenance or result of this NF4 experiment.
 
 The user-authorized fallback did succeed: the official BF16
 `Qwen/Qwen3.6-27B` checkpoint was quantized at load time to differentiable
@@ -357,9 +365,9 @@ their reports, because the recorded strict adapter certificate fails.
 
 ## Limitations
 
-1. This is not a native NVFP4 fit. A strict reproduction still needs
-   validated derivatives for the packed ModelOpt forward, including a
-   declared surrogate for FP8 activation rounding.
+1. This artifact is not a native NVFP4 fit. The later native implementation
+   supplies validated surrogate VJPs for the packed ModelOpt forward, but its
+   complete `n=10` artifact is still pending.
 2. Ten prompts are the project's minimum usable scale, not the paper's
    `n=1000` scale. Sampling variance is visible in the early-layer geometry.
 3. The public artifact lacks enough provenance to reproduce its exact corpus

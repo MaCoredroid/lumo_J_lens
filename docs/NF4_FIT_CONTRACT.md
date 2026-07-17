@@ -32,11 +32,20 @@ and the independent artifact record is
 The full procedure and evaluation are in
 [`JLENS_NF4_EXPERIMENT.md`](JLENS_NF4_EXPERIMENT.md).
 
-This result does **not** satisfy the strict NVFP4 fit contract below. Native
-fitting through `nvidia/Qwen3.6-27B-NVFP4` remains unreproduced. The local NF4
-lens was cross-applied to that checkpoint, but its strict paired adapter
+This result does **not** satisfy the strict NVFP4 fit contract below. The local
+NF4 lens was cross-applied to that checkpoint, but its strict paired adapter
 certificate failed; the public-lens control failed with the same adapter
 errors. Therefore the cross-application is also not certified.
+
+On July 17, the separate native NVIDIA implementation passed real-hardware
+operation, late-suffix, and exploratory one-row all-layer gates. It uses
+compiled NVFP4/FP8 forward captures, packed/live input VJPs, identity STE for
+FP8 activation quantization, and analytic GDN. The existing capture proof
+predates hardened model-identity/shard binding and is intentionally not reused
+by production. The strict captures and complete ten-prompt, 63-matrix artifact
+are still pending and must not be reported as complete. See
+[`JLENS_NVFP4_STE_EXPERIMENT.md`](JLENS_NVFP4_STE_EXPERIMENT.md) for its
+contract, evidence scope, commands, and current status.
 
 ## Reference estimator
 
@@ -100,13 +109,13 @@ The pinned NVIDIA checkpoint is mixed precision:
   almost everywhere and no derivative at bin boundaries.
 
 Consequently, a useful fit through the exact serving checkpoint must declare
-the surrogate used for FP8 activation quantization. The recommended contract
-is: preserve the quantized forward values, and use a straight-through input
-VJP through activation quantization with the frozen dequantized FP8 weight.
-This is an **STE Jacobian of the NVFP4/FP8 forward**, not the literal
-mathematical derivative of rounding. A fit that instead executes all
-projections with A16 activations must say so and report forward parity against
-the serving path.
+the surrogate used for FP8 activation quantization. The implemented production
+contract preserves captured quantized forward values and uses an identity
+straight-through input VJP through activation quantization with the frozen
+post-load FP8 weight. This is an **STE Jacobian of the NVFP4/FP8 forward**, not
+the literal mathematical derivative of rounding. A fit that instead executes
+all projections with A16 activations must say so and report forward parity
+against the serving path.
 
 ### NF4 alternative
 
@@ -131,8 +140,8 @@ because the resume contract intentionally binds package versions.
 This produces a lens fitted to an NF4 forward. It is a valid reproduction of
 the fitting method on a differentiable 4-bit Qwen3.6 model, but applying that
 lens to `nvidia/Qwen3.6-27B-NVFP4` is still cross-quantization. Do not label it
-an NVFP4-fitted lens. A strict NVFP4 fit must use the pinned NVIDIA weights in
-the fitting forward and must declare the FP8 surrogate above.
+an NVFP4-fitted lens. The native path uses the pinned NVIDIA weights, exact
+deployed forward captures, and the declared identity-STE surrogate above.
 
 ## Completion levels
 
@@ -191,7 +200,7 @@ For `d_model=5120`:
   `dim_batch=8`, 640; with `dim_batch=4`, 1,280; with `dim_batch=1`, it
   performs 5,120. The leading backward FLOPs are similar, but the lower batch
   substantially reduces peak activation and returned-gradient memory. The
-  production contract on this host uses `dim_batch=32`: its real 27B
+  NF4 production contract on this host uses `dim_batch=32`: its real 27B
   diagnostic allocated/reserved 23.21/24.16 GiB and matched sequential VJPs
   exactly for 32 rows at both source layers 61 and 62. The `C=4`, `C=8`, and
   `C=32` diagnostics completed in approximately 23.6, 24.5, and 28.7 seconds.

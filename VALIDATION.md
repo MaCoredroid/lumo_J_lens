@@ -2,11 +2,15 @@
 
 ## Jacobian Lens Fit And Transfer
 
-Date: 2026-07-16 (America/Los_Angeles)
+Dates: 2026-07-16 to 2026-07-17 (America/Los_Angeles)
 
-The fresh-fit result is a **completed exact dense NF4 fit**, not a native
-NVFP4 fit. Native fitting through the packed NVIDIA ModelOpt NVFP4/FP8
-checkpoint remains **unreproduced**.
+The July 16 fresh-fit result is a **completed exact dense NF4 fit**, not a
+native NVFP4 fit. The July 17 native NVIDIA implementation has separately
+passed its operation, late-suffix, and exploratory one-row all-layer hardware
+gates using compiled NVFP4/FP8 forward values and an identity-STE surrogate
+backward. Its strict per-prompt production captures and complete `n=10`
+artifact are **pending**. No final native artifact hash, held-out score, or
+completed-reproduction claim exists yet.
 
 | Claim | Result | Evidence |
 |---|---|---|
@@ -18,6 +22,24 @@ checkpoint remains **unreproduced**.
 | Local NF4 lens applied to NVFP4, strict paired adapter gate | **FAIL**; cross-application is not certified | [`local lens run`](validation/jlens-nf4-on-nvfp4-2026-07-16.json) |
 | Public lens on the same four NVFP4 prompts, control gate | **FAIL** with the same adapter errors | [`public control`](validation/jlens-public-on-nvfp4-heldout-2026-07-16.json) |
 | Public lens on the original two semantic prompts | PASS after recertification | [`public baseline`](validation/jlens-nvfp4-2026-07-16.json) |
+| Exploratory native compiled baseline/observer proof | PASS engineering evidence; 688 shared tensors directly bit-exact, 432 observer-only boundaries complete, 785 replay parameters content-equal; predates strict identity binding | [`native report`](docs/JLENS_NVFP4_STE_EXPERIMENT.md) |
+| Native packed/live VJPs, analytic GDN, and exploratory all-layer reverse replay | PASS engineering gates; one real estimator row for each source layer `0..62` | [`native report`](docs/JLENS_NVFP4_STE_EXPERIMENT.md) |
+| Dense native NVFP4/FP8-STE `n=10` artifact | **PENDING**; ten prompts and all 5,120 rows for all 63 matrices have not completed | [`native runbook`](docs/JLENS_NVFP4_STE_EXPERIMENT.md) |
+
+The exploratory native capture ran the local pinned vLLM/ModelOpt graph; this
+RTX 5090 resolved the W4 operations to the observed weight-only Marlin fallback
+and the FP8 operations to Cutlass. Its artifact predates the final
+`model.identity` and shard-hash fields, so the hardened production runner will
+not adopt it and must recapture/reprove every prompt. MTP was disabled because
+the proof covers main-model prefill, not speculative draft/decode. Of the
+capture boundaries, 688 GDN/attention tensors were directly compared
+bit-for-bit. The 432 linear/SwiGLU/post-block tensors exist only in the observer
+graph and are supported indirectly by exact endpoint generation parity plus
+the direct shared-tensor proof; they are not claimed as direct baseline
+equality. Real packed-W4 and live-FP8 probes measured relative RMS `1.2549e-7`
+and `7.8404e-7` against dense dequantization. The batch-256 estimator
+measurement projects to about 12.7 hours for ten prompts, before capture,
+hashing, commit, finalization, and export overhead.
 
 The fit used `Qwen/Qwen3.6-27B` revision `6a9e13bd...`, 496
 bitsandbytes NF4 linears, double quantization, BF16 compute, a 128-token
