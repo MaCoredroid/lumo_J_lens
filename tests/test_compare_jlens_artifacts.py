@@ -4,7 +4,10 @@
 from __future__ import annotations
 
 import importlib.util
+import hashlib
+import json
 import math
+import os
 from pathlib import Path
 import sys
 import tempfile
@@ -169,6 +172,214 @@ class ArtifactComparisonTest(unittest.TestCase):
         self.assertEqual(calls[0][2]["expected_sha256"], "a" * 64)
         self.assertTrue(calls[0][2]["check_finite"])
         self.assertFalse(calls[2][2]["check_finite"])
+
+    def test_native_artifact_verifier_is_selected_explicitly(self) -> None:
+        calls = []
+
+        def reject_nf4(*args, **kwargs):
+            self.fail("NF4 verifier must not inspect a native NVFP4 STE artifact")
+
+        def native_verifier(path, **kwargs):
+            calls.append((path, kwargs))
+            return {"kind": "native_nvfp4_ste_fit", "sha256": "c" * 64}
+
+        records = MODULE.verify_artifacts(
+            local_path=Path("native.pt"),
+            local_sha256="c" * 64,
+            local_provenance=Path("native.final.json"),
+            local_state=Path("state.json"),
+            local_state_sha256="e" * 64,
+            public_path=Path("public.pt"),
+            local_kind="nvfp4-ste",
+            nf4_verifier=reject_nf4,
+            native_verifier=native_verifier,
+            public_file_verifier=lambda path: {
+                "sha256": "d" * 64,
+                "size_bytes": 123,
+            },
+            public_checkpoint_verifier=lambda path, **kwargs: {
+                "d_model": 5120,
+                "source_layers": list(range(63)),
+            },
+        )
+
+        self.assertEqual(records["local"]["kind"], "native_nvfp4_ste_fit")
+        self.assertEqual(calls[0][0], Path("native.pt"))
+        self.assertEqual(calls[0][1]["expected_sha256"], "c" * 64)
+        self.assertEqual(
+            calls[0][1]["provenance_path"], Path("native.final.json")
+        )
+        self.assertEqual(calls[0][1]["state_path"], Path("state.json"))
+        self.assertEqual(calls[0][1]["expected_state_sha256"], "e" * 64)
+        self.assertTrue(calls[0][1]["check_finite"])
+
+    def test_native_verifier_requires_exact_fit_state(self) -> None:
+        with self.assertRaisesRegex(ValueError, "requires local fit state"):
+            MODULE.verify_artifacts(
+                local_path=Path("native.pt"),
+                local_sha256="c" * 64,
+                local_provenance=Path("native.final.json"),
+                public_path=Path("public.pt"),
+                local_kind="nvfp4-ste",
+            )
+
+    def test_geometry_can_read_a_held_inode_after_path_replacement(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            local = root / "local.pt"
+            replacement = root / "replacement.pt"
+            public = root / "public.pt"
+            matrices = {0: torch.eye(2), 1: torch.eye(2) * 2}
+            self.write_checkpoint(local, matrices)
+            self.write_checkpoint(public, matrices)
+            self.write_checkpoint(
+                replacement, {0: torch.eye(2) * 10, 1: torch.eye(2) * 20}
+            )
+            descriptor = os.open(local, os.O_RDONLY | os.O_NOFOLLOW)
+            try:
+                replacement.replace(local)
+                _layers, aggregate = MODULE.compare_artifact_matrices(
+                    Path(f"/proc/self/fd/{descriptor}"),
+                    public,
+                    d_model=2,
+                    source_layers=(0, 1),
+                    row_chunk=1,
+                )
+            finally:
+                os.close(descriptor)
+            self.assertEqual(aggregate["global_relative_frobenius_difference"], 0.0)
+
+    def test_public_verification_and_geometry_share_held_inode(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            local = root / "local.pt"
+            public = root / "public.pt"
+            replacement = root / "replacement.pt"
+            matrices = {0: torch.eye(2), 1: torch.eye(2) * 2}
+            self.write_checkpoint(local, matrices)
+            self.write_checkpoint(public, matrices)
+            self.write_checkpoint(
+                replacement, {0: torch.eye(2) * 10, 1: torch.eye(2) * 20}
+            )
+            verifier_paths = []
+
+            def public_file_verifier(path):
+                verifier_paths.append(path)
+                replacement.replace(public)
+                return {"sha256": "b" * 64, "size_bytes": path.stat().st_size}
+
+            def public_checkpoint_verifier(path, **_kwargs):
+                verifier_paths.append(path)
+                checkpoint = torch.load(
+                    path, map_location="cpu", weights_only=True, mmap=True
+                )
+                self.assertTrue(torch.equal(checkpoint["J"][0], matrices[0]))
+                return {"d_model": 2, "source_layers": [0, 1]}
+
+            with MODULE.open_held_regular_file(
+                public,
+                label="public lens checkpoint",
+                expected_sha256=hashlib.sha256(public.read_bytes()).hexdigest(),
+            ) as held:
+                public_fd_path = Path(held.fd_path)
+                records = MODULE.verify_artifacts(
+                    local_path=local,
+                    local_sha256="a" * 64,
+                    local_provenance=root / "local.provenance.json",
+                    public_path=public_fd_path,
+                    local_verifier=lambda *_args, **_kwargs: {"sha256": "a" * 64},
+                    public_file_verifier=public_file_verifier,
+                    public_checkpoint_verifier=public_checkpoint_verifier,
+                )
+                _layers, aggregate = MODULE.compare_artifact_matrices(
+                    local,
+                    public_fd_path,
+                    d_model=2,
+                    source_layers=(0, 1),
+                    row_chunk=1,
+                )
+                with self.assertRaisesRegex(
+                    ValueError, "changed while it was hashed|content changed"
+                ):
+                    held.require_unchanged()
+
+            self.assertEqual(records["public"]["sha256"], "b" * 64)
+            self.assertEqual(verifier_paths, [public_fd_path, public_fd_path])
+            self.assertEqual(aggregate["global_relative_frobenius_difference"], 0.0)
+
+    def test_public_symlink_is_rejected_before_open(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            public = root / "public.pt"
+            link = root / "public-link.pt"
+            self.write_checkpoint(public, {0: torch.eye(2), 1: torch.eye(2)})
+            link.symlink_to(public)
+            with self.assertRaisesRegex(ValueError, "regular non-symlink"):
+                MODULE.open_held_regular_file(
+                    link,
+                    label="public lens checkpoint",
+                    expected_sha256=hashlib.sha256(public.read_bytes()).hexdigest(),
+                )
+
+    def test_public_in_place_mutation_is_rejected_with_restored_mtime(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "public.pt"
+            self.write_checkpoint(path, {0: torch.eye(2), 1: torch.eye(2)})
+            expected_sha256 = hashlib.sha256(path.read_bytes()).hexdigest()
+            before = path.stat()
+            with MODULE.open_held_regular_file(
+                path,
+                label="public lens checkpoint",
+                expected_sha256=expected_sha256,
+            ) as held:
+                with path.open("r+b") as handle:
+                    original = handle.read(1)
+                    self.assertEqual(len(original), 1)
+                    handle.seek(0)
+                    handle.write(bytes([original[0] ^ 1]))
+                    handle.flush()
+                    os.fsync(handle.fileno())
+                os.utime(
+                    path,
+                    ns=(before.st_atime_ns, before.st_mtime_ns),
+                )
+                with self.assertRaisesRegex(
+                    ValueError, "changed while it was hashed|content changed"
+                ):
+                    held.require_unchanged()
+
+    def test_atomic_write_json_replaces_complete_document(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            output = Path(temporary) / "nested" / "report.json"
+            output.parent.mkdir(parents=True)
+            output.write_text("stale", encoding="utf-8")
+            payload = {"schema_version": 1, "finite": 1.25}
+            MODULE.atomic_write_json(output, payload)
+            self.assertEqual(json.loads(output.read_text(encoding="utf-8")), payload)
+            self.assertEqual(list(output.parent.glob(f".{output.name}.*")), [])
+
+    def test_cli_parser_accepts_native_exact_state_arguments(self) -> None:
+        args = MODULE.build_parser().parse_args(
+            [
+                "--local-path",
+                "lens.pt",
+                "--local-sha256",
+                "a" * 64,
+                "--local-provenance",
+                "metadata.json",
+                "--local-state",
+                "state.json",
+                "--local-state-sha256",
+                "b" * 64,
+                "--local-kind",
+                "nvfp4-ste",
+                "--output",
+                "comparison.json",
+            ]
+        )
+        self.assertEqual(args.local_kind, "nvfp4-ste")
+        self.assertEqual(args.local_state, Path("state.json"))
+        self.assertEqual(args.local_state_sha256, "b" * 64)
 
 
 if __name__ == "__main__":

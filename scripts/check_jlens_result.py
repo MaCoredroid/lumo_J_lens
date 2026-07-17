@@ -22,11 +22,11 @@ from run_jlens_nvfp4 import (
     MODEL_INDEX_SHA256,
     MODEL_REPO,
     MODEL_REVISION,
-    SCHEMA_VERSION,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
 RESULT = ROOT / "validation" / "jlens-nvfp4-2026-07-16.json"
+HISTORICAL_RESULT_SCHEMA_VERSION = 2
 
 
 def require(condition: bool, message: str) -> None:
@@ -36,7 +36,10 @@ def require(condition: bool, message: str) -> None:
 
 def main() -> int:
     result = json.loads(RESULT.read_text())
-    require(result["schema_version"] == SCHEMA_VERSION, "schema version mismatch")
+    require(
+        result["schema_version"] == HISTORICAL_RESULT_SCHEMA_VERSION,
+        "schema version mismatch",
+    )
     require(result["status"] == "passed", "result status is not passed")
     require(all(result["assertions"].values()), "one or more assertions failed")
 

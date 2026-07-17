@@ -8,6 +8,7 @@ decode logits, or make a behavioral-equivalence claim.
 from __future__ import annotations
 
 import argparse
+from contextlib import ExitStack
 from dataclasses import dataclass
 from datetime import datetime, timezone
 import json
@@ -21,9 +22,15 @@ from download_jlens import (
     LENS_FILENAME,
     LENS_REPO,
     LENS_REVISION,
+    LENS_SHA256,
     verify_checkpoint,
     verify_file,
     verify_local_fit_artifact,
+)
+from verify_nvfp4_ste_artifact import (
+    open_held_regular_file,
+    open_verified_nvfp4_ste_artifact,
+    verify_nvfp4_ste_artifact,
 )
 
 
@@ -300,17 +307,37 @@ def verify_artifacts(
     local_path: Path,
     local_sha256: str,
     local_provenance: Path,
+    local_state: Path | None = None,
+    local_state_sha256: str | None = None,
     public_path: Path,
-    local_verifier: Callable[..., dict[str, object]] = verify_local_fit_artifact,
+    local_kind: str = "nf4",
+    local_verifier: Callable[..., dict[str, object]] | None = None,
+    nf4_verifier: Callable[..., dict[str, object]] = verify_local_fit_artifact,
+    native_verifier: Callable[..., dict[str, object]] = verify_nvfp4_ste_artifact,
     public_file_verifier: Callable[..., dict[str, object]] = verify_file,
     public_checkpoint_verifier: Callable[..., dict[str, object]] = verify_checkpoint,
 ) -> dict[str, dict[str, object]]:
-    local = local_verifier(
-        local_path,
-        expected_sha256=local_sha256,
-        provenance_path=local_provenance,
-        check_finite=True,
-    )
+    if local_kind not in {"nf4", "nvfp4-ste"}:
+        raise ValueError(f"unsupported local lens kind: {local_kind}")
+    if local_verifier is None:
+        local_verifier = (
+            nf4_verifier if local_kind == "nf4" else native_verifier
+        )
+    local_kwargs: dict[str, object] = {
+        "expected_sha256": local_sha256,
+        "provenance_path": local_provenance,
+        "check_finite": True,
+    }
+    if local_kind == "nvfp4-ste":
+        if local_state is None or local_state_sha256 is None:
+            raise ValueError("native comparison requires local fit state and SHA-256")
+        local_kwargs.update(
+            state_path=local_state,
+            expected_state_sha256=local_state_sha256,
+        )
+    elif local_state is not None or local_state_sha256 is not None:
+        raise ValueError("NF4 comparison does not accept native fit-state metadata")
+    local = local_verifier(local_path, **local_kwargs)
     public = {
         "kind": "pinned_public",
         "repo_id": LENS_REPO,
@@ -347,6 +374,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--local-path", type=Path, required=True)
     parser.add_argument("--local-sha256", required=True)
     parser.add_argument("--local-provenance", type=Path, required=True)
+    parser.add_argument("--local-state", type=Path)
+    parser.add_argument("--local-state-sha256")
+    parser.add_argument(
+        "--local-kind", choices=("nf4", "nvfp4-ste"), default="nf4"
+    )
     parser.add_argument("--public-path", type=Path)
     parser.add_argument("--row-chunk", type=int, default=16)
     parser.add_argument("--output", type=Path, required=True)
@@ -368,23 +400,59 @@ def main() -> int:
                 revision=LENS_REVISION,
                 local_files_only=True,
             )
-        )
+        ).resolve(strict=True)
     else:
-        public_path = args.public_path.resolve()
-    local_path = args.local_path.resolve()
-    local_provenance = args.local_provenance.resolve()
+        public_path = args.public_path
+    with ExitStack() as resources:
+        held_public = resources.enter_context(
+            open_held_regular_file(
+                public_path,
+                label="public lens checkpoint",
+                expected_sha256=LENS_SHA256,
+            )
+        )
+        public_comparison_path = Path(held_public.fd_path)
+        local_path = args.local_path
+        local_provenance = args.local_provenance
+        local_verifier: Callable[..., dict[str, object]] | None = None
+        comparison_path = local_path.resolve()
+        if args.local_kind == "nvfp4-ste":
+            if args.local_state is None or args.local_state_sha256 is None:
+                raise ValueError(
+                    "native comparison requires --local-state and --local-state-sha256"
+                )
+            native = resources.enter_context(
+                open_verified_nvfp4_ste_artifact(
+                    local_path,
+                    expected_sha256=args.local_sha256,
+                    provenance_path=local_provenance,
+                    state_path=args.local_state,
+                    expected_state_sha256=args.local_state_sha256,
+                    check_finite=True,
+                )
+            )
+            comparison_path = Path(native.fd_path)
+            local_verifier = lambda *_args, **_kwargs: dict(native.record)
 
-    artifacts = verify_artifacts(
-        local_path=local_path,
-        local_sha256=args.local_sha256,
-        local_provenance=local_provenance,
-        public_path=public_path,
-    )
-    layers, aggregate = compare_artifact_matrices(
-        local_path,
-        public_path,
-        row_chunk=args.row_chunk,
-    )
+        artifacts = verify_artifacts(
+            local_path=local_path,
+            local_sha256=args.local_sha256,
+            local_provenance=local_provenance,
+            local_state=args.local_state,
+            local_state_sha256=args.local_state_sha256,
+            public_path=public_comparison_path,
+            local_kind=args.local_kind,
+            local_verifier=local_verifier,
+        )
+        layers, aggregate = compare_artifact_matrices(
+            comparison_path,
+            public_comparison_path,
+            row_chunk=args.row_chunk,
+        )
+        if args.local_kind == "nvfp4-ste":
+            native.require_unchanged()
+        held_public.require_unchanged()
+        artifacts["public"]["path"] = str(held_public.path)
     report = {
         "schema_version": SCHEMA_VERSION,
         "scope": "numeric matrix comparison only; no held-out token or logit evaluation",

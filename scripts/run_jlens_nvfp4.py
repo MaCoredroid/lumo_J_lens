@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+from contextlib import ExitStack
 import functools
 import hashlib
 import importlib.metadata
@@ -21,9 +22,14 @@ from download_jlens import (
     LENS_FILENAME,
     LENS_REPO,
     LENS_REVISION,
+    LENS_SHA256,
     verify_checkpoint,
     verify_file,
     verify_local_fit_artifact,
+)
+from verify_nvfp4_ste_artifact import (
+    open_held_regular_file,
+    open_verified_nvfp4_ste_artifact,
 )
 
 MODEL_REPO = "nvidia/Qwen3.6-27B-NVFP4"
@@ -33,7 +39,8 @@ MODEL_INDEX_SHA256 = "7aa103a2582b7d26631988de33dea19e8a308ee9c239e8e14feb374af3
 DEFAULT_PROMPT = "Fact: The currency used in the country shaped like a boot is"
 SOURCE_LAYERS = tuple(range(63))
 CAPTURE_LAYERS = tuple(range(64))
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
+SCORE_ENCODING = "unrounded-float32"
 FINAL_NORM_MAX_ABS_TOLERANCE = 0.125
 FINAL_NORM_RMS_TOLERANCE = 0.006
 FINAL_LOGIT_MAX_ABS_TOLERANCE = 0.0625
@@ -221,10 +228,66 @@ def _compact_topk(
     target_rank = int((logits > target_score).sum().item()) + 1
     return {
         "token_ids": token_ids.cpu().tolist(),
-        "scores": [round(float(value), 6) for value in values.cpu().tolist()],
+        "scores": [float(value) for value in values.cpu().tolist()],
         "target_token_id": target_token_id,
-        "target_score": round(float(target_score), 6),
+        "target_score": float(target_score),
         "target_rank": target_rank,
+    }
+
+
+def captured_residual_manifest(
+    captures: dict[int, Any],
+    *,
+    token_positions: tuple[int, ...],
+    layers: tuple[int, ...] = CAPTURE_LAYERS,
+) -> dict[str, object]:
+    """Hash canonical headers and logical FP32 bytes for captured residuals."""
+
+    import torch
+
+    digest = hashlib.sha256()
+    logical_bytes = 0
+    expected_rows = len(token_positions)
+    for layer in layers:
+        tensor = captures.get(layer)
+        if not torch.is_tensor(tensor):
+            raise ValueError(f"captured residual layer {layer} is not a tensor")
+        if (
+            tensor.device.type != "cpu"
+            or tensor.dtype != torch.float32
+            or tensor.ndim != 2
+            or tensor.shape[0] != expected_rows
+        ):
+            raise ValueError(f"captured residual layer {layer} geometry mismatch")
+        contiguous = tensor.detach().contiguous()
+        size = contiguous.numel() * contiguous.element_size()
+        header = {
+            "layer": layer,
+            "shape": list(contiguous.shape),
+            "dtype": "little-endian-float32",
+            "token_positions": list(token_positions),
+            "logical_bytes": size,
+        }
+        encoded = json.dumps(
+            header,
+            sort_keys=True,
+            separators=(",", ":"),
+            ensure_ascii=True,
+            allow_nan=False,
+        ).encode("utf-8")
+        digest.update(len(encoded).to_bytes(8, "big"))
+        digest.update(encoded)
+        digest.update(contiguous.view(torch.uint8).numpy().tobytes())
+        logical_bytes += size
+    return {
+        "algorithm": (
+            "SHA-256 over length-prefixed canonical layer/shape/dtype/"
+            "token-position/byte-count headers and logical row-major FP32 bytes"
+        ),
+        "sha256": digest.hexdigest(),
+        "tensor_count": len(layers),
+        "logical_bytes": logical_bytes,
+        "token_positions": list(token_positions),
     }
 
 
@@ -243,6 +306,10 @@ def _readout_captures(
     missing = sorted(set(CAPTURE_LAYERS) - set(captures))
     if missing:
         raise RuntimeError(f"hooks did not capture layers: {missing}")
+    residual_manifest = captured_residual_manifest(
+        captures,
+        token_positions=tuple(model._jlens_positions),
+    )
 
     started = time.perf_counter()
     checkpoint = torch.load(
@@ -354,24 +421,25 @@ def _readout_captures(
         )
 
     return {
+        "residual_capture_manifest": residual_manifest,
         "layers": per_layer,
         "final_model_readout": [
             records[("final", 63, position)] for position in range(positions)
         ],
         "captured_final_model_readout": captured_records,
         "final_norm_reconstruction": {
-            "max_abs_error": round(final_norm_max_abs_error, 9),
-            "rms_error": round(final_norm_rms_error, 9),
-            "reference_rms": round(final_norm_reference_rms, 9),
-            "relative_rms_error": round(final_norm_relative_rms_error, 9),
+            "max_abs_error": final_norm_max_abs_error,
+            "rms_error": final_norm_rms_error,
+            "reference_rms": final_norm_reference_rms,
+            "relative_rms_error": final_norm_relative_rms_error,
             "max_abs_tolerance": FINAL_NORM_MAX_ABS_TOLERANCE,
             "rms_tolerance": FINAL_NORM_RMS_TOLERANCE,
             "within_tolerance": final_norm_within_tolerance,
         },
         "final_logits_reconstruction": {
-            "max_abs_error": round(final_logit_max_abs_error, 9),
+            "max_abs_error": final_logit_max_abs_error,
             "max_abs_tolerance": FINAL_LOGIT_MAX_ABS_TOLERANCE,
-            "rms_error": round(final_logit_rms_error, 9),
+            "rms_error": final_logit_rms_error,
             "rms_tolerance": FINAL_LOGIT_RMS_TOLERANCE,
             "top_k_prefix": topk_parity_k,
             "top_k_prefix_token_ids_match": final_topk_prefix_ids_match,
@@ -427,9 +495,47 @@ def _load_prompts(args: argparse.Namespace) -> list[dict[str, str]]:
 
 def lens_artifact_mode(args: argparse.Namespace) -> str:
     """Classify lens CLI arguments without inspecting artifact bytes."""
+    requested_kind = getattr(args, "lens_kind", "auto")
     has_path = args.lens_path is not None
     has_sha256 = args.lens_sha256 is not None
     has_provenance = args.lens_provenance is not None
+    has_state = getattr(args, "lens_state", None) is not None
+    has_state_sha256 = getattr(args, "lens_state_sha256", None) is not None
+
+    if requested_kind == "public":
+        if has_sha256 or has_provenance or has_state or has_state_sha256:
+            raise ValueError(
+                "public lenses do not accept local artifact metadata"
+            )
+        return "public"
+
+    if requested_kind == "nvfp4-ste":
+        if not (
+            has_path
+            and has_sha256
+            and has_provenance
+            and has_state
+            and has_state_sha256
+        ):
+            raise ValueError(
+                "nvfp4-ste lenses require --lens-path, --lens-sha256, "
+                "--lens-provenance, --lens-state, and --lens-state-sha256"
+            )
+        return "native_nvfp4_ste"
+
+    if requested_kind == "nf4":
+        if not (has_path and has_sha256 and has_provenance):
+            raise ValueError(
+                "nf4 lenses require --lens-path, --lens-sha256, and --lens-provenance"
+            )
+        if has_state or has_state_sha256:
+            raise ValueError("NF4 lenses do not accept native fit-state metadata")
+        return "local_fit"
+
+    if requested_kind != "auto":
+        raise ValueError(f"unsupported lens kind: {requested_kind}")
+    if has_state or has_state_sha256:
+        raise ValueError("native fit-state metadata requires --lens-kind nvfp4-ste")
     if has_sha256 != has_provenance:
         raise ValueError(
             "local lenses require both --lens-sha256 and --lens-provenance"
@@ -444,6 +550,39 @@ def lens_artifact_mode(args: argparse.Namespace) -> str:
 def _package_versions() -> dict[str, str]:
     packages = ["vllm", "torch", "transformers", "huggingface-hub", "triton"]
     return {name: importlib.metadata.version(name) for name in packages}
+
+
+def open_pinned_model_checkpoint(
+    snapshot: Path, *, checkpoint_factory: Any | None = None
+) -> tuple[Any, dict[str, object]]:
+    """Hash the exact ModelOpt checkpoint before vLLM consumes it."""
+
+    from modelopt_checkpoint import (
+        PINNED_METADATA_SHA256,
+        PINNED_SHARDS,
+        ModelOptCheckpoint,
+    )
+
+    factory = checkpoint_factory or ModelOptCheckpoint
+    checkpoint = factory(snapshot, strict_pinned=True)
+    record: dict[str, object] = {
+        "policy": "ModelOptCheckpoint(strict_pinned=True)",
+        "validated_before_model_load": True,
+        "validated_after_evaluation": False,
+        "metadata_sha256": dict(PINNED_METADATA_SHA256),
+        "shards": {
+            filename: {"bytes": size, "sha256": digest}
+            for filename, (size, digest) in PINNED_SHARDS.items()
+        },
+    }
+    return checkpoint, record
+
+
+def revalidate_pinned_model_checkpoint(
+    checkpoint: Any, record: dict[str, object]
+) -> None:
+    checkpoint.validate_pinned_integrity()
+    record["validated_after_evaluation"] = True
 
 
 def _nvidia_smi() -> dict[str, str]:
@@ -471,9 +610,15 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--top-k", type=int, default=10)
     parser.add_argument("--output", type=Path)
     parser.add_argument(
+        "--lens-kind",
+        choices=("auto", "public", "nf4", "nvfp4-ste"),
+        default="auto",
+        help="artifact verifier; auto preserves the legacy public/NF4 inference",
+    )
+    parser.add_argument(
         "--lens-path",
         type=Path,
-        help="pinned public artifact override, or a local fit with both metadata flags",
+        help="pinned public artifact override, or a verified local fitted lens",
     )
     parser.add_argument(
         "--lens-sha256",
@@ -483,6 +628,15 @@ def build_parser() -> argparse.ArgumentParser:
         "--lens-provenance",
         type=Path,
         help="required completed fit provenance when --lens-path is a local fitted lens",
+    )
+    parser.add_argument(
+        "--lens-state",
+        type=Path,
+        help="required exact completed state.json for --lens-kind nvfp4-ste",
+    )
+    parser.add_argument(
+        "--lens-state-sha256",
+        help="required expected SHA-256 of --lens-state for exact-run verification",
     )
     parser.add_argument("--max-model-len", type=int, default=256)
     parser.add_argument("--gpu-memory-utilization", type=float, default=0.82)
@@ -499,6 +653,14 @@ def main() -> int:
         raise ValueError("--gpu-memory-utilization must be in 0.70..0.90")
     lens_mode = lens_artifact_mode(args)
 
+    with ExitStack() as resources:
+        return _run(args, lens_mode=lens_mode, resources=resources)
+
+
+def _run(
+    args: argparse.Namespace, *, lens_mode: str, resources: ExitStack
+) -> int:
+
     started_at = datetime.now(timezone.utc)
     started = time.perf_counter()
     layers = validate_layers(parse_integer_list(args.layers, allow_all=True))
@@ -507,7 +669,26 @@ def main() -> int:
 
     from huggingface_hub import hf_hub_download, snapshot_download
 
-    if lens_mode == "local_fit":
+    lens_integrity_guard = None
+    if lens_mode == "native_nvfp4_ste":
+        native_artifact = resources.enter_context(
+            open_verified_nvfp4_ste_artifact(
+                args.lens_path,
+                expected_sha256=args.lens_sha256,
+                provenance_path=args.lens_provenance,
+                state_path=args.lens_state,
+                expected_state_sha256=args.lens_state_sha256,
+                check_finite=True,
+            )
+        )
+        lens_path = Path(native_artifact.fd_path)
+        lens_integrity_guard = native_artifact
+        lens_record = dict(native_artifact.record)
+        lens_application = (
+            f"{lens_record['fit_quantization']} fitted lens applied to "
+            "strictly rehashed NVIDIA NVFP4/FP8 residuals"
+        )
+    elif lens_mode == "local_fit":
         lens_path = args.lens_path.resolve()
         lens_record = verify_local_fit_artifact(
             lens_path,
@@ -521,16 +702,25 @@ def main() -> int:
         )
     else:
         if args.lens_path:
-            lens_path = args.lens_path.resolve()
+            public_path = args.lens_path
         else:
-            lens_path = Path(
+            public_path = Path(
                 hf_hub_download(
                     LENS_REPO,
                     LENS_FILENAME,
                     revision=LENS_REVISION,
                     local_files_only=True,
                 )
+            ).resolve(strict=True)
+        public_artifact = resources.enter_context(
+            open_held_regular_file(
+                public_path,
+                label="public lens checkpoint",
+                expected_sha256=LENS_SHA256,
             )
+        )
+        lens_integrity_guard = public_artifact
+        lens_path = Path(public_artifact.fd_path)
         lens_record = {
             "repo_id": LENS_REPO,
             "revision": LENS_REVISION,
@@ -538,6 +728,7 @@ def main() -> int:
             **verify_file(lens_path),
             **verify_checkpoint(lens_path, check_finite=False),
         }
+        lens_record["path"] = str(public_artifact.path)
         lens_application = "BF16-fitted lens applied to NVFP4/FP8 residuals"
 
     model_path = Path(
@@ -546,6 +737,9 @@ def main() -> int:
             revision=MODEL_REVISION,
             local_files_only=True,
         )
+    )
+    model_checkpoint, model_checkpoint_integrity = open_pinned_model_checkpoint(
+        model_path
     )
     model_config_path = model_path / "config.json"
     model_index_path = model_path / "model.safetensors.index.json"
@@ -692,11 +886,15 @@ def main() -> int:
         )
 
     llm.apply_model(_remove_capture_hooks)
+    revalidate_pinned_model_checkpoint(
+        model_checkpoint, model_checkpoint_integrity
+    )
     runtime_gpu = _nvidia_smi()
     completed_at = datetime.now(timezone.utc)
     all_validations_passed = all_final_top1_matches and all_final_norm_matches
     result = {
         "schema_version": SCHEMA_VERSION,
+        "score_encoding": SCORE_ENCODING,
         "status": "passed" if all_validations_passed else "failed",
         "started_at": started_at.isoformat(),
         "completed_at": completed_at.isoformat(),
@@ -716,6 +914,7 @@ def main() -> int:
             "quant_method": model_config["quantization_config"]["quant_method"],
             "quant_algo": model_config["quantization_config"]["quant_algo"],
             "model_info": model_info,
+            "checkpoint_integrity": model_checkpoint_integrity,
         },
         "lens": {
             **lens_record,
@@ -753,6 +952,8 @@ def main() -> int:
     destroy_model_parallel()
     destroy_distributed_environment()
     torch.cuda.empty_cache()
+    if lens_integrity_guard is not None:
+        lens_integrity_guard.require_unchanged()
 
     rendered = json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False) + "\n"
     if args.output:

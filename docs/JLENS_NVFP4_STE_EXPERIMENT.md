@@ -265,6 +265,35 @@ existing path, and prints its byte size and SHA-256. The checkpoint keys are
 `J`, `n_prompts`, `source_layers`, and `d_model`. Export is a post-completion
 step; the command cannot turn an incomplete work directory into a lens.
 
+Apply the exported lens only with the exact completed fit state and externally
+recorded hashes:
+
+```bash
+LENS=.cache/Qwen3.6-27B-jlens-nvfp4-ste-n10-fp32.pt
+STATE=.cache/nvfp4_ste_fit/state.json
+LENS_SHA256=$(sha256sum "$LENS" | cut -d' ' -f1)
+STATE_SHA256=$(sha256sum "$STATE" | cut -d' ' -f1)
+
+scripts/run_jlens_nvfp4.sh \
+  --lens-kind nvfp4-ste \
+  --lens-path "$LENS" \
+  --lens-sha256 "$LENS_SHA256" \
+  --lens-provenance .cache/nvfp4_ste_fit/final-mean/metadata.json \
+  --lens-state "$STATE" \
+  --lens-state-sha256 "$STATE_SHA256" \
+  --prompts-file configs/jlens_prompts.json \
+  --layers all --positions=-1 --top-k 10 \
+  --output validation/jlens-native-nvfp4-ste-on-nvfp4.json
+```
+
+This is intentionally an exact-production-run verifier, not a generic loader
+for arbitrary NVFP4-STE fits. It binds the completed `state.json`, final-mean
+metadata, prompt commits, compiled-observer proofs, source/model hashes, and
+exported tensors. The verifier holds the checked lens inode open through
+readout, so replacing the CLI path cannot change the tensors being applied.
+Each evaluation also rehashes all three ModelOpt shards before model loading and
+after readout.
+
 Do not add a custom model path to a production command. The runner resolves the
 exact cached NVIDIA revision and fails if metadata, shard bytes, prompt
 manifest, source manifest, estimator settings, or resume state differs.

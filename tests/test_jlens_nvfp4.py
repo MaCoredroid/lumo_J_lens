@@ -17,6 +17,10 @@ SPEC.loader.exec_module(MODULE)
 
 
 class JacobianLensHelpersTest(unittest.TestCase):
+    def test_report_schema_attests_unrounded_float32_scores(self):
+        self.assertEqual(MODULE.SCHEMA_VERSION, 3)
+        self.assertEqual(MODULE.SCORE_ENCODING, "unrounded-float32")
+
     def test_parse_all_layers(self):
         self.assertEqual(MODULE.parse_integer_list("all", allow_all=True), list(range(63)))
 
@@ -72,6 +76,76 @@ class JacobianLensHelpersTest(unittest.TestCase):
         self.assertEqual(MODULE.transport_residual(residual, Jacobian()), "transported")
         self.assertIs(residual.operand, transpose_marker)
 
+    def test_compact_topk_preserves_float32_scores_without_decimal_rounding(self):
+        import torch
+
+        logits = torch.tensor([0.123456791, 1.987654328, -2.0], dtype=torch.float32)
+        result = MODULE._compact_topk(logits, top_k=2, target_token_id=0)
+        self.assertEqual(result["scores"][0], float(logits[1]))
+        self.assertEqual(result["target_score"], float(logits[0]))
+        self.assertNotEqual(result["target_score"], round(float(logits[0]), 6))
+
+    def test_residual_capture_manifest_binds_positions_and_bytes(self):
+        import torch
+
+        captures = {
+            0: torch.arange(8, dtype=torch.float32).reshape(2, 4),
+            1: torch.arange(8, dtype=torch.float32).reshape(2, 4) + 10,
+        }
+        first = MODULE.captured_residual_manifest(
+            captures, token_positions=(3, 7), layers=(0, 1)
+        )
+        second = MODULE.captured_residual_manifest(
+            captures, token_positions=(3, 7), layers=(0, 1)
+        )
+        self.assertEqual(first, second)
+        self.assertEqual(first["tensor_count"], 2)
+        self.assertEqual(first["logical_bytes"], 64)
+        changed = {key: value.clone() for key, value in captures.items()}
+        changed[1][0, 0] += 1
+        self.assertNotEqual(
+            first["sha256"],
+            MODULE.captured_residual_manifest(
+                changed, token_positions=(3, 7), layers=(0, 1)
+            )["sha256"],
+        )
+        self.assertNotEqual(
+            first["sha256"],
+            MODULE.captured_residual_manifest(
+                captures, token_positions=(3, 6), layers=(0, 1)
+            )["sha256"],
+        )
+
+    def test_model_checkpoint_is_revalidated_after_evaluation(self):
+        calls = []
+
+        class Checkpoint:
+            def validate_pinned_integrity(self):
+                calls.append("after")
+
+        def factory(path, *, strict_pinned):
+            calls.append((path, strict_pinned))
+            return Checkpoint()
+
+        checkpoint, record = MODULE.open_pinned_model_checkpoint(
+            Path("snapshot"), checkpoint_factory=factory
+        )
+        self.assertEqual(calls, [(Path("snapshot"), True)])
+        self.assertFalse(record["validated_after_evaluation"])
+        MODULE.revalidate_pinned_model_checkpoint(checkpoint, record)
+        self.assertEqual(calls[-1], "after")
+        self.assertTrue(record["validated_after_evaluation"])
+
+    def test_model_checkpoint_revalidation_failure_is_not_marked_valid(self):
+        class Checkpoint:
+            def validate_pinned_integrity(self):
+                raise ValueError("shard SHA-256 mismatch")
+
+        record = {"validated_after_evaluation": False}
+        with self.assertRaisesRegex(ValueError, "shard SHA-256 mismatch"):
+            MODULE.revalidate_pinned_model_checkpoint(Checkpoint(), record)
+        self.assertFalse(record["validated_after_evaluation"])
+
     def test_default_prompt_matches_reference(self):
         self.assertEqual(
             MODULE.DEFAULT_PROMPT,
@@ -89,6 +163,14 @@ class JacobianLensHelpersTest(unittest.TestCase):
             ),
             "public",
         )
+
+    def test_legacy_namespace_without_lens_kind_remains_auto(self):
+        legacy = MODULE.argparse.Namespace(
+            lens_path=Path("local.pt"),
+            lens_sha256="a" * 64,
+            lens_provenance=Path("local.provenance.json"),
+        )
+        self.assertEqual(MODULE.lens_artifact_mode(legacy), "local_fit")
 
     def test_local_lens_requires_path_hash_and_provenance(self):
         parser = MODULE.build_parser()
@@ -122,6 +204,71 @@ class JacobianLensHelpersTest(unittest.TestCase):
         for arguments in incomplete:
             with self.subTest(arguments=arguments), self.assertRaises(ValueError):
                 MODULE.lens_artifact_mode(parser.parse_args(arguments))
+
+    def test_explicit_native_nvfp4_ste_lens_mode(self):
+        parser = MODULE.build_parser()
+        arguments = [
+            "--lens-kind",
+            "nvfp4-ste",
+            "--lens-path",
+            "native.pt",
+            "--lens-sha256",
+            "a" * 64,
+            "--lens-provenance",
+            "native.final.json",
+            "--lens-state",
+            "state.json",
+            "--lens-state-sha256",
+            "b" * 64,
+        ]
+        self.assertEqual(
+            MODULE.lens_artifact_mode(parser.parse_args(arguments)),
+            "native_nvfp4_ste",
+        )
+
+    def test_explicit_nf4_lens_mode_preserves_local_fit(self):
+        parser = MODULE.build_parser()
+        arguments = [
+            "--lens-kind",
+            "nf4",
+            "--lens-path",
+            "nf4.pt",
+            "--lens-sha256",
+            "b" * 64,
+            "--lens-provenance",
+            "nf4.provenance.json",
+        ]
+        self.assertEqual(
+            MODULE.lens_artifact_mode(parser.parse_args(arguments)), "local_fit"
+        )
+
+    def test_explicit_local_lens_modes_require_all_artifacts(self):
+        parser = MODULE.build_parser()
+        for lens_kind in ("nf4", "nvfp4-ste"):
+            with self.subTest(lens_kind=lens_kind), self.assertRaisesRegex(
+                ValueError, "require --lens-path"
+            ):
+                MODULE.lens_artifact_mode(
+                    parser.parse_args(
+                        ["--lens-kind", lens_kind, "--lens-path", "lens.pt"]
+                    )
+                )
+
+    def test_explicit_public_mode_rejects_local_metadata(self):
+        parser = MODULE.build_parser()
+        with self.assertRaisesRegex(ValueError, "public lenses do not accept"):
+            MODULE.lens_artifact_mode(
+                parser.parse_args(
+                    [
+                        "--lens-kind",
+                        "public",
+                        "--lens-path",
+                        "public.pt",
+                        "--lens-sha256",
+                        "a" * 64,
+                    ]
+                )
+            )
 
 
 if __name__ == "__main__":
