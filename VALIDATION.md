@@ -5,12 +5,12 @@
 Dates: 2026-07-16 to 2026-07-17 (America/Los_Angeles)
 
 The July 16 fresh-fit result is a **completed exact dense NF4 fit**, not a
-native NVFP4 fit. The July 17 native NVIDIA implementation has separately
-passed its operation, late-suffix, and exploratory one-row all-layer hardware
-gates using compiled NVFP4/FP8 forward values and an identity-STE surrogate
-backward. Its strict per-prompt production captures and complete `n=10`
-artifact are **pending**. No final native artifact hash, held-out score, or
-completed-reproduction claim exists yet.
+native NVFP4 fit. The July 17 native NVIDIA implementation separately completed
+a strict `n=10` production fit through the pinned deployed ModelOpt NVFP4/FP8
+forward on the RTX 5090. Its backward is a declared identity-STE surrogate,
+including analytic GDN; it is not the literal derivative of quantization
+rounding. MTP was disabled for capture, fitting, and evaluation because its
+draft block is outside the accepted main-model lens.
 
 | Claim | Result | Evidence |
 |---|---|---|
@@ -22,24 +22,83 @@ completed-reproduction claim exists yet.
 | Local NF4 lens applied to NVFP4, strict paired adapter gate | **FAIL**; cross-application is not certified | [`local lens run`](validation/jlens-nf4-on-nvfp4-2026-07-16.json) |
 | Public lens on the same four NVFP4 prompts, control gate | **FAIL** with the same adapter errors | [`public control`](validation/jlens-public-on-nvfp4-heldout-2026-07-16.json) |
 | Public lens on the original two semantic prompts | PASS after recertification | [`public baseline`](validation/jlens-nvfp4-2026-07-16.json) |
-| Exploratory native compiled baseline/observer proof | PASS engineering evidence; 688 shared tensors directly bit-exact, 432 observer-only boundaries complete, 785 replay parameters content-equal; predates strict identity binding | [`native report`](docs/JLENS_NVFP4_STE_EXPERIMENT.md) |
-| Native packed/live VJPs, analytic GDN, and exploratory all-layer reverse replay | PASS engineering gates; one real estimator row for each source layer `0..62` | [`native report`](docs/JLENS_NVFP4_STE_EXPERIMENT.md) |
-| Dense native NVFP4/FP8-STE `n=10` artifact | **PENDING**; ten prompts and all 5,120 rows for all 63 matrices have not completed | [`native runbook`](docs/JLENS_NVFP4_STE_EXPERIMENT.md) |
+| Production native compiled baseline/observer proof | PASS for all ten prompts; exact endpoint generation, 688/688 shared tensors bit-exact, 432/432 observer-only boundaries complete, 785/785 replay parameters equal | [`fit state`](validation/jlens-nvfp4-ste-fit-state-2026-07-17.json) |
+| Native packed/live VJPs, analytic GDN, and all-layer reverse replay | PASS; all 5,120 rows for source layers `0..62`, target block 63, 20 committed chunks per prompt | [`final metadata`](validation/jlens-nvfp4-ste-final-metadata-2026-07-17.json) |
+| Dense native NVFP4/FP8-STE `n=10` artifact | **PASS**; 63 finite FP32 `[5120,5120]` matrices, exact production verifier passed | [`artifact verification`](validation/jlens-nvfp4-ste-artifact-verification-2026-07-17.json) |
+| Upstream native artifact load | PASS with `JacobianLens.load` and `JacobianLens.from_pretrained` | [`loader record`](validation/jlens-nvfp4-ste-upstream-load-2026-07-17.json) |
+| Native/public dense geometry | REPORTED; global cosine `0.732877`, mean layer cosine `0.822360`; no post-hoc threshold | [`geometry`](validation/jlens-nvfp4-ste-vs-public-2026-07-17.json) |
+| Paired native/public held-out NVFP4 readout | REPORTED over 1,008 observations; both independent adapter certificates failed with identical pre-lens evidence | [`paired report`](validation/jlens-nvfp4-ste-vs-public-heldout-2026-07-17.json) |
 
-The exploratory native capture ran the local pinned vLLM/ModelOpt graph; this
-RTX 5090 resolved the W4 operations to the observed weight-only Marlin fallback
-and the FP8 operations to Cutlass. Its artifact predates the final
-`model.identity` and shard-hash fields, so the hardened production runner will
-not adopt it and must recapture/reprove every prompt. MTP was disabled because
-the proof covers main-model prefill, not speculative draft/decode. Of the
-capture boundaries, 688 GDN/attention tensors were directly compared
+The production native capture ran the local pinned vLLM/ModelOpt graph; this
+RTX 5090 resolved W4 operations to the observed weight-only Marlin fallback and
+FP8 operations to Cutlass. The runner discarded the older exploratory captures
+and recaptured/reproved all ten prompts under model-identity, metadata, all
+three shard hashes, prompt-manifest, and source-contract binding. MTP was
+disabled because the proof covers main-model prefill, not speculative
+draft/decode. On every prompt, 688 GDN/attention tensors were directly compared
 bit-for-bit. The 432 linear/SwiGLU/post-block tensors exist only in the observer
 graph and are supported indirectly by exact endpoint generation parity plus
 the direct shared-tensor proof; they are not claimed as direct baseline
 equality. Real packed-W4 and live-FP8 probes measured relative RMS `1.2549e-7`
-and `7.8404e-7` against dense dequantization. The batch-256 estimator
-measurement projects to about 12.7 hours for ten prompts, before capture,
-hashing, commit, finalization, and export overhead.
+and `7.8404e-7` against dense dequantization.
+
+Run `20e4bc8c-9fed-4513-b548-9727f9686222` completed ten frozen 128-token
+prompts in 47,577.883 seconds (13:12:57.9). Peak CUDA allocation/reservation was
+8,936,882,688/11,404,312,576 bytes. The authoritative mean is 63
+little-endian FP32 matrices totaling 6,606,028,800 bytes. Its aggregate layer
+SHA-256 is
+`a4c2adc7be15232db0e5a8840a6442248caa80a363c0c5239a1ee248f36fb3b4`;
+the ten committed prompt records hash to
+`a1690ab9e88cff53a2eba407195ced52e6908208fedffed68819ee47c1a888c1`.
+The 6,606,046,478-byte exported checkpoint has SHA-256
+`82be61c805d127427b37b2b4715885b756c2ca7af96291578fa4da9cd783e057`.
+The exact verifier checked all 63 exported tensors, all ten prompt commits and
+their 20 contiguous chunks, finiteness, checkpoint/source bindings, and model
+identity. Upstream `jlens` 0.1.0 at commit
+`581d398613e5602a5af361e1c34d3a92ea82ba8e` loaded it through both supported
+load APIs.
+
+The state file is 329,400 bytes with SHA-256
+`f5ee70cfda416327be6b2583a67f5662cbe4036dbc68ce4ba470884383bfbcf6`.
+Final metadata is 988,263 bytes with SHA-256
+`289e93a0c99579a0d5637cb37b42c4575b73eb2c38d35d47963de85178e90601`.
+The frozen contract SHA-256 is
+`7944ea163b548edc3372fa67242fbbcfbe0a5abbe95c04ce4a378107ebe03dd0`.
+Dense geometry against the public `n=1000` FP16 lens measured global Frobenius
+cosine `0.7328770738661481`, mean per-layer cosine `0.8223602375534815`, global
+relative Frobenius difference `0.9345964627007955`, and all-row cosine mean
+`0.791449281794253`. These are descriptive measurements, not equivalence gates.
+
+The paired schema-3 readout covered four held-out prompts, positions 16, 32,
+64, and 96, and all 63 layers: 1,008 observations. Native/public Jacobian
+readouts measured target-rank Spearman `0.902843338526047`, top-1 agreement
+`0.4126984126984127`, mean top-5 overlap `0.4936507936507937`, and target-score
+RMSE `2.780105132813771`. Native target top-1/top-5 rates were
+`0.06349206349206349`/`0.11904761904761904`; public rates were
+`0.054563492063492064`/`0.1378968253968254`. Both independently executed
+adapter certificates failed with the same reconstruction values. All four
+residual-capture manifests and every logit-lens baseline field matched exactly,
+so adapter status remains lens-independent and is not a lens-quality verdict.
+
+The measured native production and export commands were:
+
+```bash
+.venv-vllm/bin/python scripts/run_nvfp4_ste_fit.py \
+  --work-dir .cache/nvfp4_ste_fit
+
+# Use this form after an interruption; it rehashes committed state first.
+.venv-vllm/bin/python scripts/run_nvfp4_ste_fit.py \
+  --work-dir .cache/nvfp4_ste_fit --resume
+
+.venv-vllm/bin/python scripts/export_nvfp4_ste_lens.py \
+  --final-mean .cache/nvfp4_ste_fit/final-mean \
+  --output .cache/Qwen3.6-27B-jlens-nvfp4-ste-n10-fp32.pt
+```
+
+Do not use `--resume` to bypass a contract mismatch. Resume revalidates the
+model, sources, prompt corpus, committed chunks, sums, and capture proof before
+continuing. The raw 6.15 GiB matrices and exported checkpoint remain under
+`.cache`; the compact JSON evidence is committed instead.
 
 The fit used `Qwen/Qwen3.6-27B` revision `6a9e13bd...`, 496
 bitsandbytes NF4 linears, double quantization, BF16 compute, a 128-token

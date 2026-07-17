@@ -18,15 +18,27 @@ The July 16 experiment completed and verified an exact dense `n=10` NF4 fit
 for all 63 source layers on this RTX 5090. It remains an NF4 result, not an
 NVFP4 fit.
 
-On July 17, the native NVIDIA path passed packed W4, live FP8, analytic GDN,
-late-suffix, and one-row all-layer hardware gates. The existing prompt-0 and
-short all-layer capture proofs are exploratory and predate the hardened
-`model.identity`/shard binding, so production refuses to reuse them and will
-recapture every prompt. The path uses identity STE for FP8 activation
-quantization and therefore must be labeled an `NVFP4/FP8-STE` Jacobian, not the
-literal derivative of rounding. The strict ten-prompt captures and complete
-63-matrix artifact are still pending; no completed native fit or quality result
-is claimed.
+On July 17, the native NVIDIA path completed its strict ten-prompt production
+run after passing packed W4, live FP8, analytic GDN, late-suffix, and all-layer
+hardware gates. Production recaptured every prompt under the hardened
+`model.identity` and three-shard binding. For each prompt, endpoint generation
+matched exactly, 688/688 shared internal tensors were bit-exact, 432/432
+observer-only compiled boundaries were complete, and 785/785 replay parameters
+matched. The run committed 20 row chunks per prompt and produced 63 finite
+FP32 `[5120,5120]` matrices. It took 47,577.883 seconds (13:12:57.9) and peaked
+at 8,936,882,688/11,404,312,576 CUDA bytes allocated/reserved.
+
+The exported 6,606,046,478-byte checkpoint has SHA-256
+`82be61c805d127427b37b2b4715885b756c2ca7af96291578fa4da9cd783e057`
+and passed both upstream loaders. The path uses identity STE for FP8 activation
+quantization and therefore is an `NVFP4/FP8-STE` Jacobian, not the literal
+derivative of quantization rounding. Against the public `n=1000` FP16 lens,
+global/mean-layer Frobenius cosine was `0.732877`/`0.822360`. The paired
+1,008-observation held-out comparison measured target-rank Spearman `0.902843`,
+top-1 agreement `0.412698`, top-5 overlap `0.493651`, and target-score RMSE
+`2.780105`. Both adapter certificates failed independently with identical
+residual manifests and reconstruction values. This lens-independent certificate
+must remain separate from lens-quality metrics.
 
 The local NF4 lens was cross-applied to NVFP4 activations, but it is not a
 certified NVFP4 application. Its strict four-prompt residual-adapter

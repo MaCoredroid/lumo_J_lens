@@ -11,12 +11,14 @@ weight-only operations with FP8 weight-and-activation operations, while vLLM
 exposes inference kernels rather than an autograd graph. Applying another lens
 to NVFP4 residuals is not an NVFP4 fit.
 
-The subsequent native implementation now has validated packed/live input VJPs,
-an explicit identity-STE contract, analytic GDN, exact compiled forward
-capture mechanics, and a passing exploratory one-row all-layer hardware proof.
-The existing proof predates hardened model-identity/shard binding and will not
-be reused by production. Its strict captures and full ten-prompt artifact
-remain pending. That later work is documented separately in
+The subsequent native implementation has now completed a separate strict
+ten-prompt fit using exact compiled ModelOpt NVFP4/FP8 forward captures,
+packed/live input VJPs, an explicit identity-STE contract, and analytic GDN.
+Production recaptured every prompt under hardened model/shard/source binding;
+its verified exported checkpoint has SHA-256
+`82be61c805d127427b37b2b4715885b756c2ca7af96291578fa4da9cd783e057`.
+That is an exact deployed quantized forward with a surrogate backward, not the
+literal derivative of quantization rounding. The later work is documented in
 [`JLENS_NVFP4_STE_EXPERIMENT.md`](JLENS_NVFP4_STE_EXPERIMENT.md) and does not
 change the provenance or result of this NF4 experiment.
 
@@ -368,8 +370,8 @@ their reports, because the recorded strict adapter certificate fails.
 ## Limitations
 
 1. This artifact is not a native NVFP4 fit. The later native implementation
-   supplies validated surrogate VJPs for the packed ModelOpt forward, but its
-   complete `n=10` artifact is still pending.
+   supplies validated surrogate VJPs for the packed ModelOpt forward and its
+   complete `n=10` artifact has now passed exact and upstream-loader checks.
 2. Ten prompts are the project's minimum usable scale, not the paper's
    `n=1000` scale. Sampling variance is visible in the early-layer geometry.
 3. The public artifact lacks enough provenance to reproduce its exact corpus
@@ -384,3 +386,12 @@ their reports, because the recorded strict adapter certificate fails.
    establishes that lens capture works inside speculative MTP execution.
 7. The 6.15 GiB artifact remains under `.cache` and is not intended for Git.
    The committed reports and provenance bind its content by SHA-256.
+
+The native artifact's own report records its separate downstream results:
+global/mean-layer Frobenius cosine `0.732877`/`0.822360` against the public lens,
+and target-rank Spearman `0.902843`, top-1 agreement `0.412698`, top-5 overlap
+`0.493651`, and target-score RMSE `2.780105` over 1,008 paired held-out
+observations. Both native/public adapter certificates failed with identical
+pre-lens evidence. Adapter certification is lens-independent and must not be
+interpreted as a lens-quality score. The public `n=1000` control stores FP16
+matrices, but its fit-time model precision and quantization are unpublished.

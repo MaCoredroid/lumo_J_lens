@@ -182,10 +182,11 @@ There are now two distinct resolutions:
 - For the native NVIDIA path, use `scripts/run_nvfp4_ste_fit.py`. It captures
   the exact compiled NVFP4/FP8 forward, then replays packed ModelOpt W4 and
   live post-load FP8 input VJPs with identity STE and analytic GDN. Label the
-  result `NVFP4/FP8-STE`; it is not the literal derivative of rounding. Its
-  real-hardware operation gates pass, while the strict per-prompt captures and
-  complete ten-prompt artifact remain pending. Existing exploratory capture
-  evidence predates hardened model-identity/shard binding and is not reusable.
+  result `NVFP4/FP8-STE`; it is not the literal derivative of rounding. The
+  measured production run recaptured all ten prompts under hardened identity,
+  completed 63 matrices, and passed exact artifact plus upstream-loader checks.
+  Do not substitute the old exploratory capture evidence, which predates that
+  binding and remains non-reusable.
 
 Do not point the native runner at a different quantized checkpoint. Its model
 identity, metadata, all three shard hashes, prompt manifest, and source contract
@@ -221,6 +222,16 @@ committed sums, checkpoint shards, and capture binding before doing more work.
 A contract mismatch is a fail-closed provenance error, not a reason to edit the
 state file.
 
+For the completed reference run, `state.json` must report `status: completed`,
+`n_done: 10`, `next_prompt: 10`, and `sum_generation: 10`. Its exact SHA-256 is
+`f5ee70cfda416327be6b2583a67f5662cbe4036dbc68ce4ba470884383bfbcf6`.
+The final metadata SHA-256 is
+`289e93a0c99579a0d5637cb37b42c4575b73eb2c38d35d47963de85178e90601`,
+and the exported checkpoint SHA-256 is
+`82be61c805d127427b37b2b4715885b756c2ca7af96291578fa4da9cd783e057`.
+If any value differs, treat it as a different run rather than editing evidence
+to match.
+
 ## Native fitter rejects multimodal MRoPE positions
 
 The production contract is text-only. Equal triplicated MRoPE axes reduce to
@@ -230,7 +241,8 @@ rejected because that derivative path has not been validated. Use text-only
 
 ## Strict NVFP4 adapter certificate fails on held-out prompts
 
-The four-prompt held-out run completed readout, but returned status `failed`.
+The historical July 16 four-prompt NF4/public held-out run completed readout,
+but returned status `failed`.
 Rows 3, 18, and 49 had full-logit max error `0.125`, above the `0.0625` gate;
 row 42 was exactly at the allowed maximum. All logit RMS errors were below
 `0.01`, and all greedy top-1 checks passed. Row 18 also had final-norm max
@@ -246,6 +258,20 @@ mark the local cross-application certified. Preserve both failed records:
 
 The original two-prompt public-lens baseline is a distinct passing regression,
 not evidence that every prompt satisfies the adapter's strict max-error bound.
+
+The July 17 native NVFP4/FP8-STE and public schema-3 reports independently
+reproduced those same adapter values. Their four residual-capture manifests and
+all logit-lens baseline fields matched exactly. Preserve these records too:
+
+- `validation/jlens-native-nvfp4-ste-on-nvfp4-heldout-2026-07-17.json`
+- `validation/jlens-public-schema3-on-nvfp4-heldout-2026-07-17.json`
+- `validation/jlens-nvfp4-ste-vs-public-heldout-2026-07-17.json`
+
+The paired report still contains the lens measurements: target-rank Spearman
+`0.902843`, top-1 agreement `0.412698`, top-5 overlap `0.493651`, and
+target-score RMSE `2.780105` over 1,008 observations. Adapter parity is
+lens-independent and must be reported separately from these lens-quality
+metrics.
 
 ## Scorer has no report
 

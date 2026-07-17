@@ -38,15 +38,19 @@ NF4 lens was cross-applied to that checkpoint, but its strict paired adapter
 certificate failed; the public-lens control failed with the same adapter
 errors. Therefore the cross-application is also not certified.
 
-On July 17, the separate native NVIDIA implementation passed real-hardware
-operation, late-suffix, and exploratory one-row all-layer gates. It uses
-compiled NVFP4/FP8 forward captures, packed/live input VJPs, identity STE for
-FP8 activation quantization, and analytic GDN. The existing capture proof
-predates hardened model-identity/shard binding and is intentionally not reused
-by production. The strict captures and complete ten-prompt, 63-matrix artifact
-are still pending and must not be reported as complete. See
+On July 17, the separate native NVIDIA implementation completed its strict
+ten-prompt production run. It uses exact compiled NVFP4/FP8 forward captures,
+packed/live input VJPs, identity STE for FP8 activation quantization, and
+analytic GDN. Production did not reuse the older exploratory capture: it
+recaptured and reproved every prompt under hardened model/shard/source binding.
+The result is 63 finite FP32 `[5120,5120]` matrices; its exported checkpoint is
+6,606,046,478 bytes with SHA-256
+`82be61c805d127427b37b2b4715885b756c2ca7af96291578fa4da9cd783e057`.
+The exact verifier and both upstream loaders passed. See
 [`JLENS_NVFP4_STE_EXPERIMENT.md`](JLENS_NVFP4_STE_EXPERIMENT.md) for its
-contract, evidence scope, commands, and current status.
+contract, evidence scope, commands, and measured status. This native result is
+an exact deployed quantized forward with a declared identity-STE surrogate
+backward; it is not the literal derivative of quantization rounding.
 
 ## Reference estimator
 
@@ -325,6 +329,18 @@ passed. One prompt also failed final-norm max and top-5 prefix. The public lens
 control reproduced those exact adapter errors, so this failure does not reject
 the NF4 fitting method, but it does reject certification of the NVFP4
 cross-application.
+
+Those values describe the NF4 artifact only. The completed native
+NVFP4/FP8-STE `n=10` artifact's separate public-lens comparison measured global
+Frobenius cosine `0.732877`, mean per-layer cosine `0.822360`, and global
+relative difference `0.934596`. Its 1,008-observation paired held-out comparison
+measured target-rank Spearman `0.902843`, top-1 agreement `0.412698`, top-5
+overlap `0.493651`, and target-score RMSE `2.780105`. Both native/public adapter
+certificates failed with identical pre-lens residual evidence. For either lens,
+that certificate is computed before lens application and must remain separate
+from lens-quality metrics. The public control stores 63 FP16 matrices fitted
+over `n=1000`, but its fit-time model precision and quantization are
+unpublished.
 
 ## Sketches and low-rank methods
 

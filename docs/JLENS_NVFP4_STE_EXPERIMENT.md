@@ -4,33 +4,44 @@ Date: 2026-07-17
 
 ## Status
 
-The native NVIDIA path is implemented and has passed its operation,
-late-suffix, and exploratory all-layer hardware gates on the local RTX 5090.
-It uses the same pinned ModelOpt checkpoint and compiled vLLM target-model
-graph as the serving profile. It does not substitute the BF16 source model,
-bitsandbytes NF4, or the Apple MLX port for the fitting forward.
+The native NVIDIA production fit completed on the local RTX 5090. It used the
+same pinned ModelOpt checkpoint and compiled vLLM target-model graph as the
+serving profile. It did not substitute the BF16 source model, bitsandbytes NF4,
+or the Apple MLX port for the fitting forward.
 
-The existing 128-token prompt-0 pair proof and short all-layer proof predate
-the hardened `model.identity` field and full shard-hash binding. They validate
-the operator math and baseline/observer parity that they measured, but they are
-not production capture certificates. The production runner intentionally
-rejects reuse of those ignored exploratory artifacts and will recapture and
-reprove every prompt under the strict identity contract.
+Run `20e4bc8c-9fed-4513-b548-9727f9686222` discarded the earlier exploratory
+captures, recaptured all ten frozen prompts, and reproved each one under the
+hardened `model.identity`, metadata, three-shard, prompt-manifest, runtime, and
+source-contract bindings. Every prompt had exact endpoint generation parity,
+688/688 shared internal tensors bit-exact, 432/432 observer-only compiled
+boundaries present, and 785/785 replay parameters equal by name, shape, dtype,
+and content hash. Each prompt committed 20 contiguous estimator chunks.
 
-The complete ten-prompt artifact is **pending**. No final `n=10` NVFP4/FP8-STE
-lens hash or held-out score is claimed until all ten prompts have committed and
-all 63 final matrices have passed their integrity gates. The current evidence
-establishes that the operation/replay path is executable and numerically
-validated. It does not yet establish a hardened end-to-end production run or a
-completed corpus-averaged reproduction.
+The run completed all 5,120 rows for every source layer `0..62`, targeting
+block 63, and finalized 63 finite little-endian FP32 `[5120,5120]` matrices. It
+took 47,577.883 seconds (13:12:57.9) and peaked at
+8,936,882,688/11,404,312,576 CUDA bytes allocated/reserved. The exported
+6,606,046,478-byte checkpoint has SHA-256
+`82be61c805d127427b37b2b4715885b756c2ca7af96291578fa4da9cd783e057`
+and passed the exact production verifier plus both upstream load APIs.
+
+Dense geometry against the public artifact and paired held-out readout also
+completed. Geometry measured global Frobenius cosine `0.732877` and mean
+per-layer cosine `0.822360`. Across 1,008 paired readout observations,
+native/public target-rank Spearman was `0.902843`, top-1 agreement `0.412698`,
+top-5 overlap `0.493651`, and target-score RMSE `2.780105`. Both independently
+run adapter certificates failed with identical pre-lens residual manifests and
+reconstruction values. Adapter status is therefore reported separately from
+lens-quality metrics.
 
 | Level | Status | Meaning |
 |---|---|---|
 | Public `n=1000` Qwen lens on NVFP4 residuals | Complete | FP16 lens; fit-time precision and quantization unpublished |
 | WeZZard Apple reference | Reference only | MLX 4-bit forward and custom Metal GDN backward |
-| Native NVIDIA operation and capture mechanics | Passed exploratory hardware gates | Exact deployed forward values plus declared surrogate backward; strict production recapture pending |
-| All-layer reverse replay | Passed exploratory hardware gate | One real estimator row for each source layer `0..62`, targeting block 63 |
-| Dense native `n=10` lens | Pending | Ten prompts, 63 full `5120 x 5120` FP32 means |
+| Native NVIDIA production capture | Passed on all ten prompts | Exact deployed forward values; exact endpoint parity; 688 shared, 432 observer-only, and 785 replay-parameter checks per prompt |
+| All-layer reverse replay | Complete | All 5,120 rows for source layers `0..62`, targeting block 63 |
+| Dense native `n=10` lens | Complete and verified | 63 full `5120 x 5120` FP32 means; upstream loaders passed |
+| Geometry and paired held-out readout | Reported | Descriptive native/public measurements; both independent adapter certificates failed identically |
 
 ## What Is Different From The Public And Apple Paths
 
@@ -147,8 +158,9 @@ forward into an A16 or BF16 model.
 The proof scope must be stated precisely:
 
 - 688 shared internal tensors are compared directly by shape, dtype, logical
-  byte length, and SHA-256 of row-major bytes. All were bit-exact in the real
-  128-token prompt proof. These comprise 624 GDN and 64 full-attention tensors.
+  byte length, and SHA-256 of row-major bytes. All were bit-exact in every one
+  of the ten production 128-token prompt proofs. These comprise 624 GDN and 64
+  full-attention tensors per prompt.
 - 432 required tensors exist only in the observer artifact: 304 compiled
   linear outputs, 64 SwiGLU outputs, and 64 post-block residuals. They cannot
   be directly compared to absent baseline tensors. Exact generation-record
@@ -157,9 +169,10 @@ The proof scope must be stated precisely:
 - All 785 replay parameters match by name, shape, dtype, and content hash
   between the two isolated captures.
 
-This does not prove MTP decode, another prompt, another sequence shape, or an
-unmodified observer graph. Production repeats the isolated proof for every fit
-prompt and rehashes the retained observer payload immediately before commit.
+This does not prove MTP decode, a prompt outside the frozen corpus, another
+sequence shape, or an unmodified observer graph. Production repeated the
+isolated proof for every fit prompt and rehashed the retained observer payload
+immediately before each commit.
 
 ### Surrogate backward
 
@@ -191,10 +204,9 @@ closed because that derivative path has not been validated.
 
 ## Hardware Evidence
 
-The following engineering gates ran on the real local pinned checkpoint and
-RTX 5090. The prompt-0 and short all-layer records are exploratory because they
-do not contain the later strict `model.identity`/shard binding. Production will
-repeat the pair proof for every prompt and will not adopt these artifacts:
+The following engineering and production gates ran on the real local pinned
+checkpoint and RTX 5090. The prompt-0 probe rows remain useful operator tests;
+the completed production rows are the evidence for the final artifact:
 
 | Gate | Result |
 |---|---|
@@ -208,11 +220,14 @@ repeat the pair proof for every prompt and will not adopt these artifacts:
 | Late suffix rows | Finite, nonzero J61/J62 rows; batched/sequential relative RMS `3.42e-4` / `1.45e-5` |
 | Exploratory all-layer estimator row | 63/63 finite, nonzero rows from sources `0..62` |
 | Exploratory packed/live vs dense-dequant all-layer row | 63/63 dense certificate hashes matched; worst relative RMS `0.0174684` on the frozen 128-token prompt |
+| Production isolated capture pairs | 10/10 exact generation records; 688/688 shared tensors bit-exact, 432/432 observer-only boundaries complete, and 785/785 replay parameters equal for every prompt |
+| Production row commits | 10/10 prompts; 20 contiguous chunks per prompt; all 5,120 rows for all 63 source matrices |
+| Production finalization | 63/63 finite FP32 `[5120,5120]` means; aggregate layer SHA-256 `a4c2adc7be15232db0e5a8840a6442248caa80a363c0c5239a1ee248f36fb3b4` |
+| Export and load | Exact artifact verifier passed; `JacobianLens.load` and `JacobianLens.from_pretrained` passed |
 
-The last row is a real all-depth engineering proof, not a hardened production
-capture and not a finished lens. It computes one of 5,120 output rows for every
-source matrix. The completed artifact requires fresh strict captures plus all
-5,120 rows for all 63 matrices and all ten prompts.
+The exploratory all-layer row computed one of 5,120 output rows for every
+source matrix. The production run did not adopt that capture; it performed
+fresh strict captures and completed every row for every matrix and prompt.
 
 ## Setup And Production Run
 
@@ -266,6 +281,28 @@ existing path, and prints its byte size and SHA-256. The checkpoint keys are
 `J`, `n_prompts`, `source_layers`, and `d_model`. Export is a post-completion
 step; the command cannot turn an incomplete work directory into a lens.
 
+The measured production identities are:
+
+| Record | Bytes | SHA-256 |
+|---|---:|---|
+| `state.json` | 329,400 | `f5ee70cfda416327be6b2583a67f5662cbe4036dbc68ce4ba470884383bfbcf6` |
+| `final-mean/metadata.json` | 988,263 | `289e93a0c99579a0d5637cb37b42c4575b73eb2c38d35d47963de85178e90601` |
+| Exported `.pt` | 6,606,046,478 | `82be61c805d127427b37b2b4715885b756c2ca7af96291578fa4da9cd783e057` |
+
+The raw 63-matrix mean totals 6,606,028,800 logical bytes. Its aggregate layer
+SHA-256 is
+`a4c2adc7be15232db0e5a8840a6442248caa80a363c0c5239a1ee248f36fb3b4`.
+The final cumulative sum hashes to
+`0e81bf4b5118f664bbb14f2858f5d654ba780450b20148178e4190d4db0c40e3`;
+the ordered committed-prompt records hash to
+`a1690ab9e88cff53a2eba407195ced52e6908208fedffed68819ee47c1a888c1`.
+The final metadata payload hash is
+`7b96a49e209e2e3008531fc7d7ac46de1582eb824cba50c95c3b1d7302bb8b66`.
+The frozen fit contract hashes to
+`7944ea163b548edc3372fa67242fbbcfbe0a5abbe95c04ce4a378107ebe03dd0`;
+its 13 bound source files hash in aggregate to
+`dbe1f28bbd829fa30cb48b4c593419de205c440d195c12bed398c0036ed16400`.
+
 Apply the exported lens only with the exact completed fit state and externally
 recorded hashes:
 
@@ -299,6 +336,195 @@ Do not add a custom model path to a production command. The runner resolves the
 exact cached NVIDIA revision and fails if metadata, shard bytes, prompt
 manifest, source manifest, estimator settings, or resume state differs.
 
+The committed compact evidence records are:
+
+- `validation/jlens-nvfp4-ste-fit-state-2026-07-17.json`
+- `validation/jlens-nvfp4-ste-final-metadata-2026-07-17.json`
+- `validation/jlens-nvfp4-ste-run-progress-2026-07-17.json`
+- `validation/jlens-nvfp4-ste-export-2026-07-17.json`
+- `validation/jlens-nvfp4-ste-artifact-verification-2026-07-17.json`
+- `validation/jlens-nvfp4-ste-upstream-load-2026-07-17.json`
+- `validation/jlens-nvfp4-ste-vs-public-2026-07-17.json`
+- `validation/jlens-native-nvfp4-ste-on-nvfp4-heldout-2026-07-17.json`
+- `validation/jlens-public-schema3-on-nvfp4-heldout-2026-07-17.json`
+- `validation/jlens-nvfp4-ste-vs-public-heldout-2026-07-17.json`
+
+The exact verifier checked all 63 exported tensors against the raw means, all
+ten prompt commits and 20 contiguous chunks per prompt, finiteness, capture
+proofs, model/source/contract hashes, and completed state. The upstream smoke
+used `jlens` 0.1.0 at commit
+`581d398613e5602a5af361e1c34d3a92ea82ba8e`; both
+`JacobianLens.load` and `JacobianLens.from_pretrained` passed.
+
+Run the same upstream API smoke sequentially so only one 6.15 GiB in-memory
+lens is live at a time:
+
+```bash
+# One-time setup for the pinned environment that contains upstream jlens.
+scripts/setup_fit.sh
+
+LENS="$LENS" .venv-fit/bin/python - <<'PY'
+import gc
+import os
+
+import torch
+from jlens import JacobianLens
+
+path = os.environ["LENS"]
+for name, loader in (
+    ("JacobianLens.load", lambda: JacobianLens.load(path)),
+    (
+        "JacobianLens.from_pretrained",
+        lambda: JacobianLens.from_pretrained(path),
+    ),
+):
+    lens = loader()
+    assert lens.n_prompts == 10
+    assert lens.d_model == 5120
+    assert lens.source_layers == list(range(63))
+    assert all(tuple(lens.jacobians[i].shape) == (5120, 5120) for i in range(63))
+    assert all(lens.jacobians[i].dtype == torch.float32 for i in range(63))
+    print(f"{name}: passed")
+    del lens
+    gc.collect()
+PY
+```
+
+Run the descriptive dense geometry comparison separately:
+
+```bash
+.venv-vllm/bin/python scripts/compare_jlens_artifacts.py \
+  --local-kind nvfp4-ste \
+  --local-path "$LENS" \
+  --local-sha256 82be61c805d127427b37b2b4715885b756c2ca7af96291578fa4da9cd783e057 \
+  --local-provenance .cache/nvfp4_ste_fit/final-mean/metadata.json \
+  --local-state "$STATE" \
+  --local-state-sha256 f5ee70cfda416327be6b2583a67f5662cbe4036dbc68ce4ba470884383bfbcf6 \
+  --row-chunk 16 \
+  --output validation/jlens-nvfp4-ste-vs-public-2026-07-17.json
+```
+
+No global similarity threshold was chosen after seeing the geometry. The
+63-layer comparison measured:
+
+| Geometry metric | Value |
+|---|---:|
+| Global Frobenius cosine | `0.7328770738661481` |
+| Mean per-layer Frobenius cosine | `0.8223602375534815` |
+| Global relative Frobenius difference | `0.9345964627007955` |
+| Mean cosine over all 322,560 rows | `0.791449281794253` |
+
+For held-out readout, the native and public schema-3 commands used identical
+frozen prompts, layers, positions, target model, and runtime. The untracked
+`$PROMPTS` JSON is materialized from the exact 128-token ID arrays in
+`configs/jlens_nf4_eval_prompts.json` using the pinned NVIDIA checkpoint's
+tokenizer; each decoded string must re-encode to the original ID array with
+`add_special_tokens=True` before evaluation. Run both evaluations and compare
+them with:
+
+```bash
+PROMPTS=.cache/jlens_nvfp4_heldout_prompts_2026-07-17.json
+export PROMPTS
+
+.venv-vllm/bin/python - <<'PY'
+import json
+import os
+from pathlib import Path
+
+from huggingface_hub import snapshot_download
+from transformers import AutoTokenizer
+
+revision = "0893e1606ff3d5f97a441f405d5fc541a6bdf404"
+snapshot = Path(snapshot_download(
+    "nvidia/Qwen3.6-27B-NVFP4",
+    revision=revision,
+    local_files_only=True,
+))
+tokenizer = AutoTokenizer.from_pretrained(snapshot, local_files_only=True)
+manifest = json.loads(Path("configs/jlens_nf4_eval_prompts.json").read_text())
+prompts = []
+for item in manifest["prompts"]:
+    token_ids = item["token_ids"]
+    assert len(token_ids) == item["token_count"] == 128
+    text = tokenizer.decode(
+        token_ids,
+        skip_special_tokens=False,
+        clean_up_tokenization_spaces=False,
+    )
+    assert tokenizer.encode(text, add_special_tokens=True) == token_ids
+    prompts.append({
+        "id": f"wikitext-validation-row-{item['row_index']}",
+        "text": text,
+    })
+
+Path(os.environ["PROMPTS"]).write_text(
+    json.dumps(prompts, indent=2, ensure_ascii=True) + "\n"
+)
+PY
+
+NATIVE_RC=0
+scripts/run_jlens_nvfp4.sh \
+  --lens-kind nvfp4-ste \
+  --lens-path "$LENS" \
+  --lens-sha256 82be61c805d127427b37b2b4715885b756c2ca7af96291578fa4da9cd783e057 \
+  --lens-provenance .cache/nvfp4_ste_fit/final-mean/metadata.json \
+  --lens-state "$STATE" \
+  --lens-state-sha256 f5ee70cfda416327be6b2583a67f5662cbe4036dbc68ce4ba470884383bfbcf6 \
+  --prompts-file "$PROMPTS" \
+  --layers all --positions 16,32,64,96 --top-k 10 \
+  --max-model-len 256 --gpu-memory-utilization 0.82 \
+  --output validation/jlens-native-nvfp4-ste-on-nvfp4-heldout-2026-07-17.json \
+  || NATIVE_RC=$?
+
+PUBLIC_RC=0
+scripts/run_jlens_nvfp4.sh \
+  --lens-kind public \
+  --prompts-file "$PROMPTS" \
+  --layers all --positions 16,32,64,96 --top-k 10 \
+  --max-model-len 256 --gpu-memory-utilization 0.82 \
+  --output validation/jlens-public-schema3-on-nvfp4-heldout-2026-07-17.json \
+  || PUBLIC_RC=$?
+```
+
+Both commands write complete reports and exit 1 because their independently
+derived adapter certificates fail. Do not run this pair under `set -e` without
+capturing each status. Preserve the reports, verify that exit 1 agrees with
+`status: failed`, and then run the offline comparator:
+
+```bash
+.venv-vllm/bin/python scripts/compare_jlens_nvfp4_reports.py \
+  --native-report validation/jlens-native-nvfp4-ste-on-nvfp4-heldout-2026-07-17.json \
+  --public-report validation/jlens-public-schema3-on-nvfp4-heldout-2026-07-17.json \
+  --output validation/jlens-nvfp4-ste-vs-public-heldout-2026-07-17.json
+```
+
+The comparison covered Wikitext validation rows 3, 18, 42, and 49 at positions
+16, 32, 64, and 96 for every layer `0..62`, or 1,008 observations. It measured:
+
+| Held-out native/public metric | Value |
+|---|---:|
+| Target-rank Spearman | `0.902843338526047` |
+| Top-1 agreement | `0.4126984126984127` |
+| Mean top-5 overlap fraction | `0.4936507936507937` |
+| Target-score RMSE | `2.780105132813771` |
+| Native target top-1 / top-5 rate | `0.06349206349206349` / `0.11904761904761904` |
+| Public target top-1 / top-5 rate | `0.054563492063492064` / `0.1378968253968254` |
+
+Both independently executed adapter certificates returned `status: failed`:
+rows 3, 18, and 49 had full-logit max error `0.125 > 0.0625`; row 42 was at
+the `0.0625` limit. Row 18 also failed final-norm max and top-5 prefix. All
+four residual-capture manifests and every logit-lens baseline field matched
+exactly across the runs. The pairing command preserves each adapter outcome
+separately from the lens readout metrics; this failed adapter certificate is
+not a lens-quality verdict.
+
+| Downstream record | Bytes | SHA-256 |
+|---|---:|---|
+| Dense geometry | 94,335 | `43b7431bdc006c1e097e7c187a23671d95f4807c0fe701078ee7345fafdb6fa2` |
+| Native held-out | 2,437,812 | `17ecf282aadd26db281bc2ac5817769ddd1a82ba6b7d0474db386117490e9b90` |
+| Public held-out control | 2,435,472 | `fb94cf4f84d110d2b52f473695a675e3e88341836c949658e76fae29a6ebc486` |
+| Paired summary | 767,523 | `2fe0d1e6e564119dcb757ec7073da9df051d5c496ed494bb38cd870e32ff6f02` |
+
 The default cotangent batch is 256. A real prompt-0 sweep measured:
 
 | Batch | Seconds per batch | Peak allocated | Peak reserved |
@@ -311,10 +537,12 @@ The default cotangent batch is 256. A real prompt-0 sweep measured:
 | 128 | 115.369 | 4.299 GiB | 5.479 GiB |
 | 256 | 228.215 | 8.323 GiB | 10.609 GiB |
 
-At batch 256, 20 row batches cover one prompt. The measured estimator rate
-projects to about 76.1 minutes per prompt and 12.7 hours for ten prompts.
-Isolated baseline/observer captures, content hashing, prompt commits, final
-averaging, and publication add wall time beyond that estimator-only estimate.
+At batch 256, 20 row batches cover one prompt. The pre-run estimator rate
+projected about 76.1 minutes per prompt and 12.7 hours for ten prompts. The
+completed production state measured 47,577.883 seconds (13:12:57.9), including
+isolated baseline/observer captures, content hashing, 200 row-chunk commits,
+ten prompt commits, and streaming finalization. Maximum CUDA allocated/reserved
+was 8,936,882,688/11,404,312,576 bytes (8.323/10.621 GiB).
 
 ## State, Resume, And Output
 
@@ -339,12 +567,12 @@ generation-stamped directories and atomic renames. Resume rehashes completed
 row prefixes and committed sums before doing new work; contract drift fails
 closed.
 
-The finalizer checks every output chunk for finiteness. Its metadata must report
+The finalizer checked every output chunk for finiteness. Its metadata reports
 `n_prompts=10`, sources `0..62`, target 63, per-layer shape/dtype/size/content
 hashes, an aggregate layer-manifest hash, the prompt/capture bindings,
-runtime/source provenance, and the declared forward/backward contract. Until
-that metadata exists and validates, the correct result label is **native path
-validated, final artifact pending**.
+runtime/source provenance, and the declared forward/backward contract. That
+metadata and the exported artifact passed independent verification, so the
+correct result label is **completed native NVFP4/FP8-STE `n=10` fit**.
 
 ## Limits
 
@@ -358,5 +586,10 @@ validated, final artifact pending**.
 4. Divergent multimodal MRoPE positions are unsupported.
 5. Ten prompts are the minimum usable local scale, not the public artifact's
    `n=1000` scale.
-6. No quality, public-lens similarity, or held-out readout conclusion is
-   available until the full ten-prompt artifact is finalized and evaluated.
+6. Geometry and held-out readout are descriptive comparisons on one four-prompt
+   corpus, not broad behavioral-equivalence or downstream-task guarantees.
+7. The public control contains 1,000 prompts and FP16 stored matrices, but its
+   fit-time model precision and quantization are unpublished. The native lens
+   contains ten prompts and FP32 matrices; direct equality is not expected.
+8. Residual-adapter certification is independent of the selected lens and must
+   not be treated as a lens-quality metric.

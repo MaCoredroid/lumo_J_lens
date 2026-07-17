@@ -6,9 +6,10 @@ speculative decoding, GDN-aware prefix caching, Qwen Code, and the official
 SWE-bench Verified container runtime. The public and locally fitted lens paths
 read all 63 source layers through the packed NVFP4/FP8 target model. The
 repository now also contains a native exact-forward NVFP4/FP8-STE fitter with
-packed/live input VJPs, analytic GDN, and transactional dense output; its
-complete ten-prompt artifact is still pending. A separate differentiable NF4
-path has already produced an `n=10` lens.
+packed/live input VJPs, analytic GDN, and transactional dense output. Its
+complete ten-prompt `n=10` fit, 63-matrix FP32 artifact, exact verifier, and
+upstream `JacobianLens` load checks passed on July 17. A separate
+differentiable NF4 path also produced an `n=10` lens.
 
 This repository is the cleaned, standalone extraction of a July 8, 2026 Claude
 Code setup session. It includes the fixes found during that session, not just
@@ -24,7 +25,7 @@ the serving/SWE setup rationale. See
 [docs/JLENS_NVFP4_REPRODUCTION.md](docs/JLENS_NVFP4_REPRODUCTION.md) for the
 public FP16 lens of unpublished fit precision applied to NVFP4,
 [docs/JLENS_NVFP4_STE_EXPERIMENT.md](docs/JLENS_NVFP4_STE_EXPERIMENT.md) for
-the native NVIDIA fit contract and current hardware evidence, and
+the completed native NVIDIA fit contract and production evidence, and
 [docs/JLENS_NF4_EXPERIMENT.md](docs/JLENS_NF4_EXPERIMENT.md) for the fresh-fit
 experiment.
 
@@ -110,18 +111,14 @@ packed W4, live post-load FP8, analytic GDN, and full-attention input VJPs. It
 uses identity STE for FP8 activation quantization, so this is an exact-forward
 surrogate Jacobian rather than the literal derivative of rounding.
 
-Real RTX 5090 engineering gates passed on the local pinned checkpoint: 688
-shared internal tensors were bit-exact between isolated baseline and observer
-runs, all 432 observer-only boundaries were present, all 785 replay parameters
-matched by content hash, and a real estimator row completed for every source
-layer `0..62`. The 432 observer-only values cannot be directly compared to
-absent baseline tensors; exact endpoint generation parity and the 688 direct
-comparisons provide the bounded indirect evidence for the observer graph.
-
-Those prompt-0 and short all-layer records are exploratory: they predate the
-hardened `model.identity` and shard-hash binding, so production refuses to
-reuse them. The ten-prompt runner recaptures and reproves every prompt under the
-strict checkpoint identity before committing any rows.
+The completed production run recaptured all ten prompts under the hardened
+checkpoint identity. For every prompt, endpoint generation was exact, 688/688
+shared internal tensors were bit-exact, all 432 observer-only compiled
+boundaries were present, and all 785 replay parameters matched by name, shape,
+dtype, and content hash. Each prompt committed 20 row chunks. The 432
+observer-only values cannot be directly compared to absent baseline tensors;
+exact endpoint generation parity and the 688 direct comparisons provide the
+bounded indirect evidence for the observer graph.
 
 Plan, run, or resume the frozen ten-prompt production contract with:
 
@@ -139,9 +136,22 @@ Plan, run, or resume the frozen ten-prompt production contract with:
 The contract is ten frozen 128-token prompts, `skip_first=16`, all 63 source
 matrices, target block 63, and 5,120 rows per matrix. MTP is disabled because
 it is a draft-token serving optimization outside the target-model lens. The
-measured batch-256 estimator rate projects to about 12.7 hours for ten prompts,
-plus isolated captures, hashes, commits, and finalization. The full `n=10`
-artifact and its held-out evaluation are explicitly **pending**.
+completed run took 47,577.883 seconds (13:12:57.9) and peaked at
+8,936,882,688/11,404,312,576 CUDA bytes allocated/reserved. The authoritative
+raw mean contains 63 little-endian FP32 `[5120,5120]` matrices totaling
+6,606,028,800 bytes. The exported 6,606,046,478-byte checkpoint has SHA-256
+`82be61c805d127427b37b2b4715885b756c2ca7af96291578fa4da9cd783e057`.
+Both upstream `JacobianLens.load` and `JacobianLens.from_pretrained` passed.
+
+Against the public `n=1000` FP16 lens, the native artifact measured global
+Frobenius cosine `0.732877`, mean per-layer cosine `0.822360`, and global
+relative Frobenius difference `0.934596`; these are descriptive, not post-hoc
+pass thresholds. Over 1,008 paired held-out layer/position observations,
+native/public Jacobian readouts measured target-rank Spearman `0.902843`, top-1
+agreement `0.412698`, top-5 overlap `0.493651`, and target-score RMSE `2.780105`.
+Both independently run adapter certificates failed with identical residual
+manifests and reconstruction values. That certificate is evaluated before
+either lens is applied and remains separate from lens-quality metrics.
 
 ### Fresh NF4 fit
 
@@ -191,7 +201,7 @@ The successful NF4 result remains an NF4 fit, not an NVFP4 fit. It is separate
 from the native exact-forward NVFP4/FP8-STE implementation above. Exact NF4
 evidence and interpretation are in [VALIDATION.md](VALIDATION.md) and the
 [NF4 experiment report](docs/JLENS_NF4_EXPERIMENT.md); native-path evidence and
-the pending production status are in the
+the completed production status are in the
 [NVFP4/FP8-STE report](docs/JLENS_NVFP4_STE_EXPERIMENT.md).
 
 ## Manual Lifecycle
@@ -261,6 +271,14 @@ only Git-tracked files after reviewing `git status` and `git ls-files`.
 - `validation/jlens-nf4-evidence.sha256`: hashes for the fresh-fit evidence set
 - `validation/jlens-nf4-source-manifest.sha256`: hashes for fit/evaluation sources
 - `validation/jlens-nvfp4-ste-source-manifest.sha256`: hashes for native fitter sources
+- `validation/jlens-nvfp4-ste-fit-state-2026-07-17.json`: completed ten-prompt transactional state
+- `validation/jlens-nvfp4-ste-final-metadata-2026-07-17.json`: 63-matrix raw-mean provenance
+- `validation/jlens-nvfp4-ste-artifact-verification-2026-07-17.json`: exact exported-artifact verification
+- `validation/jlens-nvfp4-ste-upstream-load-2026-07-17.json`: upstream loader smoke checks
+- `validation/jlens-nvfp4-ste-vs-public-2026-07-17.json`: native/public matrix geometry
+- `validation/jlens-native-nvfp4-ste-on-nvfp4-heldout-2026-07-17.json`: native schema-3 readout
+- `validation/jlens-public-schema3-on-nvfp4-heldout-2026-07-17.json`: paired public control
+- `validation/jlens-nvfp4-ste-vs-public-heldout-2026-07-17.json`: offline paired metrics
 - `validation/jlens-source-manifest.sha256`: lens runner/evidence source tie
 - `validation/runtime-source-manifest.sha256`: hashes for the certified runtime
 - `docs/SESSION_RECONSTRUCTION.md`: source-session and commit chronology

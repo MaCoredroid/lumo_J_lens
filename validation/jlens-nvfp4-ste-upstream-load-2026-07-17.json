@@ -1,0 +1,26 @@
+{
+  "artifact_sha256": "82be61c805d127427b37b2b4715885b756c2ca7af96291578fa4da9cd783e057",
+  "artifact_size_bytes": 6606046478,
+  "generated_at": "2026-07-17T21:30:45.263713+00:00",
+  "jlens_direct_url": {
+    "url": "https://github.com/anthropics/jacobian-lens.git",
+    "vcs_info": {
+      "commit_id": "581d398613e5602a5af361e1c34d3a92ea82ba8e",
+      "requested_revision": "581d398613e5602a5af361e1c34d3a92ea82ba8e",
+      "vcs": "git"
+    }
+  },
+  "jlens_version": "0.1.0",
+  "loaders": [
+    {
+      "loader": "JacobianLens.load",
+      "status": "passed"
+    },
+    {
+      "loader": "JacobianLens.from_pretrained",
+      "status": "passed"
+    }
+  ],
+  "schema_version": 1,
+  "status": "passed"
+}

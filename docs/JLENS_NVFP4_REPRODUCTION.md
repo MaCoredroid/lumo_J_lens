@@ -50,13 +50,24 @@ same RTX 5090 using differentiable bitsandbytes NF4. That fit succeeded and is
 documented in [`JLENS_NF4_EXPERIMENT.md`](JLENS_NF4_EXPERIMENT.md). It is an
 NF4 fit, not an NVFP4 fit.
 
-A third, NVIDIA-native path now captures the actual compiled ModelOpt
-NVFP4/FP8 forward and supplies packed W4, live FP8 identity-STE, analytic GDN,
-and full-attention VJPs. Its real-hardware operation and all-layer gates pass;
-the existing prompt-0 capture proof is exploratory and predates the hardened
-model-identity binding, so the strict production run will recapture every
-prompt. The full ten-prompt artifact remains pending. See
+A third, NVIDIA-native path captures the actual compiled ModelOpt NVFP4/FP8
+forward and supplies packed W4, live FP8 identity-STE, analytic GDN, and
+full-attention VJPs. Its strict production run recaptured and reproved all ten
+prompts under hardened model/shard/source binding, completed all 5,120 rows for
+all 63 source matrices, and exported a verified 6,606,046,478-byte FP32
+checkpoint with SHA-256
+`82be61c805d127427b37b2b4715885b756c2ca7af96291578fa4da9cd783e057`.
+This is an exact deployed quantized forward paired with a declared identity-STE
+surrogate backward, not the literal derivative of quantization rounding. See
 [`JLENS_NVFP4_STE_EXPERIMENT.md`](JLENS_NVFP4_STE_EXPERIMENT.md).
+
+Its separate comparison against this public lens measured global Frobenius
+cosine `0.732877`, mean per-layer cosine `0.822360`, and global relative
+difference `0.934596`. Over 1,008 paired held-out observations, native/public
+readouts measured target-rank Spearman `0.902843`, top-1 agreement `0.412698`,
+top-5 overlap `0.493651`, and target-score RMSE `2.780105`. Both independently
+run adapter certificates failed with identical residual manifests and pre-lens
+diagnostics, so that failure is not a lens-quality verdict.
 
 The locally fitted NF4 lens was also applied to the NVFP4 checkpoint, but its
 strict four-prompt adapter certificate failed. A paired public-lens control
@@ -347,8 +358,10 @@ diagnostic readout of the same NVFP4 target model.
   unavailable: vLLM's packed ModelOpt/Marlin/GDN deployment kernels do not
   expose that activation backward. The native fitter works around this by
   preserving exact compiled forward captures and supplying an explicitly
-  declared identity-STE surrogate backward. Its full `n=10` artifact is
-  pending, so no completed native-lens quality claim is made here.
+  declared identity-STE surrogate backward. Its full `n=10` artifact completed
+  and passed exact and upstream-loader verification. Dense public-lens geometry
+  and paired held-out interpretation are reported separately from fit integrity
+  in the native report.
 - An independently completed alternative fit uses a different quantized
   forward. The NF4 route loads pinned BF16 source weights, quantizes 496
   linears with bitsandbytes, and forces differentiable PyTorch GDN. Its
@@ -358,6 +371,6 @@ diagnostic readout of the same NVFP4 target model.
 
 This experiment therefore establishes a verified public-lens application to
 the exact local NVFP4 target model on its two frozen semantic prompts. It does
-not itself establish a completed native fit or certify the local NF4 lens on
-NVFP4; the separately validated native fitter and its pending production run
-are documented in the NVFP4/FP8-STE report.
+not certify the local NF4 lens on NVFP4. The separately completed native
+NVFP4/FP8-STE production fit is documented in its own report; its held-out
+adapter certificate remains distinct from lens-quality metrics.
