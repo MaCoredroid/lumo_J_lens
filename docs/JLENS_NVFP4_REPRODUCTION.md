@@ -30,11 +30,20 @@ The sibling
 pins that result. The source manifest records the runner, launcher, prompt set,
 verifier, tests, and vLLM dependency freeze used by the experiment.
 
-This is a **cross-precision application**, not an NVFP4 fit. The public Qwen
-lens was fitted against the differentiable BF16 model and is applied here to
-quantized forward activations. Its matrices are stored as FP16, which is
-separate from the precision of the fitting model. That distinction matters for
-interpreting rank and score differences.
+This is a **cross-check application**, not an NVFP4 fit. The public artifact's
+matrices are stored as FP16, but its fit-time model precision and quantization
+were not published. An unquantized BF16 source is plausible because the
+canonical Qwen checkpoint is BF16, but it is not verified. The artifact is
+applied here to quantized forward activations, and it carries no ModelOpt
+checkpoint identity or deployed-forward provenance.
+
+**Provenance erratum:** the two immutable July 16 schema-2 reports retain the
+historical `lens.application` label `BF16-fitted lens applied to NVFP4/FP8
+residuals`. That label is not a fit certificate and is superseded by the
+artifact inspection above: FP16 matrix storage is verified; fit-time model
+precision and quantization are unpublished. The JSON files are intentionally
+not rewritten because their recorded SHA-256 evidence chain must remain
+byte-identical. Schema-3 reports encode and pin the corrected provenance.
 
 A separate experiment subsequently fitted a complete dense `n=10` lens on the
 same RTX 5090 using differentiable bitsandbytes NF4. That fit succeeded and is
@@ -86,6 +95,14 @@ The experiment pins this exact artifact:
 | SHA-256 | `1718c8c52dd8a9dad03738d4d625937c1fbba10be325b872ed446c7290fc11e1` |
 | Metadata | `n_prompts=1000`, `d_model=5120`, source layers `0..62` |
 | Tensors | 63 finite FP16 matrices, each `[5120, 5120]` |
+
+The checkpoint contains only `J`, `d_model`, `n_prompts`, and `source_layers`.
+The reference adapter leaves model loading and dtype to its caller, reduces
+and accumulates fitted Jacobians in FP32, and saves lenses as FP16 by default.
+The public artifact does not disclose the exact source revision, fit-time
+forward/backward dtype, quantization, loader, attention implementation, or
+full command. Accordingly, this report calls it the **public Qwen3.6-27B FP16
+lens**, not a verified BF16 fit.
 
 Do not use the 381,550,248-byte file named
 `Qwen3.6-27B_jacobian_lens.pt`. Its internal archive and dimensions identify

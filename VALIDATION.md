@@ -74,7 +74,8 @@ The first invocation committed one prompt in 657.335 seconds and stopped by
 contract. The resumed invocation completed the other nine in 5,839.178
 seconds. Held-out NF4 evaluation then completed in 15.363 seconds and matched
 the fit's aggregate NF4 weight hash exactly. The dense comparison with the
-public `n=1000` BF16 lens measured global Frobenius cosine `0.750216`, mean
+public `n=1000` FP16 lens of unpublished fit precision measured global
+Frobenius cosine `0.750216`, mean
 per-layer cosine `0.820655`, and global relative Frobenius difference
 `0.865690`; these are descriptive measurements, not equivalence gates.
 

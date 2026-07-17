@@ -21,6 +21,13 @@ class JacobianLensHelpersTest(unittest.TestCase):
         self.assertEqual(MODULE.SCHEMA_VERSION, 3)
         self.assertEqual(MODULE.SCORE_ENCODING, "unrounded-float32")
 
+    def test_public_lens_provenance_does_not_claim_fit_precision(self):
+        self.assertEqual(MODULE.PUBLIC_FIT_TIME_MODEL_PRECISION, "unpublished")
+        self.assertEqual(MODULE.PUBLIC_FIT_TIME_QUANTIZATION, "unpublished")
+        self.assertIn("FP16 lens", MODULE.PUBLIC_LENS_APPLICATION)
+        self.assertIn("unpublished fit-time precision", MODULE.PUBLIC_LENS_APPLICATION)
+        self.assertNotIn("BF16-fitted", MODULE.PUBLIC_LENS_APPLICATION)
+
     def test_parse_all_layers(self):
         self.assertEqual(MODULE.parse_integer_list("all", allow_all=True), list(range(63)))
 

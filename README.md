@@ -22,7 +22,7 @@ the final command. On July 15, 2026 the extracted stack was rerun end to end:
 See [VALIDATION.md](VALIDATION.md) for the evidence and [SPEC.md](SPEC.md) for
 the serving/SWE setup rationale. See
 [docs/JLENS_NVFP4_REPRODUCTION.md](docs/JLENS_NVFP4_REPRODUCTION.md) for the
-public BF16-fitted lens applied to NVFP4,
+public FP16 lens of unpublished fit precision applied to NVFP4,
 [docs/JLENS_NVFP4_STE_EXPERIMENT.md](docs/JLENS_NVFP4_STE_EXPERIMENT.md) for
 the native NVIDIA fit contract and current hardware evidence, and
 [docs/JLENS_NF4_EXPERIMENT.md](docs/JLENS_NF4_EXPERIMENT.md) for the fresh-fit
@@ -96,8 +96,9 @@ the model in 8.846 seconds, and completed its measured artifact-gate through
 readout lifecycle in 16.300 seconds. It uses the
 exact NVIDIA ModelOpt checkpoint but disables MTP for eager residual capture;
 MTP is a separate draft-token serving optimization, not part of the 64-layer
-target-model lens. This is application of a BF16-fitted lens to quantized
-activations, not an NVFP4 refit.
+target-model lens. This applies a public FP16 lens whose fit-time model
+precision and quantization were not published to quantized activations; it is
+not an NVFP4 refit.
 
 ### Native NVFP4/FP8-STE fit
 

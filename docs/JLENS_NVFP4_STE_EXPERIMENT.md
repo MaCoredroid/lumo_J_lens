@@ -26,7 +26,7 @@ completed corpus-averaged reproduction.
 
 | Level | Status | Meaning |
 |---|---|---|
-| Public `n=1000` Qwen lens on NVFP4 residuals | Complete | BF16-fitted lens, cross-precision application |
+| Public `n=1000` Qwen lens on NVFP4 residuals | Complete | FP16 lens; fit-time precision and quantization unpublished |
 | WeZZard Apple reference | Reference only | MLX 4-bit forward and custom Metal GDN backward |
 | Native NVIDIA operation and capture mechanics | Passed exploratory hardware gates | Exact deployed forward values plus declared surrogate backward; strict production recapture pending |
 | All-layer reverse replay | Passed exploratory hardware gate | One real estimator row for each source layer `0..62`, targeting block 63 |
@@ -34,10 +34,11 @@ completed corpus-averaged reproduction.
 
 ## What Is Different From The Public And Apple Paths
 
-The public Qwen3.6 lens distributed in `neuronpedia/jacobian-lens` was fitted
-against the differentiable BF16 Qwen model. Its stored matrices are FP16. When
-that artifact is read against NVIDIA residuals, the operation is a
-cross-precision application; it is not an NVFP4 fit.
+The public Qwen3.6 lens distributed in `neuronpedia/jacobian-lens` stores FP16
+matrices, but does not publish the fit-time model precision or quantization.
+An unquantized BF16 source is plausible because the canonical Qwen checkpoint
+is BF16, but is not verified. When that artifact is read against NVIDIA
+residuals, it is a public control application, not an NVFP4 fit.
 
 `WeZZard/jlens-qwen36` solves a related problem on Apple Silicon. It uses MLX,
 Apple 4-bit weights, and a custom Metal backward for Gated DeltaNet. None of

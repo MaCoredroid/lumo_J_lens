@@ -47,6 +47,12 @@ FINAL_LOGIT_MAX_ABS_TOLERANCE = 0.0625
 FINAL_LOGIT_RMS_TOLERANCE = 0.01
 FINAL_TOPK_PARITY_K = 5
 MAX_CAPTURE_POSITIONS = 8
+PUBLIC_FIT_TIME_MODEL_PRECISION = "unpublished"
+PUBLIC_FIT_TIME_QUANTIZATION = "unpublished"
+PUBLIC_LENS_APPLICATION = (
+    "public Qwen3.6-27B FP16 lens with unpublished fit-time precision and "
+    "quantization applied to NVFP4/FP8 residuals"
+)
 
 
 def parse_integer_list(value: str, *, allow_all: bool = False) -> list[int]:
@@ -725,11 +731,13 @@ def _run(
             "repo_id": LENS_REPO,
             "revision": LENS_REVISION,
             "filename": LENS_FILENAME,
+            "fit_time_model_precision": PUBLIC_FIT_TIME_MODEL_PRECISION,
+            "fit_time_quantization": PUBLIC_FIT_TIME_QUANTIZATION,
             **verify_file(lens_path),
             **verify_checkpoint(lens_path, check_finite=False),
         }
         lens_record["path"] = str(public_artifact.path)
-        lens_application = "BF16-fitted lens applied to NVFP4/FP8 residuals"
+        lens_application = PUBLIC_LENS_APPLICATION
 
     model_path = Path(
         snapshot_download(

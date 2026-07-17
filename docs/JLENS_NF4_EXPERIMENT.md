@@ -154,8 +154,10 @@ each layer's canonical tensor hash against the provenance sidecar.
 The reference is the public `neuronpedia/jacobian-lens` Qwen artifact at
 revision `a4114d7752d11eb546e6cf372213d7e75526d3a1`, SHA-256
 `1718c8c52dd8a9dad03738d4d625937c1fbba10be325b872ed446c7290fc11e1`.
-It is an FP16 `n=1000` artifact fitted on a BF16 model; its exact prompt rows
-and full fitter provenance are not published.
+It is an FP16 `n=1000` artifact. Its fit-time model precision, quantization,
+exact prompt rows, and full fitter provenance are not published. An
+unquantized BF16 source is plausible from the canonical checkpoint, but is not
+verified by this artifact.
 
 Across the 63 matrix pairs, global Frobenius cosine was 0.750216 and relative
 Frobenius difference, normalized by the public norm, was 0.865690. Mean and
@@ -210,7 +212,7 @@ this was an activation-capture diagnostic, not the production serving path.
 | Run | Status | Elapsed | Model load | Peak allocated / reserved |
 | --- | --- | ---: | ---: | ---: |
 | Local NF4 `n=10` lens | Failed certificate | 33.328 s | 12.384 s | 25.857 / 27.916 GiB |
-| Public BF16 `n=1000` lens | Failed certificate | 23.291 s | 12.388 s | 25.857 / 27.916 GiB |
+| Public FP16 `n=1000` lens, fit precision unpublished | Failed certificate | 23.291 s | 12.388 s | 25.857 / 27.916 GiB |
 
 The capture-adapter reconstruction fields are exactly identical for all four
 prompts in the two reports. Final-logit RMS error passed its 0.01 threshold in

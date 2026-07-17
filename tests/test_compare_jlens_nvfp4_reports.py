@@ -226,11 +226,13 @@ def native_lens() -> dict[str, object]:
 def public_lens() -> dict[str, object]:
     return {
         "kind": MODULE.PUBLIC_LENS_KIND,
-        "application": "BF16-fitted lens applied to NVFP4/FP8 residuals",
+        "application": MODULE.PUBLIC_LENS_APPLICATION,
         "checkpoint_keys": ["J", "d_model", "n_prompts", "source_layers"],
         "d_model": MODULE.D_MODEL,
         "filename": MODULE.LENS_FILENAME,
         "finite_checked": False,
+        "fit_time_model_precision": MODULE.PUBLIC_FIT_TIME_MODEL_PRECISION,
+        "fit_time_quantization": MODULE.PUBLIC_FIT_TIME_QUANTIZATION,
         "n_prompts": MODULE.PUBLIC_N_PROMPTS,
         "repo_id": MODULE.LENS_REPO,
         "revision": MODULE.LENS_REVISION,
@@ -520,6 +522,9 @@ class PairedReportUnitTest(unittest.TestCase):
             (self.native["lens"], "contract_sha256", "0" * 64),
             (self.public["lens"], "sha256", "0" * 64),
             (self.public["lens"], "revision", "wrong"),
+            (self.public["lens"], "application", "verified BF16 fit"),
+            (self.public["lens"], "fit_time_model_precision", "bfloat16"),
+            (self.public["lens"], "fit_time_quantization", "none"),
         )
         for record, field, value in mutations:
             original = record[field]

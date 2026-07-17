@@ -57,6 +57,12 @@ TARGET_VALUE_FIELDS = ("target_logprob", "target_score")
 NATIVE_LENS_KIND = "native_nvfp4_ste_fit"
 PUBLIC_LENS_KIND = "pinned_public"
 PUBLIC_N_PROMPTS = 1000
+PUBLIC_FIT_TIME_MODEL_PRECISION = "unpublished"
+PUBLIC_FIT_TIME_QUANTIZATION = "unpublished"
+PUBLIC_LENS_APPLICATION = (
+    "public Qwen3.6-27B FP16 lens with unpublished fit-time precision and "
+    "quantization applied to NVFP4/FP8 residuals"
+)
 MODEL_CONFIG_SHA256 = "c04a19ba293737ad7be4f6e96d6666cb7e479cbe19ecc0c289fad267135b0338"
 MODEL_INDEX_SHA256 = "7aa103a2582b7d26631988de33dea19e8a308ee9c239e8e14feb374af30905e2"
 EXPECTED_PLATFORM = "Linux-7.0.0-27-generic-x86_64-with-glibc2.43"
@@ -778,6 +784,8 @@ def _lens_identity(report: Mapping[str, Any], label: str) -> dict[str, Any]:
         "fit_model_revision",
         "fit_quantization",
         "fit_estimator",
+        "fit_time_model_precision",
+        "fit_time_quantization",
         "repo_id",
         "revision",
         "filename",
@@ -862,9 +870,12 @@ def _validate_lens_roles(
     _require_exact_fields(
         public_lens,
         {
+            "application": PUBLIC_LENS_APPLICATION,
             "repo_id": LENS_REPO,
             "revision": LENS_REVISION,
             "filename": LENS_FILENAME,
+            "fit_time_model_precision": PUBLIC_FIT_TIME_MODEL_PRECISION,
+            "fit_time_quantization": PUBLIC_FIT_TIME_QUANTIZATION,
             "sha256": LENS_SHA256,
             "size_bytes": LENS_SIZE,
             "n_prompts": PUBLIC_N_PROMPTS,

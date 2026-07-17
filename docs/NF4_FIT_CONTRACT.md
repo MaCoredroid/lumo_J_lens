@@ -1,8 +1,9 @@
 # Qwen3.6 Quantized Jacobian Lens Fit Contract
 
 This document defines what counts as fitting a new Jacobian Lens for
-Qwen3.6-27B on this host. Applying the public BF16-fitted lens to NVFP4
-activations does not satisfy this contract.
+Qwen3.6-27B on this host. Applying the public FP16 lens, whose fit-time model
+precision and quantization are unpublished, to NVFP4 activations does not
+satisfy this contract.
 
 ## Measured implementation status
 
@@ -288,9 +289,10 @@ dot(JVP(v), u) == dot(v, VJP(u))
 
 ### Lens comparison gates
 
-Numerical comparison with the public n=1000 BF16 lens is required but cannot
-prove equality because its full provenance is absent and the new fit uses a
-different quantized forward. Report, per layer:
+Numerical comparison with the public n=1000 FP16 lens is required but cannot
+prove equality because its fit-time precision, quantization, and full
+provenance are absent and the new fit uses a pinned quantized forward. Report,
+per layer:
 
 The acceptance corpus is frozen separately from fitting in
 `configs/jlens_nf4_eval_prompts.json`: Wikitext validation rows 3, 18, 42, and
