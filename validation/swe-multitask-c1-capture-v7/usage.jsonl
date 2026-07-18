@@ -1,0 +1,8 @@
+{"idx": 1, "ts": 1784362551.21, "usage": {"prompt_tokens": 13348, "total_tokens": 13526, "completion_tokens": 178}, "finish_reason": "tool_calls"}
+{"idx": 2, "ts": 1784362553.189, "usage": {"prompt_tokens": 13686, "total_tokens": 13775, "completion_tokens": 89}, "finish_reason": "tool_calls"}
+{"idx": 3, "ts": 1784362559.868, "usage": {"prompt_tokens": 13450, "total_tokens": 13735, "completion_tokens": 285}, "finish_reason": "tool_calls"}
+{"idx": 4, "ts": 1784362561.865, "usage": {"prompt_tokens": 14502, "total_tokens": 14571, "completion_tokens": 69}, "finish_reason": "tool_calls"}
+{"idx": 5, "ts": 1784362569.05, "usage": {"prompt_tokens": 12700, "total_tokens": 13012, "completion_tokens": 312}, "finish_reason": "tool_calls"}
+{"idx": 6, "ts": 1784362570.676, "usage": {"prompt_tokens": 13594, "total_tokens": 13659, "completion_tokens": 65}, "finish_reason": "tool_calls"}
+{"idx": 7, "ts": 1784362576.563, "usage": {"prompt_tokens": 13057, "total_tokens": 13259, "completion_tokens": 202}, "finish_reason": "tool_calls"}
+{"idx": 8, "ts": 1784362578.341, "usage": {"prompt_tokens": 13341, "total_tokens": 13423, "completion_tokens": 82}, "finish_reason": "tool_calls"}

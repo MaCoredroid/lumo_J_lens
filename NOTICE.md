@@ -29,6 +29,17 @@ as exact run evidence and is covered by the SymPy BSD license reproduced in
 `validation/SYMPY_LICENSE`. The repository's original scripts and documentation
 are MIT licensed.
 
+The reviewed C0M/C1 prompt, runner-report, and request-capture evidence under
+`validation/jlens-swe-multitask-*` and
+`validation/swe-multitask-c1-capture-*` consists of exact run records, not
+upstream distributions. It contains rendered Qwen Code system text, public
+SWE-bench task inputs, and small tool-output excerpts from the ten named task
+repositories, plus non-secret local paths and run identifiers required to
+preserve byte-exact prompt provenance. Those embedded upstream portions retain
+their respective upstream licenses and are not relicensed under this
+repository's MIT license. No credentials or package, model, dataset, or
+repository distribution is included.
+
 The Neuronpedia lens is downloaded on demand and is not committed. The
 Anthropic and WeZZard repositories are Apache-2.0 references; no MLX/Metal
 implementation is vendored or executed by this project.

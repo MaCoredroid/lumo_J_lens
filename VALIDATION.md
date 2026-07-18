@@ -315,6 +315,47 @@ run ultimately emitted the successful one-character fix. Full commands,
 artifact hashes, public-checkout prompt extraction, and limitations are in
 [`docs/JLENS_SWE_QWEN_CODE_EXPERIMENT.md`](docs/JLENS_SWE_QWEN_CODE_EXPERIMENT.md).
 
+## Multi-Task SWE Checkpoint Probe
+
+Date: 2026-07-18
+
+The task-start C0 protocol freezes ten independent SWE-Verified tasks, twelve
+oracle-hidden gold-patch concepts, eleven matched cross-task foils, and layers
+16 through 47 without inspecting lens output. Ordinary logit-lens utility is
+`0.335734`; public/native J-lens utilities are `0.312907`/`0.314525`. Their
+paired differences from logit are `-0.022827`, 95% CI
+`[-0.105957, 0.061072]`, and `-0.021209`, CI
+`[-0.089765, 0.050462]`.
+
+C1 is the second request after at least one successful repository read/search
+and before the second assistant token. Identifier and scored-token leakage
+audits retain eight tasks, nine hidden concepts, and eight hidden foils. Native
+has the best C1 utility (`0.287379`, concept-level geometric rank `7,276`)
+versus public (`0.262473`, `9,166`) and logit (`0.257713`, `9,509`), but
+native-minus-logit is `+0.029665`, CI `[-0.106690, 0.181251]`; no method
+comparison excludes zero.
+
+A final audit rejected the preliminary C0-to-C1 stage comparison because the
+startup/system contexts differed. The replacement C0M baseline is the exact
+first-request text/token prefix of each C1 trajectory and preserves the same
+hidden vocabulary. Matched logit/public/native utility changes are
+`-0.063443/-0.043954/-0.029213`; all intervals cross zero. Direct
+public-minus-logit and native-minus-logit stage contrasts are `+0.019489`, CI
+`[-0.083925, 0.124465]`, and `+0.034230`, CI
+`[-0.073643, 0.158838]`. These point estimates are consistent with less J-lens
+degradation but do not detect preservation or aggregate concept emergence.
+Native `lazy` improves from rank 607 at C0M to 209 at C1 while logit worsens
+from 929 to 44,630; native `PyObject` moves the opposite way, from 2,418 to
+87,849. The next probe should add an oracle-labeled C2 after relevant source
+evidence, retain C0M/C1 controls, and compare matched J-minus-logit changes;
+this result does not yet motivate another fit.
+
+Both C0M reports pass every strict check for 8/8 prompts. Both C1 reports pair
+exact prompts, residual manifests, and ordinary logit readouts, but strict
+full-final-logit tolerance passes 6/8, so the C1 reports retain `status: failed`.
+The complete protocol, commands, hashes, limitations, and next decision are in
+[`docs/JLENS_SWE_MULTITASK_CHECKPOINTS_2026-07-18.md`](docs/JLENS_SWE_MULTITASK_CHECKPOINTS_2026-07-18.md).
+
 ## Publication-Certified Run
 
 Date: 2026-07-15 (America/Los_Angeles)

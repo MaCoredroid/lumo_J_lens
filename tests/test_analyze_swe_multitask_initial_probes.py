@@ -5,10 +5,12 @@ from __future__ import annotations
 
 import copy
 import importlib.util
+import json
 import math
 from pathlib import Path
 import statistics
 import sys
+import tempfile
 import unittest
 
 
@@ -328,6 +330,143 @@ def u(rank: int) -> float:
 
 
 class AnalyzeSweMultitaskInitialProbesTest(unittest.TestCase):
+    def test_external_input_path_is_logical_not_clone_root_dependent(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "input.json"
+            path.write_text(json.dumps({"value": 1}), encoding="utf-8")
+            value, source = MODULE.read_json(path)
+        self.assertEqual(value, {"value": 1})
+        self.assertEqual(source["path"], "external/input.json")
+
+    def test_c1_requires_and_records_its_exact_checkpoint_contract(self) -> None:
+        prompts, public, native = fixture()
+        for prompt, public_experiment, native_experiment in zip(
+            prompts,
+            public["experiments"],
+            native["experiments"],
+            strict=True,
+        ):
+            prompt["metadata"]["checkpoint"] = copy.deepcopy(
+                MODULE.CHECKPOINT_CONTRACTS["C1"]
+            )
+            prompt["metadata"]["observation_audit"] = {
+                "capture_manifest_sha256": "d" * 64,
+                "first_request_sha256": f"{len(prompt['id']):064x}",
+                "second_request_sha256": f"{len(prompt['id']) + 1:064x}",
+            }
+            public_experiment["metadata"] = copy.deepcopy(prompt["metadata"])
+            native_experiment["metadata"] = copy.deepcopy(prompt["metadata"])
+
+        with self.assertRaisesRegex(ValueError, "expected C0 contract"):
+            MODULE.analyze(
+                prompts, public, native, bootstrap_seed=7, bootstrap_samples=10
+            )
+        result = MODULE.analyze(
+            prompts,
+            public,
+            native,
+            bootstrap_seed=7,
+            bootstrap_samples=10,
+            expected_checkpoint=MODULE.CHECKPOINT_CONTRACTS["C1"],
+        )
+        self.assertEqual(
+            result["evaluation"]["checkpoint_metadata"],
+            MODULE.CHECKPOINT_CONTRACTS["C1"],
+        )
+        self.assertIn("repository observation", result["evaluation"]["checkpoint"])
+        self.assertEqual(result["coverage"]["task_count"], 4)
+        self.assertEqual(
+            result["kind"],
+            (
+                "exploratory_swe_verified_multitask_"
+                "post_repository_observation_probe_analysis"
+            ),
+        )
+        self.assertIn("post-repository-observation", result["label"])
+        self.assertNotIn("task start", " ".join(result["evaluation"]["limitations"]))
+
+    def test_c1_still_rejects_non_oracle_hidden_retained_concepts(self) -> None:
+        prompts = make_prompts()
+        for prompt in prompts:
+            prompt["metadata"]["checkpoint"] = copy.deepcopy(
+                MODULE.CHECKPOINT_CONTRACTS["C1"]
+            )
+            prompt["metadata"]["observation_audit"] = {
+                "capture_manifest_sha256": "d" * 64,
+                "first_request_sha256": "e" * 64,
+                "second_request_sha256": "f" * 64,
+            }
+        prompts[0]["metadata"]["concepts"][0]["visibility"] = (
+            "explicit_control_excluded"
+        )
+        with self.assertRaisesRegex(ValueError, "visibility mismatch"):
+            MODULE.validate_prompt_bundle(
+                prompts,
+                expected_checkpoint=MODULE.CHECKPOINT_CONTRACTS["C1"],
+            )
+
+    def test_checkpoint_configuration_is_named_and_exact(self) -> None:
+        args = MODULE.parse_args(
+            [
+                "--prompts",
+                "prompts.json",
+                "--public-report",
+                "public.json",
+                "--native-report",
+                "native.json",
+                "--output",
+                "analysis.json",
+                "--expected-checkpoint",
+                "C1",
+            ]
+        )
+        self.assertEqual(args.expected_checkpoint, "C1")
+        prompts, _, _ = fixture()
+        weakened = {
+            "id": "C1",
+            "name": "post_first_repository_observation",
+            "visibility_boundary": "anything",
+        }
+        with self.assertRaisesRegex(ValueError, "supported exact contract"):
+            MODULE.validate_prompt_bundle(
+                prompts, expected_checkpoint=weakened
+            )
+
+    def test_capture_matched_checkpoint_records_trajectory_bindings(self) -> None:
+        prompts, public, native = fixture()
+        for index, (prompt, public_experiment, native_experiment) in enumerate(
+            zip(prompts, public["experiments"], native["experiments"], strict=True)
+        ):
+            prompt["metadata"]["checkpoint"] = copy.deepcopy(
+                MODULE.CHECKPOINT_CONTRACTS["C0M"]
+            )
+            prompt["metadata"]["capture_match"] = {
+                "capture_manifest_sha256": "d" * 64,
+                "first_request_sha256": f"{index + 1:064x}",
+                "second_request_sha256": f"{index + 101:064x}",
+            }
+            public_experiment["metadata"] = copy.deepcopy(prompt["metadata"])
+            native_experiment["metadata"] = copy.deepcopy(prompt["metadata"])
+
+        result = MODULE.analyze(
+            prompts,
+            public,
+            native,
+            bootstrap_seed=7,
+            bootstrap_samples=10,
+            expected_checkpoint=MODULE.CHECKPOINT_CONTRACTS["C0M"],
+        )
+        self.assertEqual(
+            result["kind"],
+            "exploratory_swe_verified_multitask_capture_matched_initial_probe_analysis",
+        )
+        self.assertIn("same captured trajectory", result["evaluation"]["checkpoint"])
+        self.assertEqual(len(result["source_bindings"]["trajectory_bindings"]), 4)
+        self.assertEqual(
+            result["source_bindings"]["trajectory_bindings"][0]["instance_id"],
+            "project__project-0",
+        )
+
     def test_family_then_task_weighting_bootstrap_foils_and_loro(self) -> None:
         prompts, public, native = fixture()
         result = MODULE.analyze(
@@ -345,6 +484,17 @@ class AnalyzeSweMultitaskInitialProbesTest(unittest.TestCase):
             bootstrap_samples=200,
         )
         self.assertEqual(result, repeated)
+        self.assertEqual(
+            result["kind"],
+            "exploratory_swe_verified_multitask_initial_probe_analysis",
+        )
+        self.assertEqual(
+            result["label"],
+            (
+                "EXPLORATORY MULTI-TASK PILOT: associative task-start concept "
+                "readout, not chain-of-thought recovery or causal evidence"
+            ),
+        )
 
         public_method = result["methods"]["public_jacobian"]
         first_task = public_method["tasks"][0]

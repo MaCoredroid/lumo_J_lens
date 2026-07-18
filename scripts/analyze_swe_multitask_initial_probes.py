@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate and analyze the frozen multi-task SWE task-start J-lens pilot.
+"""Validate and analyze a frozen multi-task SWE checkpoint J-lens pilot.
 
 The input prompt bundle is the runner input itself.  Its metadata is the frozen
 analysis contract: task identity, fixed layer band, target concepts, eligible
@@ -21,6 +21,7 @@ import tempfile
 from typing import Any, Mapping, Sequence
 
 
+ROOT = Path(__file__).resolve().parents[1]
 MODEL_REPO = "nvidia/Qwen3.6-27B-NVFP4"
 MODEL_REVISION = "0893e1606ff3d5f97a441f405d5fc541a6bdf404"
 MODEL_CONFIG_SHA256 = (
@@ -55,6 +56,25 @@ CONCEPT_FAMILIES = frozenset(
 )
 BOOTSTRAP_SEED = 36_027
 BOOTSTRAP_SAMPLES = 20_000
+CHECKPOINT_CONTRACTS = {
+    "C0": {
+        "id": "C0",
+        "name": "task_start",
+        "visibility_boundary": "before_first_assistant_token",
+    },
+    "C0M": {
+        "id": "C0M",
+        "name": "capture_matched_task_start",
+        "visibility_boundary": "same_captured_trajectory_before_first_assistant_token",
+    },
+    "C1": {
+        "id": "C1",
+        "name": "post_first_repository_observation",
+        "visibility_boundary": (
+            "after_successful_repository_read_or_search_before_second_assistant_token"
+        ),
+    },
+}
 
 
 def require(condition: bool, message: str) -> None:
@@ -180,9 +200,17 @@ def _validate_forms(
     return result
 
 
-def validate_prompt_bundle(prompts_value: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
+def validate_prompt_bundle(
+    prompts_value: Sequence[Mapping[str, Any]],
+    *,
+    expected_checkpoint: Mapping[str, str] = CHECKPOINT_CONTRACTS["C0"],
+) -> dict[str, Any]:
     prompts = sequence(prompts_value, "prompt bundle")
     require(bool(prompts), "prompt bundle must not be empty")
+    require(
+        dict(expected_checkpoint) in CHECKPOINT_CONTRACTS.values(),
+        "expected checkpoint metadata is not a supported exact contract",
+    )
     normalized: list[dict[str, Any]] = []
     prompt_ids: set[str] = set()
     task_ids: set[str] = set()
@@ -205,7 +233,7 @@ def validate_prompt_bundle(prompts_value: Sequence[Mapping[str, Any]]) -> dict[s
         )
         require(
             "target_token_id" not in prompt,
-            f"prompt {identifier} must not override the accepted task-start token",
+            f"prompt {identifier} must not override the accepted checkpoint token",
         )
 
         metadata = mapping(prompt.get("metadata"), f"prompt {identifier}.metadata")
@@ -234,20 +262,44 @@ def validate_prompt_bundle(prompts_value: Sequence[Mapping[str, Any]]) -> dict[s
             metadata.get("checkpoint"), f"prompt {identifier}.checkpoint"
         )
         require(
-            checkpoint
-            == {
-                "id": "C0",
-                "name": "task_start",
-                "visibility_boundary": "before_first_assistant_token",
-            },
-            f"prompt {identifier} is not the frozen C0 task-start boundary",
+            checkpoint == expected_checkpoint,
+            (
+                f"prompt {identifier} checkpoint metadata does not match "
+                f"the expected {expected_checkpoint['id']} contract"
+            ),
         )
+        trajectory_binding = None
+        if checkpoint["id"] in {"C0M", "C1"}:
+            audit_field = (
+                "capture_match" if checkpoint["id"] == "C0M" else "observation_audit"
+            )
+            observation_audit = mapping(
+                metadata.get(audit_field),
+                f"prompt {identifier}.{audit_field}",
+            )
+            trajectory_binding = {
+                "instance_id": None,
+                "capture_manifest_sha256": valid_sha256(
+                    observation_audit.get("capture_manifest_sha256"),
+                    f"prompt {identifier} capture manifest",
+                ),
+                "first_request_sha256": valid_sha256(
+                    observation_audit.get("first_request_sha256"),
+                    f"prompt {identifier} first request",
+                ),
+                "second_request_sha256": valid_sha256(
+                    observation_audit.get("second_request_sha256"),
+                    f"prompt {identifier} second request",
+                ),
+            }
         task = mapping(metadata.get("task"), f"prompt {identifier}.task")
         instance_id = nonempty_string(
             task.get("instance_id"), f"prompt {identifier}.task.instance_id"
         )
         require(instance_id not in task_ids, f"duplicate SWE task: {instance_id}")
         task_ids.add(instance_id)
+        if trajectory_binding is not None:
+            trajectory_binding["instance_id"] = instance_id
         repo = nonempty_string(task.get("repo"), f"prompt {identifier}.task.repo")
         nonempty_string(
             task.get("base_commit"), f"prompt {identifier}.task.base_commit"
@@ -393,6 +445,7 @@ def validate_prompt_bundle(prompts_value: Sequence[Mapping[str, Any]]) -> dict[s
                 "repo": repo,
                 "task": dict(task),
                 "concepts": concepts,
+                "trajectory_binding": trajectory_binding,
             }
         )
 
@@ -434,6 +487,12 @@ def validate_prompt_bundle(prompts_value: Sequence[Mapping[str, Any]]) -> dict[s
         "token_text": global_token_text,
         "union_token_ids": union_ids,
         "bundle_sha256": materialized_json_sha256(prompts_value),
+        "checkpoint": dict(expected_checkpoint),
+        "trajectory_bindings": [
+            prompt["trajectory_binding"]
+            for prompt in normalized
+            if prompt["trajectory_binding"] is not None
+        ],
     }
 
 
@@ -629,7 +688,7 @@ def validate_report(
             and experiment.get("positions_resolved") == [final_position]
             and experiment.get("capture_positions_resolved") == [final_position]
             and experiment.get("final_validation_position") == final_position,
-            f"{label} {identifier} task-start readout position mismatch",
+            f"{label} {identifier} checkpoint readout position mismatch",
         )
         scored_vocabulary = mapping(
             experiment.get("scored_vocabulary"),
@@ -1041,6 +1100,7 @@ def score_method(
             for k in PASS_K
         },
         "rank_summary": {
+            "aggregation": "unweighted over scorable retained target concepts",
             "target_concept_count": len(all_target_ranks),
             "minimum": min(all_target_ranks),
             "median": statistics.median(all_target_ranks),
@@ -1261,9 +1321,12 @@ def analyze(
     *,
     bootstrap_seed: int = BOOTSTRAP_SEED,
     bootstrap_samples: int = BOOTSTRAP_SAMPLES,
+    expected_checkpoint: Mapping[str, str] = CHECKPOINT_CONTRACTS["C0"],
 ) -> dict[str, Any]:
     require(bootstrap_samples > 0, "bootstrap sample count must be positive")
-    contract = validate_prompt_bundle(prompts_value)
+    contract = validate_prompt_bundle(
+        prompts_value, expected_checkpoint=expected_checkpoint
+    )
     public = validate_report(public_report, label="public", contract=contract)
     native = validate_report(native_report, label="native", contract=contract)
     pairing = validate_report_pair(public, native)
@@ -1276,6 +1339,44 @@ def analyze(
         logit == native_logit,
         "paired reports produced different ordinary logit-lens summaries",
     )
+    checkpoint_id = contract["checkpoint"]["id"]
+    if checkpoint_id == "C0":
+        analysis_kind = "exploratory_swe_verified_multitask_initial_probe_analysis"
+        analysis_label = (
+            "EXPLORATORY MULTI-TASK PILOT: associative task-start concept "
+            "readout, not chain-of-thought recovery or causal evidence"
+        )
+        causal_limitation = (
+            "Association at task start does not establish that the model uses a "
+            "concept causally."
+        )
+    elif checkpoint_id == "C1":
+        analysis_kind = (
+            "exploratory_swe_verified_multitask_"
+            "post_repository_observation_probe_analysis"
+        )
+        analysis_label = (
+            "EXPLORATORY MULTI-TASK PILOT: associative post-repository-observation "
+            "concept readout, not chain-of-thought recovery or causal evidence"
+        )
+        causal_limitation = (
+            "Association after the first successful repository observation does not "
+            "establish that the model uses a concept causally."
+        )
+    else:
+        require(checkpoint_id == "C0M", "unsupported checkpoint analysis contract")
+        analysis_kind = (
+            "exploratory_swe_verified_multitask_"
+            "capture_matched_initial_probe_analysis"
+        )
+        analysis_label = (
+            "EXPLORATORY MULTI-TASK PILOT: associative capture-matched task-start "
+            "concept readout, not chain-of-thought recovery or causal evidence"
+        )
+        causal_limitation = (
+            "Association at a capture-matched task start does not establish that "
+            "the model uses a concept causally."
+        )
 
     comparisons = {
         "public_minus_logit": compare_methods(
@@ -1326,11 +1427,8 @@ def analyze(
 
     return {
         "schema_version": 1,
-        "kind": "exploratory_swe_verified_multitask_initial_probe_analysis",
-        "label": (
-            "EXPLORATORY MULTI-TASK PILOT: associative task-start concept "
-            "readout, not chain-of-thought recovery or causal evidence"
-        ),
+        "kind": analysis_kind,
+        "label": analysis_label,
         "model": {
             "repo_id": MODEL_REPO,
             "revision": MODEL_REVISION,
@@ -1340,16 +1438,25 @@ def analyze(
         "source_bindings": {
             "prompt_bundle_sha256": contract["bundle_sha256"],
             "protocol_sha256": contract["protocol_sha256"],
+            "trajectory_bindings": contract["trajectory_bindings"],
         },
         "evaluation": {
-            "checkpoint": "C0: before the first assistant token",
+            "checkpoint": {
+                "C0": "C0: before the first assistant token",
+                "C0M": (
+                    "C0M: same captured trajectory before the first assistant token"
+                ),
+                "C1": "C1: after the first successful repository observation",
+            }[contract["checkpoint"]["id"]],
+            "checkpoint_metadata": contract["checkpoint"],
             "fixed_middle_layers": list(FIXED_MIDDLE_LAYERS),
             "pass_at_k": list(PASS_K),
             "rank_reduction": "minimum over predeclared eligible forms and fixed layers",
             "utility_u": "log(V / minimum_rank) / log(V)",
             "weighting": (
-                "equal concepts within family, equal families within task, "
-                "equal independent tasks overall"
+                "utility and pass@k: equal concepts within family, equal families "
+                "within task, equal independent tasks overall; rank_summary: "
+                "unweighted over scorable retained target concepts"
             ),
             "accepted_generated_token_policy": (
                 "forms identical to the paired accepted generated token are "
@@ -1367,7 +1474,7 @@ def analyze(
             ),
             "limitations": [
                 "Minimum over multiple forms and 32 layers is an optimistic readout statistic.",
-                "Association at task start does not establish that the model uses a concept causally.",
+                causal_limitation,
                 "Oracle-hidden patch concepts test localization, not full SWE task completion.",
             ],
         },
@@ -1407,8 +1514,13 @@ def analyze(
 
 def read_json(path: Path) -> tuple[Any, dict[str, Any]]:
     raw = path.read_bytes()
+    resolved = path.resolve()
+    try:
+        display_path = resolved.relative_to(ROOT).as_posix()
+    except ValueError:
+        display_path = f"external/{resolved.name}"
     return json.loads(raw), {
-        "path": str(path.resolve()),
+        "path": display_path,
         "size_bytes": len(raw),
         "sha256": sha256_bytes(raw),
     }
@@ -1445,6 +1557,12 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--public-report", type=Path, required=True)
     parser.add_argument("--native-report", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument(
+        "--expected-checkpoint",
+        choices=tuple(CHECKPOINT_CONTRACTS),
+        default="C0",
+        help="exact frozen checkpoint metadata contract (default: C0)",
+    )
     parser.add_argument("--bootstrap-seed", type=int, default=BOOTSTRAP_SEED)
     parser.add_argument("--bootstrap-samples", type=int, default=BOOTSTRAP_SAMPLES)
     return parser.parse_args(argv)
@@ -1467,6 +1585,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         native_report,
         bootstrap_seed=args.bootstrap_seed,
         bootstrap_samples=args.bootstrap_samples,
+        expected_checkpoint=CHECKPOINT_CONTRACTS[args.expected_checkpoint],
     )
     result["inputs"] = {
         "prompts": prompts_source,

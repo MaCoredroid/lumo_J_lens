@@ -27,7 +27,9 @@ public FP16 lens of unpublished fit precision applied to NVFP4,
 [docs/JLENS_NVFP4_STE_EXPERIMENT.md](docs/JLENS_NVFP4_STE_EXPERIMENT.md) for
 the completed native NVIDIA fit contract and production evidence, and
 [docs/JLENS_SWE_QWEN_CODE_EXPERIMENT.md](docs/JLENS_SWE_QWEN_CODE_EXPERIMENT.md)
-for the layer-by-layer replay of the certified Qwen Code episode, and
+for the layer-by-layer replay of the certified Qwen Code episode,
+[docs/JLENS_SWE_MULTITASK_CHECKPOINTS_2026-07-18.md](docs/JLENS_SWE_MULTITASK_CHECKPOINTS_2026-07-18.md)
+for the leakage-audited multi-task C0/C1 probe, and
 [docs/JLENS_NF4_EXPERIMENT.md](docs/JLENS_NF4_EXPERIMENT.md) for the fresh-fit
 experiment.
 
@@ -257,6 +259,30 @@ tolerance.
 See the [full experiment report](docs/JLENS_SWE_QWEN_CODE_EXPERIMENT.md) and
 [`validation/jlens-swe-qwen-code-intermediate-analysis-2026-07-17.json`](validation/jlens-swe-qwen-code-intermediate-analysis-2026-07-17.json).
 
+### Multi-task SWE checkpoint probe
+
+A second experiment freezes oracle-hidden gold-patch concepts across ten
+independent SWE-Verified tasks. At task start (C0), neither J-lens beats the
+ordinary logit lens. After the first successful repository observation (C1),
+the token-aware leakage audit retains eight tasks and nine hidden concepts.
+Native has the best C1 point estimate (`U=0.28738`, concept-level geometric
+rank `7,276`) versus public (`0.26247`, `9,166`) and logit (`0.25771`,
+`9,509`), but all
+paired task-bootstrap method-difference intervals cross zero.
+
+An audit caught that the original C0 and captured C1 startup contexts differed,
+so those preliminary stage deltas were discarded. The corrected C0M baseline
+uses exact token prefixes from the same eight trajectories. Matched C0M-to-C1
+utility changes are `-0.06344/-0.04395/-0.02921` for logit/public/native. The
+direct public-minus-logit and native-minus-logit stage contrasts are `+0.01949`
+CI `[-0.08392, 0.12446]` and `+0.03423` CI `[-0.07364, 0.15884]`; neither is
+detected. Native ranks Django's hidden `lazy` target 607th at C0M and 209th at
+C1 while logit worsens from 929th to 44,630th, but other concepts move in the
+opposite direction. The next experiment should add an oracle-labeled C2 after
+reading the relevant source function and before target leakage, retaining C0M
+and C1 as controls; the current data does not justify another fit.
+See the [multi-task report](docs/JLENS_SWE_MULTITASK_CHECKPOINTS_2026-07-18.md).
+
 This is an eager, MTP-disabled replay of frozen contexts because the original
 compiled server did not retain hidden states. The strict multi-stage adapter
 status is `failed`: five stages reached BF16 max logit error `0.125` against a
@@ -355,7 +381,9 @@ gitignored. Important files are:
 Treat the entire `runs/` tree as sensitive local state. Proxy dumps contain full
 prompts and conversations; Qwen HOME state may contain local session/install
 identifiers and paths. Do not ZIP, tar, or upload the working directory. Publish
-only Git-tracked files after reviewing `git status` and `git ls-files`.
+only Git-tracked files after reviewing `git status` and `git ls-files`. The
+small tracked C1 capture subsets under `validation/` were separately reviewed
+for credentials and are required to reproduce the published visibility audit.
 
 ## Repository Map
 
@@ -380,6 +408,11 @@ only Git-tracked files after reviewing `git status` and `git ls-files`.
 - `scripts/materialize_swe_jlens_trajectory.py`: dense teacher-forced state renderer
 - `scripts/materialize_swe_intermediate_probes.py`: frozen SWE concept-probe renderer
 - `scripts/analyze_swe_intermediate_probes.py`: paired pass-at-k/AUC evaluator
+- `scripts/materialize_swe_multitask_c1_probes.py`: hash-pinned, token-aware C1 renderer
+- `scripts/materialize_swe_multitask_capture_matched_probes.py`: exact C0M prefix renderer
+- `scripts/analyze_swe_multitask_initial_probes.py`: C0/C0M/C1 exact-rank evaluator
+- `scripts/compare_swe_multitask_checkpoints.py`: matched C0M-to-C1 stage comparator
+- `scripts/run_swe_multitask_c1_pilot.sh`: one-command public/native C1 replay
 - `configs/swe_intermediate_concept_probes.json`: evidence-grounded one-task probe set
 - `scripts/qwen_code_proxy.py`: thinking/envelope injection and context-fit retry
 - `scripts/run_swe_verified.py`: Qwen Code plus official-container episode runner
@@ -398,6 +431,10 @@ only Git-tracked files after reviewing `git status` and `git ls-files`.
 - `validation/jlens-nvfp4-ste-artifact-verification-2026-07-17.json`: exact exported-artifact verification
 - `validation/jlens-upstream-multihop-control-analysis-2026-07-17.json`: external method-aligned control
 - `validation/jlens-swe-qwen-code-intermediate-analysis-2026-07-17.json`: one-task exact-rank probe
+- `validation/jlens-swe-multitask-c1-analysis-2026-07-18.json`: eight-task C1 exact-rank probe
+- `validation/jlens-swe-multitask-c0m-analysis-2026-07-18.json`: matched task-start probe
+- `validation/jlens-swe-multitask-c0m-c1-comparison-2026-07-18.json`: exact-prefix stage changes
+- `validation/jlens-swe-multitask-evidence-2026-07-18.sha256`: C0/C1 evidence hashes
 - `validation/jlens-nvfp4-ste-upstream-load-2026-07-17.json`: upstream loader smoke checks
 - `validation/jlens-nvfp4-ste-vs-public-2026-07-17.json`: native/public matrix geometry
 - `validation/jlens-native-nvfp4-ste-on-nvfp4-heldout-2026-07-17.json`: native schema-3 readout
@@ -413,6 +450,7 @@ only Git-tracked files after reviewing `git status` and `git ls-files`.
 - `docs/SESSION_RECONSTRUCTION.md`: source-session and commit chronology
 - `docs/JLENS_NVFP4_STE_EXPERIMENT.md`: native fit contract, evidence, and runbook
 - `docs/JLENS_SWE_QWEN_CODE_EXPERIMENT.md`: certified SWE layer analysis and runbook
+- `docs/JLENS_SWE_MULTITASK_CHECKPOINTS_2026-07-18.md`: C0/C1 multi-task report
 - `docs/TROUBLESHOOTING.md`: every boot/runtime failure found and its fix
 
 ## Security Boundary

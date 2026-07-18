@@ -36,6 +36,7 @@ mapfile -t python_sources < <(
   sha256sum --check validation/jlens-source-manifest.sha256
   sha256sum --check validation/jlens-swe-qwen-code-evidence-2026-07-17.sha256
   sha256sum --check validation/jlens-swe-qwen-code-source-manifest.sha256
+  sha256sum --check validation/jlens-swe-multitask-evidence-2026-07-18.sha256
   sha256sum --check validation/jlens-nf4-evidence.sha256
   sha256sum --check validation/jlens-nf4-source-manifest.sha256
 )

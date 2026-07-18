@@ -1,0 +1,1631 @@
+{
+  "claims_gate": null,
+  "contract": {
+    "c0_checkpoint": {
+      "id": "C0M",
+      "name": "capture_matched_task_start",
+      "visibility_boundary": "same_captured_trajectory_before_first_assistant_token"
+    },
+    "c1_checkpoint": {
+      "id": "C1",
+      "name": "post_first_repository_observation",
+      "visibility_boundary": "after_successful_repository_read_or_search_before_second_assistant_token"
+    },
+    "fixed_middle_layers": [
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47
+    ],
+    "matching_policy": "C1-retained task/family/concept identities matched into the declared task-start baseline; baseline-only identities ignored",
+    "model": {
+      "logit_vocabulary_size": 248320,
+      "repo_id": "nvidia/Qwen3.6-27B-NVFP4",
+      "revision": "0893e1606ff3d5f97a441f405d5fc541a6bdf404",
+      "tokenizer_json_sha256": "5f9e4d4901a92b997e463c1f46055088b6cca5ca61a6522d1b9f64c4bb81cb42"
+    },
+    "protocol_sha256": "9a7ac3d1206f83c1c964245f8f3ed2824cbfcd471b17fe81ae87b77c47045cb5",
+    "rank_source": "target_score.minimum_rank from validated analysis JSON",
+    "trajectory_request_bindings_match": true,
+    "weighting": "equal paired concepts within family, equal families within task, equal retained tasks overall"
+  },
+  "inputs": {
+    "c0_analysis": {
+      "path": ".cache/swe_multitask_c0m/analysis.json",
+      "sha256": "6fe987bf2eec089b683483c4c64d6c2782dd7770f8cd19d8b63340e7ebeccb55",
+      "size_bytes": 249239
+    },
+    "c1_analysis": {
+      "path": ".cache/swe_multitask_c1/analysis.json",
+      "sha256": "42a9e8d9b22cd61eb7bd47f6845936092476af2bf2023941537832af57628dc4",
+      "size_bytes": 249069
+    }
+  },
+  "kind": "exploratory_swe_verified_multitask_checkpoint_comparison",
+  "label": "EXPLORATORY STAGE-EMERGENCE COMPARISON: exact-rank association change from C0M to C1, not causal evidence",
+  "limitations": [
+    "This is an exploratory stage-emergence comparison, not a causal intervention.",
+    "Minimum rank over forms and layers is an optimistic associative readout.",
+    "Complete-case metrics exclude retained concepts unscorable at either checkpoint."
+  ],
+  "methods": {
+    "logit_lens": {
+      "geometric_mean_rank": {
+        "c0_task_macro": 4595.897634760889,
+        "c1_task_macro": 10107.543158010236,
+        "c1_to_c0_ratio": 2.199253325740381,
+        "ratio_confidence_interval": {
+          "confidence_level": 0.95,
+          "derived_from": "paired task bootstrap of C1-minus-C0 mean log rank",
+          "lower": 0.7727315353652211,
+          "upper": 6.964727855615827
+        }
+      },
+      "matching": {
+        "c0_available_task_count": 8,
+        "c1_retained_task_count": 8,
+        "paired_metric_task_count": 8,
+        "paired_scorable_concept_count": 9,
+        "retained_c1_concept_count": 9,
+        "unscorable_exclusions": []
+      },
+      "mean_log_rank": {
+        "c0_task_macro": 8.432919366040208,
+        "c1_minus_c0": 0.7881179053652048,
+        "c1_task_macro": 9.221037271405413,
+        "paired_task_bootstrap": {
+          "confidence_interval": {
+            "confidence_level": 0.95,
+            "lower": -0.2578235929623228,
+            "upper": 1.9408585333335524
+          },
+          "direction": "lower_is_better",
+          "estimate": 0.7881179053652055,
+          "method": "deterministic paired task-level percentile bootstrap",
+          "negative_task_count": 3,
+          "positive_task_count": 5,
+          "samples": 20000,
+          "sampling_unit": "retained SWE-Verified task",
+          "seed": 955131454,
+          "task_count": 8,
+          "tie_task_count": 0
+        }
+      },
+      "normalized_utility_u": {
+        "c0_task_macro": 0.32115618075624586,
+        "c1_minus_c0": -0.06344291290712584,
+        "c1_task_macro": 0.25771326784912,
+        "paired_task_bootstrap": {
+          "confidence_interval": {
+            "confidence_level": 0.95,
+            "lower": -0.15423612064622866,
+            "upper": 0.02034456325954139
+          },
+          "direction": "higher_is_better",
+          "estimate": -0.06344291290712582,
+          "method": "deterministic paired task-level percentile bootstrap",
+          "negative_task_count": 5,
+          "positive_task_count": 3,
+          "samples": 20000,
+          "sampling_unit": "retained SWE-Verified task",
+          "seed": 1169064635,
+          "task_count": 8,
+          "tie_task_count": 0
+        }
+      },
+      "per_concept_ranks": [
+        {
+          "c0_best_layer": 16,
+          "c0_log_rank": 9.98594273247232,
+          "c0_minimum_rank": 21719,
+          "c0_utility_u": 0.19613893967018406,
+          "c1_best_layer": 25,
+          "c1_log_rank": 9.384713758920963,
+          "c1_minimum_rank": 11905,
+          "c1_minus_c0_log_rank": -0.6012289735513576,
+          "c1_minus_c0_rank": -9814,
+          "c1_minus_c0_utility_u": 0.048398491071693195,
+          "c1_utility_u": 0.24453743074187725,
+          "concept_id": "task-00-concept-01",
+          "family": "hunk_symbol",
+          "instance_id": "pydata__xarray-6938",
+          "paired_scorable": true,
+          "path": "xarray/core/variable.py",
+          "repo": "pydata/xarray",
+          "target": "equals"
+        },
+        {
+          "c0_best_layer": 22,
+          "c0_log_rank": 5.8944028342648505,
+          "c0_minimum_rank": 363,
+          "c0_utility_u": 0.5255048983051688,
+          "c1_best_layer": 29,
+          "c1_log_rank": 7.1180162044653335,
+          "c1_minimum_rank": 1234,
+          "c1_minus_c0_log_rank": 1.223613370200483,
+          "c1_minus_c0_rank": 871,
+          "c1_minus_c0_utility_u": -0.09849997817477735,
+          "c1_utility_u": 0.42700492013039143,
+          "concept_id": "task-01-concept-00",
+          "family": "replacement",
+          "instance_id": "scikit-learn__scikit-learn-9288",
+          "paired_scorable": true,
+          "path": "sklearn/cluster/k_means_.py",
+          "repo": "scikit-learn/scikit-learn",
+          "target": "seed"
+        },
+        {
+          "c0_best_layer": 44,
+          "c0_log_rank": 6.834108738813838,
+          "c0_minimum_rank": 929,
+          "c0_utility_u": 0.4498592627286148,
+          "c1_best_layer": 28,
+          "c1_log_rank": 10.706161557623316,
+          "c1_minimum_rank": 44630,
+          "c1_minus_c0_log_rank": 3.872052818809478,
+          "c1_minus_c0_rank": 43701,
+          "c1_minus_c0_utility_u": -0.31169740984591277,
+          "c1_utility_u": 0.13816185288270205,
+          "concept_id": "task-02-concept-00",
+          "family": "replacement",
+          "instance_id": "django__django-13297",
+          "paired_scorable": true,
+          "path": "django/views/generic/base.py",
+          "repo": "django/django",
+          "target": "lazy"
+        },
+        {
+          "c0_best_layer": 18,
+          "c0_log_rank": 6.672032945461067,
+          "c0_minimum_rank": 790,
+          "c0_utility_u": 0.4629062451306557,
+          "c1_best_layer": 46,
+          "c1_log_rank": 5.429345628954441,
+          "c1_minimum_rank": 228,
+          "c1_minus_c0_log_rank": -1.2426873165066263,
+          "c1_minus_c0_rank": -562,
+          "c1_minus_c0_utility_u": 0.10003541685223649,
+          "c1_utility_u": 0.5629416619828922,
+          "concept_id": "task-03-concept-00",
+          "family": "replacement",
+          "instance_id": "sympy__sympy-21847",
+          "paired_scorable": true,
+          "path": "sympy/polys/monomials.py",
+          "repo": "sympy/sympy",
+          "target": "sum"
+        },
+        {
+          "c0_best_layer": 23,
+          "c0_log_rank": 8.02322468471667,
+          "c0_minimum_rank": 3051,
+          "c0_utility_u": 0.354136301888854,
+          "c1_best_layer": 30,
+          "c1_log_rank": 6.976348070447749,
+          "c1_minimum_rank": 1071,
+          "c1_minus_c0_log_rank": -1.0468766142689212,
+          "c1_minus_c0_rank": -1980,
+          "c1_minus_c0_utility_u": 0.0842727990462202,
+          "c1_utility_u": 0.4384091009350742,
+          "concept_id": "task-04-concept-00",
+          "family": "hunk_symbol",
+          "instance_id": "pylint-dev__pylint-4551",
+          "paired_scorable": true,
+          "path": "pylint/pyreverse/utils.py",
+          "repo": "pylint-dev/pylint",
+          "target": "visit"
+        },
+        {
+          "c0_best_layer": 29,
+          "c0_log_rank": 11.070754877853648,
+          "c0_minimum_rank": 64264,
+          "c0_utility_u": 0.10881235821391357,
+          "c1_best_layer": 42,
+          "c1_log_rank": 10.36637215151178,
+          "c1_minimum_rank": 31773,
+          "c1_minus_c0_log_rank": -0.7043827263418692,
+          "c1_minus_c0_rank": -32491,
+          "c1_minus_c0_utility_u": 0.056702292456968215,
+          "c1_utility_u": 0.16551465067088178,
+          "concept_id": "task-04-concept-01",
+          "family": "file_stem",
+          "instance_id": "pylint-dev__pylint-4551",
+          "paired_scorable": true,
+          "path": "pylint/pyreverse/inspector.py",
+          "repo": "pylint-dev/pylint",
+          "target": "inspector"
+        },
+        {
+          "c0_best_layer": 46,
+          "c0_log_rank": 8.635687085464026,
+          "c0_minimum_rank": 5629,
+          "c0_utility_u": 0.3048335281731647,
+          "c1_best_layer": 46,
+          "c1_log_rank": 10.278733974060291,
+          "c1_minimum_rank": 29107,
+          "c1_minus_c0_log_rank": 1.643046888596265,
+          "c1_minus_c0_rank": 23478,
+          "c1_minus_c0_utility_u": -0.1322640685434413,
+          "c1_utility_u": 0.17256945962972342,
+          "concept_id": "task-05-concept-00",
+          "family": "hunk_symbol",
+          "instance_id": "sphinx-doc__sphinx-8638",
+          "paired_scorable": true,
+          "path": "sphinx/domains/python.py",
+          "repo": "sphinx-doc/sphinx",
+          "target": "PyObject"
+        },
+        {
+          "c0_best_layer": 31,
+          "c0_log_rank": 8.438799123988225,
+          "c0_minimum_rank": 4623,
+          "c0_utility_u": 0.3206828645571446,
+          "c1_best_layer": 46,
+          "c1_log_rank": 9.99104044954399,
+          "c1_minimum_rank": 21830,
+          "c1_minus_c0_log_rank": 1.552241325555764,
+          "c1_minus_c0_rank": 17207,
+          "c1_minus_c0_utility_u": -0.12495428736952996,
+          "c1_utility_u": 0.19572857718761466,
+          "concept_id": "task-08-concept-00",
+          "family": "hunk_symbol",
+          "instance_id": "astropy__astropy-14598",
+          "paired_scorable": true,
+          "path": "astropy/io/fits/card.py",
+          "repo": "astropy/astropy",
+          "target": "_split"
+        },
+        {
+          "c0_best_layer": 39,
+          "c0_log_rank": 11.45539168657217,
+          "c0_minimum_rank": 94409,
+          "c0_utility_u": 0.07784937743365049,
+          "c1_best_layer": 45,
+          "c1_log_rank": 12.188926486695204,
+          "c1_minimum_rank": 196600,
+          "c1_minus_c0_log_rank": 0.7335348001230333,
+          "c1_minus_c0_rank": 102191,
+          "c1_minus_c0_utility_u": -0.05904901299886908,
+          "c1_utility_u": 0.018800364434781405,
+          "concept_id": "task-09-concept-00",
+          "family": "hunk_symbol",
+          "instance_id": "pytest-dev__pytest-7571",
+          "paired_scorable": true,
+          "path": "src/_pytest/logging.py",
+          "repo": "pytest-dev/pytest",
+          "target": "_finalize"
+        }
+      ],
+      "tasks": [
+        {
+          "c0_mean_log_rank": 9.98594273247232,
+          "c0_utility_u": 0.19613893967018406,
+          "c1_mean_log_rank": 9.384713758920963,
+          "c1_minus_c0_log_rank": -0.6012289735513576,
+          "c1_minus_c0_utility_u": 0.048398491071693195,
+          "c1_utility_u": 0.24453743074187725,
+          "families": [
+            {
+              "c0_mean_log_rank": 9.98594273247232,
+              "c0_utility_u": 0.19613893967018406,
+              "c1_mean_log_rank": 9.384713758920963,
+              "c1_utility_u": 0.24453743074187725,
+              "family": "hunk_symbol",
+              "paired_concept_count": 1
+            }
+          ],
+          "instance_id": "pydata__xarray-6938",
+          "paired_concept_count": 1,
+          "paired_family_count": 1,
+          "repo": "pydata/xarray"
+        },
+        {
+          "c0_mean_log_rank": 5.8944028342648505,
+          "c0_utility_u": 0.5255048983051688,
+          "c1_mean_log_rank": 7.1180162044653335,
+          "c1_minus_c0_log_rank": 1.223613370200483,
+          "c1_minus_c0_utility_u": -0.09849997817477735,
+          "c1_utility_u": 0.42700492013039143,
+          "families": [
+            {
+              "c0_mean_log_rank": 5.8944028342648505,
+              "c0_utility_u": 0.5255048983051688,
+              "c1_mean_log_rank": 7.1180162044653335,
+              "c1_utility_u": 0.42700492013039143,
+              "family": "replacement",
+              "paired_concept_count": 1
+            }
+          ],
+          "instance_id": "scikit-learn__scikit-learn-9288",
+          "paired_concept_count": 1,
+          "paired_family_count": 1,
+          "repo": "scikit-learn/scikit-learn"
+        },
+        {
+          "c0_mean_log_rank": 6.834108738813838,
+          "c0_utility_u": 0.4498592627286148,
+          "c1_mean_log_rank": 10.706161557623316,
+          "c1_minus_c0_log_rank": 3.872052818809478,
+          "c1_minus_c0_utility_u": -0.31169740984591277,
+          "c1_utility_u": 0.13816185288270205,
+          "families": [
+            {
+              "c0_mean_log_rank": 6.834108738813838,
+              "c0_utility_u": 0.4498592627286148,
+              "c1_mean_log_rank": 10.706161557623316,
+              "c1_utility_u": 0.13816185288270205,
+              "family": "replacement",
+              "paired_concept_count": 1
+            }
+          ],
+          "instance_id": "django__django-13297",
+          "paired_concept_count": 1,
+          "paired_family_count": 1,
+          "repo": "django/django"
+        },
+        {
+          "c0_mean_log_rank": 6.672032945461067,
+          "c0_utility_u": 0.4629062451306557,
+          "c1_mean_log_rank": 5.429345628954441,
+          "c1_minus_c0_log_rank": -1.2426873165066263,
+          "c1_minus_c0_utility_u": 0.10003541685223649,
+          "c1_utility_u": 0.5629416619828922,
+          "families": [
+            {
+              "c0_mean_log_rank": 6.672032945461067,
+              "c0_utility_u": 0.4629062451306557,
+              "c1_mean_log_rank": 5.429345628954441,
+              "c1_utility_u": 0.5629416619828922,
+              "family": "replacement",
+              "paired_concept_count": 1
+            }
+          ],
+          "instance_id": "sympy__sympy-21847",
+          "paired_concept_count": 1,
+          "paired_family_count": 1,
+          "repo": "sympy/sympy"
+        },
+        {
+          "c0_mean_log_rank": 9.54698978128516,
+          "c0_utility_u": 0.23147433005138376,
+          "c1_mean_log_rank": 8.671360110979764,
+          "c1_minus_c0_log_rank": -0.8756296703053952,
+          "c1_minus_c0_utility_u": 0.07048754575159419,
+          "c1_utility_u": 0.30196187580297795,
+          "families": [
+            {
+              "c0_mean_log_rank": 8.02322468471667,
+              "c0_utility_u": 0.354136301888854,
+              "c1_mean_log_rank": 6.976348070447749,
+              "c1_utility_u": 0.4384091009350742,
+              "family": "hunk_symbol",
+              "paired_concept_count": 1
+            },
+            {
+              "c0_mean_log_rank": 11.070754877853648,
+              "c0_utility_u": 0.10881235821391357,
+              "c1_mean_log_rank": 10.36637215151178,
+              "c1_utility_u": 0.16551465067088178,
+              "family": "file_stem",
+              "paired_concept_count": 1
+            }
+          ],
+          "instance_id": "pylint-dev__pylint-4551",
+          "paired_concept_count": 2,
+          "paired_family_count": 2,
+          "repo": "pylint-dev/pylint"
+        },
+        {
+          "c0_mean_log_rank": 8.635687085464026,
+          "c0_utility_u": 0.3048335281731647,
+          "c1_mean_log_rank": 10.278733974060291,
+          "c1_minus_c0_log_rank": 1.643046888596265,
+          "c1_minus_c0_utility_u": -0.1322640685434413,
+          "c1_utility_u": 0.17256945962972342,
+          "families": [
+            {
+              "c0_mean_log_rank": 8.635687085464026,
+              "c0_utility_u": 0.3048335281731647,
+              "c1_mean_log_rank": 10.278733974060291,
+              "c1_utility_u": 0.17256945962972342,
+              "family": "hunk_symbol",
+              "paired_concept_count": 1
+            }
+          ],
+          "instance_id": "sphinx-doc__sphinx-8638",
+          "paired_concept_count": 1,
+          "paired_family_count": 1,
+          "repo": "sphinx-doc/sphinx"
+        },
+        {
+          "c0_mean_log_rank": 8.438799123988225,
+          "c0_utility_u": 0.3206828645571446,
+          "c1_mean_log_rank": 9.99104044954399,
+          "c1_minus_c0_log_rank": 1.552241325555764,
+          "c1_minus_c0_utility_u": -0.12495428736952996,
+          "c1_utility_u": 0.19572857718761466,
+          "families": [
+            {
+              "c0_mean_log_rank": 8.438799123988225,
+              "c0_utility_u": 0.3206828645571446,
+              "c1_mean_log_rank": 9.99104044954399,
+              "c1_utility_u": 0.19572857718761466,
+              "family": "hunk_symbol",
+              "paired_concept_count": 1
+            }
+          ],
+          "instance_id": "astropy__astropy-14598",
+          "paired_concept_count": 1,
+          "paired_family_count": 1,
+          "repo": "astropy/astropy"
+        },
+        {
+          "c0_mean_log_rank": 11.45539168657217,
+          "c0_utility_u": 0.07784937743365049,
+          "c1_mean_log_rank": 12.188926486695204,
+          "c1_minus_c0_log_rank": 0.7335348001230333,
+          "c1_minus_c0_utility_u": -0.05904901299886908,
+          "c1_utility_u": 0.018800364434781405,
+          "families": [
+            {
+              "c0_mean_log_rank": 11.45539168657217,
+              "c0_utility_u": 0.07784937743365049,
+              "c1_mean_log_rank": 12.188926486695204,
+              "c1_utility_u": 0.018800364434781405,
+              "family": "hunk_symbol",
+              "paired_concept_count": 1
+            }
+          ],
+          "instance_id": "pytest-dev__pytest-7571",
+          "paired_concept_count": 1,
+          "paired_family_count": 1,
+          "repo": "pytest-dev/pytest"
+        }
+      ]
+    },
+    "native_jacobian": {
+      "geometric_mean_rank": {
+        "c0_task_macro": 4864.014971100059,
+        "c1_task_macro": 6991.994257161839,
+        "c1_to_c0_ratio": 1.4374943947963448,
+        "ratio_confidence_interval": {
+          "confidence_level": 0.95,
+          "derived_from": "paired task bootstrap of C1-minus-C0 mean log rank",
+          "lower": 0.4916922120972684,
+          "upper": 4.6191149707569865
+        }
+      },
+      "matching": {
+        "c0_available_task_count": 8,
+        "c1_retained_task_count": 8,
+        "paired_metric_task_count": 8,
+        "paired_scorable_concept_count": 9,
+        "retained_c1_concept_count": 9,
+        "unscorable_exclusions": []
+      },
+      "mean_log_rank": {
+        "c0_task_macro": 8.489619501581245,
+        "c1_minus_c0": 0.3629015944096583,
+        "c1_task_macro": 8.852521095990904,
+        "paired_task_bootstrap": {
+          "confidence_interval": {
+            "confidence_level": 0.95,
+            "lower": -0.7099023434180313,
+            "upper": 1.530203121971558
+          },
+          "direction": "lower_is_better",
+          "estimate": 0.3629015944096591,
+          "method": "deterministic paired task-level percentile bootstrap",
+          "negative_task_count": 4,
+          "positive_task_count": 4,
+          "samples": 20000,
+          "sampling_unit": "retained SWE-Verified task",
+          "seed": 1867382091,
+          "task_count": 8,
+          "tie_task_count": 0
+        }
+      },
+      "normalized_utility_u": {
+        "c0_task_macro": 0.3165918614628207,
+        "c1_minus_c0": -0.029213311981942935,
+        "c1_task_macro": 0.28737854948087777,
+        "paired_task_bootstrap": {
+          "confidence_interval": {
+            "confidence_level": 0.95,
+            "lower": -0.12369916909217316,
+            "upper": 0.05572767975815481
+          },
+          "direction": "higher_is_better",
+          "estimate": -0.029213311981942925,
+          "method": "deterministic paired task-level percentile bootstrap",
+          "negative_task_count": 4,
+          "positive_task_count": 4,
+          "samples": 20000,
+          "sampling_unit": "retained SWE-Verified task",
+          "seed": 3675555718,
+          "task_count": 8,
+          "tie_task_count": 0
+        }
+      },
+      "per_concept_ranks": [
+        {
+          "c0_best_layer": 16,
+          "c0_log_rank": 11.32688500160752,
+          "c0_minimum_rank": 83024,
+          "c0_utility_u": 0.08819407125001266,
+          "c1_best_layer": 16,
+          "c1_log_rank": 10.23444460846923,
+          "c1_minimum_rank": 27846,
+          "c1_minus_c0_log_rank": -1.0924403931382898,
+          "c1_minus_c0_rank": -55178,
+          "c1_minus_c0_utility_u": 0.0879406498016086,
+          "c1_utility_u": 0.17613472105162126,
+          "concept_id": "task-00-concept-01",
+          "family": "hunk_symbol",
+          "instance_id": "pydata__xarray-6938",
+          "paired_scorable": true,
+          "path": "xarray/core/variable.py",
+          "repo": "pydata/xarray",
+          "target": "equals"
+        },
+        {
+          "c0_best_layer": 45,
+          "c0_log_rank": 7.745002803515839,
+          "c0_minimum_rank": 2310,
+          "c0_utility_u": 0.3765329591119907,
+          "c1_best_layer": 23,
+          "c1_log_rank": 9.070503426788383,
+          "c1_minimum_rank": 8695,
+          "c1_minus_c0_log_rank": 1.3255006232725437,
+          "c1_minus_c0_rank": 6385,
+          "c1_minus_c0_utility_u": -0.10670182726232175,
+          "c1_utility_u": 0.26983113184966895,
+          "concept_id": "task-01-concept-00",
+          "family": "replacement",
+          "instance_id": "scikit-learn__scikit-learn-9288",
+          "paired_scorable": true,
+          "path": "sklearn/cluster/k_means_.py",
+          "repo": "scikit-learn/scikit-learn",
+          "target": "seed"
+        },
+        {
+          "c0_best_layer": 41,
+          "c0_log_rank": 6.408528791059498,
+          "c0_minimum_rank": 607,
+          "c0_utility_u": 0.48411813614919297,
+          "c1_best_layer": 16,
+          "c1_log_rank": 5.342334251964811,
+          "c1_minimum_rank": 209,
+          "c1_minus_c0_log_rank": -1.0661945390946874,
+          "c1_minus_c0_rank": -398,
+          "c1_minus_c0_utility_u": 0.08582787781542989,
+          "c1_utility_u": 0.5699460139646229,
+          "concept_id": "task-02-concept-00",
+          "family": "replacement",
+          "instance_id": "django__django-13297",
+          "paired_scorable": true,
+          "path": "django/views/generic/base.py",
+          "repo": "django/django",
+          "target": "lazy"
+        },
+        {
+          "c0_best_layer": 28,
+          "c0_log_rank": 7.404887575616125,
+          "c0_minimum_rank": 1644,
+          "c0_utility_u": 0.4039119853149671,
+          "c1_best_layer": 20,
+          "c1_log_rank": 8.281723990411392,
+          "c1_minimum_rank": 3951,
+          "c1_minus_c0_log_rank": 0.8768364147952665,
+          "c1_minus_c0_rank": 2307,
+          "c1_minus_c0_utility_u": -0.07058468779728405,
+          "c1_utility_u": 0.33332729751768303,
+          "concept_id": "task-03-concept-00",
+          "family": "replacement",
+          "instance_id": "sympy__sympy-21847",
+          "paired_scorable": true,
+          "path": "sympy/polys/monomials.py",
+          "repo": "sympy/sympy",
+          "target": "sum"
+        },
+        {
+          "c0_best_layer": 30,
+          "c0_log_rank": 10.668466903290184,
+          "c0_minimum_rank": 42979,
+          "c0_utility_u": 0.1411962448888231,
+          "c1_best_layer": 38,
+          "c1_log_rank": 8.682029433869172,
+          "c1_minimum_rank": 5896,
+          "c1_minus_c0_log_rank": -1.9864374694210127,
+          "c1_minus_c0_rank": -37083,
+          "c1_minus_c0_utility_u": 0.15990675825278944,
+          "c1_utility_u": 0.30110300314161254,
+          "concept_id": "task-04-concept-00",
+          "family": "hunk_symbol",
+          "instance_id": "pylint-dev__pylint-4551",
+          "paired_scorable": true,
+          "path": "pylint/pyreverse/utils.py",
+          "repo": "pylint-dev/pylint",
+          "target": "visit"
+        },
+        {
+          "c0_best_layer": 29,
+          "c0_log_rank": 9.406564833939129,
+          "c0_minimum_rank": 12168,
+          "c0_utility_u": 0.24277843524149947,
+          "c1_best_layer": 16,
+          "c1_log_rank": 9.740556773534106,
+          "c1_minimum_rank": 16993,
+          "c1_minus_c0_log_rank": 0.3339919395949771,
+          "c1_minus_c0_rank": 4825,
+          "c1_minus_c0_utility_u": -0.026886105988909337,
+          "c1_utility_u": 0.21589232925259014,
+          "concept_id": "task-04-concept-01",
+          "family": "file_stem",
+          "instance_id": "pylint-dev__pylint-4551",
+          "paired_scorable": true,
+          "path": "pylint/pyreverse/inspector.py",
+          "repo": "pylint-dev/pylint",
+          "target": "inspector"
+        },
+        {
+          "c0_best_layer": 46,
+          "c0_log_rank": 7.790696031174738,
+          "c0_minimum_rank": 2418,
+          "c0_utility_u": 0.37285468782405995,
+          "c1_best_layer": 46,
+          "c1_log_rank": 11.383374710511184,
+          "c1_minimum_rank": 87849,
+          "c1_minus_c0_log_rank": 3.592678679336446,
+          "c1_minus_c0_rank": 85431,
+          "c1_minus_c0_utility_u": -0.28920799667761604,
+          "c1_utility_u": 0.08364669114644391,
+          "concept_id": "task-05-concept-00",
+          "family": "hunk_symbol",
+          "instance_id": "sphinx-doc__sphinx-8638",
+          "paired_scorable": true,
+          "path": "sphinx/domains/python.py",
+          "repo": "sphinx-doc/sphinx",
+          "target": "PyObject"
+        },
+        {
+          "c0_best_layer": 38,
+          "c0_log_rank": 6.790097235513905,
+          "c0_minimum_rank": 889,
+          "c0_utility_u": 0.45340215644002657,
+          "c1_best_layer": 46,
+          "c1_log_rank": 8.021584533455107,
+          "c1_minimum_rank": 3046,
+          "c1_minus_c0_log_rank": 1.231487297941202,
+          "c1_minus_c0_rank": 2157,
+          "c1_minus_c0_utility_u": -0.09913382357848,
+          "c1_utility_u": 0.3542683328615466,
+          "concept_id": "task-08-concept-00",
+          "family": "hunk_symbol",
+          "instance_id": "astropy__astropy-14598",
+          "paired_scorable": true,
+          "path": "astropy/io/fits/card.py",
+          "repo": "astropy/astropy",
+          "target": "_split"
+        },
+        {
+          "c0_best_layer": 22,
+          "c0_log_rank": 10.413342705547674,
+          "c0_minimum_rank": 33301,
+          "c0_utility_u": 0.16173355554715432,
+          "c1_best_layer": 31,
+          "c1_log_rank": 9.274910142625483,
+          "c1_minimum_rank": 10667,
+          "c1_minus_c0_log_rank": -1.1384325629221905,
+          "c1_minus_c0_rank": -22634,
+          "c1_minus_c0_utility_u": 0.09164298571117988,
+          "c1_utility_u": 0.2533765412583342,
+          "concept_id": "task-09-concept-00",
+          "family": "hunk_symbol",
+          "instance_id": "pytest-dev__pytest-7571",
+          "paired_scorable": true,
+          "path": "src/_pytest/logging.py",
+          "repo": "pytest-dev/pytest",
+          "target": "_finalize"
+        }
+      ],
+      "tasks": [
+        {
+          "c0_mean_log_rank": 11.32688500160752,
+          "c0_utility_u": 0.08819407125001266,
+          "c1_mean_log_rank": 10.23444460846923,
+          "c1_minus_c0_log_rank": -1.0924403931382898,
+          "c1_minus_c0_utility_u": 0.0879406498016086,
+          "c1_utility_u": 0.17613472105162126,
+          "families": [
+            {
+              "c0_mean_log_rank": 11.32688500160752,
+              "c0_utility_u": 0.08819407125001266,
+              "c1_mean_log_rank": 10.23444460846923,
+              "c1_utility_u": 0.17613472105162126,
+              "family": "hunk_symbol",
+              "paired_concept_count": 1
+            }
+          ],
+          "instance_id": "pydata__xarray-6938",
+          "paired_concept_count": 1,
+          "paired_family_count": 1,
+          "repo": "pydata/xarray"
+        },
+        {
+          "c0_mean_log_rank": 7.745002803515839,
+          "c0_utility_u": 0.3765329591119907,
+          "c1_mean_log_rank": 9.070503426788383,
+          "c1_minus_c0_log_rank": 1.3255006232725437,
+          "c1_minus_c0_utility_u": -0.10670182726232175,
+          "c1_utility_u": 0.26983113184966895,
+          "families": [
+            {
+              "c0_mean_log_rank": 7.745002803515839,
+              "c0_utility_u": 0.3765329591119907,
+              "c1_mean_log_rank": 9.070503426788383,
+              "c1_utility_u": 0.26983113184966895,
+              "family": "replacement",
+              "paired_concept_count": 1
+            }
+          ],
+          "instance_id": "scikit-learn__scikit-learn-9288",
+          "paired_concept_count": 1,
+          "paired_family_count": 1,
+          "repo": "scikit-learn/scikit-learn"
+        },
+        {
+          "c0_mean_log_rank": 6.408528791059498,
+          "c0_utility_u": 0.48411813614919297,
+          "c1_mean_log_rank": 5.342334251964811,
+          "c1_minus_c0_log_rank": -1.0661945390946874,
+          "c1_minus_c0_utility_u": 0.08582787781542989,
+          "c1_utility_u": 0.5699460139646229,
+          "families": [
+            {
+              "c0_mean_log_rank": 6.408528791059498,
+              "c0_utility_u": 0.48411813614919297,
+              "c1_mean_log_rank": 5.342334251964811,
+              "c1_utility_u": 0.5699460139646229,
+              "family": "replacement",
+              "paired_concept_count": 1
+            }
+          ],
+          "instance_id": "django__django-13297",
+          "paired_concept_count": 1,
+          "paired_family_count": 1,
+          "repo": "django/django"
+        },
+        {
+          "c0_mean_log_rank": 7.404887575616125,
+          "c0_utility_u": 0.4039119853149671,
+          "c1_mean_log_rank": 8.281723990411392,
+          "c1_minus_c0_log_rank": 0.8768364147952665,
+          "c1_minus_c0_utility_u": -0.07058468779728405,
+          "c1_utility_u": 0.33332729751768303,
+          "families": [
+            {
+              "c0_mean_log_rank": 7.404887575616125,
+              "c0_utility_u": 0.4039119853149671,
+              "c1_mean_log_rank": 8.281723990411392,
+              "c1_utility_u": 0.33332729751768303,
+              "family": "replacement",
+              "paired_concept_count": 1
+            }
+          ],
+          "instance_id": "sympy__sympy-21847",
+          "paired_concept_count": 1,
+          "paired_family_count": 1,
+          "repo": "sympy/sympy"
+        },
+        {
+          "c0_mean_log_rank": 10.037515868614657,
+          "c0_utility_u": 0.19198734006516127,
+          "c1_mean_log_rank": 9.211293103701639,
+          "c1_minus_c0_log_rank": -0.8262227649130178,
+          "c1_minus_c0_utility_u": 0.06651032613194008,
+          "c1_utility_u": 0.25849766619710135,
+          "families": [
+            {
+              "c0_mean_log_rank": 10.668466903290184,
+              "c0_utility_u": 0.1411962448888231,
+              "c1_mean_log_rank": 8.682029433869172,
+              "c1_utility_u": 0.30110300314161254,
+              "family": "hunk_symbol",
+              "paired_concept_count": 1
+            },
+            {
+              "c0_mean_log_rank": 9.406564833939129,
+              "c0_utility_u": 0.24277843524149947,
+              "c1_mean_log_rank": 9.740556773534106,
+              "c1_utility_u": 0.21589232925259014,
+              "family": "file_stem",
+              "paired_concept_count": 1
+            }
+          ],
+          "instance_id": "pylint-dev__pylint-4551",
+          "paired_concept_count": 2,
+          "paired_family_count": 2,
+          "repo": "pylint-dev/pylint"
+        },
+        {
+          "c0_mean_log_rank": 7.790696031174738,
+          "c0_utility_u": 0.37285468782405995,
+          "c1_mean_log_rank": 11.383374710511184,
+          "c1_minus_c0_log_rank": 3.592678679336446,
+          "c1_minus_c0_utility_u": -0.28920799667761604,
+          "c1_utility_u": 0.08364669114644391,
+          "families": [
+            {
+              "c0_mean_log_rank": 7.790696031174738,
+              "c0_utility_u": 0.37285468782405995,
+              "c1_mean_log_rank": 11.383374710511184,
+              "c1_utility_u": 0.08364669114644391,
+              "family": "hunk_symbol",
+              "paired_concept_count": 1
+            }
+          ],
+          "instance_id": "sphinx-doc__sphinx-8638",
+          "paired_concept_count": 1,
+          "paired_family_count": 1,
+          "repo": "sphinx-doc/sphinx"
+        },
+        {
+          "c0_mean_log_rank": 6.790097235513905,
+          "c0_utility_u": 0.45340215644002657,
+          "c1_mean_log_rank": 8.021584533455107,
+          "c1_minus_c0_log_rank": 1.231487297941202,
+          "c1_minus_c0_utility_u": -0.09913382357848,
+          "c1_utility_u": 0.3542683328615466,
+          "families": [
+            {
+              "c0_mean_log_rank": 6.790097235513905,
+              "c0_utility_u": 0.45340215644002657,
+              "c1_mean_log_rank": 8.021584533455107,
+              "c1_utility_u": 0.3542683328615466,
+              "family": "hunk_symbol",
+              "paired_concept_count": 1
+            }
+          ],
+          "instance_id": "astropy__astropy-14598",
+          "paired_concept_count": 1,
+          "paired_family_count": 1,
+          "repo": "astropy/astropy"
+        },
+        {
+          "c0_mean_log_rank": 10.413342705547674,
+          "c0_utility_u": 0.16173355554715432,
+          "c1_mean_log_rank": 9.274910142625483,
+          "c1_minus_c0_log_rank": -1.1384325629221905,
+          "c1_minus_c0_utility_u": 0.09164298571117988,
+          "c1_utility_u": 0.2533765412583342,
+          "families": [
+            {
+              "c0_mean_log_rank": 10.413342705547674,
+              "c0_utility_u": 0.16173355554715432,
+              "c1_mean_log_rank": 9.274910142625483,
+              "c1_utility_u": 0.2533765412583342,
+              "family": "hunk_symbol",
+              "paired_concept_count": 1
+            }
+          ],
+          "instance_id": "pytest-dev__pytest-7571",
+          "paired_concept_count": 1,
+          "paired_family_count": 1,
+          "repo": "pytest-dev/pytest"
+        }
+      ]
+    },
+    "public_jacobian": {
+      "geometric_mean_rank": {
+        "c0_task_macro": 5518.655398193717,
+        "c1_task_macro": 9527.253942484153,
+        "c1_to_c0_ratio": 1.7263723235196875,
+        "ratio_confidence_interval": {
+          "confidence_level": 0.95,
+          "derived_from": "paired task bootstrap of C1-minus-C0 mean log rank",
+          "lower": 0.5265290792597516,
+          "upper": 5.764925438110786
+        }
+      },
+      "matching": {
+        "c0_available_task_count": 8,
+        "c1_retained_task_count": 8,
+        "paired_metric_task_count": 8,
+        "paired_scorable_concept_count": 9,
+        "retained_c1_concept_count": 9,
+        "unscorable_exclusions": []
+      },
+      "mean_log_rank": {
+        "c0_task_macro": 8.615889522315193,
+        "c1_minus_c0": 0.5460222840677478,
+        "c1_task_macro": 9.16191180638294,
+        "paired_task_bootstrap": {
+          "confidence_interval": {
+            "confidence_level": 0.95,
+            "lower": -0.6414487176707109,
+            "upper": 1.7517922200919862
+          },
+          "direction": "lower_is_better",
+          "estimate": 0.5460222840677486,
+          "method": "deterministic paired task-level percentile bootstrap",
+          "negative_task_count": 2,
+          "positive_task_count": 6,
+          "samples": 20000,
+          "sampling_unit": "retained SWE-Verified task",
+          "seed": 1104687230,
+          "task_count": 8,
+          "tie_task_count": 0
+        }
+      },
+      "normalized_utility_u": {
+        "c0_task_macro": 0.30642721747532914,
+        "c1_minus_c0": -0.043954393089708665,
+        "c1_task_macro": 0.2624728243856205,
+        "paired_task_bootstrap": {
+          "confidence_interval": {
+            "confidence_level": 0.95,
+            "lower": -0.14013609375572333,
+            "upper": 0.05564523766067421
+          },
+          "direction": "higher_is_better",
+          "estimate": -0.04395439308970869,
+          "method": "deterministic paired task-level percentile bootstrap",
+          "negative_task_count": 6,
+          "positive_task_count": 2,
+          "samples": 20000,
+          "sampling_unit": "retained SWE-Verified task",
+          "seed": 3686237730,
+          "task_count": 8,
+          "tie_task_count": 0
+        }
+      },
+      "per_concept_ranks": [
+        {
+          "c0_best_layer": 47,
+          "c0_log_rank": 11.268979536776724,
+          "c0_minimum_rank": 78353,
+          "c0_utility_u": 0.09285541866655754,
+          "c1_best_layer": 16,
+          "c1_log_rank": 9.648466262323895,
+          "c1_minimum_rank": 15498,
+          "c1_minus_c0_log_rank": -1.6205132744528292,
+          "c1_minus_c0_rank": -62855,
+          "c1_minus_c0_utility_u": 0.1304501291444597,
+          "c1_utility_u": 0.22330554781101725,
+          "concept_id": "task-00-concept-01",
+          "family": "hunk_symbol",
+          "instance_id": "pydata__xarray-6938",
+          "paired_scorable": true,
+          "path": "xarray/core/variable.py",
+          "repo": "pydata/xarray",
+          "target": "equals"
+        },
+        {
+          "c0_best_layer": 46,
+          "c0_log_rank": 7.739794458408701,
+          "c0_minimum_rank": 2298,
+          "c0_utility_u": 0.3769522270702149,
+          "c1_best_layer": 17,
+          "c1_log_rank": 9.0410929746695,
+          "c1_minimum_rank": 8443,
+          "c1_minus_c0_log_rank": 1.3012985162607986,
+          "c1_minus_c0_rank": 6145,
+          "c1_minus_c0_utility_u": -0.10475357541210711,
+          "c1_utility_u": 0.2721986516581078,
+          "concept_id": "task-01-concept-00",
+          "family": "replacement",
+          "instance_id": "scikit-learn__scikit-learn-9288",
+          "paired_scorable": true,
+          "path": "sklearn/cluster/k_means_.py",
+          "repo": "scikit-learn/scikit-learn",
+          "target": "seed"
+        },
+        {
+          "c0_best_layer": 40,
+          "c0_log_rank": 6.782192056006791,
+          "c0_minimum_rank": 882,
+          "c0_utility_u": 0.4540385175879852,
+          "c1_best_layer": 16,
+          "c1_log_rank": 6.949856455000773,
+          "c1_minimum_rank": 1043,
+          "c1_minus_c0_log_rank": 0.16766439899398122,
+          "c1_minus_c0_rank": 161,
+          "c1_minus_c0_utility_u": -0.01349686105414849,
+          "c1_utility_u": 0.4405416565338367,
+          "concept_id": "task-02-concept-00",
+          "family": "replacement",
+          "instance_id": "django__django-13297",
+          "paired_scorable": true,
+          "path": "django/views/generic/base.py",
+          "repo": "django/django",
+          "target": "lazy"
+        },
+        {
+          "c0_best_layer": 28,
+          "c0_log_rank": 7.6676260915849905,
+          "c0_minimum_rank": 2138,
+          "c0_utility_u": 0.38276172762828753,
+          "c1_best_layer": 20,
+          "c1_log_rank": 9.085910293598007,
+          "c1_minimum_rank": 8830,
+          "c1_minus_c0_log_rank": 1.418284202013016,
+          "c1_minus_c0_rank": 6692,
+          "c1_minus_c0_utility_u": -0.11417083724822663,
+          "c1_utility_u": 0.2685908903800609,
+          "concept_id": "task-03-concept-00",
+          "family": "replacement",
+          "instance_id": "sympy__sympy-21847",
+          "paired_scorable": true,
+          "path": "sympy/polys/monomials.py",
+          "repo": "sympy/sympy",
+          "target": "sum"
+        },
+        {
+          "c0_best_layer": 29,
+          "c0_log_rank": 10.388102662282032,
+          "c0_minimum_rank": 32471,
+          "c0_utility_u": 0.16376536050396742,
+          "c1_best_layer": 38,
+          "c1_log_rank": 7.4318919168078,
+          "c1_minimum_rank": 1689,
+          "c1_minus_c0_log_rank": -2.956210745474232,
+          "c1_minus_c0_rank": -30782,
+          "c1_minus_c0_utility_u": 0.23797279516612715,
+          "c1_utility_u": 0.4017381556700946,
+          "concept_id": "task-04-concept-00",
+          "family": "hunk_symbol",
+          "instance_id": "pylint-dev__pylint-4551",
+          "paired_scorable": true,
+          "path": "pylint/pyreverse/utils.py",
+          "repo": "pylint-dev/pylint",
+          "target": "visit"
+        },
+        {
+          "c0_best_layer": 30,
+          "c0_log_rank": 11.694963648284377,
+          "c0_minimum_rank": 119966,
+          "c0_utility_u": 0.05856401036049196,
+          "c1_best_layer": 43,
+          "c1_log_rank": 10.19585861447404,
+          "c1_minimum_rank": 26792,
+          "c1_minus_c0_log_rank": -1.499105033810336,
+          "c1_minus_c0_rank": -93174,
+          "c1_minus_c0_utility_u": 0.12067685488580707,
+          "c1_utility_u": 0.17924086524629904,
+          "concept_id": "task-04-concept-01",
+          "family": "file_stem",
+          "instance_id": "pylint-dev__pylint-4551",
+          "paired_scorable": true,
+          "path": "pylint/pyreverse/inspector.py",
+          "repo": "pylint-dev/pylint",
+          "target": "inspector"
+        },
+        {
+          "c0_best_layer": 46,
+          "c0_log_rank": 7.9603236291488395,
+          "c0_minimum_rank": 2865,
+          "c0_utility_u": 0.3591997906929903,
+          "c1_best_layer": 46,
+          "c1_log_rank": 11.709585400805462,
+          "c1_minimum_rank": 121733,
+          "c1_minus_c0_log_rank": 3.7492617716566228,
+          "c1_minus_c0_rank": 118868,
+          "c1_minus_c0_utility_u": -0.3018128206781492,
+          "c1_utility_u": 0.05738697001484108,
+          "concept_id": "task-05-concept-00",
+          "family": "hunk_symbol",
+          "instance_id": "sphinx-doc__sphinx-8638",
+          "paired_scorable": true,
+          "path": "sphinx/domains/python.py",
+          "repo": "sphinx-doc/sphinx",
+          "target": "PyObject"
+        },
+        {
+          "c0_best_layer": 38,
+          "c0_log_rank": 7.720905251936779,
+          "c0_minimum_rank": 2255,
+          "c0_utility_u": 0.37847279432661746,
+          "c1_best_layer": 46,
+          "c1_log_rank": 8.74687531957003,
+          "c1_minimum_rank": 6291,
+          "c1_minus_c0_log_rank": 1.025970067633251,
+          "c1_minus_c0_rank": 4036,
+          "c1_minus_c0_utility_u": -0.08258983738735398,
+          "c1_utility_u": 0.2958829569392635,
+          "concept_id": "task-08-concept-00",
+          "family": "hunk_symbol",
+          "instance_id": "astropy__astropy-14598",
+          "paired_scorable": true,
+          "path": "astropy/io/fits/card.py",
+          "repo": "astropy/astropy",
+          "target": "_split"
+        },
+        {
+          "c0_best_layer": 25,
+          "c0_log_rank": 8.745761999375512,
+          "c0_minimum_rank": 6284,
+          "c0_utility_u": 0.29597257839775054,
+          "c1_best_layer": 25,
+          "c1_log_rank": 9.299632479454944,
+          "c1_minimum_rank": 10934,
+          "c1_minus_c0_log_rank": 0.5538704800794321,
+          "c1_minus_c0_rank": 4650,
+          "c1_minus_c0_utility_u": -0.044586167108110974,
+          "c1_utility_u": 0.25138641128963957,
+          "concept_id": "task-09-concept-00",
+          "family": "hunk_symbol",
+          "instance_id": "pytest-dev__pytest-7571",
+          "paired_scorable": true,
+          "path": "src/_pytest/logging.py",
+          "repo": "pytest-dev/pytest",
+          "target": "_finalize"
+        }
+      ],
+      "tasks": [
+        {
+          "c0_mean_log_rank": 11.268979536776724,
+          "c0_utility_u": 0.09285541866655754,
+          "c1_mean_log_rank": 9.648466262323895,
+          "c1_minus_c0_log_rank": -1.6205132744528292,
+          "c1_minus_c0_utility_u": 0.1304501291444597,
+          "c1_utility_u": 0.22330554781101725,
+          "families": [
+            {
+              "c0_mean_log_rank": 11.268979536776724,
+              "c0_utility_u": 0.09285541866655754,
+              "c1_mean_log_rank": 9.648466262323895,
+              "c1_utility_u": 0.22330554781101725,
+              "family": "hunk_symbol",
+              "paired_concept_count": 1
+            }
+          ],
+          "instance_id": "pydata__xarray-6938",
+          "paired_concept_count": 1,
+          "paired_family_count": 1,
+          "repo": "pydata/xarray"
+        },
+        {
+          "c0_mean_log_rank": 7.739794458408701,
+          "c0_utility_u": 0.3769522270702149,
+          "c1_mean_log_rank": 9.0410929746695,
+          "c1_minus_c0_log_rank": 1.3012985162607986,
+          "c1_minus_c0_utility_u": -0.10475357541210711,
+          "c1_utility_u": 0.2721986516581078,
+          "families": [
+            {
+              "c0_mean_log_rank": 7.739794458408701,
+              "c0_utility_u": 0.3769522270702149,
+              "c1_mean_log_rank": 9.0410929746695,
+              "c1_utility_u": 0.2721986516581078,
+              "family": "replacement",
+              "paired_concept_count": 1
+            }
+          ],
+          "instance_id": "scikit-learn__scikit-learn-9288",
+          "paired_concept_count": 1,
+          "paired_family_count": 1,
+          "repo": "scikit-learn/scikit-learn"
+        },
+        {
+          "c0_mean_log_rank": 6.782192056006791,
+          "c0_utility_u": 0.4540385175879852,
+          "c1_mean_log_rank": 6.949856455000773,
+          "c1_minus_c0_log_rank": 0.16766439899398122,
+          "c1_minus_c0_utility_u": -0.01349686105414849,
+          "c1_utility_u": 0.4405416565338367,
+          "families": [
+            {
+              "c0_mean_log_rank": 6.782192056006791,
+              "c0_utility_u": 0.4540385175879852,
+              "c1_mean_log_rank": 6.949856455000773,
+              "c1_utility_u": 0.4405416565338367,
+              "family": "replacement",
+              "paired_concept_count": 1
+            }
+          ],
+          "instance_id": "django__django-13297",
+          "paired_concept_count": 1,
+          "paired_family_count": 1,
+          "repo": "django/django"
+        },
+        {
+          "c0_mean_log_rank": 7.6676260915849905,
+          "c0_utility_u": 0.38276172762828753,
+          "c1_mean_log_rank": 9.085910293598007,
+          "c1_minus_c0_log_rank": 1.418284202013016,
+          "c1_minus_c0_utility_u": -0.11417083724822663,
+          "c1_utility_u": 0.2685908903800609,
+          "families": [
+            {
+              "c0_mean_log_rank": 7.6676260915849905,
+              "c0_utility_u": 0.38276172762828753,
+              "c1_mean_log_rank": 9.085910293598007,
+              "c1_utility_u": 0.2685908903800609,
+              "family": "replacement",
+              "paired_concept_count": 1
+            }
+          ],
+          "instance_id": "sympy__sympy-21847",
+          "paired_concept_count": 1,
+          "paired_family_count": 1,
+          "repo": "sympy/sympy"
+        },
+        {
+          "c0_mean_log_rank": 11.041533155283204,
+          "c0_utility_u": 0.1111646854322297,
+          "c1_mean_log_rank": 8.81387526564092,
+          "c1_minus_c0_log_rank": -2.227657889642284,
+          "c1_minus_c0_utility_u": 0.17932482502596714,
+          "c1_utility_u": 0.2904895104581968,
+          "families": [
+            {
+              "c0_mean_log_rank": 10.388102662282032,
+              "c0_utility_u": 0.16376536050396742,
+              "c1_mean_log_rank": 7.4318919168078,
+              "c1_utility_u": 0.4017381556700946,
+              "family": "hunk_symbol",
+              "paired_concept_count": 1
+            },
+            {
+              "c0_mean_log_rank": 11.694963648284377,
+              "c0_utility_u": 0.05856401036049196,
+              "c1_mean_log_rank": 10.19585861447404,
+              "c1_utility_u": 0.17924086524629904,
+              "family": "file_stem",
+              "paired_concept_count": 1
+            }
+          ],
+          "instance_id": "pylint-dev__pylint-4551",
+          "paired_concept_count": 2,
+          "paired_family_count": 2,
+          "repo": "pylint-dev/pylint"
+        },
+        {
+          "c0_mean_log_rank": 7.9603236291488395,
+          "c0_utility_u": 0.3591997906929903,
+          "c1_mean_log_rank": 11.709585400805462,
+          "c1_minus_c0_log_rank": 3.7492617716566228,
+          "c1_minus_c0_utility_u": -0.3018128206781492,
+          "c1_utility_u": 0.05738697001484108,
+          "families": [
+            {
+              "c0_mean_log_rank": 7.9603236291488395,
+              "c0_utility_u": 0.3591997906929903,
+              "c1_mean_log_rank": 11.709585400805462,
+              "c1_utility_u": 0.05738697001484108,
+              "family": "hunk_symbol",
+              "paired_concept_count": 1
+            }
+          ],
+          "instance_id": "sphinx-doc__sphinx-8638",
+          "paired_concept_count": 1,
+          "paired_family_count": 1,
+          "repo": "sphinx-doc/sphinx"
+        },
+        {
+          "c0_mean_log_rank": 7.720905251936779,
+          "c0_utility_u": 0.37847279432661746,
+          "c1_mean_log_rank": 8.74687531957003,
+          "c1_minus_c0_log_rank": 1.025970067633251,
+          "c1_minus_c0_utility_u": -0.08258983738735398,
+          "c1_utility_u": 0.2958829569392635,
+          "families": [
+            {
+              "c0_mean_log_rank": 7.720905251936779,
+              "c0_utility_u": 0.37847279432661746,
+              "c1_mean_log_rank": 8.74687531957003,
+              "c1_utility_u": 0.2958829569392635,
+              "family": "hunk_symbol",
+              "paired_concept_count": 1
+            }
+          ],
+          "instance_id": "astropy__astropy-14598",
+          "paired_concept_count": 1,
+          "paired_family_count": 1,
+          "repo": "astropy/astropy"
+        },
+        {
+          "c0_mean_log_rank": 8.745761999375512,
+          "c0_utility_u": 0.29597257839775054,
+          "c1_mean_log_rank": 9.299632479454944,
+          "c1_minus_c0_log_rank": 0.5538704800794321,
+          "c1_minus_c0_utility_u": -0.044586167108110974,
+          "c1_utility_u": 0.25138641128963957,
+          "families": [
+            {
+              "c0_mean_log_rank": 8.745761999375512,
+              "c0_utility_u": 0.29597257839775054,
+              "c1_mean_log_rank": 9.299632479454944,
+              "c1_utility_u": 0.25138641128963957,
+              "family": "hunk_symbol",
+              "paired_concept_count": 1
+            }
+          ],
+          "instance_id": "pytest-dev__pytest-7571",
+          "paired_concept_count": 1,
+          "paired_family_count": 1,
+          "repo": "pytest-dev/pytest"
+        }
+      ]
+    }
+  },
+  "schema_version": 1,
+  "stage_method_contrasts": {
+    "native_minus_logit": {
+      "estimand": "(C1 minus baseline) left-method change minus (C1 minus baseline) right-method change",
+      "left_method": "native_jacobian",
+      "mean_log_rank": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower": -1.959839885043584,
+          "upper": 0.928144925958426
+        },
+        "direction": "lower_is_better_for_left_method",
+        "estimate": -0.42521631095554646,
+        "method": "deterministic paired task-level percentile bootstrap",
+        "negative_task_count": 4,
+        "positive_task_count": 4,
+        "samples": 20000,
+        "sampling_unit": "retained SWE-Verified task",
+        "seed": 1887163625,
+        "task_count": 8,
+        "tie_task_count": 0
+      },
+      "normalized_utility_u": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower": -0.07364300378867467,
+          "upper": 0.15883802318971568
+        },
+        "direction": "higher_is_better_for_left_method",
+        "estimate": 0.0342296009251829,
+        "method": "deterministic paired task-level percentile bootstrap",
+        "negative_task_count": 4,
+        "positive_task_count": 4,
+        "samples": 20000,
+        "sampling_unit": "retained SWE-Verified task",
+        "seed": 2495251807,
+        "task_count": 8,
+        "tie_task_count": 0
+      },
+      "right_method": "logit_lens",
+      "tasks": [
+        {
+          "c1_minus_c0_log_rank_difference": -0.49121141958693215,
+          "c1_minus_c0_utility_difference": 0.0395421587299154,
+          "instance_id": "pydata__xarray-6938"
+        },
+        {
+          "c1_minus_c0_log_rank_difference": 0.1018872530720607,
+          "c1_minus_c0_utility_difference": -0.0082018490875444,
+          "instance_id": "scikit-learn__scikit-learn-9288"
+        },
+        {
+          "c1_minus_c0_log_rank_difference": -4.9382473579041655,
+          "c1_minus_c0_utility_difference": 0.39752528766134265,
+          "instance_id": "django__django-13297"
+        },
+        {
+          "c1_minus_c0_log_rank_difference": 2.119523731301893,
+          "c1_minus_c0_utility_difference": -0.17062010464952054,
+          "instance_id": "sympy__sympy-21847"
+        },
+        {
+          "c1_minus_c0_log_rank_difference": 0.049406905392377354,
+          "c1_minus_c0_utility_difference": -0.00397721961965411,
+          "instance_id": "pylint-dev__pylint-4551"
+        },
+        {
+          "c1_minus_c0_log_rank_difference": 1.949631790740181,
+          "c1_minus_c0_utility_difference": -0.15694392813417474,
+          "instance_id": "sphinx-doc__sphinx-8638"
+        },
+        {
+          "c1_minus_c0_log_rank_difference": -0.3207540276145622,
+          "c1_minus_c0_utility_difference": 0.025820463791049963,
+          "instance_id": "astropy__astropy-14598"
+        },
+        {
+          "c1_minus_c0_log_rank_difference": -1.8719673630452238,
+          "c1_minus_c0_utility_difference": 0.15069199871004896,
+          "instance_id": "pytest-dev__pytest-7571"
+        }
+      ]
+    },
+    "native_minus_public": {
+      "estimand": "(C1 minus baseline) left-method change minus (C1 minus baseline) right-method change",
+      "left_method": "native_jacobian",
+      "mean_log_rank": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower": -0.8247205607519451,
+          "upper": 0.4464569453016486
+        },
+        "direction": "lower_is_better_for_left_method",
+        "estimate": -0.18312068965808947,
+        "method": "deterministic paired task-level percentile bootstrap",
+        "negative_task_count": 4,
+        "positive_task_count": 4,
+        "samples": 20000,
+        "sampling_unit": "retained SWE-Verified task",
+        "seed": 1568185792,
+        "task_count": 8,
+        "tie_task_count": 0
+      },
+      "normalized_utility_u": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower": -0.03594311942556658,
+          "upper": 0.06612496412656965
+        },
+        "direction": "higher_is_better_for_left_method",
+        "estimate": 0.014741081107765768,
+        "method": "deterministic paired task-level percentile bootstrap",
+        "negative_task_count": 4,
+        "positive_task_count": 4,
+        "samples": 20000,
+        "sampling_unit": "retained SWE-Verified task",
+        "seed": 3122753872,
+        "task_count": 8,
+        "tie_task_count": 0
+      },
+      "right_method": "public_jacobian",
+      "tasks": [
+        {
+          "c1_minus_c0_log_rank_difference": 0.5280728813145394,
+          "c1_minus_c0_utility_difference": -0.0425094793428511,
+          "instance_id": "pydata__xarray-6938"
+        },
+        {
+          "c1_minus_c0_log_rank_difference": 0.024202107011745078,
+          "c1_minus_c0_utility_difference": -0.0019482518502146329,
+          "instance_id": "scikit-learn__scikit-learn-9288"
+        },
+        {
+          "c1_minus_c0_log_rank_difference": -1.2338589380886686,
+          "c1_minus_c0_utility_difference": 0.09932473886957838,
+          "instance_id": "django__django-13297"
+        },
+        {
+          "c1_minus_c0_log_rank_difference": -0.5414477872177494,
+          "c1_minus_c0_utility_difference": 0.04358614945094258,
+          "instance_id": "sympy__sympy-21847"
+        },
+        {
+          "c1_minus_c0_log_rank_difference": 1.4014351247292662,
+          "c1_minus_c0_utility_difference": -0.11281449889402706,
+          "instance_id": "pylint-dev__pylint-4551"
+        },
+        {
+          "c1_minus_c0_log_rank_difference": -0.15658309232017675,
+          "c1_minus_c0_utility_difference": 0.012604824000533144,
+          "instance_id": "sphinx-doc__sphinx-8638"
+        },
+        {
+          "c1_minus_c0_log_rank_difference": 0.20551723030795088,
+          "c1_minus_c0_utility_difference": -0.016543986191126014,
+          "instance_id": "astropy__astropy-14598"
+        },
+        {
+          "c1_minus_c0_log_rank_difference": -1.6923030430016226,
+          "c1_minus_c0_utility_difference": 0.13622915281929085,
+          "instance_id": "pytest-dev__pytest-7571"
+        }
+      ]
+    },
+    "public_minus_logit": {
+      "estimand": "(C1 minus baseline) left-method change minus (C1 minus baseline) right-method change",
+      "left_method": "public_jacobian",
+      "mean_log_rank": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower": -1.513371868623869,
+          "upper": 1.0519250027505072
+        },
+        "direction": "lower_is_better_for_left_method",
+        "estimate": -0.242095621297457,
+        "method": "deterministic paired task-level percentile bootstrap",
+        "negative_task_count": 5,
+        "positive_task_count": 3,
+        "samples": 20000,
+        "sampling_unit": "retained SWE-Verified task",
+        "seed": 1883933553,
+        "task_count": 8,
+        "tie_task_count": 0
+      },
+      "normalized_utility_u": {
+        "confidence_interval": {
+          "confidence_level": 0.95,
+          "lower": -0.08392488753330257,
+          "upper": 0.12446484535109205
+        },
+        "direction": "higher_is_better_for_left_method",
+        "estimate": 0.01948851981741713,
+        "method": "deterministic paired task-level percentile bootstrap",
+        "negative_task_count": 3,
+        "positive_task_count": 5,
+        "samples": 20000,
+        "sampling_unit": "retained SWE-Verified task",
+        "seed": 3737930744,
+        "task_count": 8,
+        "tie_task_count": 0
+      },
+      "right_method": "logit_lens",
+      "tasks": [
+        {
+          "c1_minus_c0_log_rank_difference": -1.0192843009014716,
+          "c1_minus_c0_utility_difference": 0.0820516380727665,
+          "instance_id": "pydata__xarray-6938"
+        },
+        {
+          "c1_minus_c0_log_rank_difference": 0.07768514606031562,
+          "c1_minus_c0_utility_difference": -0.006253597237329767,
+          "instance_id": "scikit-learn__scikit-learn-9288"
+        },
+        {
+          "c1_minus_c0_log_rank_difference": -3.704388419815497,
+          "c1_minus_c0_utility_difference": 0.2982005487917643,
+          "instance_id": "django__django-13297"
+        },
+        {
+          "c1_minus_c0_log_rank_difference": 2.6609715185196423,
+          "c1_minus_c0_utility_difference": -0.21420625410046312,
+          "instance_id": "sympy__sympy-21847"
+        },
+        {
+          "c1_minus_c0_log_rank_difference": -1.3520282193368889,
+          "c1_minus_c0_utility_difference": 0.10883727927437295,
+          "instance_id": "pylint-dev__pylint-4551"
+        },
+        {
+          "c1_minus_c0_log_rank_difference": 2.1062148830603578,
+          "c1_minus_c0_utility_difference": -0.16954875213470788,
+          "instance_id": "sphinx-doc__sphinx-8638"
+        },
+        {
+          "c1_minus_c0_log_rank_difference": -0.5262712579225131,
+          "c1_minus_c0_utility_difference": 0.04236444998217598,
+          "instance_id": "astropy__astropy-14598"
+        },
+        {
+          "c1_minus_c0_log_rank_difference": -0.17966432004360122,
+          "c1_minus_c0_utility_difference": 0.014462845890758108,
+          "instance_id": "pytest-dev__pytest-7571"
+        }
+      ]
+    }
+  },
+  "statistics": {
+    "bootstrap_samples": 20000,
+    "bootstrap_seed": 36127,
+    "sampling_unit": "retained SWE-Verified task"
+  }
+}

@@ -1,0 +1,1850 @@
+{
+  "capture_manifest_sha256": "62fd83a16262845475057f950d2ac32816ad93fc9bd3802b6cdbb4f66319f895",
+  "capture_policy": {
+    "excluded_campaigns": [
+      {
+        "campaigns": [
+          "v3",
+          "v4",
+          "v5",
+          "v6"
+        ],
+        "reason": "failed repository diagnostics, denied non-shell tools, or incomplete request pairs"
+      }
+    ],
+    "included": "v7 request pairs 1-6 for xarray/scikit-learn/django; v2 request pairs 7-20 for the remaining frozen tasks",
+    "task_level_exclusions_recorded_in": "pair_audits"
+  },
+  "capture_sources": [
+    {
+      "bytes": 57857,
+      "capture_instance_id": "pydata__xarray-6938",
+      "capture_request_index": 1,
+      "path": "runs/swe_multitask_c1_host_v7_20260718/proxy_dumps/chat_0001.json",
+      "sha256": "b28bf4a646b4c62b53f3442fb03fbab225d76447f0ff7035e70f90c772b387ea"
+    },
+    {
+      "bytes": 59871,
+      "capture_instance_id": "pydata__xarray-6938",
+      "capture_request_index": 2,
+      "path": "runs/swe_multitask_c1_host_v7_20260718/proxy_dumps/chat_0002.json",
+      "sha256": "f82d14243af61826c2930c4757e93759acee0397fa3fb3ea4a40e798e47088cd"
+    },
+    {
+      "bytes": 58276,
+      "capture_instance_id": "scikit-learn__scikit-learn-9288",
+      "capture_request_index": 3,
+      "path": "runs/swe_multitask_c1_host_v7_20260718/proxy_dumps/chat_0003.json",
+      "sha256": "0ce62df8829f7991f7fd814121efec4441dbb50ba69881b291f3a29f65a28e1f"
+    },
+    {
+      "bytes": 62097,
+      "capture_instance_id": "scikit-learn__scikit-learn-9288",
+      "capture_request_index": 4,
+      "path": "runs/swe_multitask_c1_host_v7_20260718/proxy_dumps/chat_0004.json",
+      "sha256": "5505068fd9ae4d130b6acbb7d071bc2fb7989aa51796db333ca4484105e5db33"
+    },
+    {
+      "bytes": 56004,
+      "capture_instance_id": "django__django-13297",
+      "capture_request_index": 5,
+      "path": "runs/swe_multitask_c1_host_v7_20260718/proxy_dumps/chat_0005.json",
+      "sha256": "fa7cebf1d33386520317c170586e1b6d68ec0006e649e5a36b6c189db811a238"
+    },
+    {
+      "bytes": 60840,
+      "capture_instance_id": "django__django-13297",
+      "capture_request_index": 6,
+      "path": "runs/swe_multitask_c1_host_v7_20260718/proxy_dumps/chat_0006.json",
+      "sha256": "5c7f84d176701c50a7eb6b61adc58f8ac2d674d7118136411ed9f427a0e11c55"
+    },
+    {
+      "bytes": 55686,
+      "capture_instance_id": "sympy__sympy-21847",
+      "capture_request_index": 7,
+      "path": "runs/swe_multitask_c1_host_v2_20260718/proxy_dumps/chat_0007.json",
+      "sha256": "0b35bfeada7901a6237ade668031e34830d706ce04c4350e4005f576f45f56da"
+    },
+    {
+      "bytes": 57759,
+      "capture_instance_id": "sympy__sympy-21847",
+      "capture_request_index": 8,
+      "path": "runs/swe_multitask_c1_host_v2_20260718/proxy_dumps/chat_0008.json",
+      "sha256": "3c6859d724663ac6ddede626dfca2542d215abbf1a7c54c03829049a90e737f4"
+    },
+    {
+      "bytes": 55748,
+      "capture_instance_id": "pylint-dev__pylint-4551",
+      "capture_request_index": 9,
+      "path": "runs/swe_multitask_c1_host_v2_20260718/proxy_dumps/chat_0009.json",
+      "sha256": "068fa942dd5a6b21e2d1fcc4982c4e088d3cddfab5862c27aa7db3f1c9c84a2c"
+    },
+    {
+      "bytes": 61740,
+      "capture_instance_id": "pylint-dev__pylint-4551",
+      "capture_request_index": 10,
+      "path": "runs/swe_multitask_c1_host_v2_20260718/proxy_dumps/chat_0010.json",
+      "sha256": "2bb2e39ae5ed5874ff954375f16847384b1a1315eded3989b0f2047e11c4d5bc"
+    },
+    {
+      "bytes": 57564,
+      "capture_instance_id": "sphinx-doc__sphinx-8638",
+      "capture_request_index": 11,
+      "path": "runs/swe_multitask_c1_host_v2_20260718/proxy_dumps/chat_0011.json",
+      "sha256": "1b9cd91eeb8496d2bad89b915a02035c6bf536f0d327694b5e6d9e89673b5943"
+    },
+    {
+      "bytes": 63830,
+      "capture_instance_id": "sphinx-doc__sphinx-8638",
+      "capture_request_index": 12,
+      "path": "runs/swe_multitask_c1_host_v2_20260718/proxy_dumps/chat_0012.json",
+      "sha256": "7868f77ff0858545adbe09fd4cc41490b8ef738a8738d67a4f7de90890242681"
+    },
+    {
+      "bytes": 56103,
+      "capture_instance_id": "mwaskom__seaborn-3187",
+      "capture_request_index": 13,
+      "path": "runs/swe_multitask_c1_host_v2_20260718/proxy_dumps/chat_0013.json",
+      "sha256": "7f61636cf0472c62ca1fbf3388ad991daa2102b446a7b3396d9100ba311be9e7"
+    },
+    {
+      "bytes": 61840,
+      "capture_instance_id": "mwaskom__seaborn-3187",
+      "capture_request_index": 14,
+      "path": "runs/swe_multitask_c1_host_v2_20260718/proxy_dumps/chat_0014.json",
+      "sha256": "7c7785914d509a04eb868a89c275edf5a460339546865c128a26b3872728aa59"
+    },
+    {
+      "bytes": 57148,
+      "capture_instance_id": "matplotlib__matplotlib-25287",
+      "capture_request_index": 15,
+      "path": "runs/swe_multitask_c1_host_v2_20260718/proxy_dumps/chat_0015.json",
+      "sha256": "2ab766c1000c4a5ac1db1604d2246cfc254b35a55add89a43f95e66a0c7c66f2"
+    },
+    {
+      "bytes": 58985,
+      "capture_instance_id": "matplotlib__matplotlib-25287",
+      "capture_request_index": 16,
+      "path": "runs/swe_multitask_c1_host_v2_20260718/proxy_dumps/chat_0016.json",
+      "sha256": "43cfff42e7b5ee3e6f581db06d1c3663f819575378b24c3f887d019ea4019e61"
+    },
+    {
+      "bytes": 57494,
+      "capture_instance_id": "astropy__astropy-14598",
+      "capture_request_index": 17,
+      "path": "runs/swe_multitask_c1_host_v2_20260718/proxy_dumps/chat_0017.json",
+      "sha256": "0db66dde1f66b739786cf703afc6610f2f57e40b1c4a026969aa53a41e8bbefc"
+    },
+    {
+      "bytes": 60996,
+      "capture_instance_id": "astropy__astropy-14598",
+      "capture_request_index": 18,
+      "path": "runs/swe_multitask_c1_host_v2_20260718/proxy_dumps/chat_0018.json",
+      "sha256": "7a688d105d7b226fb54450f559379e010c508a148861582b9a865693263b412e"
+    },
+    {
+      "bytes": 55127,
+      "capture_instance_id": "pytest-dev__pytest-7571",
+      "capture_request_index": 19,
+      "path": "runs/swe_multitask_c1_host_v2_20260718/proxy_dumps/chat_0019.json",
+      "sha256": "e9554a7d2d3fa8ae47785430f70772469719398f60e0ce2197cccbd1a97429de"
+    },
+    {
+      "bytes": 56947,
+      "capture_instance_id": "pytest-dev__pytest-7571",
+      "capture_request_index": 20,
+      "path": "runs/swe_multitask_c1_host_v2_20260718/proxy_dumps/chat_0020.json",
+      "sha256": "90cdc60c664f09513c0468279538b725ea9d4c0aa3cbb68dfd68ea15fc643008"
+    }
+  ],
+  "chat_template_sha256": "c166a05aaf5ad4b807a7c46497f92180e3df24e64d4b54d27fd26ec61bec38da",
+  "checkpoint": {
+    "id": "C1",
+    "name": "post_first_repository_observation",
+    "visibility_boundary": "after_successful_repository_read_or_search_before_second_assistant_token"
+  },
+  "excluded_control_count": 2,
+  "excluded_visibility_records": [
+    {
+      "analysis_role": "explicit_control_excluded",
+      "channel_evidence": {
+        "assistant_text": {
+          "canonical_identifier_boundary_hit": false,
+          "case_sensitive_compound_identifier_hits": [
+            "swap_dims"
+          ],
+          "exposed": true,
+          "scored_form_token_id_hits": [
+            28308
+          ]
+        },
+        "tool_call_args": {
+          "canonical_identifier_boundary_hit": false,
+          "case_sensitive_compound_identifier_hits": [
+            "swap_dims"
+          ],
+          "exposed": true,
+          "scored_form_token_id_hits": [
+            28308
+          ]
+        },
+        "tool_outputs": {
+          "canonical_identifier_boundary_hit": false,
+          "case_sensitive_compound_identifier_hits": [
+            "swap_dims"
+          ],
+          "exposed": true,
+          "scored_form_token_id_hits": [
+            28308
+          ]
+        }
+      },
+      "channels": {
+        "assistant_text": true,
+        "tool_call_args": true,
+        "tool_outputs": true
+      },
+      "concept_id": "task-00-concept-00",
+      "family": "replacement",
+      "forms": [
+        {
+          "kind": "bare",
+          "text": "_dims",
+          "token_id": 28308
+        }
+      ],
+      "receiver_task_instance_id": "pydata__xarray-6938",
+      "request_index": 2,
+      "subject": "target",
+      "target": "_dims",
+      "task_instance_id": "pydata__xarray-6938",
+      "visible_channels": [
+        "assistant_text",
+        "tool_call_args",
+        "tool_outputs"
+      ],
+      "visible_in_rendered_prompt": true
+    },
+    {
+      "analysis_role": "matched_hidden_foil",
+      "channel_evidence": {
+        "assistant_text": {
+          "canonical_identifier_boundary_hit": false,
+          "case_sensitive_compound_identifier_hits": [],
+          "exposed": false,
+          "scored_form_token_id_hits": []
+        },
+        "tool_call_args": {
+          "canonical_identifier_boundary_hit": false,
+          "case_sensitive_compound_identifier_hits": [],
+          "exposed": false,
+          "scored_form_token_id_hits": []
+        },
+        "tool_outputs": {
+          "canonical_identifier_boundary_hit": false,
+          "case_sensitive_compound_identifier_hits": [],
+          "exposed": false,
+          "scored_form_token_id_hits": []
+        }
+      },
+      "channels": {
+        "assistant_text": false,
+        "tool_call_args": false,
+        "tool_outputs": false
+      },
+      "concept_id": "task-02-concept-00",
+      "family": "replacement",
+      "forms": [
+        {
+          "kind": "bare",
+          "text": "lazy",
+          "token_id": 47371
+        },
+        {
+          "kind": "leading_space",
+          "text": " lazy",
+          "token_id": 15217
+        }
+      ],
+      "receiver_task_instance_id": "pydata__xarray-6938",
+      "request_index": 2,
+      "subject": "foil",
+      "target": "lazy",
+      "task_instance_id": "django__django-13297",
+      "visible_channels": [],
+      "visible_in_rendered_prompt": false
+    },
+    {
+      "analysis_role": "explicit_control_excluded",
+      "channel_evidence": {
+        "assistant_text": {
+          "canonical_identifier_boundary_hit": false,
+          "case_sensitive_compound_identifier_hits": [],
+          "exposed": false,
+          "scored_form_token_id_hits": []
+        },
+        "tool_call_args": {
+          "canonical_identifier_boundary_hit": false,
+          "case_sensitive_compound_identifier_hits": [],
+          "exposed": false,
+          "scored_form_token_id_hits": []
+        },
+        "tool_outputs": {
+          "canonical_identifier_boundary_hit": false,
+          "case_sensitive_compound_identifier_hits": [
+            "_spacer"
+          ],
+          "exposed": true,
+          "scored_form_token_id_hits": [
+            93719
+          ]
+        }
+      },
+      "channels": {
+        "assistant_text": false,
+        "tool_call_args": false,
+        "tool_outputs": true
+      },
+      "concept_id": "task-06-concept-00",
+      "family": "hunk_symbol",
+      "forms": [
+        {
+          "kind": "bare",
+          "text": "spacer",
+          "token_id": 93719
+        },
+        {
+          "kind": "leading_space",
+          "text": " spacer",
+          "token_id": 76155
+        }
+      ],
+      "receiver_task_instance_id": "mwaskom__seaborn-3187",
+      "request_index": 14,
+      "subject": "target",
+      "target": "spacer",
+      "task_instance_id": "mwaskom__seaborn-3187",
+      "visible_channels": [
+        "tool_outputs"
+      ],
+      "visible_in_rendered_prompt": true
+    },
+    {
+      "analysis_role": "matched_hidden_foil",
+      "channel_evidence": {
+        "assistant_text": {
+          "canonical_identifier_boundary_hit": false,
+          "case_sensitive_compound_identifier_hits": [],
+          "exposed": false,
+          "scored_form_token_id_hits": []
+        },
+        "tool_call_args": {
+          "canonical_identifier_boundary_hit": false,
+          "case_sensitive_compound_identifier_hits": [],
+          "exposed": false,
+          "scored_form_token_id_hits": []
+        },
+        "tool_outputs": {
+          "canonical_identifier_boundary_hit": false,
+          "case_sensitive_compound_identifier_hits": [],
+          "exposed": false,
+          "scored_form_token_id_hits": []
+        }
+      },
+      "channels": {
+        "assistant_text": false,
+        "tool_call_args": false,
+        "tool_outputs": false
+      },
+      "concept_id": "task-09-concept-00",
+      "family": "hunk_symbol",
+      "forms": [
+        {
+          "kind": "bare",
+          "text": "_finalize",
+          "token_id": 68228
+        }
+      ],
+      "receiver_task_instance_id": "mwaskom__seaborn-3187",
+      "request_index": 14,
+      "subject": "foil",
+      "target": "_finalize",
+      "task_instance_id": "pytest-dev__pytest-7571",
+      "visible_channels": [],
+      "visible_in_rendered_prompt": false
+    }
+  ],
+  "kind": "swe_verified_multitask_c1_materialization",
+  "lens_outputs_used_for_selection": false,
+  "pair_audits": [
+    {
+      "concept_visibility": [
+        {
+          "analysis_role": "explicit_control_excluded",
+          "channel_evidence": {
+            "assistant_text": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [
+                "swap_dims"
+              ],
+              "exposed": true,
+              "scored_form_token_id_hits": [
+                28308
+              ]
+            },
+            "tool_call_args": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [
+                "swap_dims"
+              ],
+              "exposed": true,
+              "scored_form_token_id_hits": [
+                28308
+              ]
+            },
+            "tool_outputs": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [
+                "swap_dims"
+              ],
+              "exposed": true,
+              "scored_form_token_id_hits": [
+                28308
+              ]
+            }
+          },
+          "channels": {
+            "assistant_text": true,
+            "tool_call_args": true,
+            "tool_outputs": true
+          },
+          "concept_id": "task-00-concept-00",
+          "family": "replacement",
+          "forms": [
+            {
+              "kind": "bare",
+              "text": "_dims",
+              "token_id": 28308
+            }
+          ],
+          "subject": "target",
+          "target": "_dims",
+          "task_instance_id": "pydata__xarray-6938",
+          "visible_channels": [
+            "assistant_text",
+            "tool_call_args",
+            "tool_outputs"
+          ],
+          "visible_in_rendered_prompt": true
+        },
+        {
+          "analysis_role": "matched_hidden_foil",
+          "channel_evidence": {
+            "assistant_text": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_call_args": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_outputs": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            }
+          },
+          "channels": {
+            "assistant_text": false,
+            "tool_call_args": false,
+            "tool_outputs": false
+          },
+          "concept_id": "task-02-concept-00",
+          "family": "replacement",
+          "forms": [
+            {
+              "kind": "bare",
+              "text": "lazy",
+              "token_id": 47371
+            },
+            {
+              "kind": "leading_space",
+              "text": " lazy",
+              "token_id": 15217
+            }
+          ],
+          "subject": "foil",
+          "target": "lazy",
+          "task_instance_id": "django__django-13297",
+          "visible_channels": [],
+          "visible_in_rendered_prompt": false
+        },
+        {
+          "analysis_role": "primary_hidden",
+          "channel_evidence": {
+            "assistant_text": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_call_args": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_outputs": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            }
+          },
+          "channels": {
+            "assistant_text": false,
+            "tool_call_args": false,
+            "tool_outputs": false
+          },
+          "concept_id": "task-00-concept-01",
+          "family": "hunk_symbol",
+          "forms": [
+            {
+              "kind": "bare",
+              "text": "equals",
+              "token_id": 6950
+            },
+            {
+              "kind": "leading_space",
+              "text": " equals",
+              "token_id": 16327
+            }
+          ],
+          "subject": "target",
+          "target": "equals",
+          "task_instance_id": "pydata__xarray-6938",
+          "visible_channels": [],
+          "visible_in_rendered_prompt": false
+        },
+        {
+          "analysis_role": "matched_hidden_foil",
+          "channel_evidence": {
+            "assistant_text": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_call_args": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_outputs": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            }
+          },
+          "channels": {
+            "assistant_text": false,
+            "tool_call_args": false,
+            "tool_outputs": false
+          },
+          "concept_id": "task-08-concept-00",
+          "family": "hunk_symbol",
+          "forms": [
+            {
+              "kind": "bare",
+              "text": "_split",
+              "token_id": 16551
+            }
+          ],
+          "subject": "foil",
+          "target": "_split",
+          "task_instance_id": "astropy__astropy-14598",
+          "visible_channels": [],
+          "visible_in_rendered_prompt": false
+        }
+      ],
+      "exclusion_reason": null,
+      "first_request_index": 1,
+      "first_request_sha256": "b28bf4a646b4c62b53f3442fb03fbab225d76447f0ff7035e70f90c772b387ea",
+      "instance_id": "pydata__xarray-6938",
+      "observations": [
+        {
+          "arguments_sha256": "2fe5bed0d2bc1b22a027b8934f27ccdb4eb19ab0c53cf4588ef74b47a9c339cf",
+          "call_index": 0,
+          "classification": "successful_repository_read_or_search",
+          "command_sha256": "99a072e45b2697f9ae82e64da476acd5d8982ea1bc6cb940f2a5cdeebe2facee",
+          "exit_code": 0,
+          "output_bytes": 251,
+          "read_search_command": true,
+          "result_sha256": "974f156ff71ec87ac6293baa375dd12a1010f85e63058a1ee39af347bea61340",
+          "signal": 0,
+          "successful_repository_observation": true,
+          "tool_call_id": "chatcmpl-tool-9bfb74423c426732",
+          "tool_name": "run_shell_command"
+        }
+      ],
+      "prompt_token_count": 13686,
+      "rendered_prompt_sha256": "ca83e2889ff88900a4a1357126520ac87924a28ddc4b3ef995fa132bb739805a",
+      "second_request_index": 2,
+      "second_request_sha256": "f82d14243af61826c2930c4757e93759acee0397fa3fb3ea4a40e798e47088cd",
+      "selected": true,
+      "task_selection_index": 0
+    },
+    {
+      "concept_visibility": [
+        {
+          "analysis_role": "primary_hidden",
+          "channel_evidence": {
+            "assistant_text": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_call_args": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_outputs": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            }
+          },
+          "channels": {
+            "assistant_text": false,
+            "tool_call_args": false,
+            "tool_outputs": false
+          },
+          "concept_id": "task-01-concept-00",
+          "family": "replacement",
+          "forms": [
+            {
+              "kind": "bare",
+              "text": "seed",
+              "token_id": 21901
+            },
+            {
+              "kind": "leading_space",
+              "text": " seed",
+              "token_id": 10014
+            }
+          ],
+          "subject": "target",
+          "target": "seed",
+          "task_instance_id": "scikit-learn__scikit-learn-9288",
+          "visible_channels": [],
+          "visible_in_rendered_prompt": false
+        },
+        {
+          "analysis_role": "matched_hidden_foil",
+          "channel_evidence": {
+            "assistant_text": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_call_args": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_outputs": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            }
+          },
+          "channels": {
+            "assistant_text": false,
+            "tool_call_args": false,
+            "tool_outputs": false
+          },
+          "concept_id": "task-03-concept-00",
+          "family": "replacement",
+          "forms": [
+            {
+              "kind": "bare",
+              "text": "sum",
+              "token_id": 1200
+            },
+            {
+              "kind": "leading_space",
+              "text": " sum",
+              "token_id": 2542
+            }
+          ],
+          "subject": "foil",
+          "target": "sum",
+          "task_instance_id": "sympy__sympy-21847",
+          "visible_channels": [],
+          "visible_in_rendered_prompt": false
+        }
+      ],
+      "exclusion_reason": null,
+      "first_request_index": 3,
+      "first_request_sha256": "0ce62df8829f7991f7fd814121efec4441dbb50ba69881b291f3a29f65a28e1f",
+      "instance_id": "scikit-learn__scikit-learn-9288",
+      "observations": [
+        {
+          "arguments_sha256": "3f8e1439dd39bd36920a99f21f5342c2639a0a730865571624addb846b00a726",
+          "call_index": 0,
+          "classification": "successful_repository_read_or_search",
+          "command_sha256": "dcfea8e372db6493cdf52e4fe4ec5f981400dbb3bc2df843c8db89d135beeeef",
+          "exit_code": 0,
+          "output_bytes": 29,
+          "read_search_command": true,
+          "result_sha256": "889b86dbfb4cc898a04b06b03e414e3f23e80032b3aced56365be7fa2113bbd1",
+          "signal": 0,
+          "successful_repository_observation": true,
+          "tool_call_id": "chatcmpl-tool-812e27c42eb4818f",
+          "tool_name": "run_shell_command"
+        },
+        {
+          "arguments_sha256": "c6c5dbe554c70baa3fc515f2e46b6638813b94e0018b683fe61fe8b81c24ae29",
+          "call_index": 1,
+          "classification": "successful_repository_read_or_search",
+          "command_sha256": "afd38a9462363a7781bbfa76bf479399d7e5d904333d7c47bdff1749ea14988e",
+          "exit_code": 0,
+          "output_bytes": 1076,
+          "read_search_command": true,
+          "result_sha256": "e1ab7c022a9c2b563ef78c8410e4a4541b1278884839697a8d8f923afe1355b6",
+          "signal": 0,
+          "successful_repository_observation": true,
+          "tool_call_id": "chatcmpl-tool-832b779fb93dfb6a",
+          "tool_name": "run_shell_command"
+        }
+      ],
+      "prompt_token_count": 14502,
+      "rendered_prompt_sha256": "7743a66cce8a541f6a18dca962f20f59df61f4c2cc83c9d434fec621a8982f3c",
+      "second_request_index": 4,
+      "second_request_sha256": "5505068fd9ae4d130b6acbb7d071bc2fb7989aa51796db333ca4484105e5db33",
+      "selected": true,
+      "task_selection_index": 1
+    },
+    {
+      "concept_visibility": [
+        {
+          "analysis_role": "primary_hidden",
+          "channel_evidence": {
+            "assistant_text": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_call_args": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_outputs": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            }
+          },
+          "channels": {
+            "assistant_text": false,
+            "tool_call_args": false,
+            "tool_outputs": false
+          },
+          "concept_id": "task-02-concept-00",
+          "family": "replacement",
+          "forms": [
+            {
+              "kind": "bare",
+              "text": "lazy",
+              "token_id": 47371
+            },
+            {
+              "kind": "leading_space",
+              "text": " lazy",
+              "token_id": 15217
+            }
+          ],
+          "subject": "target",
+          "target": "lazy",
+          "task_instance_id": "django__django-13297",
+          "visible_channels": [],
+          "visible_in_rendered_prompt": false
+        },
+        {
+          "analysis_role": "matched_hidden_foil",
+          "channel_evidence": {
+            "assistant_text": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_call_args": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_outputs": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            }
+          },
+          "channels": {
+            "assistant_text": false,
+            "tool_call_args": false,
+            "tool_outputs": false
+          },
+          "concept_id": "task-00-concept-00",
+          "family": "replacement",
+          "forms": [
+            {
+              "kind": "bare",
+              "text": "_dims",
+              "token_id": 28308
+            }
+          ],
+          "subject": "foil",
+          "target": "_dims",
+          "task_instance_id": "pydata__xarray-6938",
+          "visible_channels": [],
+          "visible_in_rendered_prompt": false
+        }
+      ],
+      "exclusion_reason": null,
+      "first_request_index": 5,
+      "first_request_sha256": "fa7cebf1d33386520317c170586e1b6d68ec0006e649e5a36b6c189db811a238",
+      "instance_id": "django__django-13297",
+      "observations": [
+        {
+          "arguments_sha256": "860a2e5986b4330d37319db5a2fcb6774af867d55bb07eb86f74e83d3bcef09f",
+          "call_index": 0,
+          "classification": "successful_repository_read_or_search",
+          "command_sha256": "6425294af9e298bafe771ca313d0c6902cc4628c932e43917da3600f600c32d9",
+          "exit_code": 0,
+          "output_bytes": 2017,
+          "read_search_command": true,
+          "result_sha256": "4dc7c5fdf168028580aba149982cb91706aac145133c88e61e1c4e957070e40d",
+          "signal": 0,
+          "successful_repository_observation": true,
+          "tool_call_id": "chatcmpl-tool-b043ac86071ec827",
+          "tool_name": "run_shell_command"
+        }
+      ],
+      "prompt_token_count": 13594,
+      "rendered_prompt_sha256": "323f3085b0d638af52fdbb16488ad2ff39b8353ff9d4eb12cd0d04b099e1bb22",
+      "second_request_index": 6,
+      "second_request_sha256": "5c7f84d176701c50a7eb6b61adc58f8ac2d674d7118136411ed9f427a0e11c55",
+      "selected": true,
+      "task_selection_index": 2
+    },
+    {
+      "concept_visibility": [
+        {
+          "analysis_role": "primary_hidden",
+          "channel_evidence": {
+            "assistant_text": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_call_args": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_outputs": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            }
+          },
+          "channels": {
+            "assistant_text": false,
+            "tool_call_args": false,
+            "tool_outputs": false
+          },
+          "concept_id": "task-03-concept-00",
+          "family": "replacement",
+          "forms": [
+            {
+              "kind": "bare",
+              "text": "sum",
+              "token_id": 1200
+            },
+            {
+              "kind": "leading_space",
+              "text": " sum",
+              "token_id": 2542
+            }
+          ],
+          "subject": "target",
+          "target": "sum",
+          "task_instance_id": "sympy__sympy-21847",
+          "visible_channels": [],
+          "visible_in_rendered_prompt": false
+        },
+        {
+          "analysis_role": "matched_hidden_foil",
+          "channel_evidence": {
+            "assistant_text": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_call_args": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_outputs": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            }
+          },
+          "channels": {
+            "assistant_text": false,
+            "tool_call_args": false,
+            "tool_outputs": false
+          },
+          "concept_id": "task-00-concept-00",
+          "family": "replacement",
+          "forms": [
+            {
+              "kind": "bare",
+              "text": "_dims",
+              "token_id": 28308
+            }
+          ],
+          "subject": "foil",
+          "target": "_dims",
+          "task_instance_id": "pydata__xarray-6938",
+          "visible_channels": [],
+          "visible_in_rendered_prompt": false
+        }
+      ],
+      "exclusion_reason": null,
+      "first_request_index": 7,
+      "first_request_sha256": "0b35bfeada7901a6237ade668031e34830d706ce04c4350e4005f576f45f56da",
+      "instance_id": "sympy__sympy-21847",
+      "observations": [
+        {
+          "arguments_sha256": "4aa3b813211786de02ca958f636c7b44d129baffecbd95ddcced78ac7bc3cbd1",
+          "call_index": 0,
+          "classification": "successful_repository_read_or_search",
+          "command_sha256": "706100545108ca78d55bd0978fd485e8964caf4ab4c1e5d7e1af27c946f66319",
+          "exit_code": 0,
+          "output_bytes": 85,
+          "read_search_command": true,
+          "result_sha256": "40828fb7f5b8359f90d9e52a45b0bae525e92ea5c31d62604c8765134b624212",
+          "signal": 0,
+          "successful_repository_observation": true,
+          "tool_call_id": "chatcmpl-tool-be431f4a9d884dfa",
+          "tool_name": "run_shell_command"
+        }
+      ],
+      "prompt_token_count": 13023,
+      "rendered_prompt_sha256": "4a257743480bb8759a844d100e915c28e91b5a04de272fec377c27e5325d264b",
+      "second_request_index": 8,
+      "second_request_sha256": "3c6859d724663ac6ddede626dfca2542d215abbf1a7c54c03829049a90e737f4",
+      "selected": true,
+      "task_selection_index": 3
+    },
+    {
+      "concept_visibility": [
+        {
+          "analysis_role": "primary_hidden",
+          "channel_evidence": {
+            "assistant_text": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_call_args": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_outputs": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            }
+          },
+          "channels": {
+            "assistant_text": false,
+            "tool_call_args": false,
+            "tool_outputs": false
+          },
+          "concept_id": "task-04-concept-00",
+          "family": "hunk_symbol",
+          "forms": [
+            {
+              "kind": "bare",
+              "text": "visit",
+              "token_id": 26570
+            },
+            {
+              "kind": "leading_space",
+              "text": " visit",
+              "token_id": 3814
+            }
+          ],
+          "subject": "target",
+          "target": "visit",
+          "task_instance_id": "pylint-dev__pylint-4551",
+          "visible_channels": [],
+          "visible_in_rendered_prompt": false
+        },
+        {
+          "analysis_role": "matched_hidden_foil",
+          "channel_evidence": {
+            "assistant_text": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_call_args": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_outputs": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            }
+          },
+          "channels": {
+            "assistant_text": false,
+            "tool_call_args": false,
+            "tool_outputs": false
+          },
+          "concept_id": "task-08-concept-00",
+          "family": "hunk_symbol",
+          "forms": [
+            {
+              "kind": "bare",
+              "text": "_split",
+              "token_id": 16551
+            }
+          ],
+          "subject": "foil",
+          "target": "_split",
+          "task_instance_id": "astropy__astropy-14598",
+          "visible_channels": [],
+          "visible_in_rendered_prompt": false
+        },
+        {
+          "analysis_role": "primary_hidden",
+          "channel_evidence": {
+            "assistant_text": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_call_args": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_outputs": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            }
+          },
+          "channels": {
+            "assistant_text": false,
+            "tool_call_args": false,
+            "tool_outputs": false
+          },
+          "concept_id": "task-04-concept-01",
+          "family": "file_stem",
+          "forms": [
+            {
+              "kind": "leading_space",
+              "text": " inspector",
+              "token_id": 43241
+            }
+          ],
+          "subject": "target",
+          "target": "inspector",
+          "task_instance_id": "pylint-dev__pylint-4551",
+          "visible_channels": [],
+          "visible_in_rendered_prompt": false
+        }
+      ],
+      "exclusion_reason": null,
+      "first_request_index": 9,
+      "first_request_sha256": "068fa942dd5a6b21e2d1fcc4982c4e088d3cddfab5862c27aa7db3f1c9c84a2c",
+      "instance_id": "pylint-dev__pylint-4551",
+      "observations": [
+        {
+          "arguments_sha256": "026d2b62af23fd995e076105b175d5fe827a79e3606b20899d051ae0cc5a1477",
+          "call_index": 0,
+          "classification": "successful_repository_read_or_search",
+          "command_sha256": "c77a8de35d79d23166b31860b680100ff45cd0f3533f81a7ed83aa1799d7f97b",
+          "exit_code": 0,
+          "output_bytes": 4069,
+          "read_search_command": true,
+          "result_sha256": "2b684ee4cf2f6f96f9058fae7848751f052b03c9ba7d6b89c697e9ebd342c355",
+          "signal": 0,
+          "successful_repository_observation": true,
+          "tool_call_id": "chatcmpl-tool-a3920c8912aa1861",
+          "tool_name": "run_shell_command"
+        }
+      ],
+      "prompt_token_count": 14517,
+      "rendered_prompt_sha256": "095805e5c768c907ce88495ec899ab3589df1b86851b5fcee0b984309eeed1fc",
+      "second_request_index": 10,
+      "second_request_sha256": "2bb2e39ae5ed5874ff954375f16847384b1a1315eded3989b0f2047e11c4d5bc",
+      "selected": true,
+      "task_selection_index": 4
+    },
+    {
+      "concept_visibility": [
+        {
+          "analysis_role": "primary_hidden",
+          "channel_evidence": {
+            "assistant_text": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_call_args": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_outputs": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            }
+          },
+          "channels": {
+            "assistant_text": false,
+            "tool_call_args": false,
+            "tool_outputs": false
+          },
+          "concept_id": "task-05-concept-00",
+          "family": "hunk_symbol",
+          "forms": [
+            {
+              "kind": "bare",
+              "text": "PyObject",
+              "token_id": 51585
+            },
+            {
+              "kind": "leading_space",
+              "text": " PyObject",
+              "token_id": 15423
+            }
+          ],
+          "subject": "target",
+          "target": "PyObject",
+          "task_instance_id": "sphinx-doc__sphinx-8638",
+          "visible_channels": [],
+          "visible_in_rendered_prompt": false
+        },
+        {
+          "analysis_role": "matched_hidden_foil",
+          "channel_evidence": {
+            "assistant_text": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_call_args": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_outputs": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            }
+          },
+          "channels": {
+            "assistant_text": false,
+            "tool_call_args": false,
+            "tool_outputs": false
+          },
+          "concept_id": "task-00-concept-01",
+          "family": "hunk_symbol",
+          "forms": [
+            {
+              "kind": "bare",
+              "text": "equals",
+              "token_id": 6950
+            },
+            {
+              "kind": "leading_space",
+              "text": " equals",
+              "token_id": 16327
+            }
+          ],
+          "subject": "foil",
+          "target": "equals",
+          "task_instance_id": "pydata__xarray-6938",
+          "visible_channels": [],
+          "visible_in_rendered_prompt": false
+        }
+      ],
+      "exclusion_reason": null,
+      "first_request_index": 11,
+      "first_request_sha256": "1b9cd91eeb8496d2bad89b915a02035c6bf536f0d327694b5e6d9e89673b5943",
+      "instance_id": "sphinx-doc__sphinx-8638",
+      "observations": [
+        {
+          "arguments_sha256": "806aad98bcc39ccae6d18accd1f79bff64729fe1b89d2821e5893e3cba1fcf81",
+          "call_index": 0,
+          "classification": "successful_repository_read_or_search",
+          "command_sha256": "836363fffe0b1c90af13295f411522cb9203d6732d4141a18bd42efc467b5de6",
+          "exit_code": 0,
+          "output_bytes": 4068,
+          "read_search_command": true,
+          "result_sha256": "be0691fed994d88ccfaef810a56a65fb4e5ab8b48bd458a11f2a19e0ce7eb3c9",
+          "signal": 0,
+          "successful_repository_observation": true,
+          "tool_call_id": "chatcmpl-tool-a0946c4fb9ea3852",
+          "tool_name": "run_shell_command"
+        }
+      ],
+      "prompt_token_count": 14808,
+      "rendered_prompt_sha256": "445b3536c87a2aa0a3cc1634ad010cb6d26e5f44bb600a08cac4cd25a4e019f8",
+      "second_request_index": 12,
+      "second_request_sha256": "7868f77ff0858545adbe09fd4cc41490b8ef738a8738d67a4f7de90890242681",
+      "selected": true,
+      "task_selection_index": 5
+    },
+    {
+      "concept_visibility": [
+        {
+          "analysis_role": "explicit_control_excluded",
+          "channel_evidence": {
+            "assistant_text": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_call_args": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_outputs": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [
+                "_spacer"
+              ],
+              "exposed": true,
+              "scored_form_token_id_hits": [
+                93719
+              ]
+            }
+          },
+          "channels": {
+            "assistant_text": false,
+            "tool_call_args": false,
+            "tool_outputs": true
+          },
+          "concept_id": "task-06-concept-00",
+          "family": "hunk_symbol",
+          "forms": [
+            {
+              "kind": "bare",
+              "text": "spacer",
+              "token_id": 93719
+            },
+            {
+              "kind": "leading_space",
+              "text": " spacer",
+              "token_id": 76155
+            }
+          ],
+          "subject": "target",
+          "target": "spacer",
+          "task_instance_id": "mwaskom__seaborn-3187",
+          "visible_channels": [
+            "tool_outputs"
+          ],
+          "visible_in_rendered_prompt": true
+        },
+        {
+          "analysis_role": "matched_hidden_foil",
+          "channel_evidence": {
+            "assistant_text": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_call_args": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_outputs": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            }
+          },
+          "channels": {
+            "assistant_text": false,
+            "tool_call_args": false,
+            "tool_outputs": false
+          },
+          "concept_id": "task-09-concept-00",
+          "family": "hunk_symbol",
+          "forms": [
+            {
+              "kind": "bare",
+              "text": "_finalize",
+              "token_id": 68228
+            }
+          ],
+          "subject": "foil",
+          "target": "_finalize",
+          "task_instance_id": "pytest-dev__pytest-7571",
+          "visible_channels": [],
+          "visible_in_rendered_prompt": false
+        }
+      ],
+      "exclusion_reason": "no_hidden_primary_target_after_visibility_audit",
+      "first_request_index": 13,
+      "first_request_sha256": "7f61636cf0472c62ca1fbf3388ad991daa2102b446a7b3396d9100ba311be9e7",
+      "instance_id": "mwaskom__seaborn-3187",
+      "observations": [
+        {
+          "arguments_sha256": "ce3b5bfabe71893d0e7b49197739328650ebb3abd57d37ee31d5e074c6139d1d",
+          "call_index": 0,
+          "classification": "successful_repository_read_or_search",
+          "command_sha256": "ed711b35a2cef76b1dd7fa7d434c7410eaf7b4c8bfd35629665ec78a749da34a",
+          "exit_code": 0,
+          "output_bytes": 4046,
+          "read_search_command": true,
+          "result_sha256": "53b14c4ca4c251380d739cfe82a609ef2d5a6ee698c3b9d8e9f1e6b357cea063",
+          "signal": 0,
+          "successful_repository_observation": true,
+          "tool_call_id": "chatcmpl-tool-a3eebc62061a272a",
+          "tool_name": "run_shell_command"
+        }
+      ],
+      "prompt_token_count": 14265,
+      "rendered_prompt_sha256": "e1876157d975c90ae6c0d0080b28e2074c8bcb68a8c08eebd6e56045695bd226",
+      "second_request_index": 14,
+      "second_request_sha256": "7c7785914d509a04eb868a89c275edf5a460339546865c128a26b3872728aa59",
+      "selected": false,
+      "task_selection_index": 6
+    },
+    {
+      "concept_visibility": [
+        {
+          "analysis_role": "primary_hidden",
+          "channel_evidence": {
+            "assistant_text": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_call_args": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_outputs": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            }
+          },
+          "channels": {
+            "assistant_text": false,
+            "tool_call_args": false,
+            "tool_outputs": false
+          },
+          "concept_id": "task-07-concept-00",
+          "family": "hunk_symbol",
+          "forms": [
+            {
+              "kind": "bare",
+              "text": "_init",
+              "token_id": 5945
+            }
+          ],
+          "subject": "target",
+          "target": "_init",
+          "task_instance_id": "matplotlib__matplotlib-25287",
+          "visible_channels": [],
+          "visible_in_rendered_prompt": false
+        },
+        {
+          "analysis_role": "matched_hidden_foil",
+          "channel_evidence": {
+            "assistant_text": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_call_args": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_outputs": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            }
+          },
+          "channels": {
+            "assistant_text": false,
+            "tool_call_args": false,
+            "tool_outputs": false
+          },
+          "concept_id": "task-06-concept-00",
+          "family": "hunk_symbol",
+          "forms": [
+            {
+              "kind": "bare",
+              "text": "spacer",
+              "token_id": 93719
+            },
+            {
+              "kind": "leading_space",
+              "text": " spacer",
+              "token_id": 76155
+            }
+          ],
+          "subject": "foil",
+          "target": "spacer",
+          "task_instance_id": "mwaskom__seaborn-3187",
+          "visible_channels": [],
+          "visible_in_rendered_prompt": false
+        }
+      ],
+      "exclusion_reason": "no_genuinely_successful_repository_read_or_search",
+      "first_request_index": 15,
+      "first_request_sha256": "2ab766c1000c4a5ac1db1604d2246cfc254b35a55add89a43f95e66a0c7c66f2",
+      "instance_id": "matplotlib__matplotlib-25287",
+      "observations": [
+        {
+          "arguments_sha256": "95e1ef2e700b5e51b1d4188fafc10d8d5c1c6fc9b6c0e0b18c7f82598a4f5633",
+          "call_index": 0,
+          "classification": "nonqualifying_shell_observation",
+          "command_sha256": "38d74c1a1fd8f75ebda0af8ef32a4fb3b6b828ae1f5ff6fb8443178199920eff",
+          "exit_code": 0,
+          "output_bytes": 51,
+          "read_search_command": true,
+          "result_sha256": "f77688470be5345c352f9b4d3df0243f4e112baab16d454d654deef858e863fa",
+          "signal": 0,
+          "successful_repository_observation": false,
+          "tool_call_id": "chatcmpl-tool-85027bed0fe48caa",
+          "tool_name": "run_shell_command"
+        }
+      ],
+      "prompt_token_count": 13356,
+      "rendered_prompt_sha256": "5a0f9bf9c231f3b9dcd7eaba26f7910d1506a4b4c05aa18dd8c328c8aaae6db1",
+      "second_request_index": 16,
+      "second_request_sha256": "43cfff42e7b5ee3e6f581db06d1c3663f819575378b24c3f887d019ea4019e61",
+      "selected": false,
+      "task_selection_index": 7
+    },
+    {
+      "concept_visibility": [
+        {
+          "analysis_role": "primary_hidden",
+          "channel_evidence": {
+            "assistant_text": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_call_args": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_outputs": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            }
+          },
+          "channels": {
+            "assistant_text": false,
+            "tool_call_args": false,
+            "tool_outputs": false
+          },
+          "concept_id": "task-08-concept-00",
+          "family": "hunk_symbol",
+          "forms": [
+            {
+              "kind": "bare",
+              "text": "_split",
+              "token_id": 16551
+            }
+          ],
+          "subject": "target",
+          "target": "_split",
+          "task_instance_id": "astropy__astropy-14598",
+          "visible_channels": [],
+          "visible_in_rendered_prompt": false
+        },
+        {
+          "analysis_role": "matched_hidden_foil",
+          "channel_evidence": {
+            "assistant_text": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_call_args": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_outputs": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            }
+          },
+          "channels": {
+            "assistant_text": false,
+            "tool_call_args": false,
+            "tool_outputs": false
+          },
+          "concept_id": "task-00-concept-01",
+          "family": "hunk_symbol",
+          "forms": [
+            {
+              "kind": "bare",
+              "text": "equals",
+              "token_id": 6950
+            },
+            {
+              "kind": "leading_space",
+              "text": " equals",
+              "token_id": 16327
+            }
+          ],
+          "subject": "foil",
+          "target": "equals",
+          "task_instance_id": "pydata__xarray-6938",
+          "visible_channels": [],
+          "visible_in_rendered_prompt": false
+        }
+      ],
+      "exclusion_reason": null,
+      "first_request_index": 17,
+      "first_request_sha256": "0db66dde1f66b739786cf703afc6610f2f57e40b1c4a026969aa53a41e8bbefc",
+      "instance_id": "astropy__astropy-14598",
+      "observations": [
+        {
+          "arguments_sha256": "b9100e3ea6ff75fc7d0dc48ae56de084f82a10fb77eeca753a271ffdef82d5d7",
+          "call_index": 0,
+          "classification": "successful_repository_read_or_search",
+          "command_sha256": "7d8810fc11483c14bbaabcf6188514cb4e224978a16c60783c8b0ef31405dd7b",
+          "exit_code": 0,
+          "output_bytes": 147,
+          "read_search_command": true,
+          "result_sha256": "1e2650c2932aee6a65ebfc9d37f611bd32a223491e1e6a7593a542f17fc1aaeb",
+          "signal": 0,
+          "successful_repository_observation": true,
+          "tool_call_id": "chatcmpl-tool-964db27972aaea51",
+          "tool_name": "run_shell_command"
+        },
+        {
+          "arguments_sha256": "6a0046f729abf57c4e76836105bfdd28877ad2b16b2ba56ccd925194dcaf473c",
+          "call_index": 1,
+          "classification": "successful_repository_read_or_search",
+          "command_sha256": "0d1698611abc27b13db148f6dbd6479ee9a64d69d0bee10c53472a27855dd63b",
+          "exit_code": 0,
+          "output_bytes": 238,
+          "read_search_command": true,
+          "result_sha256": "0aebe29c800413f3ce39dedc18d05e15a7ac87c6f6f06d02d77e81841e88a258",
+          "signal": 0,
+          "successful_repository_observation": true,
+          "tool_call_id": "chatcmpl-tool-89815bb32808ca51",
+          "tool_name": "run_shell_command"
+        }
+      ],
+      "prompt_token_count": 13913,
+      "rendered_prompt_sha256": "bdc147ffc34bdc129e604cb1d642699ffaee1e25a93c8b7e04d0ae1b4d817015",
+      "second_request_index": 18,
+      "second_request_sha256": "7a688d105d7b226fb54450f559379e010c508a148861582b9a865693263b412e",
+      "selected": true,
+      "task_selection_index": 8
+    },
+    {
+      "concept_visibility": [
+        {
+          "analysis_role": "primary_hidden",
+          "channel_evidence": {
+            "assistant_text": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_call_args": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_outputs": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            }
+          },
+          "channels": {
+            "assistant_text": false,
+            "tool_call_args": false,
+            "tool_outputs": false
+          },
+          "concept_id": "task-09-concept-00",
+          "family": "hunk_symbol",
+          "forms": [
+            {
+              "kind": "bare",
+              "text": "_finalize",
+              "token_id": 68228
+            }
+          ],
+          "subject": "target",
+          "target": "_finalize",
+          "task_instance_id": "pytest-dev__pytest-7571",
+          "visible_channels": [],
+          "visible_in_rendered_prompt": false
+        },
+        {
+          "analysis_role": "matched_hidden_foil",
+          "channel_evidence": {
+            "assistant_text": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_call_args": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            },
+            "tool_outputs": {
+              "canonical_identifier_boundary_hit": false,
+              "case_sensitive_compound_identifier_hits": [],
+              "exposed": false,
+              "scored_form_token_id_hits": []
+            }
+          },
+          "channels": {
+            "assistant_text": false,
+            "tool_call_args": false,
+            "tool_outputs": false
+          },
+          "concept_id": "task-08-concept-00",
+          "family": "hunk_symbol",
+          "forms": [
+            {
+              "kind": "bare",
+              "text": "_split",
+              "token_id": 16551
+            }
+          ],
+          "subject": "foil",
+          "target": "_split",
+          "task_instance_id": "astropy__astropy-14598",
+          "visible_channels": [],
+          "visible_in_rendered_prompt": false
+        }
+      ],
+      "exclusion_reason": null,
+      "first_request_index": 19,
+      "first_request_sha256": "e9554a7d2d3fa8ae47785430f70772469719398f60e0ce2197cccbd1a97429de",
+      "instance_id": "pytest-dev__pytest-7571",
+      "observations": [
+        {
+          "arguments_sha256": "eec8fa88c88ab3fa870594a13b5fea0c4e00f24f34bf2853513a711d3b3cf239",
+          "call_index": 0,
+          "classification": "successful_repository_read_or_search",
+          "command_sha256": "cadd82e5e4921a283214743b11976eaa16493dba8434bb11243048804e8185ef",
+          "exit_code": 0,
+          "output_bytes": 226,
+          "read_search_command": true,
+          "result_sha256": "399768c417a44553986f0eafa7c95e62832bfa85760e3e1f3a837f4198c69b4b",
+          "signal": 0,
+          "successful_repository_observation": true,
+          "tool_call_id": "chatcmpl-tool-964177ca66f0619c",
+          "tool_name": "run_shell_command"
+        }
+      ],
+      "prompt_token_count": 12791,
+      "rendered_prompt_sha256": "a8e1253be490db677864b51ebf467858b472524e585c7d27718432d7e5d51ef5",
+      "second_request_index": 20,
+      "second_request_sha256": "90cdc60c664f09513c0468279538b725ea9d4c0aa3cbb68dfd68ea15fc643008",
+      "selected": true,
+      "task_selection_index": 9
+    }
+  ],
+  "pair_count": 10,
+  "prompt_bundle_sha256": "45a00ae55b61ef2370a88cf2d177b8fa703a70abf04b9c9f4aa0ca10d1ebb5e6",
+  "prompts": [
+    {
+      "concept_count": 1,
+      "id": "swe-c1-02-pydata__xarray-6938",
+      "instance_id": "pydata__xarray-6938",
+      "prompt_sha256": "ca83e2889ff88900a4a1357126520ac87924a28ddc4b3ef995fa132bb739805a",
+      "prompt_token_count": 13686,
+      "score_token_count": 3,
+      "score_token_ids_sha256": "bcba93ac9d588cacfef57a6481026997b2e5bbf9addb5558c7ef3c02603ede36",
+      "token_ids_sha256": "f963efa148b43b9f5127778868bf2594d3efeee03bf965ac9a8c293722d2e313"
+    },
+    {
+      "concept_count": 1,
+      "id": "swe-c1-04-scikit-learn__scikit-learn-9288",
+      "instance_id": "scikit-learn__scikit-learn-9288",
+      "prompt_sha256": "7743a66cce8a541f6a18dca962f20f59df61f4c2cc83c9d434fec621a8982f3c",
+      "prompt_token_count": 14502,
+      "score_token_count": 4,
+      "score_token_ids_sha256": "e10df389cd97c68a0b17862bfd2969c912f6b52d92aa998deeaa7bc3116ca027",
+      "token_ids_sha256": "77eb1095e0a3fb7d65064c175d739f5ae9d2a4bd7bf3646a78c218a841c43b65"
+    },
+    {
+      "concept_count": 1,
+      "id": "swe-c1-06-django__django-13297",
+      "instance_id": "django__django-13297",
+      "prompt_sha256": "323f3085b0d638af52fdbb16488ad2ff39b8353ff9d4eb12cd0d04b099e1bb22",
+      "prompt_token_count": 13594,
+      "score_token_count": 3,
+      "score_token_ids_sha256": "6252ecd551d027044607ab4642a2d4505eeb210859e415f92bc80054a2821dd8",
+      "token_ids_sha256": "23bc223243e68d87da3e361111e69374fca62f27d45a32abe2f163cd70061e82"
+    },
+    {
+      "concept_count": 1,
+      "id": "swe-c1-08-sympy__sympy-21847",
+      "instance_id": "sympy__sympy-21847",
+      "prompt_sha256": "4a257743480bb8759a844d100e915c28e91b5a04de272fec377c27e5325d264b",
+      "prompt_token_count": 13023,
+      "score_token_count": 3,
+      "score_token_ids_sha256": "4380abd719bfca49ffec7ddda5198461bf82361a0a14793012c092da9bf498fe",
+      "token_ids_sha256": "5ebe29d227eb375a8bc45ba6e724b89ef140e40e7fce7c1e0c8013814b7b4957"
+    },
+    {
+      "concept_count": 2,
+      "id": "swe-c1-10-pylint-dev__pylint-4551",
+      "instance_id": "pylint-dev__pylint-4551",
+      "prompt_sha256": "095805e5c768c907ce88495ec899ab3589df1b86851b5fcee0b984309eeed1fc",
+      "prompt_token_count": 14517,
+      "score_token_count": 4,
+      "score_token_ids_sha256": "ef6c68a417301bbeff3864e34475b495cf7578252f58c8db1b2527fe18e7adf0",
+      "token_ids_sha256": "2e9cae7a1039f058003d24dd7641955f2735d6b7a2d99400f5381ae60ebacf16"
+    },
+    {
+      "concept_count": 1,
+      "id": "swe-c1-12-sphinx-doc__sphinx-8638",
+      "instance_id": "sphinx-doc__sphinx-8638",
+      "prompt_sha256": "445b3536c87a2aa0a3cc1634ad010cb6d26e5f44bb600a08cac4cd25a4e019f8",
+      "prompt_token_count": 14808,
+      "score_token_count": 4,
+      "score_token_ids_sha256": "51e290d7dfb0aadaa7e4cfc225bf5de22881ee3a7cd7fbf9fbcfa9d78cbeef6d",
+      "token_ids_sha256": "5e062f725620fa51600df4bbe83d0de1360ece4a305cf219945fd81b00f5c9a3"
+    },
+    {
+      "concept_count": 1,
+      "id": "swe-c1-18-astropy__astropy-14598",
+      "instance_id": "astropy__astropy-14598",
+      "prompt_sha256": "bdc147ffc34bdc129e604cb1d642699ffaee1e25a93c8b7e04d0ae1b4d817015",
+      "prompt_token_count": 13913,
+      "score_token_count": 3,
+      "score_token_ids_sha256": "bcba93ac9d588cacfef57a6481026997b2e5bbf9addb5558c7ef3c02603ede36",
+      "token_ids_sha256": "ecb1240ca37005f21e97145428f83cbb2c1da430a4713216ee78785feeda62c2"
+    },
+    {
+      "concept_count": 1,
+      "id": "swe-c1-20-pytest-dev__pytest-7571",
+      "instance_id": "pytest-dev__pytest-7571",
+      "prompt_sha256": "a8e1253be490db677864b51ebf467858b472524e585c7d27718432d7e5d51ef5",
+      "prompt_token_count": 12791,
+      "score_token_count": 2,
+      "score_token_ids_sha256": "ccf43d5505ce88247bc3a202b525b7f00815e74684f6230a1682a46f20da5009",
+      "token_ids_sha256": "1b2468c5edacd064a5304acb125489620c59a7fff65091e93d2f05dfe15714f3"
+    }
+  ],
+  "protocol_sha256": "9a7ac3d1206f83c1c964245f8f3ed2824cbfcd471b17fe81ae87b77c47045cb5",
+  "request_count": 20,
+  "retained_foil_count": 8,
+  "retained_primary_concept_count": 9,
+  "schema_version": 1,
+  "selected_prompt_count": 8,
+  "selected_task_count": 8,
+  "tokenizer_json_sha256": "5f9e4d4901a92b997e463c1f46055088b6cca5ca61a6522d1b9f64c4bb81cb42",
+  "usage_manifest_sha256": "eb738f3be2f5537db78ac5fe154aa30d681bc948bf1960da65955ecd3493a967"
+}
