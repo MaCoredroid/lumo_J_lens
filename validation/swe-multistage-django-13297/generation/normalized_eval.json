@@ -1,0 +1,10 @@
+{
+  "track": "swe_bench",
+  "instance_id": "django__django-13297",
+  "outcome": "skipped",
+  "failure_mode": null,
+  "dataset_name": "/home/mark/lumo_J_lens/runs/swe_multistage_dev_django_64k_v2_20260718/dataset.json",
+  "model_id": "qwen3.6-27b-nvfp4-mtp::qwen-code-0.19.4",
+  "eval_wall_clock_seconds": 0.0,
+  "arch": "x86_64"
+}

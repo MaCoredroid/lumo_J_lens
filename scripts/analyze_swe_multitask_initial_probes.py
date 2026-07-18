@@ -50,6 +50,7 @@ NATIVE_PROVENANCE_SHA256 = (
 )
 ALL_SOURCE_LAYERS = tuple(range(63))
 FIXED_MIDDLE_LAYERS = tuple(range(16, 48))
+PRIMARY_FIXED_LAYER_BAND = tuple(range(24, 48))
 PASS_K = (1, 5, 10, 50, 100, 1000)
 CONCEPT_FAMILIES = frozenset(
     ("file_stem", "module_dir", "hunk_symbol", "replacement")
@@ -165,6 +166,40 @@ def normalized_utility(rank: int) -> float:
     return math.log(LOGIT_VOCABULARY_SIZE / rank) / math.log(
         LOGIT_VOCABULARY_SIZE
     )
+
+
+def validate_fixed_layer_band(value: Sequence[int]) -> tuple[int, ...]:
+    require(
+        not isinstance(value, (str, bytes)),
+        "fixed layer band must be an integer sequence",
+    )
+    layers = tuple(value)
+    require(bool(layers), "fixed layer band must not be empty")
+    require(
+        all(isinstance(layer, int) and not isinstance(layer, bool) for layer in layers),
+        "fixed layer band must contain integers",
+    )
+    require(
+        layers == tuple(range(layers[0], layers[-1] + 1)),
+        "fixed layer band must be sorted, unique, and contiguous",
+    )
+    require(
+        set(layers).issubset(FIXED_MIDDLE_LAYERS),
+        "fixed layer band must be contained in frozen layers 16 through 47",
+    )
+    return layers
+
+
+def parse_fixed_layer_band(value: str) -> tuple[int, ...]:
+    try:
+        start_text, end_text = value.split(":", maxsplit=1)
+        start = int(start_text)
+        end = int(end_text)
+        return validate_fixed_layer_band(tuple(range(start, end + 1)))
+    except (TypeError, ValueError) as error:
+        raise argparse.ArgumentTypeError(
+            "fixed layer band must be an inclusive START:END range within 16:47"
+        ) from error
 
 
 def _validate_forms(
@@ -527,14 +562,14 @@ def validate_lens(report: Mapping[str, Any], label: str) -> None:
         raise ValueError(f"unknown report label: {label}")
 
 
-def scored_ranks(
+def scored_token_evidence(
     value: Any,
     *,
     label: str,
     expected_ids: Sequence[int],
     token_text: Mapping[int, str],
     generated_token_id: int,
-) -> dict[int, int]:
+) -> dict[int, dict[str, Any]]:
     readout = mapping(value, label)
     require(
         readout.get("target_token_id") == generated_token_id,
@@ -552,7 +587,7 @@ def scored_ranks(
         finite(readout.get("target_logprob"), f"{label}.target_logprob")
 
     records = sequence(readout.get("scored_tokens"), f"{label}.scored_tokens")
-    result: dict[int, int] = {}
+    result: dict[int, dict[str, Any]] = {}
     for index, raw_record in enumerate(records):
         record = mapping(raw_record, f"{label}.scored_tokens[{index}]")
         token_id = record.get("token_id")
@@ -573,14 +608,41 @@ def scored_ranks(
             record.get("token") == token_text.get(token_id),
             f"{label} scored token text mismatch",
         )
-        finite(record.get("score"), f"{label}.token-{token_id}.score")
-        finite(record.get("logprob"), f"{label}.token-{token_id}.logprob")
-        result[token_id] = token_rank
+        score = finite(record.get("score"), f"{label}.token-{token_id}.score")
+        logprob = finite(
+            record.get("logprob"), f"{label}.token-{token_id}.logprob"
+        )
+        result[token_id] = {
+            "token_id": token_id,
+            "token": record.get("token"),
+            "rank": token_rank,
+            "score": score,
+            "logprob": logprob,
+        }
     require(
         list(result) == list(expected_ids),
         f"{label} scored vocabulary rank coverage/order mismatch",
     )
     return result
+
+
+def scored_ranks(
+    value: Any,
+    *,
+    label: str,
+    expected_ids: Sequence[int],
+    token_text: Mapping[int, str],
+    generated_token_id: int,
+) -> dict[int, int]:
+    """Return the legacy rank-only view while validating all retained evidence."""
+    evidence = scored_token_evidence(
+        value,
+        label=label,
+        expected_ids=expected_ids,
+        token_text=token_text,
+        generated_token_id=generated_token_id,
+    )
+    return {token_id: record["rank"] for token_id, record in evidence.items()}
 
 
 def validate_report(
@@ -712,6 +774,12 @@ def validate_report(
             "jacobian": {},
             "logit": {},
         }
+        evidence_maps: dict[
+            str, dict[int, dict[int, dict[str, Any]]]
+        ] = {
+            "jacobian": {},
+            "logit": {},
+        }
         logit_readouts: list[Mapping[str, Any]] = []
         for layer_id, raw_layer in zip(layer_ids, layers, strict=True):
             layer = mapping(raw_layer, f"{label} {identifier}.layer-{layer_id}")
@@ -731,20 +799,30 @@ def validate_report(
             )
             jacobian_readout = position.get("jacobian_lens")
             logit_readout = position.get("logit_lens")
-            rank_maps["jacobian"][layer_id] = scored_ranks(
+            jacobian_evidence = scored_token_evidence(
                 jacobian_readout,
                 label=f"{label} {identifier}.layer-{layer_id}.jacobian",
                 expected_ids=expected_ids,
                 token_text=prompt["token_text"],
                 generated_token_id=generated_token_id,
             )
-            rank_maps["logit"][layer_id] = scored_ranks(
+            logit_evidence = scored_token_evidence(
                 logit_readout,
                 label=f"{label} {identifier}.layer-{layer_id}.logit",
                 expected_ids=expected_ids,
                 token_text=prompt["token_text"],
                 generated_token_id=generated_token_id,
             )
+            evidence_maps["jacobian"][layer_id] = jacobian_evidence
+            evidence_maps["logit"][layer_id] = logit_evidence
+            rank_maps["jacobian"][layer_id] = {
+                token_id: record["rank"]
+                for token_id, record in jacobian_evidence.items()
+            }
+            rank_maps["logit"][layer_id] = {
+                token_id: record["rank"]
+                for token_id, record in logit_evidence.items()
+            }
             logit_readouts.append(mapping(logit_readout, "logit readout"))
 
         top1 = experiment.get("final_layer_top1_matches_greedy")
@@ -786,6 +864,7 @@ def validate_report(
                 "concepts": prompt["concepts"],
                 "generated_token_id": generated_token_id,
                 "rank_maps": rank_maps,
+                "evidence_maps": evidence_maps,
             }
         )
         pair_rows.append(
@@ -905,15 +984,261 @@ def _best_form_rank(
     }
 
 
-def score_method(
-    rows: Sequence[Mapping[str, Any]], *, method: str
+def _selected_form_evidence(
+    evidence: Mapping[int, Mapping[str, Any]],
+    forms: Sequence[Mapping[str, Any]],
+    *,
+    generated_token_id: int,
 ) -> dict[str, Any]:
+    included_forms = [form for form in forms if form["token_id"] != generated_token_id]
+    excluded_forms = [form for form in forms if form["token_id"] == generated_token_id]
+    if not included_forms:
+        return {
+            "scorable": False,
+            "reason": "all eligible forms equal the accepted generated token",
+            "excluded_accepted_forms": [dict(form) for form in excluded_forms],
+        }
+    selected_form = min(
+        included_forms,
+        key=lambda form: (evidence[form["token_id"]]["rank"], form["token_id"]),
+    )
+    selected_evidence = evidence[selected_form["token_id"]]
+    return {
+        "scorable": True,
+        "selected_form": {
+            **dict(selected_form),
+            "rank": selected_evidence["rank"],
+            "score": selected_evidence["score"],
+            "logprob": selected_evidence["logprob"],
+        },
+        "eligible_forms_after_accepted_token_exclusion": [
+            dict(form) for form in included_forms
+        ],
+        "excluded_accepted_forms": [dict(form) for form in excluded_forms],
+    }
+
+
+def _margin_stability(values: Sequence[float]) -> dict[str, Any]:
+    require(bool(values), "layer stability requires at least one value")
+    positives = sum(value > 0.0 for value in values)
+    negatives = sum(value < 0.0 for value in values)
+    ties = len(values) - positives - negatives
+    return {
+        "layer_count": len(values),
+        "mean": statistics.fmean(values),
+        "population_standard_deviation": statistics.pstdev(values),
+        "minimum": min(values),
+        "maximum": max(values),
+        "positive_layer_fraction": positives / len(values),
+        "negative_layer_fraction": negatives / len(values),
+        "zero_layer_fraction": ties / len(values),
+        "dominant_sign_fraction": max(positives, negatives, ties) / len(values),
+    }
+
+
+def _curve_summary(
+    per_layer_curve: Sequence[Mapping[str, Any]],
+    *,
+    fixed_layer_band: Sequence[int],
+    aggregation_unit: str,
+    unit_count: int,
+) -> dict[str, Any]:
+    layers = [row["layer"] for row in per_layer_curve]
+    require(
+        layers == list(fixed_layer_band),
+        "fixed-band contrast curve does not cover the preregistered layer band",
+    )
+    numeric_fields = (
+        "target_score",
+        "foil_score",
+        "score_margin",
+        "target_logprob",
+        "foil_logprob",
+        "logprob_margin",
+    )
+    all_layers = {
+        field: statistics.fmean(float(row[field]) for row in per_layer_curve)
+        for field in numeric_fields
+    }
+    return {
+        "layer_band": list(fixed_layer_band),
+        "aggregation_unit": aggregation_unit,
+        "unit_count": unit_count,
+        "per_layer_curve": [dict(row) for row in per_layer_curve],
+        "all_layers": {
+            "layer_count": len(fixed_layer_band),
+            "reduction": "arithmetic mean over every layer in the fixed band",
+            **all_layers,
+        },
+        "layer_stability": {
+            "score_margin": _margin_stability(
+                [float(row["score_margin"]) for row in per_layer_curve]
+            ),
+            "logprob_margin": _margin_stability(
+                [float(row["logprob_margin"]) for row in per_layer_curve]
+            ),
+        },
+    }
+
+
+def _same_layer_target_foil_contrast(
+    evidence_maps: Mapping[int, Mapping[int, Mapping[str, Any]]],
+    target_forms: Sequence[Mapping[str, Any]],
+    foils: Sequence[Mapping[str, Any]],
+    *,
+    generated_token_id: int,
+    fixed_layer_band: Sequence[int],
+) -> dict[str, Any] | None:
+    if not foils:
+        return None
+
+    first_layer = fixed_layer_band[0]
+    target_check = _selected_form_evidence(
+        evidence_maps[first_layer],
+        target_forms,
+        generated_token_id=generated_token_id,
+    )
+    scorable_foils = [
+        foil
+        for foil in foils
+        if _selected_form_evidence(
+            evidence_maps[first_layer],
+            foil["forms"],
+            generated_token_id=generated_token_id,
+        )["scorable"]
+    ]
+    if not target_check["scorable"] or not scorable_foils:
+        return {
+            "scorable": False,
+            "reason": (
+                target_check.get("reason")
+                if not target_check["scorable"]
+                else "no matched foil forms remain after accepted-token exclusion"
+            ),
+            "layer_band": list(fixed_layer_band),
+            "per_layer_curve": [],
+        }
+
+    per_layer_curve: list[dict[str, Any]] = []
+    for layer in fixed_layer_band:
+        target = _selected_form_evidence(
+            evidence_maps[layer],
+            target_forms,
+            generated_token_id=generated_token_id,
+        )
+        foil_rows: list[dict[str, Any]] = []
+        for foil in scorable_foils:
+            selected = _selected_form_evidence(
+                evidence_maps[layer],
+                foil["forms"],
+                generated_token_id=generated_token_id,
+            )
+            require(
+                selected["scorable"],
+                "fixed-band foil scorability changed by layer",
+            )
+            foil_rows.append(
+                {
+                    "task_instance_id": foil["task_instance_id"],
+                    "concept_id": foil["concept_id"],
+                    "selected_form": selected["selected_form"],
+                }
+            )
+        target_form = target["selected_form"]
+        foil_score = statistics.fmean(
+            foil["selected_form"]["score"] for foil in foil_rows
+        )
+        foil_logprob = statistics.fmean(
+            foil["selected_form"]["logprob"] for foil in foil_rows
+        )
+        per_layer_curve.append(
+            {
+                "layer": layer,
+                "target_selected_form": target_form,
+                "foils": foil_rows,
+                "foil_count": len(foil_rows),
+                "target_score": target_form["score"],
+                "foil_score": foil_score,
+                "score_margin": target_form["score"] - foil_score,
+                "target_logprob": target_form["logprob"],
+                "foil_logprob": foil_logprob,
+                "logprob_margin": target_form["logprob"] - foil_logprob,
+            }
+        )
+
+    return {
+        "scorable": True,
+        "form_reduction": (
+            "minimum-rank eligible form within each target or foil at each layer"
+        ),
+        "foil_reduction": (
+            "arithmetic mean over matched-foil evidence within the same layer"
+        ),
+        "layer_reduction": (
+            "arithmetic mean of same-layer margins over the fixed band; "
+            "no layer selection"
+        ),
+        "foil_count": len(scorable_foils),
+        **_curve_summary(
+            per_layer_curve,
+            fixed_layer_band=fixed_layer_band,
+            aggregation_unit="matched concept contrast",
+            unit_count=1,
+        ),
+    }
+
+
+def _aggregate_fixed_band_contrasts(
+    contrasts: Sequence[Mapping[str, Any]],
+    *,
+    fixed_layer_band: Sequence[int],
+    aggregation_unit: str,
+) -> dict[str, Any]:
+    require(bool(contrasts), "fixed-band aggregation requires at least one contrast")
+    curves = [
+        {row["layer"]: row for row in contrast["per_layer_curve"]}
+        for contrast in contrasts
+    ]
+    numeric_fields = (
+        "target_score",
+        "foil_score",
+        "score_margin",
+        "target_logprob",
+        "foil_logprob",
+        "logprob_margin",
+    )
+    per_layer_curve = [
+        {
+            "layer": layer,
+            **{
+                field: statistics.fmean(curve[layer][field] for curve in curves)
+                for field in numeric_fields
+            },
+        }
+        for layer in fixed_layer_band
+    ]
+    return _curve_summary(
+        per_layer_curve,
+        fixed_layer_band=fixed_layer_band,
+        aggregation_unit=aggregation_unit,
+        unit_count=len(contrasts),
+    )
+
+
+def score_method(
+    rows: Sequence[Mapping[str, Any]],
+    *,
+    method: str,
+    fixed_layer_band: Sequence[int] = PRIMARY_FIXED_LAYER_BAND,
+) -> dict[str, Any]:
+    fixed_layer_band = validate_fixed_layer_band(fixed_layer_band)
     task_results: list[dict[str, Any]] = []
     accepted_exclusions: list[dict[str, Any]] = []
     all_target_ranks: list[int] = []
     for row in rows:
         family_concepts: dict[str, list[dict[str, Any]]] = {}
         rank_maps = row["rank_maps"][method]
+        evidence_maps = row["evidence_maps"][method]
         for concept in row["concepts"]:
             target = _best_form_rank(
                 rank_maps,
@@ -974,6 +1299,13 @@ def score_method(
                         for k in PASS_K
                     },
                 }
+            fixed_band_contrast = _same_layer_target_foil_contrast(
+                evidence_maps,
+                concept["forms"],
+                concept["foils"],
+                generated_token_id=row["generated_token_id"],
+                fixed_layer_band=fixed_layer_band,
+            )
             family_concepts.setdefault(concept["family"], []).append(
                 {
                     "id": concept["id"],
@@ -982,6 +1314,7 @@ def score_method(
                     "target_score": target,
                     "foils": foils,
                     "target_minus_foil": contrast,
+                    "fixed_layer_band_contrast": fixed_band_contrast,
                 }
             )
 
@@ -992,6 +1325,12 @@ def score_method(
                 concept["target_minus_foil"]
                 for concept in concepts
                 if concept["target_minus_foil"] is not None
+            ]
+            fixed_band_contrasts = [
+                concept["fixed_layer_band_contrast"]
+                for concept in concepts
+                if concept["fixed_layer_band_contrast"] is not None
+                and concept["fixed_layer_band_contrast"]["scorable"]
             ]
             family_row: dict[str, Any] = {
                 "family": family,
@@ -1033,6 +1372,14 @@ def score_method(
                     )
                     for k in PASS_K
                 }
+            if fixed_band_contrasts:
+                family_row["fixed_layer_band_contrast"] = (
+                    _aggregate_fixed_band_contrasts(
+                        fixed_band_contrasts,
+                        fixed_layer_band=fixed_layer_band,
+                        aggregation_unit="equal-weighted scorable concept",
+                    )
+                )
             families.append(family_row)
 
         target_families = [family for family in families if "target_utility_u" in family]
@@ -1085,6 +1432,20 @@ def score_method(
                     for k in PASS_K
                 },
             }
+        fixed_band_families = [
+            family for family in families if "fixed_layer_band_contrast" in family
+        ]
+        if fixed_band_families:
+            task_result["fixed_layer_band_contrast"] = (
+                _aggregate_fixed_band_contrasts(
+                    [
+                        family["fixed_layer_band_contrast"]
+                        for family in fixed_band_families
+                    ],
+                    fixed_layer_band=fixed_layer_band,
+                    aggregation_unit="equal-weighted concept family",
+                )
+            )
         task_results.append(task_result)
 
     foil_tasks = [task for task in task_results if "foil_contrast" in task]
@@ -1125,6 +1486,16 @@ def score_method(
                 task["foil_contrast"]["target_minus_foil_u"] for task in foil_tasks
             ),
         }
+    fixed_band_tasks = [
+        task for task in task_results if "fixed_layer_band_contrast" in task
+    ]
+    if fixed_band_tasks:
+        result["fixed_layer_band_contrast"] = _aggregate_fixed_band_contrasts(
+            [task["fixed_layer_band_contrast"] for task in fixed_band_tasks],
+            fixed_layer_band=fixed_layer_band,
+            aggregation_unit="equal-weighted independent SWE-Verified task",
+        )
+        result["fixed_layer_band_contrast"]["task_count"] = len(fixed_band_tasks)
     return result
 
 
@@ -1314,6 +1685,159 @@ def target_minus_foil_comparison(
     }
 
 
+def fixed_layer_band_target_minus_foil_comparison(
+    method: Mapping[str, Any],
+    *,
+    label: str,
+    seed: int,
+    samples: int,
+) -> dict[str, Any] | None:
+    tasks = [
+        task
+        for task in sequence(method.get("tasks"), "method.tasks")
+        if "fixed_layer_band_contrast" in task
+    ]
+    if not tasks:
+        return None
+    summary = mapping(
+        method.get("fixed_layer_band_contrast"),
+        "method.fixed_layer_band_contrast",
+    )
+    metric_values: dict[str, list[dict[str, Any]]] = {}
+    for metric in ("score_margin", "logprob_margin"):
+        metric_values[metric] = [
+            {
+                "instance_id": task["instance_id"],
+                "repo": task["repo"],
+                "difference": task["fixed_layer_band_contrast"]["all_layers"][
+                    metric
+                ],
+            }
+            for task in tasks
+        ]
+    return {
+        "contrast": "same_layer_target_minus_matched_foil",
+        "layer_band": list(summary["layer_band"]),
+        "task_count": len(tasks),
+        "score_margin": paired_task_bootstrap(
+            metric_values["score_margin"],
+            label=f"{label}:fixed-band-target-minus-foil:score",
+            seed=seed,
+            samples=samples,
+        ),
+        "logprob_margin": paired_task_bootstrap(
+            metric_values["logprob_margin"],
+            label=f"{label}:fixed-band-target-minus-foil:logprob",
+            seed=seed,
+            samples=samples,
+        ),
+        "per_layer_curve": summary["per_layer_curve"],
+        "layer_stability": summary["layer_stability"],
+        "leave_one_repo_out": {
+            metric: leave_one_repo_out(values)
+            for metric, values in metric_values.items()
+        },
+    }
+
+
+def compare_fixed_layer_band_methods(
+    left: Mapping[str, Any],
+    right: Mapping[str, Any],
+    *,
+    label: str,
+    seed: int,
+    samples: int,
+) -> dict[str, Any] | None:
+    left_tasks = {
+        instance_id: task
+        for instance_id, task in _task_map(left).items()
+        if "fixed_layer_band_contrast" in task
+    }
+    right_tasks = {
+        instance_id: task
+        for instance_id, task in _task_map(right).items()
+        if "fixed_layer_band_contrast" in task
+    }
+    require(
+        left_tasks.keys() == right_tasks.keys(),
+        f"{label} fixed-band contrastable task grid mismatch",
+    )
+    if not left_tasks:
+        return None
+    left_summary = mapping(
+        left.get("fixed_layer_band_contrast"),
+        "left.fixed_layer_band_contrast",
+    )
+    right_summary = mapping(
+        right.get("fixed_layer_band_contrast"),
+        "right.fixed_layer_band_contrast",
+    )
+    require(
+        left_summary["layer_band"] == right_summary["layer_band"],
+        f"{label} fixed layer band mismatch",
+    )
+    metric_values: dict[str, list[dict[str, Any]]] = {}
+    for metric in ("score_margin", "logprob_margin"):
+        metric_values[metric] = []
+        for instance_id, left_task in left_tasks.items():
+            right_task = right_tasks[instance_id]
+            require(
+                left_task["repo"] == right_task["repo"],
+                f"{label} repository pairing mismatch for {instance_id}",
+            )
+            metric_values[metric].append(
+                {
+                    "instance_id": instance_id,
+                    "repo": left_task["repo"],
+                    "difference": (
+                        left_task["fixed_layer_band_contrast"]["all_layers"][metric]
+                        - right_task["fixed_layer_band_contrast"]["all_layers"][metric]
+                    ),
+                }
+            )
+    left_curve = {
+        row["layer"]: row for row in left_summary["per_layer_curve"]
+    }
+    right_curve = {
+        row["layer"]: row for row in right_summary["per_layer_curve"]
+    }
+    return {
+        "left_minus_right": label,
+        "layer_band": list(left_summary["layer_band"]),
+        "task_count": len(left_tasks),
+        "score_margin": paired_task_bootstrap(
+            metric_values["score_margin"],
+            label=f"{label}:fixed-band-score-margin",
+            seed=seed,
+            samples=samples,
+        ),
+        "logprob_margin": paired_task_bootstrap(
+            metric_values["logprob_margin"],
+            label=f"{label}:fixed-band-logprob-margin",
+            seed=seed,
+            samples=samples,
+        ),
+        "per_layer_curve": [
+            {
+                "layer": layer,
+                "score_margin_difference": (
+                    left_curve[layer]["score_margin"]
+                    - right_curve[layer]["score_margin"]
+                ),
+                "logprob_margin_difference": (
+                    left_curve[layer]["logprob_margin"]
+                    - right_curve[layer]["logprob_margin"]
+                ),
+            }
+            for layer in left_summary["layer_band"]
+        ],
+        "leave_one_repo_out": {
+            metric: leave_one_repo_out(values)
+            for metric, values in metric_values.items()
+        },
+    }
+
+
 def analyze(
     prompts_value: Sequence[Mapping[str, Any]],
     public_report: Mapping[str, Any],
@@ -1322,8 +1846,11 @@ def analyze(
     bootstrap_seed: int = BOOTSTRAP_SEED,
     bootstrap_samples: int = BOOTSTRAP_SAMPLES,
     expected_checkpoint: Mapping[str, str] = CHECKPOINT_CONTRACTS["C0"],
+    fixed_layer_band: Sequence[int] = PRIMARY_FIXED_LAYER_BAND,
 ) -> dict[str, Any]:
     require(bootstrap_samples > 0, "bootstrap sample count must be positive")
+    fixed_layer_band = validate_fixed_layer_band(fixed_layer_band)
+    fixed_band_is_default = fixed_layer_band == PRIMARY_FIXED_LAYER_BAND
     contract = validate_prompt_bundle(
         prompts_value, expected_checkpoint=expected_checkpoint
     )
@@ -1331,10 +1858,18 @@ def analyze(
     native = validate_report(native_report, label="native", contract=contract)
     pairing = validate_report_pair(public, native)
 
-    public_jacobian = score_method(public["rows"], method="jacobian")
-    logit = score_method(public["rows"], method="logit")
-    native_jacobian = score_method(native["rows"], method="jacobian")
-    native_logit = score_method(native["rows"], method="logit")
+    public_jacobian = score_method(
+        public["rows"], method="jacobian", fixed_layer_band=fixed_layer_band
+    )
+    logit = score_method(
+        public["rows"], method="logit", fixed_layer_band=fixed_layer_band
+    )
+    native_jacobian = score_method(
+        native["rows"], method="jacobian", fixed_layer_band=fixed_layer_band
+    )
+    native_logit = score_method(
+        native["rows"], method="logit", fixed_layer_band=fixed_layer_band
+    )
     require(
         logit == native_logit,
         "paired reports produced different ordinary logit-lens summaries",
@@ -1424,6 +1959,56 @@ def analyze(
     comparisons["target_minus_foil"] = (
         target_foil if any(value is not None for value in target_foil.values()) else None
     )
+    fixed_band_within_method = {
+        "public_jacobian": fixed_layer_band_target_minus_foil_comparison(
+            public_jacobian,
+            label="public_jacobian",
+            seed=bootstrap_seed,
+            samples=bootstrap_samples,
+        ),
+        "native_jacobian": fixed_layer_band_target_minus_foil_comparison(
+            native_jacobian,
+            label="native_jacobian",
+            seed=bootstrap_seed,
+            samples=bootstrap_samples,
+        ),
+        "logit_lens": fixed_layer_band_target_minus_foil_comparison(
+            logit,
+            label="logit_lens",
+            seed=bootstrap_seed,
+            samples=bootstrap_samples,
+        ),
+    }
+    fixed_band_method_differences = {
+        "public_minus_logit": compare_fixed_layer_band_methods(
+            public_jacobian,
+            logit,
+            label="public_jacobian_minus_logit",
+            seed=bootstrap_seed,
+            samples=bootstrap_samples,
+        ),
+        "native_minus_logit": compare_fixed_layer_band_methods(
+            native_jacobian,
+            logit,
+            label="native_jacobian_minus_logit",
+            seed=bootstrap_seed,
+            samples=bootstrap_samples,
+        ),
+        "native_minus_public": compare_fixed_layer_band_methods(
+            native_jacobian,
+            public_jacobian,
+            label="native_jacobian_minus_public_jacobian",
+            seed=bootstrap_seed,
+            samples=bootstrap_samples,
+        ),
+    }
+    comparisons["fixed_layer_band_same_layer"] = {
+        "primary": fixed_band_is_default,
+        "analysis_role": "primary" if fixed_band_is_default else "sensitivity",
+        "layer_band": list(fixed_layer_band),
+        "within_method_target_minus_foil": fixed_band_within_method,
+        "method_differences": fixed_band_method_differences,
+    }
 
     return {
         "schema_version": 1,
@@ -1450,6 +2035,44 @@ def analyze(
             }[contract["checkpoint"]["id"]],
             "checkpoint_metadata": contract["checkpoint"],
             "fixed_middle_layers": list(FIXED_MIDDLE_LAYERS),
+            "primary_fixed_layer_band": list(fixed_layer_band),
+            "primary_metric": {
+                "name": "fixed_layer_band_same_layer_target_minus_matched_foil",
+                "analysis_role": (
+                    "primary" if fixed_band_is_default else "sensitivity"
+                ),
+                "default_layer_band": list(PRIMARY_FIXED_LAYER_BAND),
+                "selected_layer_band": list(fixed_layer_band),
+                "evidence": ["unrounded-float32 score", "logprob"],
+                "form_reduction": (
+                    "minimum-rank eligible form separately within each target or "
+                    "matched foil at each layer"
+                ),
+                "foil_reduction": (
+                    "arithmetic mean over matched foils within the same layer"
+                ),
+                "layer_reduction": (
+                    "arithmetic mean of same-layer margins over every layer in the "
+                    "fixed band; target and foil layers are never selected "
+                    "independently"
+                ),
+                "weighting": (
+                    "equal concepts within family, equal families within task, "
+                    "equal independent tasks overall"
+                ),
+                "layer_band_rationale": (
+                    (
+                        "layers 24 through 47 are this repository's pre-frozen "
+                        "middle band used on the pinned Anthropic multihop control; "
+                        "the legacy 16 through 47 rank reducer is retained separately"
+                    )
+                    if fixed_band_is_default
+                    else (
+                        "explicit caller-provided sensitivity band within the frozen "
+                        "16 through 47 captured-layer superset"
+                    )
+                ),
+            },
             "pass_at_k": list(PASS_K),
             "rank_reduction": "minimum over predeclared eligible forms and fixed layers",
             "utility_u": "log(V / minimum_rank) / log(V)",
@@ -1563,6 +2186,16 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
         default="C0",
         help="exact frozen checkpoint metadata contract (default: C0)",
     )
+    parser.add_argument(
+        "--fixed-layer-band",
+        type=parse_fixed_layer_band,
+        default=PRIMARY_FIXED_LAYER_BAND,
+        metavar="START:END",
+        help=(
+            "inclusive fixed band for the primary same-layer margin "
+            "(default: 24:47; must be within 16:47)"
+        ),
+    )
     parser.add_argument("--bootstrap-seed", type=int, default=BOOTSTRAP_SEED)
     parser.add_argument("--bootstrap-samples", type=int, default=BOOTSTRAP_SAMPLES)
     return parser.parse_args(argv)
@@ -1586,6 +2219,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         bootstrap_seed=args.bootstrap_seed,
         bootstrap_samples=args.bootstrap_samples,
         expected_checkpoint=CHECKPOINT_CONTRACTS[args.expected_checkpoint],
+        fixed_layer_band=args.fixed_layer_band,
     )
     result["inputs"] = {
         "prompts": prompts_source,
@@ -1602,6 +2236,19 @@ def main(argv: Sequence[str] | None = None) -> int:
         interval = metric["confidence_interval"]
         print(
             f"{comparison_name} task-u: {metric['estimate']:+.6f} "
+            f"[{interval['lower']:+.6f}, {interval['upper']:+.6f}]"
+        )
+    primary = result["comparisons"]["fixed_layer_band_same_layer"][
+        "within_method_target_minus_foil"
+    ]
+    for method_name, method_result in primary.items():
+        if method_result is None:
+            continue
+        metric = method_result["logprob_margin"]
+        interval = metric["confidence_interval"]
+        print(
+            f"{method_name} fixed-band same-layer logprob margin: "
+            f"{metric['estimate']:+.6f} "
             f"[{interval['lower']:+.6f}, {interval['upper']:+.6f}]"
         )
     print("claims gate: NONE (exploratory pilot; no embedded thresholds)")

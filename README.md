@@ -30,6 +30,8 @@ the completed native NVIDIA fit contract and production evidence, and
 for the layer-by-layer replay of the certified Qwen Code episode,
 [docs/JLENS_SWE_MULTITASK_CHECKPOINTS_2026-07-18.md](docs/JLENS_SWE_MULTITASK_CHECKPOINTS_2026-07-18.md)
 for the leakage-audited multi-task C0/C1 probe, and
+[docs/JLENS_SWE_MULTISTAGE_2026-07-18.md](docs/JLENS_SWE_MULTISTAGE_2026-07-18.md)
+for the eight-stage lifecycle replay and next-step decision, and
 [docs/JLENS_NF4_EXPERIMENT.md](docs/JLENS_NF4_EXPERIMENT.md) for the fresh-fit
 experiment.
 
@@ -261,14 +263,16 @@ See the [full experiment report](docs/JLENS_SWE_QWEN_CODE_EXPERIMENT.md) and
 
 ### Multi-task SWE checkpoint probe
 
-A second experiment freezes oracle-hidden gold-patch concepts across ten
+A second experiment freezes gold-patch concept candidates across ten
 independent SWE-Verified tasks. At task start (C0), neither J-lens beats the
-ordinary logit lens. After the first successful repository observation (C1),
-the token-aware leakage audit retains eight tasks and nine hidden concepts.
-Native has the best C1 point estimate (`U=0.28738`, concept-level geometric
-rank `7,276`) versus public (`0.26247`, `9,166`) and logit (`0.25771`,
-`9,509`), but all
-paired task-bootstrap method-difference intervals cross zero.
+ordinary logit lens. The historical C1 exact-token audit retained eight tasks
+and nine concepts, but a later case-folded identifier audit invalidated the
+Django `lazy` row: `SimpleLazyObject` is present at both C0M and C1. The clean
+candidate cohort is therefore seven tasks and eight concepts. Historical
+aggregate JSON was not recomputed; its C1 point estimates (`U=0.28738` native,
+`0.26247` public, and `0.25771` logit) include the exposed Django row and must
+not be cited as a clean hidden-concept evaluation. All paired task-bootstrap
+method-difference intervals already cross zero.
 
 An audit caught that the original C0 and captured C1 startup contexts differed,
 so those preliminary stage deltas were discarded. The corrected C0M baseline
@@ -276,11 +280,12 @@ uses exact token prefixes from the same eight trajectories. Matched C0M-to-C1
 utility changes are `-0.06344/-0.04395/-0.02921` for logit/public/native. The
 direct public-minus-logit and native-minus-logit stage contrasts are `+0.01949`
 CI `[-0.08392, 0.12446]` and `+0.03423` CI `[-0.07364, 0.15884]`; neither is
-detected. Native ranks Django's hidden `lazy` target 607th at C0M and 209th at
-C1 while logit worsens from 929th to 44,630th, but other concepts move in the
-opposite direction. The next experiment should add an oracle-labeled C2 after
-reading the relevant source function and before target leakage, retaining C0M
-and C1 as controls; the current data does not justify another fit.
+detected. Native ranks Django's exposed `lazy` control 607th at C0M and 209th at
+C1 while logit worsens from 929th to 44,630th; this is compatible with lexical
+association and is not hidden-concept evidence. The next experiment must first
+apply the semantic audit and same-task foil rule, then add an oracle-labeled C2
+after reading the relevant source function and before target leakage, retaining
+C0M and C1 as controls. The current data does not justify another fit.
 See the [multi-task report](docs/JLENS_SWE_MULTITASK_CHECKPOINTS_2026-07-18.md).
 
 This is an eager, MTP-disabled replay of frozen contexts because the original
@@ -290,6 +295,57 @@ status is `failed`: five stages reached BF16 max logit error `0.125` against a
 checks, and full-logit RMS checks passed, and the longest-context preflight
 passed the complete strict gate. Treat the lens result as a reproducible
 descriptive analysis, not a strict adapter certification.
+
+### Full-lifecycle SWE pilot
+
+The one-command pilot freezes eight exact request prefixes from a separately
+resolved Django trajectory, replays all of them through the public `n=1000`,
+NF4 `n=10`, and native NVFP4/FP8-STE `n=10` lenses in three model loads, and
+compares each readout with a same-residual logit lens:
+
+```bash
+OUT_DIR=validation/jlens-swe-multistage-2026-07-18 \
+  scripts/run_swe_multistage_pilot.sh
+```
+
+Here one request is one Qwen Code model invocation in the agent/tool loop. The
+eight stages map to requests `1,2,5,6,13,14,16,25`; they are correlated
+checkpoints from one task, not eight independent samples. The corrected
+case-folded identifier audit finds **zero hidden concept rows**. The task prompt
+already contains `SimpleLazyObject`, which exposes the target `lazy` from S0;
+all eight stages are therefore semantic-exposure controls. The earlier positive
+`lazy`-versus-`_dims` margins are archived as a lexically primed, cross-domain
+association, not evidence of hidden reasoning. `lazy` also comes from the
+benchmark gold patch rather than Qwen's resolved repair, while `_dims` is an
+unrelated xarray foil.
+
+The action result remains negative: on the six certified rows, every J-lens
+reaches `50.0%` micro accuracy versus a `66.7%` inspect majority baseline;
+including both uncertified rows leaves J-lens at `50.0%` versus a `62.5%`
+majority baseline. Edit and finalize are both missed. The outcome controls are
+also non-diagnostic because the official outcome is always success and only one
+transition is labeled failure. Immediate-next-action is not the J-lens training
+objective: its future-summed transport can weight later validation content, so
+the observed `validate` bias is a readout failure, not by itself evidence that
+the fitted matrices are wrong.
+
+The replay reports retain `status: failed` because stages S5 and S6 have
+maximum final-logit error `0.125` against the strict `0.0625` bound. Their RMS,
+top-five, greedy-token, and final-norm checks pass. Primary metrics exclude
+those rows; inclusive values are sensitivity only. The result is therefore
+`N=1` development evidence, not a generalization claim.
+
+The next step is to refine the probe, then collect more requests and tasks with
+the lenses frozen. Derive a target from the agent's actual subsequent diagnosis
+or edit, reject it if any case-folded token, identifier segment, or semantic
+alias is already visible, and compare it with a plausible same-task,
+same-family foil. First use the existing resolved SymPy trajectory as an `N=2`
+pipeline smoke test, then automate roughly 10-20 independent tasks with balanced
+actions and both successful and failed validation transitions. Calibrate the
+action vocabulary or train a small readout with task-held-out splits. Refit only
+if method-aligned positive controls pass and the frozen lens then fails
+consistently across held-out tasks. See the
+[full multistage report](docs/JLENS_SWE_MULTISTAGE_2026-07-18.md).
 
 ### Fresh NF4 fit
 
@@ -382,8 +438,10 @@ Treat the entire `runs/` tree as sensitive local state. Proxy dumps contain full
 prompts and conversations; Qwen HOME state may contain local session/install
 identifiers and paths. Do not ZIP, tar, or upload the working directory. Publish
 only Git-tracked files after reviewing `git status` and `git ls-files`. The
-small tracked C1 capture subsets under `validation/` were separately reviewed
-for credentials and are required to reproduce the published visibility audit.
+tracked publication subsets under `validation/`, including the full Django
+trajectory used by the multistage pilot, were separately reviewed for
+credentials and are intentionally reversible so the visibility and lifecycle
+audits can be reproduced.
 
 ## Repository Map
 
@@ -413,6 +471,10 @@ for credentials and are required to reproduce the published visibility audit.
 - `scripts/analyze_swe_multitask_initial_probes.py`: C0/C0M/C1 exact-rank evaluator
 - `scripts/compare_swe_multitask_checkpoints.py`: matched C0M-to-C1 stage comparator
 - `scripts/run_swe_multitask_c1_pilot.sh`: one-command public/native C1 replay
+- `scripts/run_swe_multistage_pilot.sh`: one-command eight-stage, three-lens replay
+- `scripts/materialize_swe_multistage_probes.py`: exact lifecycle-prefix renderer
+- `scripts/augment_swe_multistage_action_probes.py`: evidence-derived action labels
+- `scripts/analyze_swe_multistage_probes.py`: paired concept/action/outcome analysis
 - `configs/swe_intermediate_concept_probes.json`: evidence-grounded one-task probe set
 - `scripts/qwen_code_proxy.py`: thinking/envelope injection and context-fit retry
 - `scripts/run_swe_verified.py`: Qwen Code plus official-container episode runner
@@ -435,6 +497,8 @@ for credentials and are required to reproduce the published visibility audit.
 - `validation/jlens-swe-multitask-c0m-analysis-2026-07-18.json`: matched task-start probe
 - `validation/jlens-swe-multitask-c0m-c1-comparison-2026-07-18.json`: exact-prefix stage changes
 - `validation/jlens-swe-multitask-evidence-2026-07-18.sha256`: C0/C1 evidence hashes
+- `validation/jlens-swe-multistage-2026-07-18/`: complete three-lens lifecycle replay
+- `validation/swe-multistage-django-13297/`: frozen trajectory and official score proof
 - `validation/jlens-nvfp4-ste-upstream-load-2026-07-17.json`: upstream loader smoke checks
 - `validation/jlens-nvfp4-ste-vs-public-2026-07-17.json`: native/public matrix geometry
 - `validation/jlens-native-nvfp4-ste-on-nvfp4-heldout-2026-07-17.json`: native schema-3 readout
@@ -451,6 +515,7 @@ for credentials and are required to reproduce the published visibility audit.
 - `docs/JLENS_NVFP4_STE_EXPERIMENT.md`: native fit contract, evidence, and runbook
 - `docs/JLENS_SWE_QWEN_CODE_EXPERIMENT.md`: certified SWE layer analysis and runbook
 - `docs/JLENS_SWE_MULTITASK_CHECKPOINTS_2026-07-18.md`: C0/C1 multi-task report
+- `docs/JLENS_SWE_MULTISTAGE_2026-07-18.md`: eight-stage lifecycle report
 - `docs/TROUBLESHOOTING.md`: every boot/runtime failure found and its fix
 
 ## Security Boundary

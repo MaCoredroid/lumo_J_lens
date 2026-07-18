@@ -396,6 +396,8 @@ class JacobianLensHelpersTest(unittest.TestCase):
                 "mamba_block_size": None,
                 "enable_prefix_caching": False,
                 "kv_cache_dtype": "auto",
+                "kv_offloading_size": None,
+                "kv_offloading_backend": "native",
                 "stream_final_only": False,
             },
         )
@@ -412,6 +414,10 @@ class JacobianLensHelpersTest(unittest.TestCase):
                 "--enable-prefix-caching",
                 "--kv-cache-dtype",
                 "fp8",
+                "--kv-offloading-size",
+                "8",
+                "--kv-offloading-backend",
+                "native",
                 "--stream-final-only",
             ]
         )
@@ -423,6 +429,8 @@ class JacobianLensHelpersTest(unittest.TestCase):
                 "mamba_block_size": 4096,
                 "enable_prefix_caching": True,
                 "kv_cache_dtype": "fp8",
+                "kv_offloading_size": 8.0,
+                "kv_offloading_backend": "native",
                 "stream_final_only": True,
             },
         )
@@ -431,6 +439,18 @@ class JacobianLensHelpersTest(unittest.TestCase):
         args = MODULE.build_parser().parse_args(["--mamba-block-size", "1024"])
         with self.assertRaisesRegex(ValueError, "requires --enable-prefix-caching"):
             MODULE._runtime_pins(args)
+
+    def test_kv_offloading_size_must_be_positive(self):
+        args = MODULE.build_parser().parse_args(["--kv-offloading-size", "0"])
+        with self.assertRaisesRegex(ValueError, "must be positive"):
+            MODULE._runtime_pins(args)
+
+    def test_launcher_disables_expandable_segments_for_kv_offload(self):
+        launcher = (ROOT / "scripts" / "run_jlens_nvfp4.sh").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn('"$argument" == --kv-offloading-size', launcher)
+        self.assertIn("unset PYTORCH_CUDA_ALLOC_CONF", launcher)
 
     def test_residual_capture_manifest_binds_positions_and_bytes(self):
         import torch

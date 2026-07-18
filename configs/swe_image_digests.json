@@ -1,6 +1,12 @@
 {
   "schema_version": 1,
   "images": {
+    "django__django-13297": {
+      "x86_64": {
+        "reference": "swebench/sweb.eval.x86_64.django_1776_django-13297@sha256:0291be700f4db5aa369af9f7106943c9af1e46dcebf313d9999e88d851334bed",
+        "image_id": "sha256:0291be700f4db5aa369af9f7106943c9af1e46dcebf313d9999e88d851334bed"
+      }
+    },
     "sympy__sympy-13480": {
       "x86_64": {
         "reference": "swebench/sweb.eval.x86_64.sympy_1776_sympy-13480@sha256:3a985bfd2f3430af337ad8f34793964d1f8845485fcee129c3f166dfba6c5e43",

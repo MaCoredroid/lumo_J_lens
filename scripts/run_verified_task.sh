@@ -6,6 +6,7 @@ if [[ -f "$ROOT/.env" ]]; then set -a; source "$ROOT/.env"; set +a; fi
 TASK_ID=${1:-sympy__sympy-13480}
 ENDPOINT=${ENDPOINT:-http://127.0.0.1:${PORT:-9952}/v1}
 MODEL=${SERVED_MODEL_NAME:-qwen3.6-27b-nvfp4}
+MAX_MODEL_LEN=${MAX_MODEL_LEN:-32768}
 SWE_PYTHON=${SWE_PYTHON:-$ROOT/.venv-swe/bin/python}
 QWEN_BIN=${QWEN_BIN:-$ROOT/node_modules/.bin/qwen}
 RUN_NAME=${RUN_NAME:-$(date -u +%Y%m%dT%H%M%SZ)_${TASK_ID//[^A-Za-z0-9_.-]/_}}
@@ -23,7 +24,7 @@ qwen_version=$("$QWEN_BIN" --version)
   exit 1
 }
 "$SWE_PYTHON" "$ROOT/scripts/check_endpoint.py" "$ENDPOINT" \
-  --model "$MODEL" --max-model-len "${MAX_MODEL_LEN:-32768}"
+  --model "$MODEL" --max-model-len "$MAX_MODEL_LEN"
 
 "$ROOT/scripts/pull_verified_image.sh" "$TASK_ID"
 
@@ -62,6 +63,7 @@ export SWE_EMPTY_PATCH_RETRIES=${SWE_EMPTY_PATCH_RETRIES:-1}
   --max-session-turns 50 \
   --proxy-port "${PROXY_PORT:-30032}" \
   --proxy-max-tokens 8192 \
+  --proxy-context-limit "$MAX_MODEL_LEN" \
   --proxy-script "$ROOT/scripts/qwen_code_proxy.py" \
   --proxy-dump-dir "$ROOT/runs/$RUN_NAME/proxy_dumps" \
   --container-name-prefix "swe_ep_lumo" \

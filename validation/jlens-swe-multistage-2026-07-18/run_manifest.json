@@ -1,0 +1,207 @@
+{
+  "artifacts": {
+    "action_prompts": {
+      "bytes": 3474386,
+      "path": "validation/jlens-swe-multistage-2026-07-18/action_prompts.json",
+      "path_base": "repository_root",
+      "sha256": "7a76bb65f921d2d5cd20d818364be0b1d49544cb212425b61aee0e7999d8f719"
+    },
+    "action_prompts_summary": {
+      "bytes": 6120,
+      "path": "validation/jlens-swe-multistage-2026-07-18/action_prompts_summary.json",
+      "path_base": "repository_root",
+      "sha256": "caa5df64640b884ceec0fc4d98e70134d6e6c84558bc839c30b5db48d1342020"
+    },
+    "analysis": {
+      "bytes": 4896722,
+      "path": "validation/jlens-swe-multistage-2026-07-18/analysis.json",
+      "path_base": "repository_root",
+      "sha256": "174cf6a655076400a0e32d62df6fbcab112908d968f6217bfe535f7cf6f449e7"
+    },
+    "native_report": {
+      "bytes": 13197563,
+      "path": "validation/jlens-swe-multistage-2026-07-18/native-report.json",
+      "path_base": "repository_root",
+      "report_status": "failed",
+      "sha256": "dbb67f375f8a5f18253989af81a8286cac2c64b6ce8e800183217cf07d6d5712"
+    },
+    "nf4_report": {
+      "bytes": 13197587,
+      "path": "validation/jlens-swe-multistage-2026-07-18/nf4-report.json",
+      "path_base": "repository_root",
+      "report_status": "failed",
+      "sha256": "ea2fa71d576ea894762ddd2768e51f4adfb7a98d7f765df48b919d9045fcc28a"
+    },
+    "prompts": {
+      "bytes": 3401581,
+      "path": "validation/jlens-swe-multistage-2026-07-18/prompts.json",
+      "path_base": "repository_root",
+      "sha256": "5ac1d1287e502590249b524df713d9850bb68ab4482f18244ea48566ff0ca83b"
+    },
+    "prompts_summary": {
+      "bytes": 19402,
+      "path": "validation/jlens-swe-multistage-2026-07-18/prompts_summary.json",
+      "path_base": "repository_root",
+      "sha256": "db05fd3d96b1360c690eb5fa0a8c177796ef9d80dfd3e107d7b1eb4bfa28ef98"
+    },
+    "public_report": {
+      "bytes": 13195382,
+      "path": "validation/jlens-swe-multistage-2026-07-18/public-report.json",
+      "path_base": "repository_root",
+      "report_status": "failed",
+      "sha256": "d342eb6560f607a11fb98ba8f9a0a5b0b126c9162c186053f1b7b859a36c491d"
+    }
+  },
+  "inputs": {
+    "action_protocol": {
+      "bytes": 5996,
+      "path": "configs/swe_stage_action_probes.json",
+      "path_base": "repository_root",
+      "sha256": "bce204d03608e181456bb5c05a041c4bf4d305f48cb4b4e651ba34460d46d493"
+    },
+    "analyzer": {
+      "bytes": 80316,
+      "path": "scripts/analyze_swe_multistage_probes.py",
+      "path_base": "repository_root",
+      "sha256": "02d91fb1af637c1f95d9da192da43acd6b1c9eef8befaf2570d1395f05bc28f8"
+    },
+    "augmenter": {
+      "bytes": 41879,
+      "path": "scripts/augment_swe_multistage_action_probes.py",
+      "path_base": "repository_root",
+      "sha256": "14d1dc3a8a7341a43c199dfed4d21d086b2624ef21ef535f2884705df634d061"
+    },
+    "jlens_python_runner": {
+      "bytes": 52319,
+      "path": "scripts/run_jlens_nvfp4.py",
+      "path_base": "repository_root",
+      "sha256": "18697bd8adc1159b7228390c526b9c418e87c25c64e7fa5d121d9f95906f7ee5"
+    },
+    "jlens_runner": {
+      "bytes": 1743,
+      "path": "scripts/run_jlens_nvfp4.sh",
+      "path_base": "repository_root",
+      "sha256": "89763dc20b09394e52f2296654b58408de40c902cb5dddc0a109026964eb2331"
+    },
+    "lifecycle_protocol": {
+      "bytes": 4682,
+      "path": "configs/swe_multistage_protocol.json",
+      "path_base": "repository_root",
+      "sha256": "a850972479134e1b796592831ddd0927114253adde0d3f5413a31ee1ba5de5bf"
+    },
+    "materializer": {
+      "bytes": 105967,
+      "path": "scripts/materialize_swe_multistage_probes.py",
+      "path_base": "repository_root",
+      "sha256": "31477d716266f998cfcb0cdce99a43744f91bd1e4a7af3695232c751279992be"
+    },
+    "pilot": {
+      "bytes": 25312,
+      "path": "scripts/run_swe_multistage_pilot.sh",
+      "path_base": "repository_root",
+      "sha256": "cb2308d38425fe7dafa0f8f4dc69f3f42ebaa8a62b8256425177c00e1dfcff25"
+    },
+    "trajectory_manifest": {
+      "bytes": 7596,
+      "path": "configs/swe_multistage_trajectory_manifest.json",
+      "path_base": "repository_root",
+      "sha256": "6161a8a8825676af60c1beb00e3d1f471b8b9f16b1b87b03704801c20bba1d33"
+    }
+  },
+  "kind": "swe_verified_multistage_pilot_run",
+  "mode": "fresh_replay",
+  "path_contract": {
+    "absolute_paths_embedded": false,
+    "output_directory": "directory containing this manifest",
+    "repository_root": "directory containing this repository"
+  },
+  "phases": {
+    "analyze": {
+      "status": "0",
+      "status_file_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "augment": {
+      "status": "0",
+      "status_file_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "materialize": {
+      "status": "0",
+      "status_file_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "native": {
+      "status": "1",
+      "status_file_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    "nf4": {
+      "status": "1",
+      "status_file_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    "public": {
+      "status": "1",
+      "status_file_sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    }
+  },
+  "runtime_contract": {
+    "enable_prefix_caching": true,
+    "gpu_memory_utilization": 0.78,
+    "kv_cache_dtype": "fp8_e4m3",
+    "kv_offloading_backend": "native",
+    "kv_offloading_size_gib": 8,
+    "layers": [
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47
+    ],
+    "lens_sha256": {
+      "native": "82be61c805d127427b37b2b4715885b756c2ca7af96291578fa4da9cd783e057",
+      "nf4": "54d95f9626d8d120d56c161cfc8943ec76fd77172a9c0c54d5d913a5a639424f",
+      "public": "1718c8c52dd8a9dad03738d4d625937c1fbba10be325b872ed446c7290fc11e1"
+    },
+    "mamba_block_size": 1024,
+    "max_model_len": 49152,
+    "max_num_batched_tokens": 4096,
+    "model": {
+      "config_sha256": "c04a19ba293737ad7be4f6e96d6666cb7e479cbe19ecc0c289fad267135b0338",
+      "index_sha256": "7aa103a2582b7d26631988de33dea19e8a308ee9c239e8e14feb374af30905e2",
+      "repo_id": "nvidia/Qwen3.6-27B-NVFP4",
+      "revision": "0893e1606ff3d5f97a441f405d5fc541a6bdf404"
+    },
+    "mtp_enabled": false,
+    "positions": [
+      -1
+    ],
+    "stream_final_only": true,
+    "top_k": 10
+  },
+  "schema_version": 2,
+  "status": "complete"
+}

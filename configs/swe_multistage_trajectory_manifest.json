@@ -1,0 +1,133 @@
+{
+  "kind": "swe_verified_multistage_trajectory_manifest",
+  "lens_outputs_used_for_selection": false,
+  "concept_registry": {
+    "path": "configs/swe_multitask_initial_protocol.json",
+    "sha256": "9a7ac3d1206f83c1c964245f8f3ed2824cbfcd471b17fe81ae87b77c47045cb5"
+  },
+  "image_registry": {
+    "path": "configs/swe_image_digests.json",
+    "sha256": "74a114cd1e650e53c59e2f1fad859574f588d9d4f14f32bd09feb0d66f6992be"
+  },
+  "lifecycle_protocol_sha256": "a850972479134e1b796592831ddd0927114253adde0d3f5413a31ee1ba5de5bf",
+  "schema_version": 1,
+  "trajectories": [
+    {
+      "base_commit": "8954f255bbf5f4ee997fd6de62cb50fc9b5dd697",
+      "dataset_path": "validation/swe-multistage-django-13297/dataset.json",
+      "dataset_sha256": "f492377f82271dd83cfc45351863c4b2c05f9dab7f2951b6fe0c5977ea2f8697",
+      "evidence_binding": {
+        "generated_patch_path": "validation/swe-multistage-django-13297/generation/patch.diff",
+        "generated_patch_sha256": "d571976cda27c77be7c9dac51a8b475e5262728a38d7a5ae93fb39b4336d4e1f",
+        "manifest_path": "validation/swe-multistage-django-13297/evidence.sha256",
+        "manifest_sha256": "6ca599fc730e51b45b2d2fc491a341650265b2c528a7811e9aa2bf4c98a47591",
+        "official_eval_script_path": "validation/swe-multistage-django-13297/official_score_pinned/logs/run_evaluation/lumo_j_lens_swe_multistage_pinned_20260718/qwen3.6-27b-nvfp4-mtp::qwen-code-0.19.4/django__django-13297/eval.sh",
+        "official_eval_script_sha256": "57f2e91893901e9f7a3fa5f4d62f245bbb204747b4c61e48497fcd19ae900f33",
+        "official_instance_report_path": "validation/swe-multistage-django-13297/official_score_pinned/logs/run_evaluation/lumo_j_lens_swe_multistage_pinned_20260718/qwen3.6-27b-nvfp4-mtp::qwen-code-0.19.4/django__django-13297/report.json",
+        "official_instance_report_sha256": "36053d145d504a800648f6a1e981a586d27c5927bc794617a9d0515158a58a25",
+        "official_patch_path": "validation/swe-multistage-django-13297/official_score_pinned/logs/run_evaluation/lumo_j_lens_swe_multistage_pinned_20260718/qwen3.6-27b-nvfp4-mtp::qwen-code-0.19.4/django__django-13297/patch.diff",
+        "official_patch_sha256": "d571976cda27c77be7c9dac51a8b475e5262728a38d7a5ae93fb39b4336d4e1f",
+        "official_report_path": "validation/swe-multistage-django-13297/official_score_pinned/qwen3.6-27b-nvfp4-mtp::qwen-code-0.19.4.lumo_j_lens_swe_multistage_pinned_20260718.json",
+        "official_report_sha256": "cd9a51e78b153f365b0c1e740ba9f832e8cb0e7825864a551748aeb98fd40466",
+        "official_run_log_path": "validation/swe-multistage-django-13297/official_score_pinned/logs/run_evaluation/lumo_j_lens_swe_multistage_pinned_20260718/qwen3.6-27b-nvfp4-mtp::qwen-code-0.19.4/django__django-13297/run_instance.log",
+        "official_run_log_sha256": "259489c0ef0d480090aa9791e51bdf165fcf9ac7ec76c4d8b8270628c8c42632",
+        "official_score_log_path": "validation/swe-multistage-django-13297/official_score_pinned/score.log",
+        "official_score_log_sha256": "66b99ee7c2aec5e931777d1ce8d2114dff23ce668d56e2da456bd6d85dff1178",
+        "official_test_output_path": "validation/swe-multistage-django-13297/official_score_pinned/logs/run_evaluation/lumo_j_lens_swe_multistage_pinned_20260718/qwen3.6-27b-nvfp4-mtp::qwen-code-0.19.4/django__django-13297/test_output.txt",
+        "official_test_output_sha256": "3588a1bed84e712631b4f326463ed1949efd638efb2225edd171d29d74f2a28b"
+      },
+      "expected_official_verdict": "resolved",
+      "expected_request_count": 25,
+      "instance_id": "django__django-13297",
+      "image_binding": {
+        "architecture": "x86_64",
+        "historical_generation_digest_proven": false,
+        "historical_generation_limitation": "the generation runner recorded only a mutable :latest reference; the certified digest was verified for the later official score, not proven for generation",
+        "historical_runner_reference": "swebench/sweb.eval.x86_64.django_1776_django-13297:latest"
+      },
+      "max_prompt_tokens": 65535,
+      "official_instance_report_path": "validation/swe-multistage-django-13297/official_score_pinned/logs/run_evaluation/lumo_j_lens_swe_multistage_pinned_20260718/qwen3.6-27b-nvfp4-mtp::qwen-code-0.19.4/django__django-13297/report.json",
+      "official_instance_report_sha256": "36053d145d504a800648f6a1e981a586d27c5927bc794617a9d0515158a58a25",
+      "official_report_path": "validation/swe-multistage-django-13297/official_score_pinned/qwen3.6-27b-nvfp4-mtp::qwen-code-0.19.4.lumo_j_lens_swe_multistage_pinned_20260718.json",
+      "official_report_sha256": "cd9a51e78b153f365b0c1e740ba9f832e8cb0e7825864a551748aeb98fd40466",
+      "oracle": {
+        "concepts": [
+          {
+            "contrast": "SimpleLazyObject",
+            "family": "replacement",
+            "foils": [
+              {
+                "concept_id": "task-00-concept-00",
+                "family": "replacement",
+                "forms": [
+                  {
+                    "kind": "bare",
+                    "text": "_dims",
+                    "token_id": 28308
+                  }
+                ],
+                "kind": "identifier_replacement",
+                "target": "_dims",
+                "task_instance_id": "pydata__xarray-6938"
+              }
+            ],
+            "forms": [
+              {
+                "kind": "bare",
+                "text": "lazy",
+                "token_id": 47371
+              },
+              {
+                "kind": "leading_space",
+                "text": " lazy",
+                "token_id": 15217
+              }
+            ],
+            "id": "task-02-concept-00",
+            "kind": "identifier_replacement",
+            "path": "django/views/generic/base.py",
+            "sources": [
+              {
+                "artifact": "patch",
+                "change_block_index": 0,
+                "derivation": "exact_identifier_replacement",
+                "file_index": 0,
+                "hunk_index": 0
+              }
+            ],
+            "target": "lazy"
+          }
+        ],
+        "source_locations": [
+          {
+            "body_markers": [],
+            "path": "django/views/generic/base.py",
+            "symbols": [
+              "_wrap_url_kwargs_with_deprecation_warning"
+            ]
+          }
+        ]
+      },
+      "patch_sha256": "3f22504c0339aed615bca366ebb07b5f2a0cf7534f29393b7068875d1d3ef09e",
+      "problem_statement_sha256": "e61d15a6ceed56f64d664100196a3313d242c09e49317661ec6aa85c8c980c36",
+      "proxy_dir": "validation/swe-multistage-django-13297/proxy_dumps",
+      "repo": "django/django",
+      "request_manifest_sha256": "1d50a684e85d6a1e52d257eaacc9d1fdae40af9911831af5a6c448a2e99edac2",
+      "selection_index": 0,
+      "terminal_binding": {
+        "expected_cli_exit_code": 0,
+        "expected_dataset_path_suffix": "runs/swe_multistage_dev_django_64k_v2_20260718/dataset.json",
+        "expected_final_request_index": 25,
+        "expected_finish_reason": "stop",
+        "expected_num_turns": 25,
+        "expected_parsed": true,
+        "expected_subtype": "success",
+        "runner_metadata_path": "validation/swe-multistage-django-13297/generation/runner_metadata.json",
+        "runner_metadata_sha256": "0d4756d37ba6e23eff5c8657416b18ceb2b1e81002f7799fdaaaf43bdf26dafb"
+      },
+      "test_patch_sha256": "21a27212783bc4c43bf297f9c595b2829ffad8bb641dea654fba5b2941b1afee",
+      "usage_path": "validation/swe-multistage-django-13297/proxy_dumps/usage.jsonl",
+      "usage_sha256": "c073fb3d3aee9b7de162a60769ef9ec423713534db39771ea8c45b88c16f7d4b"
+    }
+  ]
+}

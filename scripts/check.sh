@@ -23,6 +23,8 @@ mapfile -t python_sources < <(
 "$PYTHON_BIN" "$ROOT/tests/test_proxy_envelope.py"
 "$PYTHON_BIN" -m unittest discover -s "$ROOT/tests" -p 'test_*.py'
 "$PYTHON_BIN" "$ROOT/scripts/check_validation.py"
+"$PYTHON_BIN" "$ROOT/scripts/check_historical_validation.py"
+"$PYTHON_BIN" "$ROOT/scripts/check_swe_multistage_publication.py"
 "$PYTHON_BIN" "$ROOT/scripts/check_jlens_result.py"
 "$PYTHON_BIN" "$ROOT/scripts/check_jlens_nf4_result.py"
 "$PYTHON_BIN" "$ROOT/scripts/check_jlens_nvfp4_ste_result.py"
@@ -32,13 +34,8 @@ mapfile -t python_sources < <(
   sha256sum --check validation/jlens-nvfp4-2026-07-16.sha256
   sha256sum --check validation/jlens-nvfp4-ste-prefit-2026-07-16.sha256
   sha256sum --check validation/jlens-nvfp4-ste-evidence-2026-07-17.sha256
-  sha256sum --check validation/jlens-nvfp4-ste-source-manifest.sha256
-  sha256sum --check validation/jlens-source-manifest.sha256
   sha256sum --check validation/jlens-swe-qwen-code-evidence-2026-07-17.sha256
-  sha256sum --check validation/jlens-swe-qwen-code-source-manifest.sha256
-  sha256sum --check validation/jlens-swe-multitask-evidence-2026-07-18.sha256
   sha256sum --check validation/jlens-nf4-evidence.sha256
-  sha256sum --check validation/jlens-nf4-source-manifest.sha256
 )
 
 if [[ -x "$ROOT/node_modules/.bin/qwen" ]]; then

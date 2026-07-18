@@ -1,0 +1,122 @@
+{
+  "event_contract": {
+    "diagnosis": {
+      "assistant_text_regexes": [
+        "(?i)\\bnow i understand(?: the)? (?:issue|problem)\\b",
+        "(?i)\\b(?:root cause|issue|problem) is\\b",
+        "(?i)\\b(?:is|was) caused by\\b",
+        "(?i)\\bthe fix is to\\b"
+      ],
+      "must_precede_first_source_edit": true
+    },
+    "repository_orientation": {
+      "algorithm": "successful_nonmutating_repository_read_or_search_v1"
+    },
+    "source_edit": {
+      "algorithm": "successful_path_targeted_mutation_command_v1",
+      "command_regexes": [
+        "(?im)(?:^|[;&|]\\s*|\\n\\s*)(?:cat|echo|printf)\\b[^\\n]*(?:>>?|\\btee\\b)",
+        "(?im)(?:^|[;&|]\\s*|\\n\\s*)tee\\b",
+        "(?im)\\bsed\\b[^\\n;|]*\\s-i(?:[.A-Za-z0-9_-]*)?\\b",
+        "(?im)\\b(?:apply_patch|git\\s+apply|patch\\b[^\\n;|&]*\\s-p\\d+)\\b",
+        "(?im)\\b(?:write_text|write_bytes)\\s*\\(",
+        "(?im)\\bopen\\s*\\([^\\n]*,[^\\n]*(?:['\"]w|['\"]a|['\"]x)"
+      ],
+      "must_reference_oracle_source_path": true,
+      "requires_successful_tool_result": true
+    },
+    "source_read": {
+      "algorithm": "successful_nonmutating_read_referencing_oracle_path_and_body_v1",
+      "declaration_regex_templates": [
+        "(?m)^\\s*(?:async\\s+def|def|class|function|fn|func)\\s+{symbol}\\b",
+        "(?m)^\\s*(?:export\\s+)?(?:async\\s+)?(?:function\\s+)?{symbol}\\s*\\([^\\n]*\\)\\s*(?:\\{|:|=>)"
+      ]
+    },
+    "successful_validation": {
+      "command_regexes": [
+        "(?i)(?:^|[;&|]\\s*|\\s)(?:python(?:3|[0-9.]*)?\\s+)?(?:[^\\s;|]*/)?runtests\\.py\\b",
+        "(?i)(?:^|[;&|]\\s*|\\s)(?:python(?:3|[0-9.]*)?\\s+-m\\s+)?(?:pytest|unittest)\\b",
+        "(?i)(?:^|[;&|]\\s*|\\s)(?:tox|nox|cargo\\s+test|go\\s+test|npm\\s+(?:run\\s+)?test|pnpm\\s+(?:run\\s+)?test|yarn\\s+test|make\\s+test)\\b"
+      ],
+      "negative_output_regexes": [
+        "(?im)^\\s*(?:FAILED|FAILURES?|ERRORS?)\\b",
+        "(?i)\\b[1-9][0-9]*\\s+(?:failed|failures?|errors?)\\b",
+        "(?i)\\b0\\s+(?:tests?\\s+)?passed\\b",
+        "(?im)^\\s*Ran\\s+0\\s+tests?\\b",
+        "(?i)\\b(?:no tests ran|no tests? (?:were )?found|collected 0 items?)\\b",
+        "(?i)\\bTraceback \\(most recent call last\\)",
+        "(?i)\\b(?:ModuleNotFoundError|ImportError|command not found|No module named)\\b"
+      ],
+      "positive_output_regexes": [
+        "(?ims)\\bRan\\s+[1-9][0-9]*\\s+tests?\\b.*?^\\s*OK\\s*$",
+        "(?i)\\b[1-9][0-9]*\\s+passed\\b"
+      ],
+      "requires_successful_tool_result": true
+    }
+  },
+  "kind": "swe_verified_multistage_probe_protocol",
+  "lens_outputs_used_for_selection": false,
+  "pins": {
+    "chat_template": {
+      "path": "configs/qwen3-openai-codex.jinja",
+      "sha256": "c166a05aaf5ad4b807a7c46497f92180e3df24e64d4b54d27fd26ec61bec38da"
+    },
+    "model": {
+      "repo_id": "nvidia/Qwen3.6-27B-NVFP4",
+      "revision": "0893e1606ff3d5f97a441f405d5fc541a6bdf404",
+      "served_model": "qwen3.6-27b-nvfp4",
+      "tokenizer_json_sha256": "5f9e4d4901a92b997e463c1f46055088b6cca5ca61a6522d1b9f64c4bb81cb42"
+    }
+  },
+  "schema_version": 1,
+  "stages": [
+    {
+      "id": "S0",
+      "name": "task_start",
+      "selector": "task_start_request",
+      "visibility_contract": "classify_from_leakage"
+    },
+    {
+      "id": "S1",
+      "name": "first_successful_repository_orientation",
+      "selector": "first_successful_repository_orientation",
+      "visibility_contract": "classify_from_leakage"
+    },
+    {
+      "id": "S2",
+      "name": "first_successful_oracle_source_body_read",
+      "selector": "first_successful_oracle_source_body_read",
+      "visibility_contract": "classify_from_leakage"
+    },
+    {
+      "id": "S3",
+      "name": "diagnosis_pre_edit",
+      "selector": "first_diagnosis_after_source_read_before_edit",
+      "visibility_contract": "classify_from_leakage"
+    },
+    {
+      "id": "S4",
+      "name": "last_filesystem_pre_edit",
+      "selector": "last_request_before_first_successful_oracle_source_edit",
+      "visibility_contract": "classify_from_leakage"
+    },
+    {
+      "id": "S5",
+      "name": "first_post_edit_prefix",
+      "selector": "first_successful_oracle_source_edit",
+      "visibility_contract": "explicit_contaminated_control"
+    },
+    {
+      "id": "S6",
+      "name": "first_successful_post_edit_validation",
+      "selector": "first_successful_validation_after_source_edit",
+      "visibility_contract": "explicit_contaminated_control"
+    },
+    {
+      "id": "S7",
+      "name": "finalization_after_last_successful_validation",
+      "selector": "terminal_response_after_last_post_edit_successful_validation",
+      "visibility_contract": "explicit_contaminated_control"
+    }
+  ]
+}

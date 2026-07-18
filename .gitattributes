@@ -1,0 +1,2 @@
+# Preserve byte-exact external experiment evidence without whitespace rewriting.
+validation/swe-multistage-django-13297/** -whitespace

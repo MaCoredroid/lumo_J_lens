@@ -6,6 +6,8 @@ runs/
 __pycache__/
 *.py[cod]
 *.log
+!validation/swe-multistage-django-13297/**/*.log
+!validation/jlens-swe-multistage-2026-07-18/logs/*.log
 .server-state
 .pytest_cache/
 /configs/qwen3-openai-codex.jinja

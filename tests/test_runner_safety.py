@@ -7,6 +7,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 from run_swe_verified import _safe_task_dir, _validated_commit  # noqa: E402
 
 
+ROOT = Path(__file__).resolve().parents[1]
+
+
 class RunnerSafetyTests(unittest.TestCase):
     def test_official_instance_id_stays_below_root(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -30,3 +33,11 @@ class RunnerSafetyTests(unittest.TestCase):
     def test_shell_expression_commit_is_rejected(self):
         with self.assertRaises(ValueError):
             _validated_commit("HEAD; touch /tmp/bad")
+
+    def test_verified_launcher_keeps_endpoint_and_proxy_context_limits_equal(self):
+        launcher = (ROOT / "scripts" / "run_verified_task.sh").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("MAX_MODEL_LEN=${MAX_MODEL_LEN:-32768}", launcher)
+        self.assertIn('--max-model-len "$MAX_MODEL_LEN"', launcher)
+        self.assertIn('--proxy-context-limit "$MAX_MODEL_LEN"', launcher)

@@ -3,12 +3,29 @@
 **Date:** 2026-07-18
 **Status:** exploratory C0, capture-matched C0M, and C1 evaluations complete
 
+## Semantic Visibility Erratum
+
+The frozen C0M/C1 artifacts used identifier-boundary and exact scored-token
+visibility checks. Those checks missed a semantic case variant: the Django task
+contains `SimpleLazyObject` from task start, so the proposed target `lazy` is a
+case-folded camel-case identifier segment at both C0M and C1. The corrected
+audit finds no other new target or foil exposure in the historical C0M/C1
+rendered prompts.
+
+Therefore the historical eight-task, nine-concept cohort contains one exposed
+control. Excluding Django leaves seven tasks and eight hidden concept candidates,
+but the historical aggregate JSON and tables below were not recomputed. They
+remain exact records of the superseded audit and must not be cited as a clean
+hidden-concept evaluation. In particular, the Django `lazy` rank movement is a
+lexically primed association control, not evidence of hidden reasoning.
+
 ## Scope
 
-This experiment asks whether a Jacobian lens ranks oracle-hidden concepts from
-SWE-bench Verified gold patches above matched controls during Qwen Code
-requests. It is a concept-localization probe, not chain-of-thought recovery,
-task grading, or causal evidence.
+This historical experiment asked whether a Jacobian lens ranks gold-patch
+concept candidates above matched controls during Qwen Code requests. It is a
+concept-localization probe, not chain-of-thought recovery, task grading, or
+causal evidence. The erratum above supersedes its Django visibility label and
+its aggregate hidden-cohort interpretation.
 
 One **request** is one model invocation at a completion boundary. It contains
 the conversation accumulated so far and ends immediately before the next
@@ -20,7 +37,7 @@ from that completion become input to the next request.
   first assistant token and before any tool result.
 - **C0M / capture-matched task start:** the exact first request from each
   retained C1 trajectory. Its rendered text and token IDs are an exact prefix
-  of C1 and it retains the identical hidden concept/foil vocabulary.
+  of C1 and it retains the identical historical concept/foil vocabulary.
 - **C1 / post-observation:** the second request, after the first completion and
   at least one genuinely successful repository read or search, but before the
   second assistant token.
@@ -145,21 +162,25 @@ diagnostic, and nonempty repository output.
 
 Visibility is audited in assistant reasoning/text, tool-call arguments, tool
 outputs, the rendered prompt, and the actual scored token IDs. Targets or foils
-made visible are excluded before lens evaluation. This token-level check is
-stricter than identifier-boundary matching.
+made visible are excluded before lens evaluation. That historical token-level
+check is stricter than identifier-boundary matching but still misses
+case-folded semantic segments whose tokenization differs, such as `lazy` inside
+`SimpleLazyObject`. The current audit also segments snake-case and camel-case
+identifiers and checks declared aliases.
 
-The merged sample has eight tasks and nine hidden primary concepts:
+The historical merged sample has eight tasks and nine primary concepts. The
+corrected status column below marks the newly detected Django exposure:
 
-| Capture | Task | Hidden targets |
-|---|---|---|
-| v7 | `pydata__xarray-6938` | `equals` |
-| v7 | `scikit-learn__scikit-learn-9288` | `seed` |
-| v7 | `django__django-13297` | `lazy` |
-| v2 | `sympy__sympy-21847` | `sum` |
-| v2 | `pylint-dev__pylint-4551` | `visit`, `inspector` |
-| v2 | `sphinx-doc__sphinx-8638` | `PyObject` |
-| v2 | `astropy__astropy-14598` | `_split` |
-| v2 | `pytest-dev__pytest-7571` | `_finalize` |
+| Capture | Task | Targets | Corrected status |
+|---|---|---|---|
+| v7 | `pydata__xarray-6938` | `equals` | hidden candidate |
+| v7 | `scikit-learn__scikit-learn-9288` | `seed` | hidden candidate |
+| v7 | `django__django-13297` | `lazy` | exposed control: `SimpleLazyObject` |
+| v2 | `sympy__sympy-21847` | `sum` | hidden candidate |
+| v2 | `pylint-dev__pylint-4551` | `visit`, `inspector` | hidden candidates |
+| v2 | `sphinx-doc__sphinx-8638` | `PyObject` | hidden candidate |
+| v2 | `astropy__astropy-14598` | `_split` | hidden candidate |
+| v2 | `pytest-dev__pytest-7571` | `_finalize` | hidden candidate |
 
 The xarray `_dims` target and seaborn `spacer` target are observed-token
 controls, not hidden targets: `swap_dims` exposes the scored `_dims` token and
@@ -191,11 +212,12 @@ target-minus-foil point estimates are positive for all methods and largest for
 native, but all three intervals also cross zero. These are directional
 observations, not a claims-gate pass.
 
-One task-specific result is concrete: for Django's hidden replacement target
-`lazy`, native ranks the best allowed form 209th in the fixed middle band,
-versus 1,043 for public and 44,630 for logit. Native improves from rank 607 at
-the matched C0M boundary, while logit worsens from 929. That is a real paired
-task example, but one task cannot establish an aggregate stage effect.
+For Django's exposed `lazy` control, native ranks the best allowed form 209th in
+the fixed middle band, versus 1,043 for public and 44,630 for logit. Native
+improves from rank 607 at the matched C0M boundary, while logit worsens from
+929. These are real historical ranks, but the prompt is already primed by
+`SimpleLazyObject`; the movement cannot establish hidden-concept emergence or
+an aggregate stage effect.
 
 Both raw C1 reports preserve `status: failed`: final norm, greedy top-1, and
 top-5 parity pass for 8/8 prompts, while the strict full-final-logit tolerance
@@ -211,7 +233,9 @@ v2/v7 captures before any assistant token. The preliminary C0-to-C1 deltas were
 therefore confounded and are not published as stage evidence. C0M fixes this by
 rendering the exact first request from every selected C1 pair. For all eight
 tasks, C0M raw messages, normalized messages, rendered text, and token IDs are
-exact C1 prefixes; the same nine targets and eight foils remain hidden.
+exact C1 prefixes; the same historical nine targets and eight foils are
+retained. Under the corrected audit, Django `lazy` is exposed at both boundaries
+and the other eight targets have no new semantic identifier hit.
 
 Both C0M runner reports pass every strict reconstruction check for 8/8 prompts.
 Their prompt tokens, generated tokens, residual manifests, and ordinary logit
@@ -264,10 +288,11 @@ preservation. Target-minus-foil point estimates move from C0M to C1 as
 descriptive values.
 
 Concept movements are heterogeneous. Public improves `visit` from rank 32,471
-to 1,689 and `inspector` from 119,966 to 26,792. Native improves `lazy` from
-607 to 209, `visit` from 42,979 to 5,896, and `_finalize` from 33,301 to
-10,667, while `PyObject` worsens from 2,418 to 87,849. A single generic read is
-not a reliable semantic checkpoint.
+to 1,689 and `inspector` from 119,966 to 26,792. Native moves the exposed `lazy`
+control from 607 to 209, and improves `visit` from 42,979 to 5,896 and
+`_finalize` from 33,301 to 10,667, while `PyObject` worsens from 2,418 to
+87,849. A single generic read is not a reliable semantic checkpoint, and the
+`lazy` movement is not hidden-concept evidence.
 
 ### C0M/C1 artifact bindings
 
@@ -301,16 +326,20 @@ statistics without another GPU replay.
 
 ## Next Experiment
 
-Probe another checkpoint before refitting the lens. Preserve C0M and C1, then
-add a semantically aligned **C2** boundary: after Qwen has read the relevant
+Repair the probe before refitting the lens. Preserve C0M and C1, derive a target
+from the agent's actual later diagnosis or edit without consulting lens output,
+and match it to a plausible same-task, same-family foil. Reject a hidden label
+if the target appears in any prior channel under exact token IDs, Unicode case
+folding, snake/camel identifier segmentation, or declared semantic aliases.
+Then add a semantically aligned **C2** boundary: after Qwen has read the relevant
 source file or function, but before its next assistant token and before the
-hidden target appears in reasoning, commands, or tool output. Freeze relevance
-before inspecting lens output, for example as the first successful read that
-returns a non-test file changed by the gold patch or the enclosing function.
-That is an explicitly oracle-selected boundary and must be labeled as such.
-Report how many tasks never reach it and keep their missingness separate from
-complete-case C0M/C1/C2 estimates. Selecting an arbitrary later request would
-mix different observation depths, survivorship, and explicit leakage.
+audited target appears. Freeze relevance before inspecting lens output, for
+example as the first successful read that returns a non-test file changed by
+the subsequent agent patch or its enclosing function. That is an explicitly
+future-selected boundary and must be labeled as such. Report how many tasks
+never reach it and keep their missingness separate from complete-case
+C0M/C1/C2 estimates. Selecting an arbitrary later request would mix different
+observation depths, survivorship, and explicit leakage.
 
 The next diagnosis should use matched C0M/C1/C2 task changes, direct changes in
 J-minus-logit contrasts, target-minus-foil behavior, and task-bootstrap
@@ -336,6 +365,9 @@ separate timing from concept-objective quality.
 
 - C0, C0M, and C1 are associative token-rank probes. They do not expose hidden
   reasoning and do not show that a concept causally affects the completion.
+- The historical C0M/C1 audit missed `lazy` inside `SimpleLazyObject`. Its
+  aggregate JSON includes that exposed Django row; a corrected seven-task,
+  eight-concept aggregate has not been computed.
 - Gold-patch identifiers are oracle labels. They test localization and may not
   be the model's preferred semantic representation of a fix.
 - Taking the minimum rank over multiple forms and 32 layers creates an
@@ -361,6 +393,7 @@ separate timing from concept-objective quality.
   reconstruction tolerance passes only 6/8 prompts, despite 8/8 final-norm,
   greedy-top-1, and top-5 checks. Interpretation is conditional on that
   disclosed adapter mismatch.
-- Identifier-boundary filtering alone is insufficient for subword models;
-  compound identifiers can contain an exact scored token. C1 therefore audits
-  token IDs in addition to textual surfaces.
+- Identifier-boundary and exact-token filtering are insufficient for subword
+  models; semantically equivalent case variants can use different token IDs.
+  Future probes must also audit case-folded snake/camel identifier segments and
+  declared aliases.

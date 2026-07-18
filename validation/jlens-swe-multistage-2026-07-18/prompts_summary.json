@@ -1,0 +1,406 @@
+{
+  "available_stage_count": 8,
+  "chat_template_sha256": "c166a05aaf5ad4b807a7c46497f92180e3df24e64d4b54d27fd26ec61bec38da",
+  "concept_registry_sha256": "9a7ac3d1206f83c1c964245f8f3ed2824cbfcd471b17fe81ae87b77c47045cb5",
+  "explicit_control_prompt_count": 8,
+  "hidden_prompt_count": 0,
+  "image_registry_sha256": "74a114cd1e650e53c59e2f1fad859574f588d9d4f14f32bd09feb0d66f6992be",
+  "kind": "swe_verified_multistage_probe_materialization",
+  "lens_outputs_used_for_selection": false,
+  "lifecycle_protocol_sha256": "a850972479134e1b796592831ddd0927114253adde0d3f5413a31ee1ba5de5bf",
+  "missing_stage_count": 0,
+  "prompt_bundle_sha256": "5ac1d1287e502590249b524df713d9850bb68ab4482f18244ea48566ff0ca83b",
+  "prompt_count": 8,
+  "prompts": [
+    {
+      "analysis_role": "explicit_contaminated_control",
+      "id": "swe-s0-000-django__django-13297",
+      "instance_id": "django__django-13297",
+      "prompt_sha256": "43b787e041b161571d9ab5c4f88a9e277b4d10669ee2d35ffb55b276197c84f1",
+      "prompt_token_count": 12625,
+      "score_token_ids_sha256": "559e3b3d78c6d93b2d59764f002860936621f696e0584c13df94fe1c4be22720",
+      "stage_id": "S0",
+      "token_ids_sha256": "e8bd384f85cca72791e9a5371b1519188dd5878b2b3b1b95dd1159bc71aa6dd0"
+    },
+    {
+      "analysis_role": "explicit_contaminated_control",
+      "id": "swe-s1-000-django__django-13297",
+      "instance_id": "django__django-13297",
+      "prompt_sha256": "2eaa4ff3239943472657ed7dee7c387e3ac7575c01985fef93d7acd6ab267da6",
+      "prompt_token_count": 13480,
+      "score_token_ids_sha256": "559e3b3d78c6d93b2d59764f002860936621f696e0584c13df94fe1c4be22720",
+      "stage_id": "S1",
+      "token_ids_sha256": "48e7a0ffbfa4d13bcad4e31e9b3032b594a300317eb3f7d5be190539c70b107c"
+    },
+    {
+      "analysis_role": "explicit_contaminated_control",
+      "id": "swe-s2-000-django__django-13297",
+      "instance_id": "django__django-13297",
+      "prompt_sha256": "51ef8ffde2805cd2ef7096c2070b2b44635d63f7fa40b220898e971df1a3796c",
+      "prompt_token_count": 16185,
+      "score_token_ids_sha256": "559e3b3d78c6d93b2d59764f002860936621f696e0584c13df94fe1c4be22720",
+      "stage_id": "S2",
+      "token_ids_sha256": "1adf2813144281a3d4a76ca00d7133818347347044128bf9c2630e1a0bf0623b"
+    },
+    {
+      "analysis_role": "explicit_contaminated_control",
+      "id": "swe-s3-000-django__django-13297",
+      "instance_id": "django__django-13297",
+      "prompt_sha256": "1b0d9cd722e23939e71ed939824f1a9476283dd2c28ffe8495a382b06f1bf74a",
+      "prompt_token_count": 17451,
+      "score_token_ids_sha256": "559e3b3d78c6d93b2d59764f002860936621f696e0584c13df94fe1c4be22720",
+      "stage_id": "S3",
+      "token_ids_sha256": "5711ab91a1da84c4d64ed60eb9821d8f63ceb9d3c8f55994228698d5ed166d82"
+    },
+    {
+      "analysis_role": "explicit_contaminated_control",
+      "id": "swe-s4-000-django__django-13297",
+      "instance_id": "django__django-13297",
+      "prompt_sha256": "fca95cde7d37f9edad442823be34401cfc6e97aa38e15768a48598bbbfe86497",
+      "prompt_token_count": 31385,
+      "score_token_ids_sha256": "559e3b3d78c6d93b2d59764f002860936621f696e0584c13df94fe1c4be22720",
+      "stage_id": "S4",
+      "token_ids_sha256": "1f1c8bdcf02bac1579728869810a980ec495313f0173841c09305ce33a7665e7"
+    },
+    {
+      "analysis_role": "explicit_contaminated_control",
+      "id": "swe-s5-000-django__django-13297",
+      "instance_id": "django__django-13297",
+      "prompt_sha256": "5b61b7e0d80cc4384fedfbe19e469c28bed43af8db3898dccbd5bcfd12fe65ce",
+      "prompt_token_count": 32809,
+      "score_token_ids_sha256": "559e3b3d78c6d93b2d59764f002860936621f696e0584c13df94fe1c4be22720",
+      "stage_id": "S5",
+      "token_ids_sha256": "1e8e2e29c1d6ee758c9329b99b56b2ca6933d1c9d35bee57f676aa74c67837e9"
+    },
+    {
+      "analysis_role": "explicit_contaminated_control",
+      "id": "swe-s6-000-django__django-13297",
+      "instance_id": "django__django-13297",
+      "prompt_sha256": "9e2eff26f65feb2ade7630aa1cab25a9b3066573e8b9f47ed243c99dfeca52da",
+      "prompt_token_count": 35115,
+      "score_token_ids_sha256": "559e3b3d78c6d93b2d59764f002860936621f696e0584c13df94fe1c4be22720",
+      "stage_id": "S6",
+      "token_ids_sha256": "26641ac706642dd5b83afbdeeeba4e09770f020b5922b95b601d1ae6ad8ac8ae"
+    },
+    {
+      "analysis_role": "explicit_contaminated_control",
+      "id": "swe-s7-000-django__django-13297",
+      "instance_id": "django__django-13297",
+      "prompt_sha256": "da006c25713f902026767cd05c7b9a13b2cbfb23000478baff255ad60e43f522",
+      "prompt_token_count": 40989,
+      "score_token_ids_sha256": "559e3b3d78c6d93b2d59764f002860936621f696e0584c13df94fe1c4be22720",
+      "stage_id": "S7",
+      "token_ids_sha256": "47d6670b46595033e442bae75100f4e636421ad82b790e5802c97b4eaad8ca83"
+    }
+  ],
+  "schema_version": 1,
+  "stage_contract": [
+    {
+      "id": "S0",
+      "name": "task_start",
+      "selector": "task_start_request",
+      "visibility_contract": "classify_from_leakage"
+    },
+    {
+      "id": "S1",
+      "name": "first_successful_repository_orientation",
+      "selector": "first_successful_repository_orientation",
+      "visibility_contract": "classify_from_leakage"
+    },
+    {
+      "id": "S2",
+      "name": "first_successful_oracle_source_body_read",
+      "selector": "first_successful_oracle_source_body_read",
+      "visibility_contract": "classify_from_leakage"
+    },
+    {
+      "id": "S3",
+      "name": "diagnosis_pre_edit",
+      "selector": "first_diagnosis_after_source_read_before_edit",
+      "visibility_contract": "classify_from_leakage"
+    },
+    {
+      "id": "S4",
+      "name": "last_filesystem_pre_edit",
+      "selector": "last_request_before_first_successful_oracle_source_edit",
+      "visibility_contract": "classify_from_leakage"
+    },
+    {
+      "id": "S5",
+      "name": "first_post_edit_prefix",
+      "selector": "first_successful_oracle_source_edit",
+      "visibility_contract": "explicit_contaminated_control"
+    },
+    {
+      "id": "S6",
+      "name": "first_successful_post_edit_validation",
+      "selector": "first_successful_validation_after_source_edit",
+      "visibility_contract": "explicit_contaminated_control"
+    },
+    {
+      "id": "S7",
+      "name": "finalization_after_last_successful_validation",
+      "selector": "terminal_response_after_last_post_edit_successful_validation",
+      "visibility_contract": "explicit_contaminated_control"
+    }
+  ],
+  "task_audits": [
+    {
+      "available_stage_count": 8,
+      "concept_registry_binding": {
+        "concept_ids": [
+          "task-02-concept-00"
+        ],
+        "exact_concept_foil_registry_match": true,
+        "instance_id": "django__django-13297",
+        "path": "configs/swe_multitask_initial_protocol.json",
+        "sha256": "9a7ac3d1206f83c1c964245f8f3ed2824cbfcd471b17fe81ae87b77c47045cb5",
+        "task_selection_index": 2
+      },
+      "evidence_binding": {
+        "generated_and_official_patch_bytes_equal": true,
+        "generated_patch_path": "validation/swe-multistage-django-13297/generation/patch.diff",
+        "generated_patch_sha256": "d571976cda27c77be7c9dac51a8b475e5262728a38d7a5ae93fb39b4336d4e1f",
+        "manifest_entry_count": 45,
+        "manifest_path": "validation/swe-multistage-django-13297/evidence.sha256",
+        "manifest_sha256": "6ca599fc730e51b45b2d2fc491a341650265b2c528a7811e9aa2bf4c98a47591",
+        "official_eval_script_path": "validation/swe-multistage-django-13297/official_score_pinned/logs/run_evaluation/lumo_j_lens_swe_multistage_pinned_20260718/qwen3.6-27b-nvfp4-mtp::qwen-code-0.19.4/django__django-13297/eval.sh",
+        "official_eval_script_sha256": "57f2e91893901e9f7a3fa5f4d62f245bbb204747b4c61e48497fcd19ae900f33",
+        "official_instance_report_path": "validation/swe-multistage-django-13297/official_score_pinned/logs/run_evaluation/lumo_j_lens_swe_multistage_pinned_20260718/qwen3.6-27b-nvfp4-mtp::qwen-code-0.19.4/django__django-13297/report.json",
+        "official_instance_report_sha256": "36053d145d504a800648f6a1e981a586d27c5927bc794617a9d0515158a58a25",
+        "official_patch_path": "validation/swe-multistage-django-13297/official_score_pinned/logs/run_evaluation/lumo_j_lens_swe_multistage_pinned_20260718/qwen3.6-27b-nvfp4-mtp::qwen-code-0.19.4/django__django-13297/patch.diff",
+        "official_patch_sha256": "d571976cda27c77be7c9dac51a8b475e5262728a38d7a5ae93fb39b4336d4e1f",
+        "official_report_path": "validation/swe-multistage-django-13297/official_score_pinned/qwen3.6-27b-nvfp4-mtp::qwen-code-0.19.4.lumo_j_lens_swe_multistage_pinned_20260718.json",
+        "official_report_sha256": "cd9a51e78b153f365b0c1e740ba9f832e8cb0e7825864a551748aeb98fd40466",
+        "official_run_log_path": "validation/swe-multistage-django-13297/official_score_pinned/logs/run_evaluation/lumo_j_lens_swe_multistage_pinned_20260718/qwen3.6-27b-nvfp4-mtp::qwen-code-0.19.4/django__django-13297/run_instance.log",
+        "official_run_log_sha256": "259489c0ef0d480090aa9791e51bdf165fcf9ac7ec76c4d8b8270628c8c42632",
+        "official_score_log_first_line": "verified pinned task image: swebench/sweb.eval.x86_64.django_1776_django-13297:latest (sha256:0291be700f4db5aa369af9f7106943c9af1e46dcebf313d9999e88d851334bed)",
+        "official_score_log_path": "validation/swe-multistage-django-13297/official_score_pinned/score.log",
+        "official_score_log_sha256": "66b99ee7c2aec5e931777d1ce8d2114dff23ce668d56e2da456bd6d85dff1178",
+        "official_test_output_path": "validation/swe-multistage-django-13297/official_score_pinned/logs/run_evaluation/lumo_j_lens_swe_multistage_pinned_20260718/qwen3.6-27b-nvfp4-mtp::qwen-code-0.19.4/django__django-13297/test_output.txt",
+        "official_test_output_sha256": "3588a1bed84e712631b4f326463ed1949efd638efb2225edd171d29d74f2a28b"
+      },
+      "image_binding": {
+        "architecture": "x86_64",
+        "certified_image_id": "sha256:0291be700f4db5aa369af9f7106943c9af1e46dcebf313d9999e88d851334bed",
+        "certified_reference": "swebench/sweb.eval.x86_64.django_1776_django-13297@sha256:0291be700f4db5aa369af9f7106943c9af1e46dcebf313d9999e88d851334bed",
+        "generation_digest_proven": false,
+        "historical_runner_reference": "swebench/sweb.eval.x86_64.django_1776_django-13297:latest",
+        "limitation": "the generation runner recorded only a mutable :latest reference; the certified digest was verified for the later official score, not proven for generation",
+        "official_score_digest_proven": true,
+        "registry_path": "configs/swe_image_digests.json",
+        "registry_sha256": "74a114cd1e650e53c59e2f1fad859574f588d9d4f14f32bd09feb0d66f6992be"
+      },
+      "instance_id": "django__django-13297",
+      "missing_stage_count": 0,
+      "official_instance_verdict": {
+        "patch_exists": true,
+        "patch_successfully_applied": true,
+        "report_sha256": "36053d145d504a800648f6a1e981a586d27c5927bc794617a9d0515158a58a25",
+        "test_counts": {
+          "FAIL_TO_FAIL": {
+            "failure": 0,
+            "success": 0
+          },
+          "FAIL_TO_PASS": {
+            "failure": 0,
+            "success": 1
+          },
+          "PASS_TO_FAIL": {
+            "failure": 0,
+            "success": 0
+          },
+          "PASS_TO_PASS": {
+            "failure": 0,
+            "success": 52
+          }
+        },
+        "verdict": "resolved"
+      },
+      "official_verdict": {
+        "completed": true,
+        "empty_patch": false,
+        "report_sha256": "cd9a51e78b153f365b0c1e740ba9f832e8cb0e7825864a551748aeb98fd40466",
+        "submitted": true,
+        "verdict": "resolved"
+      },
+      "request_count": 25,
+      "selection_index": 0,
+      "source_locations": [
+        {
+          "body_markers": [],
+          "path": "django/views/generic/base.py",
+          "symbols": [
+            "_wrap_url_kwargs_with_deprecation_warning"
+          ]
+        }
+      ],
+      "stage_audits": [
+        {
+          "analysis_role": "explicit_contaminated_control",
+          "evidence_request_index": null,
+          "missing_reason": null,
+          "official_verdict": "resolved",
+          "prompt_id": "swe-s0-000-django__django-13297",
+          "prompt_token_count": 12625,
+          "raw_request_sha256": "cec98bc8f5f367d32acef960ce401a07c55cd9b56c13961f9fa589562c935e8a",
+          "rendered_prompt_sha256": "43b787e041b161571d9ab5c4f88a9e277b4d10669ee2d35ffb55b276197c84f1",
+          "request_index": 1,
+          "stage": {
+            "id": "S0",
+            "name": "task_start",
+            "selector": "task_start_request",
+            "visibility_contract": "classify_from_leakage"
+          },
+          "status": "available"
+        },
+        {
+          "analysis_role": "explicit_contaminated_control",
+          "evidence_request_index": 2,
+          "missing_reason": null,
+          "official_verdict": "resolved",
+          "prompt_id": "swe-s1-000-django__django-13297",
+          "prompt_token_count": 13480,
+          "raw_request_sha256": "9d725b02460fee791184a98633d41e5611b15d508680a3cb34b4959c5b86ee02",
+          "rendered_prompt_sha256": "2eaa4ff3239943472657ed7dee7c387e3ac7575c01985fef93d7acd6ab267da6",
+          "request_index": 2,
+          "stage": {
+            "id": "S1",
+            "name": "first_successful_repository_orientation",
+            "selector": "first_successful_repository_orientation",
+            "visibility_contract": "classify_from_leakage"
+          },
+          "status": "available"
+        },
+        {
+          "analysis_role": "explicit_contaminated_control",
+          "evidence_request_index": 5,
+          "missing_reason": null,
+          "official_verdict": "resolved",
+          "prompt_id": "swe-s2-000-django__django-13297",
+          "prompt_token_count": 16185,
+          "raw_request_sha256": "46b8f36a88b839f6418654f9fd86ad8d608aea78219173ded2d85c615b2ace04",
+          "rendered_prompt_sha256": "51ef8ffde2805cd2ef7096c2070b2b44635d63f7fa40b220898e971df1a3796c",
+          "request_index": 5,
+          "stage": {
+            "id": "S2",
+            "name": "first_successful_oracle_source_body_read",
+            "selector": "first_successful_oracle_source_body_read",
+            "visibility_contract": "classify_from_leakage"
+          },
+          "status": "available"
+        },
+        {
+          "analysis_role": "explicit_contaminated_control",
+          "evidence_request_index": 6,
+          "missing_reason": null,
+          "official_verdict": "resolved",
+          "prompt_id": "swe-s3-000-django__django-13297",
+          "prompt_token_count": 17451,
+          "raw_request_sha256": "d81c396666a0789736179469a84c0be40a211b67f029ebc43523f253993f339c",
+          "rendered_prompt_sha256": "1b0d9cd722e23939e71ed939824f1a9476283dd2c28ffe8495a382b06f1bf74a",
+          "request_index": 6,
+          "stage": {
+            "id": "S3",
+            "name": "diagnosis_pre_edit",
+            "selector": "first_diagnosis_after_source_read_before_edit",
+            "visibility_contract": "classify_from_leakage"
+          },
+          "status": "available"
+        },
+        {
+          "analysis_role": "explicit_contaminated_control",
+          "evidence_request_index": 14,
+          "missing_reason": null,
+          "official_verdict": "resolved",
+          "prompt_id": "swe-s4-000-django__django-13297",
+          "prompt_token_count": 31385,
+          "raw_request_sha256": "75f4ea3f7565446eff2f67e08f0ad1b7a8ea94406c1e88d95dd73f9268971fa0",
+          "rendered_prompt_sha256": "fca95cde7d37f9edad442823be34401cfc6e97aa38e15768a48598bbbfe86497",
+          "request_index": 13,
+          "stage": {
+            "id": "S4",
+            "name": "last_filesystem_pre_edit",
+            "selector": "last_request_before_first_successful_oracle_source_edit",
+            "visibility_contract": "classify_from_leakage"
+          },
+          "status": "available"
+        },
+        {
+          "analysis_role": "explicit_contaminated_control",
+          "evidence_request_index": 14,
+          "missing_reason": null,
+          "official_verdict": "resolved",
+          "prompt_id": "swe-s5-000-django__django-13297",
+          "prompt_token_count": 32809,
+          "raw_request_sha256": "5bd45c4ef4c7b20e16b22e80dd9f3a30b3d3d5bd8834beb3905848d14628bb23",
+          "rendered_prompt_sha256": "5b61b7e0d80cc4384fedfbe19e469c28bed43af8db3898dccbd5bcfd12fe65ce",
+          "request_index": 14,
+          "stage": {
+            "id": "S5",
+            "name": "first_post_edit_prefix",
+            "selector": "first_successful_oracle_source_edit",
+            "visibility_contract": "explicit_contaminated_control"
+          },
+          "status": "available"
+        },
+        {
+          "analysis_role": "explicit_contaminated_control",
+          "evidence_request_index": 16,
+          "missing_reason": null,
+          "official_verdict": "resolved",
+          "prompt_id": "swe-s6-000-django__django-13297",
+          "prompt_token_count": 35115,
+          "raw_request_sha256": "473ad33e397e89213b009f815a81d1336b7896a5473f848fea9611685bcee3c4",
+          "rendered_prompt_sha256": "9e2eff26f65feb2ade7630aa1cab25a9b3066573e8b9f47ed243c99dfeca52da",
+          "request_index": 16,
+          "stage": {
+            "id": "S6",
+            "name": "first_successful_post_edit_validation",
+            "selector": "first_successful_validation_after_source_edit",
+            "visibility_contract": "explicit_contaminated_control"
+          },
+          "status": "available"
+        },
+        {
+          "analysis_role": "explicit_contaminated_control",
+          "evidence_request_index": 25,
+          "missing_reason": null,
+          "official_verdict": "resolved",
+          "prompt_id": "swe-s7-000-django__django-13297",
+          "prompt_token_count": 40989,
+          "raw_request_sha256": "ae90bf3cb22be3c85291fb513a3da6c8722e6109ee9967f4d1dc98e85ee635f6",
+          "rendered_prompt_sha256": "da006c25713f902026767cd05c7b9a13b2cbfb23000478baff255ad60e43f522",
+          "request_index": 25,
+          "stage": {
+            "id": "S7",
+            "name": "finalization_after_last_successful_validation",
+            "selector": "terminal_response_after_last_post_edit_successful_validation",
+            "visibility_contract": "explicit_contaminated_control"
+          },
+          "status": "available"
+        }
+      ],
+      "terminal_run": {
+        "agent": "qwen_code",
+        "base_commit": "8954f255bbf5f4ee997fd6de62cb50fc9b5dd697",
+        "cli_exit_code": 0,
+        "dataset_name": "/home/mark/lumo_J_lens/runs/swe_multistage_dev_django_64k_v2_20260718/dataset.json",
+        "dataset_path_suffix": "runs/swe_multistage_dev_django_64k_v2_20260718/dataset.json",
+        "final_request_index": 25,
+        "finish_reason": "stop",
+        "generation_eval_mode": "skip",
+        "historical_image_reference": "swebench/sweb.eval.x86_64.django_1776_django-13297:latest",
+        "num_turns": 25,
+        "parsed": true,
+        "repo": "django/django",
+        "runner_metadata_sha256": "0d4756d37ba6e23eff5c8657416b18ceb2b1e81002f7799fdaaaf43bdf26dafb",
+        "runtime": "container",
+        "subtype": "success"
+      }
+    }
+  ],
+  "tokenizer_json_sha256": "5f9e4d4901a92b997e463c1f46055088b6cca5ca61a6522d1b9f64c4bb81cb42",
+  "trajectory_count": 1,
+  "trajectory_manifest_sha256": "6161a8a8825676af60c1beb00e3d1f471b8b9f16b1b87b03704801c20bba1d33"
+}

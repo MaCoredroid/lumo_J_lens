@@ -1,0 +1,57 @@
+{
+  "artifacts": [
+    {
+      "compressed_path": "action_prompts.json.gz",
+      "compressed_sha256": "92f2468bee3d54edbd3d45c37fdfa0c2afa09ee26d27b6d94a5bdea3ac5064ba",
+      "original_path": "action_prompts.json",
+      "original_sha256": "35bf4a1747941ad0cf7856bfd485db8c764a998a5b8836cbdcbf28241d5fd768"
+    },
+    {
+      "compressed_path": "action_prompts_summary.json.gz",
+      "compressed_sha256": "1b3485ab7de6264d02173b7759a7b23f28b6cca3044a102d455e3c2744ecdb3f",
+      "original_path": "action_prompts_summary.json",
+      "original_sha256": "e80909fa6cbbff5205c427c0d83598662b5e8758476c45ec6cb3c4c8451ce441"
+    },
+    {
+      "compressed_path": "analysis.json.gz",
+      "compressed_sha256": "66599512d7e27e532a683d1ff9a4cd55aba700bd07f452cd92f533b5d6a602ec",
+      "original_path": "analysis.json",
+      "original_sha256": "47d9b5547e1452a9ee520395c24d0e57caefc4941b7b87d3ad47554c9d6a8b6f"
+    },
+    {
+      "compressed_path": "native-report.json.gz",
+      "compressed_sha256": "9cdcf11445595d36f3fb1a5c78c7a0b1a25d7b921389189a0440886054ea258d",
+      "original_path": "native-report.json",
+      "original_sha256": "a1130587b4eda6f0b4c14971244139c96f9c9a808985c70bc878a18b0e0dbc69"
+    },
+    {
+      "compressed_path": "nf4-report.json.gz",
+      "compressed_sha256": "b7679f389e91fb4bdc10476b88fa78d8038e40a9779411af8706426d882a4063",
+      "original_path": "nf4-report.json",
+      "original_sha256": "1a9353a52dc125e0d9f45aa7d0bc63912a318b3fbb5f14ee403401ecc7604691"
+    },
+    {
+      "compressed_path": "prompts.json.gz",
+      "compressed_sha256": "b81538b22a6c9f0043bb87bdde4e3ae816c5a6842265d14afe820485e2c21978",
+      "original_path": "prompts.json",
+      "original_sha256": "8464c84d8740a85071c59ca750f4b72c4261f3408a0a18e5eccb929ebc4f671b"
+    },
+    {
+      "compressed_path": "prompts_summary.json.gz",
+      "compressed_sha256": "1b591a9427b76af8231364cd96c7542a6840be4587addb79a18b049e645d108e",
+      "original_path": "prompts_summary.json",
+      "original_sha256": "a04bc163edd6de685e85f6ca76b9a80199c88e2439a1612d9de188c70736f5d7"
+    },
+    {
+      "compressed_path": "public-report.json.gz",
+      "compressed_sha256": "199903483de212d4c62db69fa0edde6f09cec1c4ebf7396b251f2a17c4409102",
+      "original_path": "public-report.json",
+      "original_sha256": "93634249830242e0124fbd90301347368720d185f365612bb5e7f5df3851d880"
+    }
+  ],
+  "compression": "gzip -n -9",
+  "invalidated_claim": "S0-S2 were labeled oracle-hidden even though lazy was exposed within SimpleLazyObject",
+  "kind": "invalidated_lexically_primed_multistage_audit",
+  "replacement_status": "current corrected artifacts classify all eight prompts as explicit contaminated controls",
+  "schema_version": 1
+}

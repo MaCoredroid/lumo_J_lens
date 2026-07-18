@@ -1,0 +1,23 @@
+verified pinned task image: swebench/sweb.eval.x86_64.django_1776_django-13297:latest (sha256:0291be700f4db5aa369af9f7106943c9af1e46dcebf313d9999e88d851334bed)
+<frozen runpy>:128: RuntimeWarning: 'swebench.harness.run_evaluation' found in sys.modules after import of package 'swebench.harness', but prior to execution of 'swebench.harness.run_evaluation'; this may result in unpredictable behaviour
+Found 1 existing instance images. Will reuse them.
+Running 1 instances...
+Evaluation:   0%|          | 0/1 [00:00<?, ?it/s, error=0, ✓=0, ✖=0]Evaluation:   0%|          | 0/1 [00:21<?, ?it/s, ✓=1, ✖=0, error=0]Evaluation: 100%|██████████| 1/1 [00:21<00:00, 21.71s/it, ✓=1, ✖=0, error=0]Evaluation: 100%|██████████| 1/1 [00:21<00:00, 21.71s/it, ✓=1, ✖=0, error=0]
+All instances run.
+Cleaning cached images...
+Removed 0 images.
+Total instances: 1
+Instances submitted: 1
+Instances completed: 1
+Instances incomplete: 0
+Instances resolved: 1
+Instances unresolved: 0
+Instances with empty patches: 0
+Instances with errors: 0
+Unstopped containers: 0
+Unremoved images: 1
+Report written to qwen3.6-27b-nvfp4-mtp::qwen-code-0.19.4.lumo_j_lens_swe_multistage_pinned_20260718.json
+official report: /home/mark/lumo_J_lens/validation/swe-multistage-django-13297/official_score_pinned/qwen3.6-27b-nvfp4-mtp::qwen-code-0.19.4.lumo_j_lens_swe_multistage_pinned_20260718.json
+resolved_ids: ['django__django-13297']
+unresolved_ids: []
+error_ids: []

@@ -325,6 +325,28 @@ def fixture():
     return prompts, make_report(prompts, "public"), make_report(prompts, "native")
 
 
+def set_scored_evidence(
+    report: dict[str, object],
+    *,
+    task_index: int,
+    layer: int,
+    method: str,
+    token_id: int,
+    rank: int,
+    score: float,
+    logprob: float,
+) -> None:
+    layer_row = next(
+        row
+        for row in report["experiments"][task_index]["layers"]
+        if row["layer"] == layer
+    )
+    readout_key = "jacobian_lens" if method == "jacobian" else "logit_lens"
+    records = layer_row["positions"][0][readout_key]["scored_tokens"]
+    record = next(record for record in records if record["token_id"] == token_id)
+    record.update({"rank": rank, "score": score, "logprob": logprob})
+
+
 def u(rank: int) -> float:
     return math.log(V / rank) / math.log(V)
 
@@ -418,9 +440,12 @@ class AnalyzeSweMultitaskInitialProbesTest(unittest.TestCase):
                 "analysis.json",
                 "--expected-checkpoint",
                 "C1",
+                "--fixed-layer-band",
+                "24:31",
             ]
         )
         self.assertEqual(args.expected_checkpoint, "C1")
+        self.assertEqual(args.fixed_layer_band, tuple(range(24, 32)))
         prompts, _, _ = fixture()
         weakened = {
             "id": "C1",
@@ -536,6 +561,146 @@ class AnalyzeSweMultitaskInitialProbesTest(unittest.TestCase):
             )
         self.assertIsNone(result["evaluation"]["claims_gate"])
         self.assertTrue(result["pairing"]["accepted_generated_tokens_equal"])
+        self.assertEqual(
+            result["evaluation"]["primary_fixed_layer_band"],
+            list(MODULE.PRIMARY_FIXED_LAYER_BAND),
+        )
+        self.assertIn(
+            "this repository's pre-frozen middle band used on the pinned Anthropic multihop control",
+            result["evaluation"]["primary_metric"]["layer_band_rationale"],
+        )
+
+    def test_fixed_band_uses_same_layer_target_foil_evidence(self) -> None:
+        prompts, public, native = fixture()
+        concept = prompts[0]["metadata"]["concepts"][0]
+        target_token_id = concept["forms"][1]["token_id"]
+        foil_token_id = concept["foils"][0]["forms"][1]["token_id"]
+        set_scored_evidence(
+            public,
+            task_index=0,
+            layer=24,
+            method="jacobian",
+            token_id=target_token_id,
+            rank=1,
+            score=10.0,
+            logprob=-1.0,
+        )
+        set_scored_evidence(
+            public,
+            task_index=0,
+            layer=24,
+            method="jacobian",
+            token_id=foil_token_id,
+            rank=100,
+            score=1.0,
+            logprob=-10.0,
+        )
+        set_scored_evidence(
+            public,
+            task_index=0,
+            layer=25,
+            method="jacobian",
+            token_id=target_token_id,
+            rank=50,
+            score=2.0,
+            logprob=-9.0,
+        )
+        set_scored_evidence(
+            public,
+            task_index=0,
+            layer=25,
+            method="jacobian",
+            token_id=foil_token_id,
+            rank=2,
+            score=8.0,
+            logprob=-3.0,
+        )
+
+        result = MODULE.analyze(
+            prompts,
+            public,
+            native,
+            bootstrap_seed=7,
+            bootstrap_samples=50,
+            fixed_layer_band=(24, 25),
+        )
+        concept_result = result["methods"]["public_jacobian"]["tasks"][0][
+            "families"
+        ][0]["concepts"][0]
+
+        # The compatibility reducer still selects target and foil independently.
+        self.assertEqual(concept_result["target_score"]["best_layer"], 24)
+        self.assertEqual(concept_result["foils"][0]["score"]["best_layer"], 25)
+
+        fixed = concept_result["fixed_layer_band_contrast"]
+        self.assertEqual(fixed["layer_band"], [24, 25])
+        self.assertEqual(
+            [row["score_margin"] for row in fixed["per_layer_curve"]],
+            [9.0, -6.0],
+        )
+        self.assertEqual(
+            [row["logprob_margin"] for row in fixed["per_layer_curve"]],
+            [9.0, -6.0],
+        )
+        self.assertAlmostEqual(fixed["all_layers"]["score_margin"], 1.5)
+        self.assertAlmostEqual(fixed["all_layers"]["logprob_margin"], 1.5)
+        self.assertAlmostEqual(
+            fixed["layer_stability"]["score_margin"][
+                "population_standard_deviation"
+            ],
+            7.5,
+        )
+        self.assertEqual(
+            fixed["layer_stability"]["score_margin"]["positive_layer_fraction"],
+            0.5,
+        )
+        self.assertNotIn("best_layer", json.dumps(fixed))
+
+        method_fixed = result["methods"]["public_jacobian"][
+            "fixed_layer_band_contrast"
+        ]
+        self.assertAlmostEqual(method_fixed["all_layers"]["score_margin"], 0.09375)
+        primary = result["comparisons"]["fixed_layer_band_same_layer"]
+        self.assertFalse(primary["primary"])
+        self.assertEqual(primary["analysis_role"], "sensitivity")
+        self.assertEqual(primary["layer_band"], [24, 25])
+        self.assertIn(
+            "explicit caller-provided sensitivity band",
+            result["evaluation"]["primary_metric"]["layer_band_rationale"],
+        )
+        self.assertAlmostEqual(
+            primary["within_method_target_minus_foil"]["public_jacobian"][
+                "score_margin"
+            ]["estimate"],
+            0.09375,
+        )
+        self.assertAlmostEqual(
+            primary["method_differences"]["public_minus_logit"]["score_margin"][
+                "estimate"
+            ],
+            0.09375,
+        )
+
+    def test_fixed_layer_band_must_be_a_contiguous_captured_sub_band(self) -> None:
+        prompts, public, native = fixture()
+        with self.assertRaisesRegex(ValueError, "sorted, unique, and contiguous"):
+            MODULE.analyze(
+                prompts,
+                public,
+                native,
+                bootstrap_seed=7,
+                bootstrap_samples=10,
+                fixed_layer_band=(24, 26),
+            )
+        with self.assertRaisesRegex(ValueError, "contained in frozen layers"):
+            MODULE.analyze(
+                prompts,
+                public,
+                native,
+                bootstrap_seed=7,
+                bootstrap_samples=10,
+                fixed_layer_band=(48,),
+            )
 
     def test_rejects_prompt_text_token_metadata_and_vocabulary_mismatches(self) -> None:
         mutators = (
@@ -584,6 +749,14 @@ class AnalyzeSweMultitaskInitialProbesTest(unittest.TestCase):
                     "positions"
                 ][0]["jacobian_lens"]["scored_tokens"][0].pop("rank"),
                 "rank",
+            ),
+            (
+                lambda prompts, public, native: public["experiments"][0]["layers"][0][
+                    "positions"
+                ][0]["jacobian_lens"]["scored_tokens"][0].__setitem__(
+                    "score", float("nan")
+                ),
+                "score.*finite",
             ),
             (
                 lambda prompts, public, native: native["experiments"][0].__setitem__(

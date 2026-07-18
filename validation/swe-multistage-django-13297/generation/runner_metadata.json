@@ -1,0 +1,79 @@
+{
+  "instance_id": "django__django-13297",
+  "dataset_name": "/home/mark/lumo_J_lens/runs/swe_multistage_dev_django_64k_v2_20260718/dataset.json",
+  "started_at": "2026-07-18T13:39:15Z",
+  "repo": "django/django",
+  "base_commit": "8954f255bbf5f4ee997fd6de62cb50fc9b5dd697",
+  "agent": "qwen_code",
+  "eval_mode": "skip",
+  "runtime": "container",
+  "image": "swebench/sweb.eval.x86_64.django_1776_django-13297:latest",
+  "container": "swe_ep_lumo_django_django-13297",
+  "qwen": {
+    "elapsed_s": 164.17,
+    "exit_code": 0,
+    "timed_out": false,
+    "cli_exit_is_verdict": false,
+    "parsed": true,
+    "subtype": "success",
+    "num_turns": 25,
+    "duration_api_ms": 163302,
+    "usage": {
+      "input_tokens": 707727,
+      "output_tokens": 6455,
+      "cache_read_input_tokens": 0,
+      "total_tokens": 714182
+    },
+    "tool_calls": 28,
+    "tool_by_name": {
+      "run_shell_command": {
+        "count": 27,
+        "success": 27,
+        "fail": 0,
+        "durationMs": 15314,
+        "decisions": {
+          "accept": 0,
+          "reject": 0,
+          "modify": 0,
+          "auto_accept": 27
+        }
+      },
+      "read_file": {
+        "count": 1,
+        "success": 0,
+        "fail": 1,
+        "durationMs": 0,
+        "decisions": {
+          "accept": 0,
+          "reject": 0,
+          "modify": 0,
+          "auto_accept": 0
+        }
+      }
+    },
+    "result_tail": "to `get_context_data()` \u2014 so user code gets real values\n2. After `get_context_data()` returns, wrap only URL kwargs that remain in the final context \u2014 so template access still triggers the deprecation warning\n\n**Key change in `/testbed/django/views/generic/base.py`**:\n- `TemplateView.get()` now calls `get_context_data(**kwargs)` directly instead of wrapping kwargs first\n- After `get_context_data()` returns, URL kwargs in the context are wrapped for the deprecation warning\n- Renamed `_wrap_url_kwargs_with_deprecation_warning()` \u2192 `_lazy_reify_context_value()` to reflect its new single-key usage"
+  },
+  "patch_bytes": 1907,
+  "eval": {
+    "exit_code": 0,
+    "elapsed_s": 0.0,
+    "backend": "skip"
+  },
+  "eval_report": {
+    "track": "swe_bench",
+    "instance_id": "django__django-13297",
+    "model_id": "qwen3.6-27b-nvfp4-mtp::qwen-code-0.19.4",
+    "dataset_name": "/home/mark/lumo_J_lens/runs/swe_multistage_dev_django_64k_v2_20260718/dataset.json",
+    "patch_path": "/home/mark/lumo_J_lens/runs/swe_multistage_dev_django_64k_v2_20260718/generation/verified/per_task/django__django-13297/patch.diff",
+    "prediction_path": "/home/mark/lumo_J_lens/runs/swe_multistage_dev_django_64k_v2_20260718/generation/verified/per_task/django__django-13297/eval/predictions.jsonl",
+    "verdict": "skipped",
+    "passed": false,
+    "failure_mode": null,
+    "harness_exit_code": 0,
+    "eval_wall_clock_seconds": 0.0,
+    "error": null,
+    "eval_backend": "skip"
+  },
+  "terminal_cause": null,
+  "ended_at": "2026-07-18T13:42:02Z"
+}

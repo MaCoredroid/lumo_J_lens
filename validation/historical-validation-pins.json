@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "historical_commit": "b69c3f3004965520c0707755f412cf764f5fc27b",
+  "source_manifests": [
+    "validation/runtime-source-manifest.sha256",
+    "validation/jlens-source-manifest.sha256",
+    "validation/jlens-nvfp4-ste-source-manifest.sha256",
+    "validation/jlens-swe-qwen-code-source-manifest.sha256",
+    "validation/jlens-nf4-source-manifest.sha256"
+  ],
+  "hybrid_manifests": [
+    {
+      "path": "validation/jlens-swe-multitask-evidence-2026-07-18.sha256",
+      "historical_prefixes": [
+        "configs/",
+        "scripts/",
+        "tests/"
+      ],
+      "current_prefixes": [
+        "validation/"
+      ]
+    }
+  ],
+  "external_files": [
+    {
+      "path": "configs/qwen3-openai-codex.jinja",
+      "sha256": "c166a05aaf5ad4b807a7c46497f92180e3df24e64d4b54d27fd26ec61bec38da"
+    }
+  ]
+}
