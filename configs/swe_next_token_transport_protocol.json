@@ -13,6 +13,9 @@
     "amendment_at_utc": "2026-07-18T19:06:36Z",
     "public_numerical_diagnostics_inspected_before_amendment": true,
     "public_numeric_only_observation": "90 of 160 full-logit maximum errors were exactly 0.125 instead of the strict 0.0625 bound; all 160 full-logit RMS errors remained below 0.02; 159 greedy top-1 and top-5 checks passed; 157 final-norm checks passed",
+    "n20_nf4_report_existed_at_amendment": true,
+    "n20_native_report_existed_at_amendment": false,
+    "nf4_or_native_rank_or_logprob_outcomes_inspected_before_amendment": false,
     "lens_target_ranks_or_logprobs_inspected_before_amendment": false,
     "strict_primary_track_changed_by_amendment": false
   },
