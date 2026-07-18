@@ -9,3 +9,9 @@ e6a064ee99177372ac14bd62a33cbd069c210699a45b4845a62522950b5c6886  validation/jle
 495b7e043d83b0ce47f81687c763bdee3306b94f897aeea88f50be95d318fe93  validation/jlens-swe-qwen-code-native-vs-public-2026-07-17.json
 8426064cf82c48961433987e04b43cbc9f54375feb8e326c60496215835dfc1e  validation/jlens-swe-qwen-code-prompt-provenance-2026-07-17.json
 b3a4e43bf379dca4a630002644e824956e1bf6ca5b3533480ff80bd0dc2e2a97  validation/jlens-swe-qwen-code-public-2026-07-17.json
+ea07313ff6f788d51e90cac00a987881264a69c2c93cc6b67eff64f937e856d0  validation/jlens-upstream-multihop-control-analysis-2026-07-17.json
+e7c6bffda6c8e7b01e13e1117025cfb1bb71155888243b2ab68c2d0733d02b7d  validation/jlens-swe-qwen-code-trajectory-calibration-2026-07-17.json
+8b2020c47ede816a85e03d1d1550441642ff8325019fc6cd170a72b20ea9b125  validation/jlens-swe-qwen-code-semantic-calibration-2026-07-17.json
+29f7cb2f1ffe7948f7836c49db46020864fd4e2876ec060ca03637edd5e034db  validation/jlens-swe-qwen-code-intermediate-analysis-2026-07-17.json
+fc3293d64323cb25ea4ae1626e5a3508c983bec18a25ff2241ddf74d3a86e9fc  validation/jlens-swe-qwen-code-intermediate-prompts-2026-07-17.json
+4438fe2326b73262a9cc5a6064c35e9f8d99b5762156d57c007cd3a61d68d427  validation/jlens-swe-qwen-code-intermediate-prompts-summary-2026-07-17.json

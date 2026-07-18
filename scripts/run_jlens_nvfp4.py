@@ -9,6 +9,7 @@ import functools
 import hashlib
 import importlib.metadata
 import json
+import math
 import os
 import platform
 import subprocess
@@ -270,21 +271,95 @@ def _compact_topk(
     *,
     top_k: int,
     target_token_id: int,
+    score_token_ids: tuple[int, ...] = (),
 ) -> dict[str, object]:
     import torch
 
     logits = logits.detach().float()
     values, token_ids = torch.topk(logits, top_k)
+    logprobs = torch.log_softmax(logits, dim=-1)
     target_score = logits[target_token_id]
-    target_logprob = torch.log_softmax(logits, dim=-1)[target_token_id]
+    target_logprob = logprobs[target_token_id]
     target_rank = int((logits > target_score).sum().item()) + 1
-    return {
+    result = {
         "token_ids": token_ids.cpu().tolist(),
         "scores": [float(value) for value in values.cpu().tolist()],
         "target_token_id": target_token_id,
         "target_score": float(target_score),
         "target_logprob": float(target_logprob),
         "target_rank": target_rank,
+    }
+    if score_token_ids:
+        scored_ids = torch.tensor(score_token_ids, device=logits.device)
+        scored_logits = logits[scored_ids]
+        scored_logprobs = logprobs[scored_ids]
+        scored_ranks = (logits.unsqueeze(0) > scored_logits.unsqueeze(1)).sum(dim=1)
+        result["scored_tokens"] = [
+            {
+                "token_id": token_id,
+                "score": float(score),
+                "logprob": float(logprob),
+                "rank": int(rank) + 1,
+            }
+            for token_id, score, logprob, rank in zip(
+                score_token_ids,
+                scored_logits.cpu().tolist(),
+                scored_logprobs.cpu().tolist(),
+                scored_ranks.cpu().tolist(),
+                strict=True,
+            )
+        ]
+    return result
+
+
+def _distribution_fidelity(
+    reference_logits: Any,
+    candidate_logits: Any,
+    *,
+    reference_top_ids: list[int],
+    candidate_top_ids: list[int],
+    top_k: int = FINAL_TOPK_PARITY_K,
+) -> dict[str, object]:
+    """Measure a readout distribution against the captured final model."""
+
+    import torch
+
+    reference_logprobs = torch.log_softmax(reference_logits.detach().float(), dim=-1)
+    candidate_logprobs = torch.log_softmax(candidate_logits.detach().float(), dim=-1)
+    reference_probs = reference_logprobs.exp()
+    candidate_probs = candidate_logprobs.exp()
+    mixture_logprobs = torch.logaddexp(
+        reference_logprobs, candidate_logprobs
+    ) - math.log(2.0)
+    forward_kl = torch.sum(
+        reference_probs * (reference_logprobs - candidate_logprobs)
+    ).clamp_min(0.0)
+    reverse_kl = torch.sum(
+        candidate_probs * (candidate_logprobs - reference_logprobs)
+    ).clamp_min(0.0)
+    jensen_shannon = 0.5 * (
+        torch.sum(reference_probs * (reference_logprobs - mixture_logprobs))
+        + torch.sum(candidate_probs * (candidate_logprobs - mixture_logprobs))
+    ).clamp_min(0.0)
+    total_variation = 0.5 * torch.sum(torch.abs(reference_probs - candidate_probs))
+    overlap_k = min(top_k, len(reference_top_ids), len(candidate_top_ids))
+    overlap = len(
+        set(reference_top_ids[:overlap_k])
+        & set(candidate_top_ids[:overlap_k])
+    )
+    return {
+        "reference": "captured_block_63_final_model",
+        "kl_final_to_readout": float(forward_kl),
+        "kl_readout_to_final": float(reverse_kl),
+        "jensen_shannon_divergence": float(jensen_shannon),
+        "total_variation_distance": float(total_variation),
+        "top1_matches_final": bool(
+            reference_top_ids and candidate_top_ids
+            and reference_top_ids[0] == candidate_top_ids[0]
+        ),
+        "top_k": overlap_k,
+        "top_k_overlap_count": overlap,
+        "top_k_overlap_fraction": overlap / overlap_k if overlap_k else 0.0,
     }
 
 
@@ -351,6 +426,7 @@ def _readout_captures(
     layers: tuple[int, ...],
     top_k: int,
     target_token_ids: tuple[int, ...],
+    score_token_ids: tuple[int, ...] = (),
 ) -> dict[str, object]:
     import torch
 
@@ -421,21 +497,31 @@ def _readout_captures(
     if len(target_token_ids) != positions:
         raise ValueError("target token count does not match captured positions")
 
-    records: dict[tuple[str, int, int], dict[str, object]] = {}
-    for index, label in enumerate(labels):
-        records[label] = _compact_topk(
-            logits[index],
-            top_k=top_k,
-            target_token_id=target_token_ids[label[2]],
-        )
     captured_records = [
         _compact_topk(
             logits[len(labels) + position],
             top_k=top_k,
             target_token_id=target_token_ids[position],
+            score_token_ids=score_token_ids,
         )
         for position in range(positions)
     ]
+    records: dict[tuple[str, int, int], dict[str, object]] = {}
+    for index, label in enumerate(labels):
+        position = label[2]
+        record = _compact_topk(
+            logits[index],
+            top_k=top_k,
+            target_token_id=target_token_ids[position],
+            score_token_ids=score_token_ids,
+        )
+        record["final_distribution_fidelity"] = _distribution_fidelity(
+            logits[len(labels) + position],
+            logits[index],
+            reference_top_ids=captured_records[position]["token_ids"],
+            candidate_top_ids=record["token_ids"],
+        )
+        records[label] = record
     reconstructed_final_logits = logits[final_start : final_start + positions].float()
     captured_final_logits = logits[len(labels) : len(labels) + positions].float()
     final_logit_difference = reconstructed_final_logits - captured_final_logits
@@ -506,11 +592,20 @@ def _readout_captures(
 
 def _decode_topk(tokenizer: Any, compact: dict[str, object]) -> dict[str, object]:
     token_ids = compact["token_ids"]
-    return {
+    result = {
         **compact,
         "tokens": [tokenizer.decode([token_id]) for token_id in token_ids],
         "target_token": tokenizer.decode([compact["target_token_id"]]),
     }
+    if "scored_tokens" in compact:
+        result["scored_tokens"] = [
+            {
+                **record,
+                "token": tokenizer.decode([record["token_id"]]),
+            }
+            for record in compact["scored_tokens"]
+        ]
+    return result
 
 
 def _decorate_readout(tokenizer: Any, readout: dict[str, object]) -> None:
@@ -567,6 +662,19 @@ def _load_prompts(args: argparse.Namespace) -> list[dict[str, object]]:
                 or target_token_id < 0
             ):
                 raise ValueError(f"invalid target_token_id at index {index}")
+            prompt_score_token_ids = item.get("score_token_ids")
+            if prompt_score_token_ids is not None and (
+                not isinstance(prompt_score_token_ids, list)
+                or not prompt_score_token_ids
+                or any(
+                    isinstance(token_id, bool)
+                    or not isinstance(token_id, int)
+                    or token_id < 0
+                    for token_id in prompt_score_token_ids
+                )
+                or len(set(prompt_score_token_ids)) != len(prompt_score_token_ids)
+            ):
+                raise ValueError(f"invalid score_token_ids at index {index}")
 
             prompt: dict[str, object] = {"id": str(item.get("id", index))}
             if text is not None:
@@ -575,11 +683,20 @@ def _load_prompts(args: argparse.Namespace) -> list[dict[str, object]]:
                 prompt["token_ids"] = list(token_ids)
             if target_token_id is not None:
                 prompt["target_token_id"] = target_token_id
+            if prompt_score_token_ids is not None:
+                prompt["score_token_ids"] = list(prompt_score_token_ids)
             if "metadata" in item:
                 prompt["metadata"] = item["metadata"]
             prompts.append(prompt)
         return prompts
     return [{"id": "currency_boot", "text": DEFAULT_PROMPT}]
+
+
+def _prompt_score_token_ids(
+    global_ids: tuple[int, ...], prompt_spec: dict[str, object]
+) -> tuple[int, ...]:
+    prompt_ids = prompt_spec.get("score_token_ids", ())
+    return tuple(dict.fromkeys((*global_ids, *prompt_ids)))
 
 
 def _resolve_prompt_input(
@@ -610,6 +727,7 @@ def _validate_vocabulary_ids(
     prompt_id: object,
     token_ids: list[int],
     target_token_id: int | None,
+    score_token_ids: tuple[int, ...] = (),
 ) -> None:
     vocabulary_size = len(tokenizer)
     invalid_prompt_ids = [
@@ -624,6 +742,14 @@ def _validate_vocabulary_ids(
         raise ValueError(
             f"prompt {prompt_id} target token ID {target_token_id} is outside "
             f"vocabulary size {vocabulary_size}"
+        )
+    invalid_score_ids = [
+        token_id for token_id in score_token_ids if token_id >= vocabulary_size
+    ]
+    if invalid_score_ids:
+        raise ValueError(
+            f"scored token IDs are outside vocabulary size {vocabulary_size}: "
+            f"{invalid_score_ids[:8]}"
         )
 
 
@@ -753,6 +879,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--layers", default="all", help="comma list in 0..62, or all")
     parser.add_argument("--positions", default="-1", help="comma list of token positions")
     parser.add_argument("--top-k", type=int, default=10)
+    parser.add_argument(
+        "--score-token-ids",
+        help="optional comma-separated vocabulary IDs whose exact scores are recorded",
+    )
     parser.add_argument("--output", type=Path)
     parser.add_argument(
         "--lens-kind",
@@ -862,6 +992,9 @@ def _run(
     started = time.perf_counter()
     layers = validate_layers(parse_integer_list(args.layers, allow_all=True))
     positions = parse_integer_list(args.positions)
+    score_token_ids = tuple(
+        parse_integer_list(args.score_token_ids) if args.score_token_ids else ()
+    )
     prompts = _load_prompts(args)
     runtime_pins = _runtime_pins(args)
 
@@ -1009,11 +1142,15 @@ def _run(
     for prompt_spec in prompts:
         token_ids, prompt_text = _resolve_prompt_input(tokenizer, prompt_spec)
         target_token_id_override = prompt_spec.get("target_token_id")
+        prompt_score_token_ids = _prompt_score_token_ids(
+            score_token_ids, prompt_spec
+        )
         _validate_vocabulary_ids(
             tokenizer,
             prompt_id=prompt_spec["id"],
             token_ids=token_ids,
             target_token_id=target_token_id_override,
+            score_token_ids=prompt_score_token_ids,
         )
         if len(token_ids) + 1 > args.max_model_len:
             raise ValueError(
@@ -1059,6 +1196,7 @@ def _run(
                 layers=tuple(layers),
                 top_k=args.top_k,
                 target_token_ids=target_token_ids,
+                score_token_ids=prompt_score_token_ids,
             )
         )[0]
         _decorate_readout(tokenizer, readout)
@@ -1103,6 +1241,13 @@ def _run(
             "generated_text": output.outputs[0].text,
             "generation_seconds": round(generation_seconds, 6),
             "final_layer_top1_matches_greedy": final_matches,
+            "scored_vocabulary": {
+                "token_ids": list(prompt_score_token_ids),
+                "tokens": [
+                    tokenizer.decode([token_id])
+                    for token_id in prompt_score_token_ids
+                ],
+            },
             **readout,
         }
         if "metadata" in prompt_spec:
@@ -1118,6 +1263,13 @@ def _run(
     runtime_gpu = _nvidia_smi()
     completed_at = datetime.now(timezone.utc)
     all_validations_passed = all_final_top1_matches and all_final_norm_matches
+    scored_union = tuple(
+        dict.fromkeys(
+            token_id
+            for experiment in experiment_results
+            for token_id in experiment["scored_vocabulary"]["token_ids"]
+        )
+    )
     result = {
         "schema_version": SCHEMA_VERSION,
         "score_encoding": SCORE_ENCODING,
@@ -1157,6 +1309,22 @@ def _run(
             "readout_dtype": "torch.bfloat16",
             "model_load_seconds": round(model_load_seconds, 6),
             "timing_scope": "artifact resolution and validation through readout",
+        },
+        "scored_vocabulary": {
+            "token_ids": list(score_token_ids),
+            "tokens": [tokenizer.decode([token_id]) for token_id in score_token_ids],
+            "scope": (
+                "global"
+                if all(
+                    "score_token_ids" not in prompt_spec
+                    for prompt_spec in prompts
+                )
+                else "global_plus_per_experiment"
+            ),
+            "union_token_ids": list(scored_union),
+            "union_tokens": [
+                tokenizer.decode([token_id]) for token_id in scored_union
+            ],
         },
         "assertions": {
             "lens_hash_matches": True,

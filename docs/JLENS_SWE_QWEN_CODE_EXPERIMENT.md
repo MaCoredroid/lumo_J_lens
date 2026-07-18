@@ -4,12 +4,16 @@ Date: 2026-07-17
 
 ## Outcome
 
-The interpretability replay completed on the local RTX 5090. It recovered
-semantically relevant decoded readouts from the frozen Qwen Code contexts and
-showed a positive native Jacobian-Lens preference for the correct `cothm`
-definition-use repair over the buggy `cotm` spelling at the same turn-3 token
-boundary. This is a completed exploratory replay, not a claim that hidden
-states are literal natural-language thoughts.
+The engineering reproduction completed on the local RTX 5090: the public lens
+and the locally fitted native NVFP4/FP8-STE lens both load and decode frozen
+Qwen Code residuals. A pinned Anthropic multihop control also reproduced the
+method-aligned result: both J-lenses recover known intermediate concepts better
+than logit lens over the fixed middle band. The single SWE episode is more
+limited. It contains semantically relevant decoded readouts and a usually
+positive preference for the correct `cothm` definition-use repair, but the
+ordinary logit lens is stronger on that exact identifier contrast. This is a
+completed exploratory replay, not a claim that hidden states are literal
+natural-language thoughts or that J-lens has passed a multi-task SWE gate.
 
 The underlying certified SWE-bench result is independent and unambiguous:
 `sympy__sympy-13480` was resolved, 1/1. The patch changes one identifier in
@@ -96,6 +100,44 @@ the frozen turn-3 context supports the exact def-use correction from `cotm`
 to `cothm`. This readout experiment does not establish a causal mechanism, and
 it does not show that the model would have discovered the file or line without
 the task prompt.
+
+## Evaluation Objective
+
+The J-lens objective is present-and-future-summed causal transport, not
+reconstruction of the current next-token distribution. At a source layer and
+token state it estimates an average Jacobian from that residual to final-layer
+residuals at positions `t' >= t`, then decodes the transported state without
+fitting a current-context affine intercept. Schematically:
+
+```text
+J_l       = E[d h_final,t' / d h_l,t] over target positions t' >= t
+readout_l = softmax(W_U norm(J_l h_l,t))
+```
+
+That distinction changes the evaluation. Anthropic explicitly reports that
+J-lens has the worst next-token KL through most of the network and describes
+this as a feature: the readout emphasizes information that will matter later,
+not everything already present in the current output distribution. Dense
+next-token KL, accepted-target NLL, and distance to the captured final margin
+are therefore useful calibration diagnostics, but they are not J-lens quality
+or reproduction gates.
+
+The method-aligned quality check uses known semantic intermediates, verifies
+each candidate surface is one tokenizer token, takes the exact minimum rank
+over its allowed forms and a fixed layer band, and reports item-macro pass-at-k
+and normalized log-rank AUC. The pinned references are:
+
+- [Anthropic J-lens method](https://transformer-circuits.pub/2026/workspace/index.html#methods-jlens)
+- [Objective comparison](https://transformer-circuits.pub/2026/workspace/index.html#methods-compare)
+- [Quantitative comparison](https://transformer-circuits.pub/2026/workspace/index.html#app-quant)
+- [Pinned upstream repository](https://github.com/anthropics/jacobian-lens/tree/581d398613e5602a5af361e1c34d3a92ea82ba8e)
+- [Pinned fitting implementation](https://github.com/anthropics/jacobian-lens/blob/581d398613e5602a5af361e1c34d3a92ea82ba8e/jlens/fitting.py)
+- [Pinned evaluation conventions](https://github.com/anthropics/jacobian-lens/blob/581d398613e5602a5af361e1c34d3a92ea82ba8e/data/evaluations/README.md)
+
+Intervention-induced KL is a separate, valid causal metric: after ablating or
+swapping a concept-selected J-space direction, measure the change in the
+model's downstream output. That does not compare a J-lens readout with the
+unmodified final next-token distribution and is not the calibration KL above.
 
 ## Frozen Pins
 
@@ -301,6 +343,153 @@ top-1 agreement was `40/81` (`0.493827`), mean top-5 overlap was `0.533333`,
 and exact top-5-set agreement was `2/81` (`0.024691`). Macro layer-wise
 target-rank Spearman was `0.6630`, and target-log-probability mean absolute
 difference was `2.3017`. This is moderate agreement, not equivalence.
+
+## Method-Aligned Evaluations
+
+### Pinned Anthropic multihop control
+
+The external control uses Anthropic's pinned
+[`lens-eval-multihop.json`](https://github.com/anthropics/jacobian-lens/blob/581d398613e5602a5af361e1c34d3a92ea82ba8e/data/evaluations/lens-eval-multihop.json).
+Its source SHA-256 is
+`50b7e4c9255291c0ca2a8e94615be9f44531fa57bb1a844e4f9616056d987416`.
+It contains 93 items and 103 intermediate occurrences. Ninety-four
+occurrences have at least one exact single-token form under the pinned Qwen
+tokenizer; the other nine are retained as misses rather than silently dropped.
+For each occurrence, the metric takes the minimum exact vocabulary rank over
+eligible forms and the primary fixed middle band, layers 24 through 47. Scores
+are macro-averaged over upstream items. The paired percentile bootstrap
+resamples the 93 items 20,000 times with seed 36027.
+
+| Lens artifact | J-lens AUC | Logit-lens AUC | AUC gain, 95% CI | J-lens pass-at-10 | Logit pass-at-10 | Pass-at-10 gain, 95% CI |
+|---|---:|---:|---:|---:|---:|---:|
+| Public `n=1000` | 0.623738 | 0.470733 | +0.153005 `[0.114900, 0.190107]` | 0.290323 | 0.134409 | +0.155914 `[0.064516, 0.247312]` |
+| Native NVFP4/FP8-STE `n=10` | 0.619019 | 0.470733 | +0.148286 `[0.109855, 0.186264]` | 0.279570 | 0.134409 | +0.145161 `[0.053763, 0.236559]` |
+
+Public J-lens pass-at-1/5/50/100 was
+`0.129032/0.241935/0.460573/0.530466`; native was
+`0.134409/0.225806/0.465950/0.546595`. Over all 63 layers, a declared
+secondary view, AUC gains remained positive but smaller: public `+0.030925`
+with CI `[0.012334, 0.049868]` and native `+0.028842` with CI
+`[0.010716, 0.047271]`; the all-layer pass-at-10 gain CIs crossed zero. The
+fixed band is the primary comparison, not a post-hoc best-layer selection.
+
+This result supports method reproduction but does not create a strict adapter
+pass. Both raw reports retain `status: failed`. Greedy final top-1 and final
+norm tolerance passed for 90/93 prompts, final top-5 parity for 85/93, and the
+full final-logit tolerance for 72/93. The analyzer verifies paired prompt IDs,
+tokens, residual manifests, and all logit-lens fields between public and native
+runs. Thus the intermediate comparison is paired on identical residuals, while
+imperfect final-output parity limits causal claims. The compact result is
+[`validation/jlens-upstream-multihop-control-analysis-2026-07-17.json`](../validation/jlens-upstream-multihop-control-analysis-2026-07-17.json).
+The local manifest/public/native/analysis SHA-256 values are respectively
+`ca1bc7aa53070cb398d60517c1d1f16e10b17be9c5bcab00dce775f59738791d`,
+`e5bbd06335d11b6dfa19bf884d396d3b3b628d84a235a1ca7ddf17cea0cd572e`,
+`7786e37a2a39eda351e1edf13a2b4e4bcbba634e524c3033f01c450ca6dd00ae`,
+and `ea07313ff6f788d51e90cac00a987881264a69c2c93cc6b67eff64f937e856d0`.
+
+### SWE intermediate-concept probe
+
+The episode-specific probe adapts the same evaluation convention without
+scoring the accepted next token. Before any lens output was inspected, it
+froze ten exact trajectory states, 17 semantic intermediates with verified
+single-token forms, and contiguous layers 16 through 47. The selected states
+are request 1 offset 0; request 2 offset 0; request 3 offset 32; requests 4
+through 8 offset 0; and request 9 offsets 0 and 60. They are selected from the
+293-state teacher-forced trajectory bundle by task text, trace, shell command,
+and tool-result evidence only.
+
+The frozen config SHA-256 is
+`2cae42b3b3f559209a81ae80d55800ff215be0786a28865b5f95d0a16fdba1cc`.
+The materialized prompt bundle SHA-256 is
+`fc3293d64323cb25ea4ae1626e5a3508c983bec18a25ff2241ddf74d3a86e9fc`;
+its summary file SHA-256 is
+`4438fe2326b73262a9cc5a6064c35e9f8d99b5762156d57c007cd3a61d68d427`.
+The public and native raw report SHA-256 values are
+`16a8c781db6c3dea9dd6602a1e6a113d1a7b29b5ada1d1668168a0ff0d9290b7`
+and `a307b236c259bc58703ba1449ecfe404f6387376a1db10d3f675b0c1c21b5068`.
+
+| Method | Pass@1 | Pass@5 | Pass@10 | Pass@50 | Pass@100 | Pass@1000 | Normalized log-rank AUC |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Public J-lens | 0.25 | 0.35 | 0.35 | 0.55 | 0.65 | 0.85 | 0.715434 |
+| Native J-lens | 0.10 | 0.25 | 0.25 | 0.50 | 0.70 | 0.85 | 0.691667 |
+| Logit lens | 0.00 | 0.30 | 0.40 | 0.50 | 0.55 | 0.95 | 0.691825 |
+
+These results are exploratory. With 20,000 deterministic paired item-bootstrap
+draws, public AUC gain over logit lens is `+0.023609`, 95% CI
+`[-0.073627, 0.102261]` (7/10 item gains positive), and native gain is
+`-0.000157`, CI `[-0.096932, 0.085179]` (6/10 positive). The pre-output
+nonbaseline subset has eight items: public gain `+0.071442`, CI
+`[-0.003289, 0.122190]`, and native gain `+0.045482`, CI
+`[-0.036767, 0.118418]`. These intervals cross zero, and the adaptation has no
+preregistered claims gate.
+
+The leakage labels are material. The seven post-tool boundary items mostly
+test concepts already explicit in earlier tool output. Their public/native AUC
+gains are `+0.106254`, CI `[0.083356, 0.129165]` (7/7 positive), and
+`+0.078410`, CI `[0.023077, 0.134710]` (6/7 positive), but same-task
+transcript-explicit rows are not independent-task evidence and can measure
+retention rather than novel inference. The initial task-explicit item is worse
+under both J-lenses (`0.284740`/`0.287085`) than logit lens (`0.596228`). The
+focused-test state is only an implicit tool-success case, and the final summary
+is a teacher-forced explicit positive control.
+
+The exact pre-identifier state remains the clearest weakness. For its
+`defined_identifier` and `typographical_error` concepts, public J-lens
+band-minimum ranks are `[191,525]`, native ranks `[175,787]`, and logit-lens
+ranks `[3,463]`. The older lexical `co` versus `cot` probe is consistent:
+native/public favor `co` at 8/9 and 9/9 middle layers, but logit lens favors it
+at 9/9 with the larger mean margin (`+3.244` versus `+1.673`/`+1.569`), and
+both alternatives remain outside the J-lens middle-layer top 10. The result
+does not establish latent reasoning or SWE-bench generalization.
+
+All ten public and native probe rows pass model-greedy final top-1, final top-5,
+and final-norm checks. Only 5/10 pass the strict full-final-logit tolerance, so
+both raw reports retain `status: failed`. The recorded accepted target matches
+greedy generation on 9/10 rows and is not scored as an intermediate. The
+compact analysis is
+[`validation/jlens-swe-qwen-code-intermediate-analysis-2026-07-17.json`](../validation/jlens-swe-qwen-code-intermediate-analysis-2026-07-17.json).
+It is 263,279 bytes with SHA-256
+`29f7cb2f1ffe7948f7836c49db46020864fd4e2876ec060ca03637edd5e034db`.
+
+### Output-calibration diagnostics
+
+The dense trajectory evaluates all 293 teacher-forced states, but asks the
+non-objective question of how closely each readout predicts the captured final
+next-token distribution. Over its fixed middle slice, the public J-lens KL is
+`12.224606` versus logit-lens `8.770976`; native J-lens KL is `13.094680`.
+Accepted-target log-probability gains relative to logit lens are public
+`-3.521563` with request-bootstrap 95% CI `[-3.967421, -3.080830]` and native
+`-4.400345` with CI `[-4.909200, -3.965547]`. These intervals quantify
+within-episode variation over nine correlated requests, not task-level
+uncertainty. Both reports have only 192/293 strictly eligible rows. The poor
+output calibration is consistent with the transport objective and Anthropic's
+reported behavior; it is not a failed J-lens reproduction. The compact record
+is [`validation/jlens-swe-qwen-code-trajectory-calibration-2026-07-17.json`](../validation/jlens-swe-qwen-code-trajectory-calibration-2026-07-17.json).
+
+The older ten-state semantic final-margin analysis is also calibration only.
+Public and native J-lens margins are positive on 8/10 states, versus 10/10 for
+logit lens; each J-lens is closer to the captured final margin on only 4/10.
+Its former final-margin error reductions are negative (`-18.06%` public and
+`-24.08%` native) and are not quality gates. Native/public J-lens signs still
+agree on all ten states. The compact record is
+[`validation/jlens-swe-qwen-code-semantic-calibration-2026-07-17.json`](../validation/jlens-swe-qwen-code-semantic-calibration-2026-07-17.json).
+
+## Next Experiment
+
+1. Freeze method-aligned concept probes across multiple independent SWE tasks
+   before inspecting lens outputs. Separate novel inferred concepts from
+   task-explicit, tool-explicit, and teacher-forced controls; keep fixed layer
+   bands, exact single-token forms, item/task macro weighting, and held-out
+   preregistered pass-at-k/AUC claims.
+2. If that retrieval gate is met, perform causal ablation and cross-state swap
+   interventions on selected J-space concept directions. Measure downstream
+   tool/action changes and intervention-induced output KL; do not reinterpret
+   readout-to-final calibration KL as a causal result.
+3. Refit the native lens with at least 100 prompts only if it systematically
+   trails the public lens on the pinned external multihop control and the
+   frozen multi-task SWE probes. The current native multihop result nearly
+   matches public, while the one-task SWE result is too weak for a refit
+   decision, so no refit is justified yet.
 
 ## Adapter-Certificate Detail
 
@@ -611,6 +800,167 @@ recomputes the paired stage comparison, validates native/public candidate
 roles and runtime identity, binds the preflight to request 9, and checks the
 official `1/1` record and patch before accepting the compact findings.
 
+### 9. Reproduce the pinned Anthropic multihop control
+
+Materialize the exact upstream commit and verify its source hash and tokenizer
+forms:
+
+```bash
+.venv-vllm/bin/python scripts/materialize_jlens_upstream_multihop.py \
+  --allow-download \
+  --output-dir .cache/jlens_upstream_multihop
+```
+
+Run the public artifact on all layers. The command writes the report and then
+returns 1 because the strict final-state certificate is failed; the shell guard
+accepts only that documented exit code and does not change the report status:
+
+```bash
+scripts/run_jlens_nvfp4.sh \
+  --lens-kind public \
+  --prompts-file .cache/jlens_upstream_multihop/prompts.json \
+  --layers all --positions=-1 --top-k 10 \
+  --max-model-len 256 --max-num-batched-tokens 256 \
+  --gpu-memory-utilization 0.82 \
+  --output .cache/jlens_upstream_multihop/public-report.json \
+  || test $? -eq 1
+```
+
+Run the native artifact on the identical prompts and runtime:
+
+```bash
+scripts/run_jlens_nvfp4.sh \
+  --lens-kind nvfp4-ste \
+  --lens-path .cache/Qwen3.6-27B-jlens-nvfp4-ste-n10-fp32.pt \
+  --lens-sha256 82be61c805d127427b37b2b4715885b756c2ca7af96291578fa4da9cd783e057 \
+  --lens-provenance .cache/nvfp4_ste_fit/final-mean/metadata.json \
+  --lens-state .cache/nvfp4_ste_fit/state.json \
+  --lens-state-sha256 f5ee70cfda416327be6b2583a67f5662cbe4036dbc68ce4ba470884383bfbcf6 \
+  --prompts-file .cache/jlens_upstream_multihop/prompts.json \
+  --layers all --positions=-1 --top-k 10 \
+  --max-model-len 256 --max-num-batched-tokens 256 \
+  --gpu-memory-utilization 0.82 \
+  --output .cache/jlens_upstream_multihop/native-report.json \
+  || test $? -eq 1
+```
+
+Validate exact ranks, paired residual identity, item-macro metrics, and the
+deterministic bootstrap:
+
+```bash
+.venv-vllm/bin/python scripts/analyze_jlens_upstream_multihop.py \
+  --manifest .cache/jlens_upstream_multihop/manifest.json \
+  --report .cache/jlens_upstream_multihop/public-report.json \
+  --native-report .cache/jlens_upstream_multihop/native-report.json \
+  --output .cache/jlens_upstream_multihop/analysis.json
+```
+
+The recorded public/native runner lifecycles were 148.583/135.831 seconds,
+including 15.108/10.600 seconds to load the model. Both were eager,
+MTP-disabled, prefix-cache-disabled target-model replays.
+
+### 10. Reproduce the SWE intermediate-concept probe
+
+The owner path first materializes the private 293-state trajectory from the
+certified raw run. This verifies every request/trace hash and reconstructs the
+teacher-forced completion boundaries:
+
+```bash
+.venv-vllm/bin/python scripts/materialize_swe_jlens_trajectory.py \
+  --run-dir runs/publication_certified_v2_20260715 \
+  --template configs/qwen3-openai-codex.jinja \
+  --output .cache/swe_jlens_trajectory/swe_jlens_trajectory_prompts.json \
+  --summary-output .cache/swe_jlens_trajectory/swe_jlens_trajectory_prompts.summary.json
+```
+
+Select the ten predeclared points from that trajectory. The materializer checks
+the config and trajectory hashes, request bindings, exact points, Qwen
+single-token round trips, and the rule that the accepted target token is not
+scored:
+
+```bash
+.venv-vllm/bin/python scripts/materialize_swe_intermediate_probes.py \
+  --config configs/swe_intermediate_concept_probes.json \
+  --trajectory-prompts .cache/swe_jlens_trajectory/swe_jlens_trajectory_prompts.json \
+  --output .cache/swe_jlens_intermediate/prompts.json
+```
+
+The private 45 MB trajectory is intentionally not tracked. A public checkout
+instead uses the exact ten-input bundle and summary committed for replay. These
+files have the same hashes as the owner-materialized outputs:
+
+```bash
+INTERMEDIATE_PROMPTS=validation/jlens-swe-qwen-code-intermediate-prompts-2026-07-17.json
+INTERMEDIATE_SUMMARY=validation/jlens-swe-qwen-code-intermediate-prompts-summary-2026-07-17.json
+
+test "$(sha256sum "$INTERMEDIATE_PROMPTS" | cut -d' ' -f1)" = \
+  fc3293d64323cb25ea4ae1626e5a3508c983bec18a25ff2241ddf74d3a86e9fc
+test "$(sha256sum "$INTERMEDIATE_SUMMARY" | cut -d' ' -f1)" = \
+  4438fe2326b73262a9cc5a6064c35e9f8d99b5762156d57c007cd3a61d68d427
+```
+
+For the owner path, point the same variables at the `.cache` outputs instead.
+Extract and verify the fixed 58-token scoring vocabulary before either replay:
+
+```bash
+SCORE_TOKEN_IDS=$(jq -r '.scored_token_ids | join(",")' "$INTERMEDIATE_SUMMARY")
+test "$(jq '.scored_token_ids | length' "$INTERMEDIATE_SUMMARY")" -eq 58
+```
+
+Run the public lens on the frozen middle band:
+
+```bash
+scripts/run_jlens_nvfp4.sh \
+  --lens-kind public \
+  --prompts-file "$INTERMEDIATE_PROMPTS" \
+  --score-token-ids "$SCORE_TOKEN_IDS" \
+  --layers "$(seq -s, 16 47)" --positions=-1 --top-k 10 \
+  --max-model-len 16384 --max-num-batched-tokens 4096 \
+  --mamba-block-size 1024 --enable-prefix-caching \
+  --kv-cache-dtype fp8_e4m3 --stream-final-only \
+  --gpu-memory-utilization 0.78 \
+  --output .cache/swe_jlens_intermediate/public-report.json \
+  || test $? -eq 1
+```
+
+Run the native lens on the identical prompts and residual schedule:
+
+```bash
+scripts/run_jlens_nvfp4.sh \
+  --lens-kind nvfp4-ste \
+  --lens-path .cache/Qwen3.6-27B-jlens-nvfp4-ste-n10-fp32.pt \
+  --lens-sha256 82be61c805d127427b37b2b4715885b756c2ca7af96291578fa4da9cd783e057 \
+  --lens-provenance .cache/nvfp4_ste_fit/final-mean/metadata.json \
+  --lens-state .cache/nvfp4_ste_fit/state.json \
+  --lens-state-sha256 f5ee70cfda416327be6b2583a67f5662cbe4036dbc68ce4ba470884383bfbcf6 \
+  --prompts-file "$INTERMEDIATE_PROMPTS" \
+  --score-token-ids "$SCORE_TOKEN_IDS" \
+  --layers "$(seq -s, 16 47)" --positions=-1 --top-k 10 \
+  --max-model-len 16384 --max-num-batched-tokens 4096 \
+  --mamba-block-size 1024 --enable-prefix-caching \
+  --kv-cache-dtype fp8_e4m3 --stream-final-only \
+  --gpu-memory-utilization 0.78 \
+  --output .cache/swe_jlens_intermediate/native-report.json \
+  || test $? -eq 1
+```
+
+Analyze exact form/layer minima and paired residual identity:
+
+```bash
+.venv-vllm/bin/python scripts/analyze_swe_intermediate_probes.py \
+  --config configs/swe_intermediate_concept_probes.json \
+  --summary "$INTERMEDIATE_SUMMARY" \
+  --prompts "$INTERMEDIATE_PROMPTS" \
+  --report .cache/swe_jlens_intermediate/public-report.json \
+  --native-report .cache/swe_jlens_intermediate/native-report.json \
+  --output .cache/swe_jlens_intermediate/analysis.json
+```
+
+The recorded public/native runner lifecycles were 50.058/73.291 seconds,
+including 12.711/11.453 seconds to load the model. Both were eager and
+MTP-disabled. They used prefix caching only for replay efficiency; this does
+not reproduce or claim access to the original accepted MTP draft-token trace.
+
 ## Recorded Evidence
 
 | File | Bytes | SHA-256 |
@@ -623,6 +973,12 @@ official `1/1` record and patch before accepting the compact findings.
 | `validation/jlens-swe-qwen-code-longest-preflight-2026-07-17.json` | 547,599 | `e6a064ee99177372ac14bd62a33cbd069c210699a45b4845a62522950b5c6886` |
 | `validation/jlens-swe-qwen-code-prompt-provenance-2026-07-17.json` | 5,967 | `8426064cf82c48961433987e04b43cbc9f54375feb8e326c60496215835dfc1e` |
 | `validation/jlens-swe-qwen-code-analysis-2026-07-17.json` | 104,118 | `739a1963410d4043f95c4c1757cd00d3e743bcaeb59747f9cf4654f84ae91af8` |
+| `validation/jlens-upstream-multihop-control-analysis-2026-07-17.json` | 206,885 | `ea07313ff6f788d51e90cac00a987881264a69c2c93cc6b67eff64f937e856d0` |
+| `validation/jlens-swe-qwen-code-trajectory-calibration-2026-07-17.json` | 114,825 | `e7c6bffda6c8e7b01e13e1117025cfb1bb71155888243b2ab68c2d0733d02b7d` |
+| `validation/jlens-swe-qwen-code-semantic-calibration-2026-07-17.json` | 10,843 | `8b2020c47ede816a85e03d1d1550441642ff8325019fc6cd170a72b20ea9b125` |
+| `validation/jlens-swe-qwen-code-intermediate-analysis-2026-07-17.json` | 263,279 | `29f7cb2f1ffe7948f7836c49db46020864fd4e2876ec060ca03637edd5e034db` |
+| `validation/jlens-swe-qwen-code-intermediate-prompts-2026-07-17.json` | 1,670,877 | `fc3293d64323cb25ea4ae1626e5a3508c983bec18a25ff2241ddf74d3a86e9fc` |
+| `validation/jlens-swe-qwen-code-intermediate-prompts-summary-2026-07-17.json` | 3,017 | `4438fe2326b73262a9cc5a6064c35e9f8d99b5762156d57c007cd3a61d68d427` |
 
 Native stage replay took 51.069 seconds, public stage replay 52.201 seconds,
 the five-step native candidate replay 64.265 seconds, the public candidate
@@ -666,13 +1022,22 @@ its prompts have been separately approved for disclosure.
 6. Decoded top tokens are readouts under a fitted linear transport and
    unembedding. They are not literal thoughts, explanations, or proof of a
    unique internal causal mechanism.
-7. The same-context first-token `co` versus `cot` margin is the cleanest
-   candidate comparison. Full `cothm` versus `cotm` sequence totals use unequal
-   BPE lengths and different teacher-forced continuations, so they are
-   secondary.
+7. The same-context first-token `co` versus `cot` margin is a lexically
+   controlled calibration contrast, not a method-aligned quality metric. Full
+   `cothm` versus `cotm` sequence totals use unequal BPE lengths and different
+   teacher-forced continuations, so they are secondary.
 8. This is one easy, prompt-localized SWE-Verified task. It establishes a
-   concrete reproduction and a task-aligned probe, not general SWE-bench
-   interpretability performance.
+   concrete engineering reproduction and an exploratory task-aligned probe,
+   not general SWE-bench interpretability performance.
 9. The nine-layer middle-depth slice is a fixed exploratory reporting view
    chosen while analyzing these results, not a preregistered hypothesis or a
    claim that the preference holds across all 63 layers.
+10. Seven of ten intermediate-probe states follow tool outputs whose target
+    concepts are mostly explicit in the transcript. High ranks there can show
+    retention; they do not by themselves show novel latent inference.
+11. Both upstream multihop reports fail the strict final-output adapter gate,
+    despite identical paired residual manifests and positive intermediate-rank
+    gains. Those gains support descriptive method reproduction but not a
+    numerical-equivalence or causal certificate.
+12. No ablation or state-swap intervention was performed. Readout ranks and
+    correlations alone do not identify a unique causal mechanism.

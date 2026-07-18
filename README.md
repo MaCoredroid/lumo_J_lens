@@ -174,6 +174,35 @@ Both independently run adapter certificates failed with identical residual
 manifests and reconstruction values. That certificate is evaluated before
 either lens is applied and remains separate from lens-quality metrics.
 
+### What the J-lens objective measures
+
+The Anthropic J-lens is not trained to reconstruct the current next-token
+distribution. It averages the causal Jacobian from a source residual to
+final-layer residuals at present and future positions (`t' >= t`) and decodes
+`J_l h_l` without a current-context affine intercept. Anthropic explicitly
+reports that J-lens has the worst next-token KL
+through most of the network and calls that a feature of the method. Therefore,
+next-token KL, accepted-token NLL, and final-margin similarity are calibration
+diagnostics, not J-lens quality or reproduction gates. The primary evaluation
+is recovery of known single-token intermediate concepts, scored by minimum
+rank over a fixed layer band and summarized by pass-at-k and normalized
+log-rank AUC. See the pinned [method](https://transformer-circuits.pub/2026/workspace/index.html#methods-jlens),
+[objective comparison](https://transformer-circuits.pub/2026/workspace/index.html#methods-compare),
+[quantitative appendix](https://transformer-circuits.pub/2026/workspace/index.html#app-quant),
+and [evaluation conventions](https://github.com/anthropics/jacobian-lens/blob/581d398613e5602a5af361e1c34d3a92ea82ba8e/data/evaluations/README.md).
+
+On Anthropic's pinned 93-item multihop set, the public lens over fixed layers
+24 through 47 achieved AUC `0.62374` versus logit-lens `0.47073`, a gain of
+`+0.15300` with paired item-bootstrap 95% CI `[0.11490, 0.19011]`.
+Pass-at-10 was `0.29032` versus `0.13441`, a gain of `+0.15591` with CI
+`[0.06452, 0.24731]`. The native NVFP4/FP8-STE lens nearly reproduced it:
+AUC `0.61902`, gain `+0.14829` with CI `[0.10986, 0.18626]`, and pass-at-10
+`0.27957`, gain `+0.14516` with CI `[0.05376, 0.23656]`. These are paired
+descriptive results on identical residuals, not adapter certification: only
+72/93 prompts passed the strict full-final-logit tolerance in either run.
+Compact evidence is in
+[`validation/jlens-upstream-multihop-control-analysis-2026-07-17.json`](validation/jlens-upstream-multihop-control-analysis-2026-07-17.json).
+
 ### J-lens on the certified SWE episode
 
 The exact nine request contexts from the successful Qwen Code run were
@@ -205,7 +234,28 @@ run's one-character `cotm` to `cothm` patch: `1/1`.
 
 The ordinary logit-lens baseline also favors `co` at all nine middle layers,
 with a larger mean margin (`+3.2440`) than either J-lens. The preference is
-therefore not uniquely revealed by Jacobian transport.
+therefore not uniquely revealed by Jacobian transport. The dense 293-state
+next-token trajectory and the earlier ten-state semantic final-margin analysis
+are retained as calibration diagnostics, not quality gates: J-lens performed
+worse than logit lens on their final-output targets, consistent with the
+objective mismatch and Anthropic's reported behavior.
+
+A method-aligned exploratory probe instead froze ten episode states, 17
+single-token semantic intermediates, and layers 16 through 47 before scoring.
+The public lens reached AUC `0.71543` versus logit-lens `0.69182`; the native
+lens reached `0.69167`. Their AUC gains over logit lens were `+0.02361` with
+paired item-bootstrap 95% CI `[-0.07363, 0.10226]` and `-0.00016` with CI
+`[-0.09693, 0.08518]`. Public/native pass-at-10 were `0.35`/`0.25`, versus
+`0.40` for logit lens. Seven items follow tool results whose concepts are
+mostly already explicit in the transcript, and the exact pre-identifier item
+was weak: public/native semantic ranks were `[191,525]`/`[175,787]`, versus
+logit-lens `[3,463]`. This one-task adaptation had no preregistered claims
+gate, so it does not establish latent reasoning or SWE-bench generalization.
+Both probe reports retain `status: failed`: all ten rows pass model-greedy
+top-1, top-5, and final-norm checks, but only 5/10 pass the strict full-logit
+tolerance.
+See the [full experiment report](docs/JLENS_SWE_QWEN_CODE_EXPERIMENT.md) and
+[`validation/jlens-swe-qwen-code-intermediate-analysis-2026-07-17.json`](validation/jlens-swe-qwen-code-intermediate-analysis-2026-07-17.json).
 
 This is an eager, MTP-disabled replay of frozen contexts because the original
 compiled server did not retain hidden states. The strict multi-stage adapter
@@ -325,6 +375,12 @@ only Git-tracked files after reviewing `git status` and `git ls-files`.
 - `scripts/compare_jlens_artifacts.py`: dense local/public matrix comparison
 - `scripts/materialize_swe_jlens_prompts.py`: exact certified-request renderer
 - `scripts/analyze_swe_jlens_report.py`: bound middle-layer/candidate analysis
+- `scripts/materialize_jlens_upstream_multihop.py`: pinned Anthropic control renderer
+- `scripts/analyze_jlens_upstream_multihop.py`: exact-rank multihop evaluator
+- `scripts/materialize_swe_jlens_trajectory.py`: dense teacher-forced state renderer
+- `scripts/materialize_swe_intermediate_probes.py`: frozen SWE concept-probe renderer
+- `scripts/analyze_swe_intermediate_probes.py`: paired pass-at-k/AUC evaluator
+- `configs/swe_intermediate_concept_probes.json`: evidence-grounded one-task probe set
 - `scripts/qwen_code_proxy.py`: thinking/envelope injection and context-fit retry
 - `scripts/run_swe_verified.py`: Qwen Code plus official-container episode runner
 - `scripts/score_verified.sh`: official SWE-bench scoring
@@ -340,6 +396,8 @@ only Git-tracked files after reviewing `git status` and `git ls-files`.
 - `validation/jlens-nvfp4-ste-fit-state-2026-07-17.json`: completed ten-prompt transactional state
 - `validation/jlens-nvfp4-ste-final-metadata-2026-07-17.json`: 63-matrix raw-mean provenance
 - `validation/jlens-nvfp4-ste-artifact-verification-2026-07-17.json`: exact exported-artifact verification
+- `validation/jlens-upstream-multihop-control-analysis-2026-07-17.json`: external method-aligned control
+- `validation/jlens-swe-qwen-code-intermediate-analysis-2026-07-17.json`: one-task exact-rank probe
 - `validation/jlens-nvfp4-ste-upstream-load-2026-07-17.json`: upstream loader smoke checks
 - `validation/jlens-nvfp4-ste-vs-public-2026-07-17.json`: native/public matrix geometry
 - `validation/jlens-native-nvfp4-ste-on-nvfp4-heldout-2026-07-17.json`: native schema-3 readout
@@ -349,6 +407,8 @@ only Git-tracked files after reviewing `git status` and `git ls-files`.
 - `validation/jlens-swe-qwen-code-native-nvfp4-ste-2026-07-17.json`: native all-layer replay
 - `validation/jlens-swe-qwen-code-public-2026-07-17.json`: public all-layer control
 - `validation/jlens-source-manifest.sha256`: lens runner/evidence source tie
+- `validation/jlens-swe-qwen-code-intermediate-prompts-2026-07-17.json`: exact public ten-state SWE replay inputs
+- `validation/jlens-swe-qwen-code-intermediate-prompts-summary-2026-07-17.json`: fixed 58-token scoring contract
 - `validation/runtime-source-manifest.sha256`: hashes for the certified runtime
 - `docs/SESSION_RECONSTRUCTION.md`: source-session and commit chronology
 - `docs/JLENS_NVFP4_STE_EXPERIMENT.md`: native fit contract, evidence, and runbook

@@ -1,0 +1,3192 @@
+{
+  "inputs": {
+    "native": {
+      "path": "/home/mark/lumo_J_lens/.cache/swe_jlens_trajectory/native-report.json",
+      "sha256": "ff045ac74c229f8327ba41e27b9b169ce2a99fe041d5f3b9870f1ab51797ed77",
+      "size_bytes": 149245960
+    },
+    "primary": {
+      "path": "/home/mark/lumo_J_lens/.cache/swe_jlens_trajectory/public-report.json",
+      "sha256": "1d029b953e3723a92644872e94922bb956609c1a731b70872eb973fa385e126f",
+      "size_bytes": 149244172
+    }
+  },
+  "kind": "dense_swe_jlens_output_prediction_calibration",
+  "label": "CALIBRATION DIAGNOSTIC: comparison with captured final next-token distributions; not a Jacobian Lens quality or reproduction gate",
+  "model": {
+    "repo_id": "nvidia/Qwen3.6-27B-NVFP4",
+    "revision": "0893e1606ff3d5f97a441f405d5fc541a6bdf404"
+  },
+  "native": {
+    "adapter_eligibility": {
+      "distribution_analysis_eligible": false,
+      "experiment_count": 293,
+      "strict_eligible": false,
+      "strict_pass_count": 192
+    },
+    "coverage": {
+      "experiment_count": 293,
+      "fixed_middle_layers": [
+        24,
+        27,
+        28,
+        31,
+        32,
+        35,
+        36,
+        39,
+        40
+      ],
+      "layers": [
+        24,
+        27,
+        28,
+        31,
+        32,
+        35,
+        36,
+        39,
+        40,
+        62
+      ],
+      "requests": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    "fixed_middle_primary": {
+      "macro_equal_request": {
+        "jacobian_kl": 13.094679628032429,
+        "kl_gain_exact_one_sided_sign_flip_p": 1.0,
+        "kl_gain_nats": -4.323704155730201,
+        "logit_kl": 8.770975472302228,
+        "relative_kl_reduction": -0.49295590546159684,
+        "relative_kl_reduction_ci": {
+          "confidence_level": 0.95,
+          "lower": -0.5390689519396843,
+          "method": "deterministic paired request-level percentile bootstrap",
+          "samples": 20000,
+          "seed": 799824156,
+          "upper": -0.44958747101923513
+        },
+        "target_logprob_gain_ci": {
+          "confidence_level": 0.95,
+          "lower": -4.909200289266982,
+          "method": "deterministic request-level percentile bootstrap",
+          "samples": 20000,
+          "seed": 3155083371,
+          "upper": -3.9655470313838146
+        },
+        "target_logprob_gain_exact_one_sided_sign_flip_p": 1.0,
+        "target_logprob_gain_nats": -4.400345219915324,
+        "target_rank_gain": -46716.01889497225,
+        "top5_overlap_fraction_gain": -0.0143776827461038
+      },
+      "observation_count": 2637,
+      "paired_wins": {
+        "observation_kl": {
+          "jacobian": 470,
+          "logit": 2167,
+          "ties": 0
+        },
+        "request_mean_kl": {
+          "jacobian": 0,
+          "logit": 9,
+          "ties": 0
+        }
+      },
+      "request_count": 9,
+      "request_level": [
+        {
+          "jacobian_kl": 12.837758325432372,
+          "kl_gain": -4.229645939283152,
+          "logit_kl": 8.60811238614922,
+          "observation_count": 234,
+          "request_index": 1,
+          "target_logprob_gain": -4.212577003155811,
+          "target_rank_gain": -39685.05982905983,
+          "top5_overlap_gain": -0.04700854700854701
+        },
+        {
+          "jacobian_kl": 13.288220681329,
+          "kl_gain": -4.134430017980695,
+          "logit_kl": 9.153790663348303,
+          "observation_count": 180,
+          "request_index": 2,
+          "target_logprob_gain": -3.9964696582652524,
+          "target_rank_gain": -48845.066666666666,
+          "top5_overlap_gain": 0.017777777777777778
+        },
+        {
+          "jacobian_kl": 11.4010230311277,
+          "kl_gain": -3.4886919586382783,
+          "logit_kl": 7.912331072489421,
+          "observation_count": 855,
+          "request_index": 3,
+          "target_logprob_gain": -3.546941410154254,
+          "target_rank_gain": -32557.7216374269,
+          "top5_overlap_gain": -0.06152046783625731
+        },
+        {
+          "jacobian_kl": 13.818588833417744,
+          "kl_gain": -4.82501459983281,
+          "logit_kl": 8.993574233584933,
+          "observation_count": 225,
+          "request_index": 4,
+          "target_logprob_gain": -4.991445369521776,
+          "target_rank_gain": -61991.08888888889,
+          "top5_overlap_gain": -0.0026666666666666666
+        },
+        {
+          "jacobian_kl": 15.057828169190053,
+          "kl_gain": -5.78473641775839,
+          "logit_kl": 9.273091751431663,
+          "observation_count": 252,
+          "request_index": 5,
+          "target_logprob_gain": -6.0302865372885,
+          "target_rank_gain": -67048.56746031746,
+          "top5_overlap_gain": 0.020634920634920634
+        },
+        {
+          "jacobian_kl": 11.971436003878436,
+          "kl_gain": -3.7838849542060435,
+          "logit_kl": 8.187551049672393,
+          "observation_count": 297,
+          "request_index": 6,
+          "target_logprob_gain": -3.852827379845027,
+          "target_rank_gain": -26947.55892255892,
+          "top5_overlap_gain": -0.044444444444444446
+        },
+        {
+          "jacobian_kl": 13.496025960999154,
+          "kl_gain": -4.775324331533876,
+          "logit_kl": 8.720701629465276,
+          "observation_count": 198,
+          "request_index": 7,
+          "target_logprob_gain": -4.759595223952813,
+          "target_rank_gain": -64569.59090909091,
+          "top5_overlap_gain": -0.01717171717171717
+        },
+        {
+          "jacobian_kl": 13.526403485456507,
+          "kl_gain": -3.7713884168724894,
+          "logit_kl": 9.755015068584019,
+          "observation_count": 180,
+          "request_index": 8,
+          "target_logprob_gain": -3.7028767545489245,
+          "target_rank_gain": -51140.37222222222,
+          "top5_overlap_gain": 0.0022222222222222222
+        },
+        {
+          "jacobian_kl": 12.45483216146089,
+          "kl_gain": -4.120220765466069,
+          "logit_kl": 8.334611395994822,
+          "observation_count": 216,
+          "request_index": 9,
+          "target_logprob_gain": -4.510087642505554,
+          "target_rank_gain": -27659.14351851852,
+          "top5_overlap_gain": 0.002777777777777778
+        }
+      ]
+    },
+    "next_token_noninferiority_diagnostic": {
+      "confidence_interval": {
+        "confidence_level": 0.95,
+        "lower": -4.909200289266982,
+        "method": "deterministic request-level percentile bootstrap",
+        "samples": 20000,
+        "seed": 3155083371,
+        "upper": -3.9655470313838146
+      },
+      "exact_one_sided_sign_flip_p_at_margin": 1.0,
+      "interpretation": "Teacher-forced next-token calibration only; failure does not imply failure on the Jacobian Lens intermediate-concept objective.",
+      "margin_nats": -0.1,
+      "mean_gain_nats": -4.400345219915324,
+      "passed": false
+    },
+    "per_layer": {
+      "24": {
+        "macro_equal_request": {
+          "jacobian_kl": 15.042791851033156,
+          "kl_gain_exact_one_sided_sign_flip_p": 1.0,
+          "kl_gain_nats": -6.316321586654814,
+          "logit_kl": 8.726470264378342,
+          "relative_kl_reduction": -0.7238117354777668,
+          "relative_kl_reduction_ci": {
+            "confidence_level": 0.95,
+            "lower": -0.7984704652533429,
+            "method": "deterministic paired request-level percentile bootstrap",
+            "samples": 20000,
+            "seed": 2253983023,
+            "upper": -0.6451489861426025
+          },
+          "target_logprob_gain_ci": {
+            "confidence_level": 0.95,
+            "lower": -7.046948554745254,
+            "method": "deterministic request-level percentile bootstrap",
+            "samples": 20000,
+            "seed": 2608395748,
+            "upper": -5.653356556621601
+          },
+          "target_logprob_gain_exact_one_sided_sign_flip_p": 1.0,
+          "target_logprob_gain_nats": -6.361060699625718,
+          "target_rank_gain": -71288.16782454388,
+          "top5_overlap_fraction_gain": -0.02523394928658087
+        },
+        "observation_count": 293,
+        "paired_wins": {
+          "observation_kl": {
+            "jacobian": 25,
+            "logit": 268,
+            "ties": 0
+          },
+          "request_mean_kl": {
+            "jacobian": 0,
+            "logit": 9,
+            "ties": 0
+          }
+        },
+        "request_count": 9,
+        "request_level": [
+          {
+            "jacobian_kl": 14.645415204075666,
+            "kl_gain": -6.233389037159773,
+            "logit_kl": 8.412026166915894,
+            "observation_count": 26,
+            "request_index": 1,
+            "target_logprob_gain": -6.168629936300791,
+            "target_rank_gain": -58618.46153846154,
+            "top5_overlap_gain": -0.04615384615384616
+          },
+          {
+            "jacobian_kl": 15.674910246301442,
+            "kl_gain": -6.664482079911977,
+            "logit_kl": 9.010428166389465,
+            "observation_count": 20,
+            "request_index": 2,
+            "target_logprob_gain": -6.2366466043517,
+            "target_rank_gain": -82704.05,
+            "top5_overlap_gain": 0.01
+          },
+          {
+            "jacobian_kl": 12.56340212806275,
+            "kl_gain": -4.410066506580303,
+            "logit_kl": 8.153335621482448,
+            "observation_count": 95,
+            "request_index": 3,
+            "target_logprob_gain": -4.403520277799352,
+            "target_rank_gain": -47584.57894736842,
+            "top5_overlap_gain": -0.05894736842105264
+          },
+          {
+            "jacobian_kl": 15.947231622934341,
+            "kl_gain": -7.046302763223648,
+            "logit_kl": 8.900928859710694,
+            "observation_count": 25,
+            "request_index": 4,
+            "target_logprob_gain": -7.219551775828004,
+            "target_rank_gain": -84740.68,
+            "top5_overlap_gain": -0.008
+          },
+          {
+            "jacobian_kl": 16.692544923646242,
+            "kl_gain": -7.772168946402546,
+            "logit_kl": 8.920375977243696,
+            "observation_count": 28,
+            "request_index": 5,
+            "target_logprob_gain": -8.09249009958668,
+            "target_rank_gain": -83964.67857142857,
+            "top5_overlap_gain": -0.021428571428571432
+          },
+          {
+            "jacobian_kl": 14.574977607804943,
+            "kl_gain": -6.225124872458929,
+            "logit_kl": 8.349852735346014,
+            "observation_count": 33,
+            "request_index": 6,
+            "target_logprob_gain": -6.312342172149908,
+            "target_rank_gain": -68833.12121212122,
+            "top5_overlap_gain": -0.05454545454545455
+          },
+          {
+            "jacobian_kl": 16.003397887477398,
+            "kl_gain": -7.52623970949472,
+            "logit_kl": 8.477158177982677,
+            "observation_count": 22,
+            "request_index": 7,
+            "target_logprob_gain": -7.508285283534364,
+            "target_rank_gain": -83376.68181818182,
+            "top5_overlap_gain": -0.03636363636363637
+          },
+          {
+            "jacobian_kl": 15.199278256722028,
+            "kl_gain": -5.390450117416913,
+            "logit_kl": 9.808828139305115,
+            "observation_count": 20,
+            "request_index": 8,
+            "target_logprob_gain": -5.387915457464987,
+            "target_rank_gain": -71393.55,
+            "top5_overlap_gain": -0.02
+          },
+          {
+            "jacobian_kl": 14.083968782273587,
+            "kl_gain": -5.578670247244493,
+            "logit_kl": 8.505298535029093,
+            "observation_count": 24,
+            "request_index": 9,
+            "target_logprob_gain": -5.920164689615679,
+            "target_rank_gain": -60377.708333333336,
+            "top5_overlap_gain": 0.008333333333333331
+          }
+        ]
+      },
+      "27": {
+        "macro_equal_request": {
+          "jacobian_kl": 15.832213072292047,
+          "kl_gain_exact_one_sided_sign_flip_p": 1.0,
+          "kl_gain_nats": -7.061721681042981,
+          "logit_kl": 8.770491391249067,
+          "relative_kl_reduction": -0.8051683042627411,
+          "relative_kl_reduction_ci": {
+            "confidence_level": 0.95,
+            "lower": -0.8899482691636637,
+            "method": "deterministic paired request-level percentile bootstrap",
+            "samples": 20000,
+            "seed": 3217269361,
+            "upper": -0.7227367744512517
+          },
+          "target_logprob_gain_ci": {
+            "confidence_level": 0.95,
+            "lower": -7.9569213157712415,
+            "method": "deterministic request-level percentile bootstrap",
+            "samples": 20000,
+            "seed": 1097713273,
+            "upper": -6.301362052702495
+          },
+          "target_logprob_gain_exact_one_sided_sign_flip_p": 1.0,
+          "target_logprob_gain_nats": -7.107230768801286,
+          "target_rank_gain": -63033.104535162696,
+          "top5_overlap_fraction_gain": -0.016339917392548975
+        },
+        "observation_count": 293,
+        "paired_wins": {
+          "observation_kl": {
+            "jacobian": 31,
+            "logit": 262,
+            "ties": 0
+          },
+          "request_mean_kl": {
+            "jacobian": 0,
+            "logit": 9,
+            "ties": 0
+          }
+        },
+        "request_count": 9,
+        "request_level": [
+          {
+            "jacobian_kl": 15.431704867344637,
+            "kl_gain": -6.845990307055986,
+            "logit_kl": 8.585714560288649,
+            "observation_count": 26,
+            "request_index": 1,
+            "target_logprob_gain": -6.906254864656008,
+            "target_rank_gain": -58035.192307692305,
+            "top5_overlap_gain": -0.015384615384615385
+          },
+          {
+            "jacobian_kl": 17.392511914519126,
+            "kl_gain": -8.280089114455041,
+            "logit_kl": 9.112422800064087,
+            "observation_count": 20,
+            "request_index": 2,
+            "target_logprob_gain": -8.02272950519109,
+            "target_rank_gain": -76748.3,
+            "top5_overlap_gain": 0.01
+          },
+          {
+            "jacobian_kl": 13.047837128306396,
+            "kl_gain": -4.986596756401521,
+            "logit_kl": 8.061240371904875,
+            "observation_count": 95,
+            "request_index": 3,
+            "target_logprob_gain": -5.004966352232365,
+            "target_rank_gain": -44711.73684210526,
+            "top5_overlap_gain": -0.05894736842105264
+          },
+          {
+            "jacobian_kl": 17.043442091513427,
+            "kl_gain": -8.08053014235571,
+            "logit_kl": 8.962911949157714,
+            "observation_count": 25,
+            "request_index": 4,
+            "target_logprob_gain": -8.215063257236034,
+            "target_rank_gain": -84656.32,
+            "top5_overlap_gain": 0.0
+          },
+          {
+            "jacobian_kl": 18.301566951268928,
+            "kl_gain": -9.287566739825706,
+            "logit_kl": 9.01400021144322,
+            "observation_count": 28,
+            "request_index": 5,
+            "target_logprob_gain": -9.45708606829638,
+            "target_rank_gain": -84085.5,
+            "top5_overlap_gain": 0.0
+          },
+          {
+            "jacobian_kl": 14.820907706165489,
+            "kl_gain": -6.475992937484107,
+            "logit_kl": 8.344914768681381,
+            "observation_count": 33,
+            "request_index": 6,
+            "target_logprob_gain": -6.521233030059551,
+            "target_rank_gain": -46406.393939393936,
+            "top5_overlap_gain": -0.03636363636363637
+          },
+          {
+            "jacobian_kl": 15.970686815406555,
+            "kl_gain": -7.398102142998885,
+            "logit_kl": 8.57258467240767,
+            "observation_count": 22,
+            "request_index": 7,
+            "target_logprob_gain": -7.373674942464938,
+            "target_rank_gain": -61646.27272727273,
+            "top5_overlap_gain": -0.03636363636363637
+          },
+          {
+            "jacobian_kl": 16.357769536442355,
+            "kl_gain": -6.580505203671055,
+            "logit_kl": 9.777264332771301,
+            "observation_count": 20,
+            "request_index": 8,
+            "target_logprob_gain": -6.585537235382072,
+            "target_rank_gain": -78317.35,
+            "top5_overlap_gain": -0.01
+          },
+          {
+            "jacobian_kl": 14.123490639661517,
+            "kl_gain": -5.620121785138811,
+            "logit_kl": 8.503368854522705,
+            "observation_count": 24,
+            "request_index": 9,
+            "target_logprob_gain": -5.878531663693138,
+            "target_rank_gain": -32690.875,
+            "top5_overlap_gain": 0.0
+          }
+        ]
+      },
+      "28": {
+        "macro_equal_request": {
+          "jacobian_kl": 14.920955920713997,
+          "kl_gain_exact_one_sided_sign_flip_p": 1.0,
+          "kl_gain_nats": -6.094193485661037,
+          "logit_kl": 8.82676243505296,
+          "relative_kl_reduction": -0.6904222845581176,
+          "relative_kl_reduction_ci": {
+            "confidence_level": 0.95,
+            "lower": -0.7596692622923339,
+            "method": "deterministic paired request-level percentile bootstrap",
+            "samples": 20000,
+            "seed": 3996404231,
+            "upper": -0.6229865929936704
+          },
+          "target_logprob_gain_ci": {
+            "confidence_level": 0.95,
+            "lower": -6.8681767464984445,
+            "method": "deterministic request-level percentile bootstrap",
+            "samples": 20000,
+            "seed": 3957642691,
+            "upper": -5.486446549274074
+          },
+          "target_logprob_gain_exact_one_sided_sign_flip_p": 1.0,
+          "target_logprob_gain_nats": -6.155984536564542,
+          "target_rank_gain": -72576.82285783418,
+          "top5_overlap_fraction_gain": -0.021765604765604768
+        },
+        "observation_count": 293,
+        "paired_wins": {
+          "observation_kl": {
+            "jacobian": 29,
+            "logit": 264,
+            "ties": 0
+          },
+          "request_mean_kl": {
+            "jacobian": 0,
+            "logit": 9,
+            "ties": 0
+          }
+        },
+        "request_count": 9,
+        "request_level": [
+          {
+            "jacobian_kl": 14.263969017909123,
+            "kl_gain": -5.528928499955398,
+            "logit_kl": 8.735040517953726,
+            "observation_count": 26,
+            "request_index": 1,
+            "target_logprob_gain": -5.606964290142059,
+            "target_rank_gain": -73718.96153846153,
+            "top5_overlap_gain": -0.03076923076923077
+          },
+          {
+            "jacobian_kl": 16.088930189446547,
+            "kl_gain": -6.89795924408827,
+            "logit_kl": 9.190970945358277,
+            "observation_count": 20,
+            "request_index": 2,
+            "target_logprob_gain": -6.684125514212065,
+            "target_rank_gain": -79480.3,
+            "top5_overlap_gain": -0.02
+          },
+          {
+            "jacobian_kl": 12.629015314304516,
+            "kl_gain": -4.49659453352031,
+            "logit_kl": 8.132420780784205,
+            "observation_count": 95,
+            "request_index": 3,
+            "target_logprob_gain": -4.498492867793692,
+            "target_rank_gain": -40961.073684210525,
+            "top5_overlap_gain": -0.04
+          },
+          {
+            "jacobian_kl": 15.882353279516101,
+            "kl_gain": -6.842512237951159,
+            "logit_kl": 9.03984104156494,
+            "observation_count": 25,
+            "request_index": 4,
+            "target_logprob_gain": -6.934575724247843,
+            "target_rank_gain": -85653.56,
+            "top5_overlap_gain": -0.008
+          },
+          {
+            "jacobian_kl": 17.134665653729048,
+            "kl_gain": -8.011812510854465,
+            "logit_kl": 9.12285314287458,
+            "observation_count": 28,
+            "request_index": 5,
+            "target_logprob_gain": -8.250018235470634,
+            "target_rank_gain": -103239.21428571429,
+            "top5_overlap_gain": 0.0
+          },
+          {
+            "jacobian_kl": 13.971354311843628,
+            "kl_gain": -5.750206702364129,
+            "logit_kl": 8.2211476094795,
+            "observation_count": 33,
+            "request_index": 6,
+            "target_logprob_gain": -5.822144759152169,
+            "target_rank_gain": -48406.90909090909,
+            "top5_overlap_gain": -0.04242424242424243
+          },
+          {
+            "jacobian_kl": 15.652484765419187,
+            "kl_gain": -6.828811148663093,
+            "logit_kl": 8.823673616756093,
+            "observation_count": 22,
+            "request_index": 7,
+            "target_logprob_gain": -6.808079126756638,
+            "target_rank_gain": -87336.04545454546,
+            "top5_overlap_gain": -0.03636363636363637
+          },
+          {
+            "jacobian_kl": 15.195531126781134,
+            "kl_gain": -5.463258621020941,
+            "logit_kl": 9.732272505760193,
+            "observation_count": 20,
+            "request_index": 8,
+            "target_logprob_gain": -5.469276658998569,
+            "target_rank_gain": -87271.8,
+            "top5_overlap_gain": -0.01
+          },
+          {
+            "jacobian_kl": 13.470299627476683,
+            "kl_gain": -5.027657872531563,
+            "logit_kl": 8.44264175494512,
+            "observation_count": 24,
+            "request_index": 9,
+            "target_logprob_gain": -5.330183652307217,
+            "target_rank_gain": -47123.541666666664,
+            "top5_overlap_gain": -0.008333333333333333
+          }
+        ]
+      },
+      "31": {
+        "macro_equal_request": {
+          "jacobian_kl": 13.577232956073164,
+          "kl_gain_exact_one_sided_sign_flip_p": 1.0,
+          "kl_gain_nats": -4.636020017912475,
+          "logit_kl": 8.941212938160689,
+          "relative_kl_reduction": -0.5185001240856432,
+          "relative_kl_reduction_ci": {
+            "confidence_level": 0.95,
+            "lower": -0.5880548029244473,
+            "method": "deterministic paired request-level percentile bootstrap",
+            "samples": 20000,
+            "seed": 228009052,
+            "upper": -0.4571591168174655
+          },
+          "target_logprob_gain_ci": {
+            "confidence_level": 0.95,
+            "lower": -5.441276096049908,
+            "method": "deterministic request-level percentile bootstrap",
+            "samples": 20000,
+            "seed": 3781716013,
+            "upper": -4.082498189802777
+          },
+          "target_logprob_gain_exact_one_sided_sign_flip_p": 1.0,
+          "target_logprob_gain_nats": -4.71301940709103,
+          "target_rank_gain": -32739.585279710547,
+          "top5_overlap_fraction_gain": -0.005057912847386533
+        },
+        "observation_count": 293,
+        "paired_wins": {
+          "observation_kl": {
+            "jacobian": 46,
+            "logit": 247,
+            "ties": 0
+          },
+          "request_mean_kl": {
+            "jacobian": 0,
+            "logit": 9,
+            "ties": 0
+          }
+        },
+        "request_count": 9,
+        "request_level": [
+          {
+            "jacobian_kl": 13.32070892313137,
+            "kl_gain": -4.362656911494783,
+            "logit_kl": 8.958052011636587,
+            "observation_count": 26,
+            "request_index": 1,
+            "target_logprob_gain": -4.429079847535691,
+            "target_rank_gain": -27483.26923076923,
+            "top5_overlap_gain": -0.02307692307692308
+          },
+          {
+            "jacobian_kl": 14.077863185293973,
+            "kl_gain": -4.853052036650479,
+            "logit_kl": 9.224811148643493,
+            "observation_count": 20,
+            "request_index": 2,
+            "target_logprob_gain": -4.711403874307871,
+            "target_rank_gain": -43672.3,
+            "top5_overlap_gain": 0.01
+          },
+          {
+            "jacobian_kl": 11.614850730056826,
+            "kl_gain": -3.480915117930425,
+            "logit_kl": 8.1339356121264,
+            "observation_count": 95,
+            "request_index": 3,
+            "target_logprob_gain": -3.5231865131933437,
+            "target_rank_gain": -19916.094736842104,
+            "top5_overlap_gain": -0.04421052631578948
+          },
+          {
+            "jacobian_kl": 15.021877246908844,
+            "kl_gain": -5.937659565024078,
+            "logit_kl": 9.084217681884766,
+            "observation_count": 25,
+            "request_index": 4,
+            "target_logprob_gain": -6.22283727299422,
+            "target_rank_gain": -47489.32,
+            "top5_overlap_gain": 0.008
+          },
+          {
+            "jacobian_kl": 15.987145018896886,
+            "kl_gain": -6.6534626350871156,
+            "logit_kl": 9.333682383809771,
+            "observation_count": 28,
+            "request_index": 5,
+            "target_logprob_gain": -6.804154751024076,
+            "target_rank_gain": -49659.57142857143,
+            "top5_overlap_gain": -0.0071428571428571435
+          },
+          {
+            "jacobian_kl": 11.857133199432582,
+            "kl_gain": -3.6055658934920123,
+            "logit_kl": 8.25156730594057,
+            "observation_count": 33,
+            "request_index": 6,
+            "target_logprob_gain": -3.6241250067497743,
+            "target_rank_gain": -14741.060606060606,
+            "top5_overlap_gain": -0.024242424242424242
+          },
+          {
+            "jacobian_kl": 13.65687050992115,
+            "kl_gain": -4.834791501645338,
+            "logit_kl": 8.822079008275812,
+            "observation_count": 22,
+            "request_index": 7,
+            "target_logprob_gain": -4.8359479992015455,
+            "target_rank_gain": -29049.81818181818,
+            "top5_overlap_gain": -0.018181818181818184
+          },
+          {
+            "jacobian_kl": 14.212238817010075,
+            "kl_gain": -4.200278429780155,
+            "logit_kl": 10.01196038722992,
+            "observation_count": 20,
+            "request_index": 8,
+            "target_logprob_gain": -4.130092394910752,
+            "target_rank_gain": -42495.0,
+            "top5_overlap_gain": 0.02
+          },
+          {
+            "jacobian_kl": 12.446408974006772,
+            "kl_gain": -3.7957980701078973,
+            "logit_kl": 8.650610903898874,
+            "observation_count": 24,
+            "request_index": 9,
+            "target_logprob_gain": -4.1363470039019985,
+            "target_rank_gain": -20149.833333333332,
+            "top5_overlap_gain": 0.03333333333333333
+          }
+        ]
+      },
+      "32": {
+        "macro_equal_request": {
+          "jacobian_kl": 12.401989366041757,
+          "kl_gain_exact_one_sided_sign_flip_p": 1.0,
+          "kl_gain_nats": -3.454870979478562,
+          "logit_kl": 8.947118386563195,
+          "relative_kl_reduction": -0.3861434296730773,
+          "relative_kl_reduction_ci": {
+            "confidence_level": 0.95,
+            "lower": -0.43602723909247115,
+            "method": "deterministic paired request-level percentile bootstrap",
+            "samples": 20000,
+            "seed": 2178017075,
+            "upper": -0.34331847638563096
+          },
+          "target_logprob_gain_ci": {
+            "confidence_level": 0.95,
+            "lower": -4.0757089198147645,
+            "method": "deterministic request-level percentile bootstrap",
+            "samples": 20000,
+            "seed": 2946984920,
+            "upper": -3.073224730716944
+          },
+          "target_logprob_gain_exact_one_sided_sign_flip_p": 1.0,
+          "target_logprob_gain_nats": -3.5417287676257807,
+          "target_rank_gain": -49454.04563192168,
+          "top5_overlap_fraction_gain": -0.00975431585957902
+        },
+        "observation_count": 293,
+        "paired_wins": {
+          "observation_kl": {
+            "jacobian": 59,
+            "logit": 234,
+            "ties": 0
+          },
+          "request_mean_kl": {
+            "jacobian": 0,
+            "logit": 9,
+            "ties": 0
+          }
+        },
+        "request_count": 9,
+        "request_level": [
+          {
+            "jacobian_kl": 12.587824725187742,
+            "kl_gain": -3.615720579257378,
+            "logit_kl": 8.972104145930363,
+            "observation_count": 26,
+            "request_index": 1,
+            "target_logprob_gain": -3.7053023118239183,
+            "target_rank_gain": -49589.307692307695,
+            "top5_overlap_gain": -0.04615384615384616
+          },
+          {
+            "jacobian_kl": 12.729144630208612,
+            "kl_gain": -3.455291864648461,
+            "logit_kl": 9.27385276556015,
+            "observation_count": 20,
+            "request_index": 2,
+            "target_logprob_gain": -3.4198780385777354,
+            "target_rank_gain": -49432.3,
+            "top5_overlap_gain": 0.01
+          },
+          {
+            "jacobian_kl": 10.433688603263152,
+            "kl_gain": -2.494589123286699,
+            "logit_kl": 7.939099479976453,
+            "observation_count": 95,
+            "request_index": 3,
+            "target_logprob_gain": -2.569304479423322,
+            "target_rank_gain": -29454.57894736842,
+            "top5_overlap_gain": -0.037894736842105266
+          },
+          {
+            "jacobian_kl": 13.061049364805221,
+            "kl_gain": -3.9824276149272917,
+            "logit_kl": 9.07862174987793,
+            "observation_count": 25,
+            "request_index": 4,
+            "target_logprob_gain": -4.185702144503593,
+            "target_rank_gain": -66104.68,
+            "top5_overlap_gain": -0.024000000000000004
+          },
+          {
+            "jacobian_kl": 14.357424762366074,
+            "kl_gain": -5.0455124130738636,
+            "logit_kl": 9.31191234929221,
+            "observation_count": 28,
+            "request_index": 5,
+            "target_logprob_gain": -5.217570144816169,
+            "target_rank_gain": -88934.78571428571,
+            "top5_overlap_gain": 0.03571428571428571
+          },
+          {
+            "jacobian_kl": 10.86412639690168,
+            "kl_gain": -2.5675146543618403,
+            "logit_kl": 8.29661174253984,
+            "observation_count": 33,
+            "request_index": 6,
+            "target_logprob_gain": -2.6129059809626956,
+            "target_rank_gain": -28577.060606060608,
+            "top5_overlap_gain": -0.03636363636363637
+          },
+          {
+            "jacobian_kl": 12.490044036372142,
+            "kl_gain": -3.6696238578720526,
+            "logit_kl": 8.820420178500088,
+            "observation_count": 22,
+            "request_index": 7,
+            "target_logprob_gain": -3.6559242104942147,
+            "target_rank_gain": -47141.77272727273,
+            "top5_overlap_gain": -0.009090909090909092
+          },
+          {
+            "jacobian_kl": 13.54009447004646,
+            "kl_gain": -3.4532269230112433,
+            "logit_kl": 10.086867547035217,
+            "observation_count": 20,
+            "request_index": 8,
+            "target_logprob_gain": -3.3372085641138254,
+            "target_rank_gain": -69185.55,
+            "top5_overlap_gain": 0.02
+          },
+          {
+            "jacobian_kl": 11.554507305224737,
+            "kl_gain": -2.8099317848682404,
+            "logit_kl": 8.744575520356497,
+            "observation_count": 24,
+            "request_index": 9,
+            "target_logprob_gain": -3.171763033916553,
+            "target_rank_gain": -16666.375,
+            "top5_overlap_gain": 0.0
+          }
+        ]
+      },
+      "35": {
+        "macro_equal_request": {
+          "jacobian_kl": 12.04350336691953,
+          "kl_gain_exact_one_sided_sign_flip_p": 1.0,
+          "kl_gain_nats": -3.177562902745688,
+          "logit_kl": 8.865940464173843,
+          "relative_kl_reduction": -0.35840110990884977,
+          "relative_kl_reduction_ci": {
+            "confidence_level": 0.95,
+            "lower": -0.42297863037268424,
+            "method": "deterministic paired request-level percentile bootstrap",
+            "samples": 20000,
+            "seed": 875535885,
+            "upper": -0.30424991146382696
+          },
+          "target_logprob_gain_ci": {
+            "confidence_level": 0.95,
+            "lower": -3.862987882712727,
+            "method": "deterministic request-level percentile bootstrap",
+            "samples": 20000,
+            "seed": 3193269748,
+            "upper": -2.7737798639169484
+          },
+          "target_logprob_gain_exact_one_sided_sign_flip_p": 1.0,
+          "target_logprob_gain_nats": -3.2661824566028366,
+          "target_rank_gain": -32235.165579303735,
+          "top5_overlap_fraction_gain": -0.00624421777053356
+        },
+        "observation_count": 293,
+        "paired_wins": {
+          "observation_kl": {
+            "jacobian": 54,
+            "logit": 239,
+            "ties": 0
+          },
+          "request_mean_kl": {
+            "jacobian": 0,
+            "logit": 9,
+            "ties": 0
+          }
+        },
+        "request_count": 9,
+        "request_level": [
+          {
+            "jacobian_kl": 11.81179219025832,
+            "kl_gain": -3.2218913298386793,
+            "logit_kl": 8.58990086041964,
+            "observation_count": 26,
+            "request_index": 1,
+            "target_logprob_gain": -3.1732952411358175,
+            "target_rank_gain": -24448.115384615383,
+            "top5_overlap_gain": -0.06923076923076923
+          },
+          {
+            "jacobian_kl": 11.645410668849944,
+            "kl_gain": -2.3375287652015686,
+            "logit_kl": 9.307881903648376,
+            "observation_count": 20,
+            "request_index": 2,
+            "target_logprob_gain": -2.3112302660942077,
+            "target_rank_gain": -29412.75,
+            "top5_overlap_gain": 0.030000000000000006
+          },
+          {
+            "jacobian_kl": 11.281525342087997,
+            "kl_gain": -3.2918807243046007,
+            "logit_kl": 7.989644617783396,
+            "observation_count": 95,
+            "request_index": 3,
+            "target_logprob_gain": -3.3839238899318795,
+            "target_rank_gain": -25409.936842105264,
+            "top5_overlap_gain": -0.06947368421052633
+          },
+          {
+            "jacobian_kl": 12.305814976692199,
+            "kl_gain": -3.1688323259353637,
+            "logit_kl": 9.136982650756837,
+            "observation_count": 25,
+            "request_index": 4,
+            "target_logprob_gain": -3.339055519104004,
+            "target_rank_gain": -52849.2,
+            "top5_overlap_gain": 0.024000000000000004
+          },
+          {
+            "jacobian_kl": 13.016228471483503,
+            "kl_gain": -3.512646658079965,
+            "logit_kl": 9.503581813403539,
+            "observation_count": 28,
+            "request_index": 5,
+            "target_logprob_gain": -3.712188243865967,
+            "target_rank_gain": -35835.78571428572,
+            "top5_overlap_gain": 0.05714285714285715
+          },
+          {
+            "jacobian_kl": 10.886007836370757,
+            "kl_gain": -2.5689367958993623,
+            "logit_kl": 8.317071040471395,
+            "observation_count": 33,
+            "request_index": 6,
+            "target_logprob_gain": -2.7050085790229565,
+            "target_rank_gain": -8085.909090909091,
+            "top5_overlap_gain": -0.030303030303030304
+          },
+          {
+            "jacobian_kl": 12.018170844424855,
+            "kl_gain": -3.2550803422927856,
+            "logit_kl": 8.76309050213207,
+            "observation_count": 22,
+            "request_index": 7,
+            "target_logprob_gain": -3.2368691075931895,
+            "target_rank_gain": -65458.318181818184,
+            "top5_overlap_gain": 0.0
+          },
+          {
+            "jacobian_kl": 12.196797013282776,
+            "kl_gain": -2.3989500522613527,
+            "logit_kl": 9.797846961021424,
+            "observation_count": 20,
+            "request_index": 8,
+            "target_logprob_gain": -2.2927504539489747,
+            "target_rank_gain": -29310.35,
+            "top5_overlap_gain": 0.01
+          },
+          {
+            "jacobian_kl": 13.22978295882543,
+            "kl_gain": -4.842319130897522,
+            "logit_kl": 8.387463827927908,
+            "observation_count": 24,
+            "request_index": 9,
+            "target_logprob_gain": -5.241320808728536,
+            "target_rank_gain": -19306.125,
+            "top5_overlap_gain": -0.008333333333333333
+          }
+        ]
+      },
+      "36": {
+        "macro_equal_request": {
+          "jacobian_kl": 11.626344722339901,
+          "kl_gain_exact_one_sided_sign_flip_p": 1.0,
+          "kl_gain_nats": -2.805787513021542,
+          "logit_kl": 8.820557209318359,
+          "relative_kl_reduction": -0.3180964021249594,
+          "relative_kl_reduction_ci": {
+            "confidence_level": 0.95,
+            "lower": -0.376995984934376,
+            "method": "deterministic paired request-level percentile bootstrap",
+            "samples": 20000,
+            "seed": 4084882538,
+            "upper": -0.2627443119048191
+          },
+          "target_logprob_gain_ci": {
+            "confidence_level": 0.95,
+            "lower": -3.4457633536101726,
+            "method": "deterministic request-level percentile bootstrap",
+            "samples": 20000,
+            "seed": 4232340896,
+            "upper": -2.3711024228218656
+          },
+          "target_logprob_gain_exact_one_sided_sign_flip_p": 1.0,
+          "target_logprob_gain_nats": -2.8870245482201757,
+          "target_rank_gain": -34019.10220735405,
+          "top5_overlap_fraction_gain": -0.003010932537248328
+        },
+        "observation_count": 293,
+        "paired_wins": {
+          "observation_kl": {
+            "jacobian": 71,
+            "logit": 222,
+            "ties": 0
+          },
+          "request_mean_kl": {
+            "jacobian": 0,
+            "logit": 9,
+            "ties": 0
+          }
+        },
+        "request_count": 9,
+        "request_level": [
+          {
+            "jacobian_kl": 11.393874663573046,
+            "kl_gain": -2.8613626039945164,
+            "logit_kl": 8.53251205957853,
+            "observation_count": 26,
+            "request_index": 1,
+            "target_logprob_gain": -2.766136884689331,
+            "target_rank_gain": -20393.03846153846,
+            "top5_overlap_gain": -0.06923076923076923
+          },
+          {
+            "jacobian_kl": 11.15054407119751,
+            "kl_gain": -1.8313834190368652,
+            "logit_kl": 9.319160652160644,
+            "observation_count": 20,
+            "request_index": 2,
+            "target_logprob_gain": -1.7893539428710938,
+            "target_rank_gain": -23657.45,
+            "top5_overlap_gain": 0.04
+          },
+          {
+            "jacobian_kl": 10.564778662355323,
+            "kl_gain": -2.7244036254129913,
+            "logit_kl": 7.840375036942332,
+            "observation_count": 95,
+            "request_index": 3,
+            "target_logprob_gain": -2.832500205639946,
+            "target_rank_gain": -29040.663157894738,
+            "top5_overlap_gain": -0.06947368421052633
+          },
+          {
+            "jacobian_kl": 12.375088911056519,
+            "kl_gain": -3.3837571239471433,
+            "logit_kl": 8.991331787109376,
+            "observation_count": 25,
+            "request_index": 4,
+            "target_logprob_gain": -3.46946328163147,
+            "target_rank_gain": -53596.84,
+            "top5_overlap_gain": 0.016
+          },
+          {
+            "jacobian_kl": 13.020050295761653,
+            "kl_gain": -3.420032867363521,
+            "logit_kl": 9.600017428398132,
+            "observation_count": 28,
+            "request_index": 5,
+            "target_logprob_gain": -3.6736375434058055,
+            "target_rank_gain": -44281.57142857143,
+            "top5_overlap_gain": 0.05
+          },
+          {
+            "jacobian_kl": 10.340500112735864,
+            "kl_gain": -2.1236822135520703,
+            "logit_kl": 8.216817899183793,
+            "observation_count": 33,
+            "request_index": 6,
+            "target_logprob_gain": -2.2282261198217217,
+            "target_rank_gain": -8709.575757575758,
+            "top5_overlap_gain": -0.024242424242424242
+          },
+          {
+            "jacobian_kl": 11.768045468763871,
+            "kl_gain": -2.891475200653076,
+            "logit_kl": 8.876570268110795,
+            "observation_count": 22,
+            "request_index": 7,
+            "target_logprob_gain": -2.874965873631564,
+            "target_rank_gain": -74692.27272727272,
+            "top5_overlap_gain": 0.018181818181818184
+          },
+          {
+            "jacobian_kl": 11.723151373863221,
+            "kl_gain": -1.9714985370635987,
+            "logit_kl": 9.751652836799622,
+            "observation_count": 20,
+            "request_index": 8,
+            "target_logprob_gain": -1.8777477025985718,
+            "target_rank_gain": -33285.55,
+            "top5_overlap_gain": 0.02
+          },
+          {
+            "jacobian_kl": 12.301068941752115,
+            "kl_gain": -4.0444920261700945,
+            "logit_kl": 8.256576915582022,
+            "observation_count": 24,
+            "request_index": 9,
+            "target_logprob_gain": -4.471189379692078,
+            "target_rank_gain": -18514.958333333332,
+            "top5_overlap_gain": -0.008333333333333333
+          }
+        ]
+      },
+      "39": {
+        "macro_equal_request": {
+          "jacobian_kl": 11.245503358949142,
+          "kl_gain_exact_one_sided_sign_flip_p": 1.0,
+          "kl_gain_nats": -2.692353827627441,
+          "logit_kl": 8.5531495313217,
+          "relative_kl_reduction": -0.3147792304773838,
+          "relative_kl_reduction_ci": {
+            "confidence_level": 0.95,
+            "lower": -0.3658382641086968,
+            "method": "deterministic paired request-level percentile bootstrap",
+            "samples": 20000,
+            "seed": 997485769,
+            "upper": -0.2613922322753319
+          },
+          "target_logprob_gain_ci": {
+            "confidence_level": 0.95,
+            "lower": -3.3241534395980374,
+            "method": "deterministic request-level percentile bootstrap",
+            "samples": 20000,
+            "seed": 1235887316,
+            "upper": -2.2824513659358243
+          },
+          "target_logprob_gain_exact_one_sided_sign_flip_p": 1.0,
+          "target_logprob_gain_nats": -2.788876585814072,
+          "target_rank_gain": -33303.768395746556,
+          "top5_overlap_fraction_gain": -0.019217497901708427
+        },
+        "observation_count": 293,
+        "paired_wins": {
+          "observation_kl": {
+            "jacobian": 78,
+            "logit": 215,
+            "ties": 0
+          },
+          "request_mean_kl": {
+            "jacobian": 0,
+            "logit": 9,
+            "ties": 0
+          }
+        },
+        "request_count": 9,
+        "request_level": [
+          {
+            "jacobian_kl": 10.950277860348042,
+            "kl_gain": -2.5368195955569925,
+            "logit_kl": 8.413458264791048,
+            "observation_count": 26,
+            "request_index": 1,
+            "target_logprob_gain": -2.4285393815774183,
+            "target_rank_gain": -24387.076923076922,
+            "top5_overlap_gain": -0.07692307692307693
+          },
+          {
+            "jacobian_kl": 10.421742224693299,
+            "kl_gain": -1.4487732887268066,
+            "logit_kl": 8.972968935966492,
+            "observation_count": 20,
+            "request_index": 2,
+            "target_logprob_gain": -1.3732835412025453,
+            "target_rank_gain": -24432.7,
+            "top5_overlap_gain": 0.04
+          },
+          {
+            "jacobian_kl": 10.311332978072919,
+            "kl_gain": -2.796368187979648,
+            "logit_kl": 7.514964790093272,
+            "observation_count": 95,
+            "request_index": 3,
+            "target_logprob_gain": -2.8951908168039826,
+            "target_rank_gain": -28980.536842105263,
+            "top5_overlap_gain": -0.0863157894736842
+          },
+          {
+            "jacobian_kl": 11.350534218549729,
+            "kl_gain": -2.471967018842697,
+            "logit_kl": 8.878567199707032,
+            "observation_count": 25,
+            "request_index": 4,
+            "target_logprob_gain": -2.6537601494789125,
+            "target_rank_gain": -42519.04,
+            "top5_overlap_gain": 2.220446049250313e-18
+          },
+          {
+            "jacobian_kl": 13.40846278837749,
+            "kl_gain": -4.0653142503329684,
+            "logit_kl": 9.34314853804452,
+            "observation_count": 28,
+            "request_index": 5,
+            "target_logprob_gain": -4.417770087718964,
+            "target_rank_gain": -58826.392857142855,
+            "top5_overlap_gain": 0.04285714285714286
+          },
+          {
+            "jacobian_kl": 10.276589292468447,
+            "kl_gain": -2.4062610828515254,
+            "logit_kl": 7.870328209616921,
+            "observation_count": 33,
+            "request_index": 6,
+            "target_logprob_gain": -2.46127386526628,
+            "target_rank_gain": -9496.333333333334,
+            "top5_overlap_gain": -0.07272727272727272
+          },
+          {
+            "jacobian_kl": 11.953395827250047,
+            "kl_gain": -3.2540964050726457,
+            "logit_kl": 8.699299422177402,
+            "observation_count": 22,
+            "request_index": 7,
+            "target_logprob_gain": -3.2399186166850003,
+            "target_rank_gain": -64909.22727272727,
+            "top5_overlap_gain": -0.018181818181818184
+          },
+          {
+            "jacobian_kl": 11.87147285938263,
+            "kl_gain": -2.3577651977539062,
+            "logit_kl": 9.513707661628723,
+            "observation_count": 20,
+            "request_index": 8,
+            "target_logprob_gain": -2.2218812823295595,
+            "target_rank_gain": -28146.65,
+            "top5_overlap_gain": -0.01
+          },
+          {
+            "jacobian_kl": 10.665722181399664,
+            "kl_gain": -2.89381942152977,
+            "logit_kl": 7.771902759869893,
+            "observation_count": 24,
+            "request_index": 9,
+            "target_logprob_gain": -3.408271531263987,
+            "target_rank_gain": -18035.958333333332,
+            "top5_overlap_gain": 0.008333333333333333
+          }
+        ]
+      },
+      "40": {
+        "macro_equal_request": {
+          "jacobian_kl": 11.161582037929158,
+          "kl_gain_exact_one_sided_sign_flip_p": 1.0,
+          "kl_gain_nats": -2.6745054074272634,
+          "logit_kl": 8.487076630501894,
+          "relative_kl_reduction": -0.3151268126666017,
+          "relative_kl_reduction_ci": {
+            "confidence_level": 0.95,
+            "lower": -0.3723731768439673,
+            "method": "deterministic paired request-level percentile bootstrap",
+            "samples": 20000,
+            "seed": 2306451998,
+            "upper": -0.2577593421762055
+          },
+          "target_logprob_gain_ci": {
+            "confidence_level": 0.95,
+            "lower": -3.351664930269765,
+            "method": "deterministic request-level percentile bootstrap",
+            "samples": 20000,
+            "seed": 3375075524,
+            "upper": -2.2641298327568173
+          },
+          "target_logprob_gain_exact_one_sided_sign_flip_p": 1.0,
+          "target_logprob_gain_nats": -2.78199920889247,
+          "target_rank_gain": -31794.407743173004,
+          "top5_overlap_fraction_gain": -0.022774796353743725
+        },
+        "observation_count": 293,
+        "paired_wins": {
+          "observation_kl": {
+            "jacobian": 77,
+            "logit": 216,
+            "ties": 0
+          },
+          "request_mean_kl": {
+            "jacobian": 0,
+            "logit": 9,
+            "ties": 0
+          }
+        },
+        "request_count": 9,
+        "request_level": [
+          {
+            "jacobian_kl": 11.134257477063398,
+            "kl_gain": -2.8600545892348657,
+            "logit_kl": 8.274202887828533,
+            "observation_count": 26,
+            "request_index": 1,
+            "target_logprob_gain": -2.7289902705412645,
+            "target_rank_gain": -20492.115384615383,
+            "top5_overlap_gain": -0.04615384615384616
+          },
+          {
+            "jacobian_kl": 10.41292900145054,
+            "kl_gain": -1.4413103491067887,
+            "logit_kl": 8.97161865234375,
+            "observation_count": 20,
+            "request_index": 2,
+            "target_logprob_gain": -1.4195756375789643,
+            "target_rank_gain": -30065.45,
+            "top5_overlap_gain": 0.030000000000000006
+          },
+          {
+            "jacobian_kl": 10.162776393639414,
+            "kl_gain": -2.716813052328009,
+            "logit_kl": 7.445963341311405,
+            "observation_count": 95,
+            "request_index": 3,
+            "target_logprob_gain": -2.811387288570404,
+            "target_rank_gain": -26960.294736842105,
+            "top5_overlap_gain": -0.08842105263157896
+          },
+          {
+            "jacobian_kl": 11.379907788783312,
+            "kl_gain": -2.5111426062881947,
+            "logit_kl": 8.868765182495117,
+            "observation_count": 25,
+            "request_index": 4,
+            "target_logprob_gain": -2.682999200671911,
+            "target_rank_gain": -40310.16,
+            "top5_overlap_gain": -0.032
+          },
+          {
+            "jacobian_kl": 13.60236465718065,
+            "kl_gain": -4.2941107388053625,
+            "logit_kl": 9.308253918375287,
+            "observation_count": 28,
+            "request_index": 5,
+            "target_logprob_gain": -4.647663661411831,
+            "target_rank_gain": -54609.607142857145,
+            "top5_overlap_gain": 0.028571428571428574
+          },
+          {
+            "jacobian_kl": 10.15132757118254,
+            "kl_gain": -2.3316794353904147,
+            "logit_kl": 7.819648135792125,
+            "observation_count": 33,
+            "request_index": 6,
+            "target_logprob_gain": -2.388186905420188,
+            "target_rank_gain": -9271.666666666666,
+            "top5_overlap_gain": -0.0787878787878788
+          },
+          {
+            "jacobian_kl": 11.951137493957173,
+            "kl_gain": -3.3196986751122908,
+            "logit_kl": 8.631438818844883,
+            "observation_count": 22,
+            "request_index": 7,
+            "target_logprob_gain": -3.3026918552138587,
+            "target_rank_gain": -67515.90909090909,
+            "top5_overlap_gain": -0.018181818181818184
+          },
+          {
+            "jacobian_kl": 11.441297915577888,
+            "kl_gain": -2.1265626698732376,
+            "logit_kl": 9.31473524570465,
+            "observation_count": 20,
+            "request_index": 8,
+            "target_logprob_gain": -2.0234810411930084,
+            "target_rank_gain": -20857.55,
+            "top5_overlap_gain": 0.0
+          },
+          {
+            "jacobian_kl": 10.218240042527517,
+            "kl_gain": -2.4691765507062278,
+            "logit_kl": 7.749063491821289,
+            "observation_count": 24,
+            "request_index": 9,
+            "target_logprob_gain": -3.033017019430796,
+            "target_rank_gain": -16066.916666666666,
+            "top5_overlap_gain": 0.0
+          }
+        ]
+      },
+      "62": {
+        "macro_equal_request": {
+          "jacobian_kl": 0.9487175011337629,
+          "kl_gain_exact_one_sided_sign_flip_p": 0.04296875,
+          "kl_gain_nats": 0.11965102413978601,
+          "logit_kl": 1.0683685252735489,
+          "relative_kl_reduction": 0.11199414931205516,
+          "relative_kl_reduction_ci": {
+            "confidence_level": 0.95,
+            "lower": 0.019270961070027494,
+            "method": "deterministic paired request-level percentile bootstrap",
+            "samples": 20000,
+            "seed": 1021733709,
+            "upper": 0.21372398989374097
+          },
+          "target_logprob_gain_ci": {
+            "confidence_level": 0.95,
+            "lower": -0.0035622762740705077,
+            "method": "deterministic request-level percentile bootstrap",
+            "samples": 20000,
+            "seed": 1048441528,
+            "upper": 0.17075039038037576
+          },
+          "target_logprob_gain_exact_one_sided_sign_flip_p": 0.068359375,
+          "target_logprob_gain_nats": 0.08044849852829626,
+          "target_rank_gain": 2.074579455632087,
+          "top5_overlap_fraction_gain": 0.032671963514068786
+        },
+        "observation_count": 293,
+        "paired_wins": {
+          "observation_kl": {
+            "jacobian": 155,
+            "logit": 138,
+            "ties": 0
+          },
+          "request_mean_kl": {
+            "jacobian": 7,
+            "logit": 2,
+            "ties": 0
+          }
+        },
+        "request_count": 9,
+        "request_level": [
+          {
+            "jacobian_kl": 0.4215929261993621,
+            "kl_gain": 0.006963409834777569,
+            "logit_kl": 0.4285563360341397,
+            "observation_count": 26,
+            "request_index": 1,
+            "target_logprob_gain": 0.05728948570252284,
+            "target_rank_gain": -0.38461538461538464,
+            "top5_overlap_gain": 0.04615384615384615
+          },
+          {
+            "jacobian_kl": 1.3710888406336381,
+            "kl_gain": 0.3090376177902726,
+            "logit_kl": 1.6801264584239106,
+            "observation_count": 20,
+            "request_index": 2,
+            "target_logprob_gain": 0.25927644316288934,
+            "target_rank_gain": 2.0,
+            "top5_overlap_gain": 0.06000000000000001
+          },
+          {
+            "jacobian_kl": 0.6207505290733504,
+            "kl_gain": -0.003981832563400339,
+            "logit_kl": 0.61676869650995,
+            "observation_count": 95,
+            "request_index": 3,
+            "target_logprob_gain": 0.010688681725828007,
+            "target_rank_gain": -0.021052631578947368,
+            "top5_overlap_gain": 0.023157894736842103
+          },
+          {
+            "jacobian_kl": 0.8382244682761575,
+            "kl_gain": 0.38228482039467054,
+            "logit_kl": 1.220509288670828,
+            "observation_count": 25,
+            "request_index": 4,
+            "target_logprob_gain": 0.15917539402445982,
+            "target_rank_gain": 2.36,
+            "top5_overlap_gain": 0.064
+          },
+          {
+            "jacobian_kl": 1.5899002582439112,
+            "kl_gain": 0.0602224428172227,
+            "logit_kl": 1.650122701061134,
+            "observation_count": 28,
+            "request_index": 5,
+            "target_logprob_gain": 0.051126265818461594,
+            "target_rank_gain": 0.8214285714285714,
+            "top5_overlap_gain": 0.042857142857142864
+          },
+          {
+            "jacobian_kl": 1.0568217810731297,
+            "kl_gain": -0.07592182032132053,
+            "logit_kl": 0.9808999607518093,
+            "observation_count": 33,
+            "request_index": 6,
+            "target_logprob_gain": -0.13076471477291884,
+            "target_rank_gain": 11.242424242424242,
+            "top5_overlap_gain": 6.7286243916676156e-18
+          },
+          {
+            "jacobian_kl": 0.44709152007858805,
+            "kl_gain": 0.3197422468897044,
+            "logit_kl": 0.7668337669682924,
+            "observation_count": 22,
+            "request_index": 7,
+            "target_logprob_gain": 0.31968381532368023,
+            "target_rank_gain": 0.13636363636363635,
+            "top5_overlap_gain": -0.045454545454545456
+          },
+          {
+            "jacobian_kl": 1.670308156979536,
+            "kl_gain": 0.011684015346600064,
+            "logit_kl": 1.681992172326136,
+            "observation_count": 20,
+            "request_index": 8,
+            "target_logprob_gain": -0.009065461294812848,
+            "target_rank_gain": 2.35,
+            "top5_overlap_gain": 0.07
+          },
+          {
+            "jacobian_kl": 0.5226790296461937,
+            "kl_gain": 0.06682831706954555,
+            "logit_kl": 0.5895073467157393,
+            "observation_count": 24,
+            "request_index": 9,
+            "target_logprob_gain": 0.006626577064556234,
+            "target_rank_gain": 0.16666666666666666,
+            "top5_overlap_gain": 0.03333333333333333
+          }
+        ]
+      }
+    },
+    "predictive_diagnostic_passed": false,
+    "predictive_improvement_diagnostic": {
+      "criteria": {
+        "at_least_7_of_9_positive_request_means": false,
+        "bootstrap_ci_lower_above_zero": false,
+        "relative_kl_reduction_at_least_10_percent": false
+      },
+      "interpretation": "Next-token distribution calibration only. Jacobian Lens is fit to future-summed causal transport, so this is not a lens-quality gate.",
+      "passed": false
+    }
+  },
+  "native_comparison": {
+    "confidence_interval": {
+      "confidence_level": 0.95,
+      "lower": -1.100117814944404,
+      "method": "deterministic request-level percentile bootstrap",
+      "samples": 20000,
+      "seed": 397371778,
+      "upper": -0.6571414143291381
+    },
+    "exact_one_sided_sign_flip_p": 1.0,
+    "interpretation": "positive values favor the native lens over the primary lens",
+    "native_minus_primary_kl_gain_nats": -0.8700740124051934,
+    "positive_request_count": 0,
+    "request_level": [
+      {
+        "native_minus_primary_kl_gain_nats": -0.4944157142005065,
+        "request_index": 1
+      },
+      {
+        "native_minus_primary_kl_gain_nats": -1.4760109935356822,
+        "request_index": 2
+      },
+      {
+        "native_minus_primary_kl_gain_nats": -0.4122185669852998,
+        "request_index": 3
+      },
+      {
+        "native_minus_primary_kl_gain_nats": -0.8103665012866259,
+        "request_index": 4
+      },
+      {
+        "native_minus_primary_kl_gain_nats": -1.343333985231145,
+        "request_index": 5
+      },
+      {
+        "native_minus_primary_kl_gain_nats": -0.7026509073412404,
+        "request_index": 6
+      },
+      {
+        "native_minus_primary_kl_gain_nats": -0.8324358522562155,
+        "request_index": 7
+      },
+      {
+        "native_minus_primary_kl_gain_nats": -1.0862402655449437,
+        "request_index": 8
+      },
+      {
+        "native_minus_primary_kl_gain_nats": -0.6729933252650814,
+        "request_index": 9
+      }
+    ]
+  },
+  "primary": {
+    "adapter_eligibility": {
+      "distribution_analysis_eligible": false,
+      "experiment_count": 293,
+      "strict_eligible": false,
+      "strict_pass_count": 192
+    },
+    "coverage": {
+      "experiment_count": 293,
+      "fixed_middle_layers": [
+        24,
+        27,
+        28,
+        31,
+        32,
+        35,
+        36,
+        39,
+        40
+      ],
+      "layers": [
+        24,
+        27,
+        28,
+        31,
+        32,
+        35,
+        36,
+        39,
+        40,
+        62
+      ],
+      "requests": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    "fixed_middle_primary": {
+      "macro_equal_request": {
+        "jacobian_kl": 12.224605615627235,
+        "kl_gain_exact_one_sided_sign_flip_p": 1.0,
+        "kl_gain_nats": -3.4536301433250074,
+        "logit_kl": 8.770975472302228,
+        "relative_kl_reduction": -0.39375667555235905,
+        "relative_kl_reduction_ci": {
+          "confidence_level": 0.95,
+          "lower": -0.4370599926945022,
+          "method": "deterministic paired request-level percentile bootstrap",
+          "samples": 20000,
+          "seed": 799824156,
+          "upper": -0.34523492403729317
+        },
+        "target_logprob_gain_ci": {
+          "confidence_level": 0.95,
+          "lower": -3.9674209928747204,
+          "method": "deterministic request-level percentile bootstrap",
+          "samples": 20000,
+          "seed": 3155083371,
+          "upper": -3.08083001323264
+        },
+        "target_logprob_gain_exact_one_sided_sign_flip_p": 1.0,
+        "target_logprob_gain_nats": -3.5215626147341292,
+        "target_rank_gain": -35549.765758476955,
+        "top5_overlap_fraction_gain": -0.013203148162212491
+      },
+      "observation_count": 2637,
+      "paired_wins": {
+        "observation_kl": {
+          "jacobian": 552,
+          "logit": 2085,
+          "ties": 0
+        },
+        "request_mean_kl": {
+          "jacobian": 0,
+          "logit": 9,
+          "ties": 0
+        }
+      },
+      "request_count": 9,
+      "request_level": [
+        {
+          "jacobian_kl": 12.343342611231865,
+          "kl_gain": -3.735230225082646,
+          "logit_kl": 8.60811238614922,
+          "observation_count": 234,
+          "request_index": 1,
+          "target_logprob_gain": -3.7301590929174018,
+          "target_rank_gain": -26713.84188034188,
+          "top5_overlap_gain": -0.044444444444444446
+        },
+        {
+          "jacobian_kl": 11.812209687793317,
+          "kl_gain": -2.658419024445013,
+          "logit_kl": 9.153790663348303,
+          "observation_count": 180,
+          "request_index": 2,
+          "target_logprob_gain": -2.523030378891983,
+          "target_rank_gain": -31782.65,
+          "top5_overlap_gain": 0.026666666666666665
+        },
+        {
+          "jacobian_kl": 10.9888044641424,
+          "kl_gain": -3.0764733916529785,
+          "logit_kl": 7.912331072489421,
+          "observation_count": 855,
+          "request_index": 3,
+          "target_logprob_gain": -3.1058142496844785,
+          "target_rank_gain": -31286.298245614034,
+          "top5_overlap_gain": -0.0608187134502924
+        },
+        {
+          "jacobian_kl": 13.008222332131117,
+          "kl_gain": -4.014648098546184,
+          "logit_kl": 8.993574233584933,
+          "observation_count": 225,
+          "request_index": 4,
+          "target_logprob_gain": -4.190103178022222,
+          "target_rank_gain": -46818.64,
+          "top5_overlap_gain": -0.0035555555555555557
+        },
+        {
+          "jacobian_kl": 13.714494183958907,
+          "kl_gain": -4.441402432527245,
+          "logit_kl": 9.273091751431663,
+          "observation_count": 252,
+          "request_index": 5,
+          "target_logprob_gain": -4.678576208299972,
+          "target_rank_gain": -43085.75,
+          "top5_overlap_gain": 0.013492063492063493
+        },
+        {
+          "jacobian_kl": 11.268785096537197,
+          "kl_gain": -3.081234046864803,
+          "logit_kl": 8.187551049672393,
+          "observation_count": 297,
+          "request_index": 6,
+          "target_logprob_gain": -3.133703561271588,
+          "target_rank_gain": -22725.070707070707,
+          "top5_overlap_gain": -0.0457912457912458
+        },
+        {
+          "jacobian_kl": 12.663590108742937,
+          "kl_gain": -3.942888479277661,
+          "logit_kl": 8.720701629465276,
+          "observation_count": 198,
+          "request_index": 7,
+          "target_logprob_gain": -3.9360975127883555,
+          "target_rank_gain": -60261.969696969696,
+          "top5_overlap_gain": -0.019191919191919194
+        },
+        {
+          "jacobian_kl": 12.440163219911565,
+          "kl_gain": -2.6851481513275455,
+          "logit_kl": 9.755015068584019,
+          "observation_count": 180,
+          "request_index": 8,
+          "target_logprob_gain": -2.6267281737230306,
+          "target_rank_gain": -38191.166666666664,
+          "top5_overlap_gain": 0.005555555555555556
+        },
+        {
+          "jacobian_kl": 11.78183883619581,
+          "kl_gain": -3.4472274402009875,
+          "logit_kl": 8.334611395994822,
+          "observation_count": 216,
+          "request_index": 9,
+          "target_logprob_gain": -3.7698511770081327,
+          "target_rank_gain": -19082.50462962963,
+          "top5_overlap_gain": 0.009259259259259259
+        }
+      ]
+    },
+    "next_token_noninferiority_diagnostic": {
+      "confidence_interval": {
+        "confidence_level": 0.95,
+        "lower": -3.9674209928747204,
+        "method": "deterministic request-level percentile bootstrap",
+        "samples": 20000,
+        "seed": 3155083371,
+        "upper": -3.08083001323264
+      },
+      "exact_one_sided_sign_flip_p_at_margin": 1.0,
+      "interpretation": "Teacher-forced next-token calibration only; failure does not imply failure on the Jacobian Lens intermediate-concept objective.",
+      "margin_nats": -0.1,
+      "mean_gain_nats": -3.5215626147341292,
+      "passed": false
+    },
+    "per_layer": {
+      "24": {
+        "macro_equal_request": {
+          "jacobian_kl": 13.127838342750174,
+          "kl_gain_exact_one_sided_sign_flip_p": 1.0,
+          "kl_gain_nats": -4.401368078371831,
+          "logit_kl": 8.726470264378342,
+          "relative_kl_reduction": -0.5043698018817895,
+          "relative_kl_reduction_ci": {
+            "confidence_level": 0.95,
+            "lower": -0.5644238994334899,
+            "method": "deterministic paired request-level percentile bootstrap",
+            "samples": 20000,
+            "seed": 2253983023,
+            "upper": -0.4388588067319528
+          },
+          "target_logprob_gain_ci": {
+            "confidence_level": 0.95,
+            "lower": -4.936461933833924,
+            "method": "deterministic request-level percentile bootstrap",
+            "samples": 20000,
+            "seed": 2608395748,
+            "upper": -3.885338802898109
+          },
+          "target_logprob_gain_exact_one_sided_sign_flip_p": 1.0,
+          "target_logprob_gain_nats": -4.4473782368232735,
+          "target_rank_gain": -31779.516904976117,
+          "top5_overlap_fraction_gain": -0.026008700850806116
+        },
+        "observation_count": 293,
+        "paired_wins": {
+          "observation_kl": {
+            "jacobian": 40,
+            "logit": 253,
+            "ties": 0
+          },
+          "request_mean_kl": {
+            "jacobian": 0,
+            "logit": 9,
+            "ties": 0
+          }
+        },
+        "request_count": 9,
+        "request_level": [
+          {
+            "jacobian_kl": 13.647408534701054,
+            "kl_gain": -5.23538236778516,
+            "logit_kl": 8.412026166915894,
+            "observation_count": 26,
+            "request_index": 1,
+            "target_logprob_gain": -5.185378572115531,
+            "target_rank_gain": -20856.19230769231,
+            "top5_overlap_gain": -0.038461538461538464
+          },
+          {
+            "jacobian_kl": 12.631061502546071,
+            "kl_gain": -3.6206333361566068,
+            "logit_kl": 9.010428166389465,
+            "observation_count": 20,
+            "request_index": 2,
+            "target_logprob_gain": -3.351804518699646,
+            "target_rank_gain": -28408.5,
+            "top5_overlap_gain": 0.030000000000000006
+          },
+          {
+            "jacobian_kl": 11.545033975808243,
+            "kl_gain": -3.3916983543257966,
+            "logit_kl": 8.153335621482448,
+            "observation_count": 95,
+            "request_index": 3,
+            "target_logprob_gain": -3.364302633153765,
+            "target_rank_gain": -27402.515789473684,
+            "top5_overlap_gain": -0.06315789473684211
+          },
+          {
+            "jacobian_kl": 13.889512875974178,
+            "kl_gain": -4.988584016263485,
+            "logit_kl": 8.900928859710694,
+            "observation_count": 25,
+            "request_index": 4,
+            "target_logprob_gain": -5.1839498239755635,
+            "target_rank_gain": -40904.8,
+            "top5_overlap_gain": -0.008
+          },
+          {
+            "jacobian_kl": 13.864339665110622,
+            "kl_gain": -4.943963687866926,
+            "logit_kl": 8.920375977243696,
+            "observation_count": 28,
+            "request_index": 5,
+            "target_logprob_gain": -5.18958643078804,
+            "target_rank_gain": -15032.535714285714,
+            "top5_overlap_gain": -0.021428571428571432
+          },
+          {
+            "jacobian_kl": 13.005805047172489,
+            "kl_gain": -4.655952311826475,
+            "logit_kl": 8.349852735346014,
+            "observation_count": 33,
+            "request_index": 6,
+            "target_logprob_gain": -4.723985013636676,
+            "target_rank_gain": -36563.969696969696,
+            "top5_overlap_gain": -0.06666666666666667
+          },
+          {
+            "jacobian_kl": 13.48307500144636,
+            "kl_gain": -5.005916823463684,
+            "logit_kl": 8.477158177982677,
+            "observation_count": 22,
+            "request_index": 7,
+            "target_logprob_gain": -5.003592524254187,
+            "target_rank_gain": -36195.36363636364,
+            "top5_overlap_gain": -0.03636363636363637
+          },
+          {
+            "jacobian_kl": 13.049562128167599,
+            "kl_gain": -3.240733988862485,
+            "logit_kl": 9.808828139305115,
+            "observation_count": 20,
+            "request_index": 8,
+            "target_logprob_gain": -3.25921345083043,
+            "target_rank_gain": -40405.15,
+            "top5_overlap_gain": -0.030000000000000006
+          },
+          {
+            "jacobian_kl": 13.034746353824934,
+            "kl_gain": -4.52944781879584,
+            "logit_kl": 8.505298535029093,
+            "observation_count": 24,
+            "request_index": 9,
+            "target_logprob_gain": -4.764591163955629,
+            "target_rank_gain": -40246.625,
+            "top5_overlap_gain": 0.0
+          }
+        ]
+      },
+      "27": {
+        "macro_equal_request": {
+          "jacobian_kl": 13.46486881279524,
+          "kl_gain_exact_one_sided_sign_flip_p": 1.0,
+          "kl_gain_nats": -4.694377421546173,
+          "logit_kl": 8.770491391249067,
+          "relative_kl_reduction": -0.5352467965740303,
+          "relative_kl_reduction_ci": {
+            "confidence_level": 0.95,
+            "lower": -0.5938900676684814,
+            "method": "deterministic paired request-level percentile bootstrap",
+            "samples": 20000,
+            "seed": 3217269361,
+            "upper": -0.4765686292953968
+          },
+          "target_logprob_gain_ci": {
+            "confidence_level": 0.95,
+            "lower": -5.302309874048057,
+            "method": "deterministic request-level percentile bootstrap",
+            "samples": 20000,
+            "seed": 1097713273,
+            "upper": -4.217869740887779
+          },
+          "target_logprob_gain_exact_one_sided_sign_flip_p": 1.0,
+          "target_logprob_gain_nats": -4.738430771619778,
+          "target_rank_gain": -31067.39717620586,
+          "top5_overlap_fraction_gain": -0.013640998377840484
+        },
+        "observation_count": 293,
+        "paired_wins": {
+          "observation_kl": {
+            "jacobian": 35,
+            "logit": 258,
+            "ties": 0
+          },
+          "request_mean_kl": {
+            "jacobian": 0,
+            "logit": 9,
+            "ties": 0
+          }
+        },
+        "request_count": 9,
+        "request_level": [
+          {
+            "jacobian_kl": 14.247158402433762,
+            "kl_gain": -5.661443842145113,
+            "logit_kl": 8.585714560288649,
+            "observation_count": 26,
+            "request_index": 1,
+            "target_logprob_gain": -5.696703983614078,
+            "target_rank_gain": -22287.96153846154,
+            "top5_overlap_gain": -0.015384615384615385
+          },
+          {
+            "jacobian_kl": 13.636827723588794,
+            "kl_gain": -4.524404923524708,
+            "logit_kl": 9.112422800064087,
+            "observation_count": 20,
+            "request_index": 2,
+            "target_logprob_gain": -4.3206848130561415,
+            "target_rank_gain": -24236.55,
+            "top5_overlap_gain": 0.030000000000000006
+          },
+          {
+            "jacobian_kl": 11.758002307462064,
+            "kl_gain": -3.69676193555719,
+            "logit_kl": 8.061240371904875,
+            "observation_count": 95,
+            "request_index": 3,
+            "target_logprob_gain": -3.687954305112362,
+            "target_rank_gain": -33099.72631578947,
+            "top5_overlap_gain": -0.06526315789473684
+          },
+          {
+            "jacobian_kl": 14.68127337142825,
+            "kl_gain": -5.718361422270537,
+            "logit_kl": 8.962911949157714,
+            "observation_count": 25,
+            "request_index": 4,
+            "target_logprob_gain": -5.902318429462611,
+            "target_rank_gain": -59000.36,
+            "top5_overlap_gain": 0.0
+          },
+          {
+            "jacobian_kl": 14.74930940235832,
+            "kl_gain": -5.735309190915099,
+            "logit_kl": 9.01400021144322,
+            "observation_count": 28,
+            "request_index": 5,
+            "target_logprob_gain": -5.917181970618133,
+            "target_rank_gain": -21505.821428571428,
+            "top5_overlap_gain": 0.0
+          },
+          {
+            "jacobian_kl": 12.886246575734042,
+            "kl_gain": -4.54133180705266,
+            "logit_kl": 8.344914768681381,
+            "observation_count": 33,
+            "request_index": 6,
+            "target_logprob_gain": -4.582166752777994,
+            "target_rank_gain": -32248.575757575756,
+            "top5_overlap_gain": -0.04242424242424243
+          },
+          {
+            "jacobian_kl": 13.172613137846135,
+            "kl_gain": -4.600028465438465,
+            "logit_kl": 8.57258467240767,
+            "observation_count": 22,
+            "request_index": 7,
+            "target_logprob_gain": -4.589204471833496,
+            "target_rank_gain": -25909.954545454544,
+            "top5_overlap_gain": -0.03636363636363637
+          },
+          {
+            "jacobian_kl": 13.604422716982663,
+            "kl_gain": -3.8271583842113612,
+            "logit_kl": 9.777264332771301,
+            "observation_count": 20,
+            "request_index": 8,
+            "target_logprob_gain": -3.8364437744021416,
+            "target_rank_gain": -45531.25,
+            "top5_overlap_gain": -0.01
+          },
+          {
+            "jacobian_kl": 12.44796567732313,
+            "kl_gain": -3.9445968228004253,
+            "logit_kl": 8.503368854522705,
+            "observation_count": 24,
+            "request_index": 9,
+            "target_logprob_gain": -4.113218443701044,
+            "target_rank_gain": -15786.375,
+            "top5_overlap_gain": 0.016666666666666666
+          }
+        ]
+      },
+      "28": {
+        "macro_equal_request": {
+          "jacobian_kl": 13.377661624849356,
+          "kl_gain_exact_one_sided_sign_flip_p": 1.0,
+          "kl_gain_nats": -4.550899189796397,
+          "logit_kl": 8.82676243505296,
+          "relative_kl_reduction": -0.5155796616575749,
+          "relative_kl_reduction_ci": {
+            "confidence_level": 0.95,
+            "lower": -0.5626477129975752,
+            "method": "deterministic paired request-level percentile bootstrap",
+            "samples": 20000,
+            "seed": 3996404231,
+            "upper": -0.4671087252191086
+          },
+          "target_logprob_gain_ci": {
+            "confidence_level": 0.95,
+            "lower": -5.081027551536664,
+            "method": "deterministic request-level percentile bootstrap",
+            "samples": 20000,
+            "seed": 3957642691,
+            "upper": -4.165696208057988
+          },
+          "target_logprob_gain_exact_one_sided_sign_flip_p": 1.0,
+          "target_logprob_gain_nats": -4.611595045290895,
+          "target_rank_gain": -31311.4347202213,
+          "top5_overlap_fraction_gain": -0.01704648373069426
+        },
+        "observation_count": 293,
+        "paired_wins": {
+          "observation_kl": {
+            "jacobian": 34,
+            "logit": 259,
+            "ties": 0
+          },
+          "request_mean_kl": {
+            "jacobian": 0,
+            "logit": 9,
+            "ties": 0
+          }
+        },
+        "request_count": 9,
+        "request_level": [
+          {
+            "jacobian_kl": 13.944829113781452,
+            "kl_gain": -5.209788595827726,
+            "logit_kl": 8.735040517953726,
+            "observation_count": 26,
+            "request_index": 1,
+            "target_logprob_gain": -5.274248678523761,
+            "target_rank_gain": -24116.69230769231,
+            "top5_overlap_gain": -0.03076923076923077
+          },
+          {
+            "jacobian_kl": 13.257489052484743,
+            "kl_gain": -4.066518107126467,
+            "logit_kl": 9.190970945358277,
+            "observation_count": 20,
+            "request_index": 2,
+            "target_logprob_gain": -3.890551131637767,
+            "target_rank_gain": -27779.1,
+            "top5_overlap_gain": 0.0
+          },
+          {
+            "jacobian_kl": 12.031229178489824,
+            "kl_gain": -3.8988083977056176,
+            "logit_kl": 8.132420780784205,
+            "observation_count": 95,
+            "request_index": 3,
+            "target_logprob_gain": -3.876519427855352,
+            "target_rank_gain": -30311.56842105263,
+            "top5_overlap_gain": -0.04631578947368421
+          },
+          {
+            "jacobian_kl": 14.25155999733135,
+            "kl_gain": -5.211718955766409,
+            "logit_kl": 9.03984104156494,
+            "observation_count": 25,
+            "request_index": 4,
+            "target_logprob_gain": -5.395332396496087,
+            "target_rank_gain": -32540.08,
+            "top5_overlap_gain": -0.008
+          },
+          {
+            "jacobian_kl": 14.732931004205186,
+            "kl_gain": -5.610077861330605,
+            "logit_kl": 9.12285314287458,
+            "observation_count": 28,
+            "request_index": 5,
+            "target_logprob_gain": -5.83659395173059,
+            "target_rank_gain": -27064.678571428572,
+            "top5_overlap_gain": 0.0
+          },
+          {
+            "jacobian_kl": 12.473977208476175,
+            "kl_gain": -4.252829598996676,
+            "logit_kl": 8.2211476094795,
+            "observation_count": 33,
+            "request_index": 6,
+            "target_logprob_gain": -4.333559540248561,
+            "target_rank_gain": -27547.78787878788,
+            "top5_overlap_gain": -0.030303030303030304
+          },
+          {
+            "jacobian_kl": 13.61884153769775,
+            "kl_gain": -4.7951679209416564,
+            "logit_kl": 8.823673616756093,
+            "observation_count": 22,
+            "request_index": 7,
+            "target_logprob_gain": -4.779888075966896,
+            "target_rank_gain": -53249.36363636364,
+            "top5_overlap_gain": -0.03636363636363637
+          },
+          {
+            "jacobian_kl": 13.49016082487069,
+            "kl_gain": -3.757888319110498,
+            "logit_kl": 9.732272505760193,
+            "observation_count": 20,
+            "request_index": 8,
+            "target_logprob_gain": -3.7302827396895735,
+            "target_rank_gain": -39999.35,
+            "top5_overlap_gain": -0.01
+          },
+          {
+            "jacobian_kl": 12.597936706307033,
+            "kl_gain": -4.155294951361914,
+            "logit_kl": 8.44264175494512,
+            "observation_count": 24,
+            "request_index": 9,
+            "target_logprob_gain": -4.387379465469469,
+            "target_rank_gain": -19194.291666666668,
+            "top5_overlap_gain": 0.008333333333333333
+          }
+        ]
+      },
+      "31": {
+        "macro_equal_request": {
+          "jacobian_kl": 11.87184405031488,
+          "kl_gain_exact_one_sided_sign_flip_p": 1.0,
+          "kl_gain_nats": -2.9306311121541917,
+          "logit_kl": 8.941212938160689,
+          "relative_kl_reduction": -0.3277666165008096,
+          "relative_kl_reduction_ci": {
+            "confidence_level": 0.95,
+            "lower": -0.3885616513467046,
+            "method": "deterministic paired request-level percentile bootstrap",
+            "samples": 20000,
+            "seed": 228009052,
+            "upper": -0.277659498402386
+          },
+          "target_logprob_gain_ci": {
+            "confidence_level": 0.95,
+            "lower": -3.623331896511252,
+            "method": "deterministic request-level percentile bootstrap",
+            "samples": 20000,
+            "seed": 3781716013,
+            "upper": -2.489080885957611
+          },
+          "target_logprob_gain_exact_one_sided_sign_flip_p": 1.0,
+          "target_logprob_gain_nats": -3.000793666680244,
+          "target_rank_gain": -22171.427654538442,
+          "top5_overlap_fraction_gain": 0.0021688428530533795
+        },
+        "observation_count": 293,
+        "paired_wins": {
+          "observation_kl": {
+            "jacobian": 74,
+            "logit": 219,
+            "ties": 0
+          },
+          "request_mean_kl": {
+            "jacobian": 0,
+            "logit": 9,
+            "ties": 0
+          }
+        },
+        "request_count": 9,
+        "request_level": [
+          {
+            "jacobian_kl": 11.824512286828114,
+            "kl_gain": -2.8664602751915274,
+            "logit_kl": 8.958052011636587,
+            "observation_count": 26,
+            "request_index": 1,
+            "target_logprob_gain": -2.955303581861349,
+            "target_rank_gain": -16224.384615384615,
+            "top5_overlap_gain": -0.007692307692307693
+          },
+          {
+            "jacobian_kl": 11.794293523579835,
+            "kl_gain": -2.5694823749363422,
+            "logit_kl": 9.224811148643493,
+            "observation_count": 20,
+            "request_index": 2,
+            "target_logprob_gain": -2.4048124462366105,
+            "target_rank_gain": -22191.7,
+            "top5_overlap_gain": 0.030000000000000006
+          },
+          {
+            "jacobian_kl": 10.147426727570986,
+            "kl_gain": -2.0134911154445847,
+            "logit_kl": 8.1339356121264,
+            "observation_count": 95,
+            "request_index": 3,
+            "target_logprob_gain": -2.0362408532123815,
+            "target_rank_gain": -15119.484210526316,
+            "top5_overlap_gain": -0.03368421052631579
+          },
+          {
+            "jacobian_kl": 12.690349779427052,
+            "kl_gain": -3.606132097542286,
+            "logit_kl": 9.084217681884766,
+            "observation_count": 25,
+            "request_index": 4,
+            "target_logprob_gain": -3.888190571665764,
+            "target_rank_gain": -24274.92,
+            "top5_overlap_gain": 0.032
+          },
+          {
+            "jacobian_kl": 14.144786677190236,
+            "kl_gain": -4.811104293380465,
+            "logit_kl": 9.333682383809771,
+            "observation_count": 28,
+            "request_index": 5,
+            "target_logprob_gain": -4.998052271349089,
+            "target_rank_gain": -40804.07142857143,
+            "top5_overlap_gain": -0.014285714285714287
+          },
+          {
+            "jacobian_kl": 10.707632166869713,
+            "kl_gain": -2.4560648609291422,
+            "logit_kl": 8.25156730594057,
+            "observation_count": 33,
+            "request_index": 6,
+            "target_logprob_gain": -2.4612427448684517,
+            "target_rank_gain": -9238.666666666666,
+            "top5_overlap_gain": -0.030303030303030304
+          },
+          {
+            "jacobian_kl": 12.126653571359135,
+            "kl_gain": -3.3045745630833236,
+            "logit_kl": 8.822079008275812,
+            "observation_count": 22,
+            "request_index": 7,
+            "target_logprob_gain": -3.3101863928816537,
+            "target_rank_gain": -34950.36363636364,
+            "top5_overlap_gain": -0.018181818181818184
+          },
+          {
+            "jacobian_kl": 12.509062096476555,
+            "kl_gain": -2.4971017092466354,
+            "logit_kl": 10.01196038722992,
+            "observation_count": 20,
+            "request_index": 8,
+            "target_logprob_gain": -2.4406744450330735,
+            "target_rank_gain": -29442.05,
+            "top5_overlap_gain": 0.02
+          },
+          {
+            "jacobian_kl": 10.901879623532295,
+            "kl_gain": -2.2512687196334205,
+            "logit_kl": 8.650610903898874,
+            "observation_count": 24,
+            "request_index": 9,
+            "target_logprob_gain": -2.512439693013827,
+            "target_rank_gain": -7297.208333333333,
+            "top5_overlap_gain": 0.041666666666666664
+          }
+        ]
+      },
+      "32": {
+        "macro_equal_request": {
+          "jacobian_kl": 11.3584601663914,
+          "kl_gain_exact_one_sided_sign_flip_p": 1.0,
+          "kl_gain_nats": -2.411341779828204,
+          "logit_kl": 8.947118386563195,
+          "relative_kl_reduction": -0.2695104362818718,
+          "relative_kl_reduction_ci": {
+            "confidence_level": 0.95,
+            "lower": -0.31577997272299363,
+            "method": "deterministic paired request-level percentile bootstrap",
+            "samples": 20000,
+            "seed": 2178017075,
+            "upper": -0.2272540621426662
+          },
+          "target_logprob_gain_ci": {
+            "confidence_level": 0.95,
+            "lower": -2.9621332285137574,
+            "method": "deterministic request-level percentile bootstrap",
+            "samples": 20000,
+            "seed": 2946984920,
+            "upper": -2.0746040496505285
+          },
+          "target_logprob_gain_exact_one_sided_sign_flip_p": 1.0,
+          "target_logprob_gain_nats": -2.4925404198848673,
+          "target_rank_gain": -28033.73552569263,
+          "top5_overlap_fraction_gain": -0.0028948556316977362
+        },
+        "observation_count": 293,
+        "paired_wins": {
+          "observation_kl": {
+            "jacobian": 77,
+            "logit": 216,
+            "ties": 0
+          },
+          "request_mean_kl": {
+            "jacobian": 0,
+            "logit": 9,
+            "ties": 0
+          }
+        },
+        "request_count": 9,
+        "request_level": [
+          {
+            "jacobian_kl": 11.666076357548054,
+            "kl_gain": -2.69397221161769,
+            "logit_kl": 8.972104145930363,
+            "observation_count": 26,
+            "request_index": 1,
+            "target_logprob_gain": -2.8132396111121545,
+            "target_rank_gain": -23572.076923076922,
+            "top5_overlap_gain": -0.038461538461538464
+          },
+          {
+            "jacobian_kl": 11.267742305994034,
+            "kl_gain": -1.9938895404338837,
+            "logit_kl": 9.27385276556015,
+            "observation_count": 20,
+            "request_index": 2,
+            "target_logprob_gain": -1.99138742685318,
+            "target_rank_gain": -21662.7,
+            "top5_overlap_gain": 0.030000000000000006
+          },
+          {
+            "jacobian_kl": 9.886065663789449,
+            "kl_gain": -1.9469661838129948,
+            "logit_kl": 7.939099479976453,
+            "observation_count": 95,
+            "request_index": 3,
+            "target_logprob_gain": -1.997009863900511,
+            "target_rank_gain": -17545.35789473684,
+            "top5_overlap_gain": -0.02526315789473684
+          },
+          {
+            "jacobian_kl": 11.907814302444457,
+            "kl_gain": -2.8291925525665285,
+            "logit_kl": 9.07862174987793,
+            "observation_count": 25,
+            "request_index": 4,
+            "target_logprob_gain": -3.0263541603088377,
+            "target_rank_gain": -34212.04,
+            "top5_overlap_gain": -0.008
+          },
+          {
+            "jacobian_kl": 13.062408949647631,
+            "kl_gain": -3.750496600355421,
+            "logit_kl": 9.31191234929221,
+            "observation_count": 28,
+            "request_index": 5,
+            "target_logprob_gain": -3.924067037446158,
+            "target_rank_gain": -57518.82142857143,
+            "top5_overlap_gain": 0.021428571428571432
+          },
+          {
+            "jacobian_kl": 10.11915630644018,
+            "kl_gain": -1.8225445639003406,
+            "logit_kl": 8.29661174253984,
+            "observation_count": 33,
+            "request_index": 6,
+            "target_logprob_gain": -1.8204357118317576,
+            "target_rank_gain": -13647.939393939394,
+            "top5_overlap_gain": -0.04242424242424243
+          },
+          {
+            "jacobian_kl": 11.683309712193228,
+            "kl_gain": -2.8628895336931404,
+            "logit_kl": 8.820420178500088,
+            "observation_count": 22,
+            "request_index": 7,
+            "target_logprob_gain": -2.862343360077251,
+            "target_rank_gain": -43320.90909090909,
+            "top5_overlap_gain": 0.0
+          },
+          {
+            "jacobian_kl": 12.375642493367195,
+            "kl_gain": -2.2887749463319778,
+            "logit_kl": 10.086867547035217,
+            "observation_count": 20,
+            "request_index": 8,
+            "target_logprob_gain": -2.186706545948982,
+            "target_rank_gain": -38272.65,
+            "top5_overlap_gain": 0.02
+          },
+          {
+            "jacobian_kl": 10.257925406098366,
+            "kl_gain": -1.5133498857418697,
+            "logit_kl": 8.744575520356497,
+            "observation_count": 24,
+            "request_index": 9,
+            "target_logprob_gain": -1.8113200614849727,
+            "target_rank_gain": -2551.125,
+            "top5_overlap_gain": 0.016666666666666666
+          }
+        ]
+      },
+      "35": {
+        "macro_equal_request": {
+          "jacobian_kl": 12.140157099613477,
+          "kl_gain_exact_one_sided_sign_flip_p": 1.0,
+          "kl_gain_nats": -3.2742166354396343,
+          "logit_kl": 8.865940464173843,
+          "relative_kl_reduction": -0.36930279970526925,
+          "relative_kl_reduction_ci": {
+            "confidence_level": 0.95,
+            "lower": -0.432086674603447,
+            "method": "deterministic paired request-level percentile bootstrap",
+            "samples": 20000,
+            "seed": 875535885,
+            "upper": -0.30740891548880994
+          },
+          "target_logprob_gain_ci": {
+            "confidence_level": 0.95,
+            "lower": -3.874440735792055,
+            "method": "deterministic request-level percentile bootstrap",
+            "samples": 20000,
+            "seed": 3193269748,
+            "upper": -2.805741461991022
+          },
+          "target_logprob_gain_exact_one_sided_sign_flip_p": 1.0,
+          "target_logprob_gain_nats": -3.3451466599771003,
+          "target_rank_gain": -45154.10126719285,
+          "top5_overlap_fraction_gain": -0.012037893879999144
+        },
+        "observation_count": 293,
+        "paired_wins": {
+          "observation_kl": {
+            "jacobian": 65,
+            "logit": 228,
+            "ties": 0
+          },
+          "request_mean_kl": {
+            "jacobian": 0,
+            "logit": 9,
+            "ties": 0
+          }
+        },
+        "request_count": 9,
+        "request_level": [
+          {
+            "jacobian_kl": 12.328958658071665,
+            "kl_gain": -3.7390577976520243,
+            "logit_kl": 8.58990086041964,
+            "observation_count": 26,
+            "request_index": 1,
+            "target_logprob_gain": -3.7252943332378683,
+            "target_rank_gain": -43772.07692307692,
+            "top5_overlap_gain": -0.06923076923076923
+          },
+          {
+            "jacobian_kl": 11.475922179222106,
+            "kl_gain": -2.1680402755737305,
+            "logit_kl": 9.307881903648376,
+            "observation_count": 20,
+            "request_index": 2,
+            "target_logprob_gain": -2.0871445655822756,
+            "target_rank_gain": -43530.0,
+            "top5_overlap_gain": 0.02
+          },
+          {
+            "jacobian_kl": 11.55451683998108,
+            "kl_gain": -3.564872222197683,
+            "logit_kl": 7.989644617783396,
+            "observation_count": 95,
+            "request_index": 3,
+            "target_logprob_gain": -3.6253059496220787,
+            "target_rank_gain": -40509.56842105263,
+            "top5_overlap_gain": -0.06315789473684211
+          },
+          {
+            "jacobian_kl": 12.585997943878175,
+            "kl_gain": -3.449015293121338,
+            "logit_kl": 9.136982650756837,
+            "observation_count": 25,
+            "request_index": 4,
+            "target_logprob_gain": -3.5857785034179686,
+            "target_rank_gain": -60602.96,
+            "top5_overlap_gain": 0.0
+          },
+          {
+            "jacobian_kl": 13.004187209265572,
+            "kl_gain": -3.5006053958620345,
+            "logit_kl": 9.503581813403539,
+            "observation_count": 28,
+            "request_index": 5,
+            "target_logprob_gain": -3.711841412952968,
+            "target_rank_gain": -47821.75,
+            "top5_overlap_gain": 0.03571428571428571
+          },
+          {
+            "jacobian_kl": 10.892353187907826,
+            "kl_gain": -2.575282147436431,
+            "logit_kl": 8.317071040471395,
+            "observation_count": 33,
+            "request_index": 6,
+            "target_logprob_gain": -2.660123145941532,
+            "target_rank_gain": -20142.39393939394,
+            "top5_overlap_gain": -0.024242424242424242
+          },
+          {
+            "jacobian_kl": 12.578730203888632,
+            "kl_gain": -3.815639701756564,
+            "logit_kl": 8.76309050213207,
+            "observation_count": 22,
+            "request_index": 7,
+            "target_logprob_gain": -3.805007641965693,
+            "target_rank_gain": -90675.54545454546,
+            "top5_overlap_gain": -0.009090909090909092
+          },
+          {
+            "jacobian_kl": 12.042994260787964,
+            "kl_gain": -2.2451472997665407,
+            "logit_kl": 9.797846961021424,
+            "observation_count": 20,
+            "request_index": 8,
+            "target_logprob_gain": -2.1503886222839355,
+            "target_rank_gain": -36983.2,
+            "top5_overlap_gain": 0.01
+          },
+          {
+            "jacobian_kl": 12.79775341351827,
+            "kl_gain": -4.4102895855903625,
+            "logit_kl": 8.387463827927908,
+            "observation_count": 24,
+            "request_index": 9,
+            "target_logprob_gain": -4.755435764789581,
+            "target_rank_gain": -22349.416666666668,
+            "top5_overlap_gain": -0.008333333333333333
+          }
+        ]
+      },
+      "36": {
+        "macro_equal_request": {
+          "jacobian_kl": 12.04222916048311,
+          "kl_gain_exact_one_sided_sign_flip_p": 1.0,
+          "kl_gain_nats": -3.221671951164751,
+          "logit_kl": 8.820557209318359,
+          "relative_kl_reduction": -0.3652458540557119,
+          "relative_kl_reduction_ci": {
+            "confidence_level": 0.95,
+            "lower": -0.42610183311594113,
+            "method": "deterministic paired request-level percentile bootstrap",
+            "samples": 20000,
+            "seed": 4084882538,
+            "upper": -0.30299821469435295
+          },
+          "target_logprob_gain_ci": {
+            "confidence_level": 0.95,
+            "lower": -3.8416382123863952,
+            "method": "deterministic request-level percentile bootstrap",
+            "samples": 20000,
+            "seed": 4232340896,
+            "upper": -2.716879023228784
+          },
+          "target_logprob_gain_exact_one_sided_sign_flip_p": 1.0,
+          "target_logprob_gain_nats": -3.2887313503765023,
+          "target_rank_gain": -50167.847057211795,
+          "top5_overlap_fraction_gain": -0.006924085660927766
+        },
+        "observation_count": 293,
+        "paired_wins": {
+          "observation_kl": {
+            "jacobian": 69,
+            "logit": 224,
+            "ties": 0
+          },
+          "request_mean_kl": {
+            "jacobian": 0,
+            "logit": 9,
+            "ties": 0
+          }
+        },
+        "request_count": 9,
+        "request_level": [
+          {
+            "jacobian_kl": 11.740880452669584,
+            "kl_gain": -3.208368393091055,
+            "logit_kl": 8.53251205957853,
+            "observation_count": 26,
+            "request_index": 1,
+            "target_logprob_gain": -3.137976884841919,
+            "target_rank_gain": -35770.88461538462,
+            "top5_overlap_gain": -0.06153846153846154
+          },
+          {
+            "jacobian_kl": 11.335859036445617,
+            "kl_gain": -2.016698384284973,
+            "logit_kl": 9.319160652160644,
+            "observation_count": 20,
+            "request_index": 2,
+            "target_logprob_gain": -1.8997170090675355,
+            "target_rank_gain": -45130.8,
+            "top5_overlap_gain": 0.019999999999999997
+          },
+          {
+            "jacobian_kl": 11.29754517015658,
+            "kl_gain": -3.4571701332142477,
+            "logit_kl": 7.840375036942332,
+            "observation_count": 95,
+            "request_index": 3,
+            "target_logprob_gain": -3.531042038884602,
+            "target_rank_gain": -49255.905263157896,
+            "top5_overlap_gain": -0.06526315789473684
+          },
+          {
+            "jacobian_kl": 13.134961547851562,
+            "kl_gain": -4.143629760742187,
+            "logit_kl": 8.991331787109376,
+            "observation_count": 25,
+            "request_index": 4,
+            "target_logprob_gain": -4.239788408279419,
+            "target_rank_gain": -69836.92,
+            "top5_overlap_gain": 0.016
+          },
+          {
+            "jacobian_kl": 13.285552127020699,
+            "kl_gain": -3.6855346986225674,
+            "logit_kl": 9.600017428398132,
+            "observation_count": 28,
+            "request_index": 5,
+            "target_logprob_gain": -3.925724685192108,
+            "target_rank_gain": -57614.0,
+            "top5_overlap_gain": 0.05
+          },
+          {
+            "jacobian_kl": 10.737584482539784,
+            "kl_gain": -2.5207665833559902,
+            "logit_kl": 8.216817899183793,
+            "observation_count": 33,
+            "request_index": 6,
+            "target_logprob_gain": -2.5841856942032324,
+            "target_rank_gain": -24739.878787878788,
+            "top5_overlap_gain": -0.04242424242424242
+          },
+          {
+            "jacobian_kl": 12.485356005755337,
+            "kl_gain": -3.6087857376445425,
+            "logit_kl": 8.876570268110795,
+            "observation_count": 22,
+            "request_index": 7,
+            "target_logprob_gain": -3.6008455590768293,
+            "target_rank_gain": -97353.31818181818,
+            "top5_overlap_gain": -0.009090909090909092
+          },
+          {
+            "jacobian_kl": 12.002621531486511,
+            "kl_gain": -2.2509686946868896,
+            "logit_kl": 9.751652836799622,
+            "observation_count": 20,
+            "request_index": 8,
+            "target_logprob_gain": -2.1677855014801026,
+            "target_rank_gain": -47852.5,
+            "top5_overlap_gain": 0.030000000000000006
+          },
+          {
+            "jacobian_kl": 12.359702090422312,
+            "kl_gain": -4.103125174840291,
+            "logit_kl": 8.256576915582022,
+            "observation_count": 24,
+            "request_index": 9,
+            "target_logprob_gain": -4.511516372362773,
+            "target_rank_gain": -23956.416666666668,
+            "top5_overlap_gain": 0.0
+          }
+        ]
+      },
+      "39": {
+        "macro_equal_request": {
+          "jacobian_kl": 11.424599286894932,
+          "kl_gain_exact_one_sided_sign_flip_p": 1.0,
+          "kl_gain_nats": -2.871449755573231,
+          "logit_kl": 8.5531495313217,
+          "relative_kl_reduction": -0.33571840934827096,
+          "relative_kl_reduction_ci": {
+            "confidence_level": 0.95,
+            "lower": -0.3902179337980519,
+            "method": "deterministic paired request-level percentile bootstrap",
+            "samples": 20000,
+            "seed": 997485769,
+            "upper": -0.27740611594854736
+          },
+          "target_logprob_gain_ci": {
+            "confidence_level": 0.95,
+            "lower": -3.4832450429387243,
+            "method": "deterministic request-level percentile bootstrap",
+            "samples": 20000,
+            "seed": 1235887316,
+            "upper": -2.405697087392902
+          },
+          "target_logprob_gain_exact_one_sided_sign_flip_p": 1.0,
+          "target_logprob_gain_nats": -2.956849545903537,
+          "target_rank_gain": -42820.86692094456,
+          "top5_overlap_fraction_gain": -0.02149981986824092
+        },
+        "observation_count": 293,
+        "paired_wins": {
+          "observation_kl": {
+            "jacobian": 77,
+            "logit": 216,
+            "ties": 0
+          },
+          "request_mean_kl": {
+            "jacobian": 0,
+            "logit": 9,
+            "ties": 0
+          }
+        },
+        "request_count": 9,
+        "request_level": [
+          {
+            "jacobian_kl": 10.957956593770247,
+            "kl_gain": -2.544498328979199,
+            "logit_kl": 8.413458264791048,
+            "observation_count": 26,
+            "request_index": 1,
+            "target_logprob_gain": -2.4563888701108785,
+            "target_rank_gain": -32137.346153846152,
+            "top5_overlap_gain": -0.07692307692307693
+          },
+          {
+            "jacobian_kl": 10.55383705496788,
+            "kl_gain": -1.5808681190013885,
+            "logit_kl": 8.972968935966492,
+            "observation_count": 20,
+            "request_index": 2,
+            "target_logprob_gain": -1.4527121365070343,
+            "target_rank_gain": -37810.95,
+            "top5_overlap_gain": 0.04
+          },
+          {
+            "jacobian_kl": 10.565018864995555,
+            "kl_gain": -3.0500540749022833,
+            "logit_kl": 7.514964790093272,
+            "observation_count": 95,
+            "request_index": 3,
+            "target_logprob_gain": -3.1077397352770757,
+            "target_rank_gain": -38745.347368421055,
+            "top5_overlap_gain": -0.09263157894736843
+          },
+          {
+            "jacobian_kl": 11.991007759571076,
+            "kl_gain": -3.1124405598640443,
+            "logit_kl": 8.878567199707032,
+            "observation_count": 25,
+            "request_index": 4,
+            "target_logprob_gain": -3.2730131006240843,
+            "target_rank_gain": -53093.8,
+            "top5_overlap_gain": -0.016
+          },
+          {
+            "jacobian_kl": 13.192222952842712,
+            "kl_gain": -3.8490744147981917,
+            "logit_kl": 9.34314853804452,
+            "observation_count": 28,
+            "request_index": 5,
+            "target_logprob_gain": -4.185733675956726,
+            "target_rank_gain": -63557.892857142855,
+            "top5_overlap_gain": 0.028571428571428574
+          },
+          {
+            "jacobian_kl": 10.370016730192935,
+            "kl_gain": -2.4996885205760146,
+            "logit_kl": 7.870328209616921,
+            "observation_count": 33,
+            "request_index": 6,
+            "target_logprob_gain": -2.578604705405958,
+            "target_rank_gain": -21594.424242424244,
+            "top5_overlap_gain": -0.06666666666666667
+          },
+          {
+            "jacobian_kl": 12.431860327720642,
+            "kl_gain": -3.7325609055432407,
+            "logit_kl": 8.699299422177402,
+            "observation_count": 22,
+            "request_index": 7,
+            "target_logprob_gain": -3.7209911319342526,
+            "target_rank_gain": -78215.0,
+            "top5_overlap_gain": -0.018181818181818184
+          },
+          {
+            "jacobian_kl": 11.708000594377518,
+            "kl_gain": -2.1942929327487946,
+            "logit_kl": 9.513707661628723,
+            "observation_count": 20,
+            "request_index": 8,
+            "target_logprob_gain": -2.091195374727249,
+            "target_rank_gain": -37526.25,
+            "top5_overlap_gain": 0.0
+          },
+          {
+            "jacobian_kl": 11.051472703615824,
+            "kl_gain": -3.279569943745931,
+            "logit_kl": 7.771902759869893,
+            "observation_count": 24,
+            "request_index": 9,
+            "target_logprob_gain": -3.7452671825885773,
+            "target_rank_gain": -22706.791666666668,
+            "top5_overlap_gain": 0.008333333333333333
+          }
+        ]
+      },
+      "40": {
+        "macro_equal_request": {
+          "jacobian_kl": 11.213791996552548,
+          "kl_gain_exact_one_sided_sign_flip_p": 1.0,
+          "kl_gain_nats": -2.7267153660506533,
+          "logit_kl": 8.487076630501894,
+          "relative_kl_reduction": -0.32127851376421535,
+          "relative_kl_reduction_ci": {
+            "confidence_level": 0.95,
+            "lower": -0.38130928769952355,
+            "method": "deterministic paired request-level percentile bootstrap",
+            "samples": 20000,
+            "seed": 2306451998,
+            "upper": -0.25872168631074915
+          },
+          "target_logprob_gain_ci": {
+            "confidence_level": 0.95,
+            "lower": -3.4130980918053457,
+            "method": "deterministic request-level percentile bootstrap",
+            "samples": 20000,
+            "seed": 3375075524,
+            "upper": -2.218524363729596
+          },
+          "target_logprob_gain_exact_one_sided_sign_flip_p": 1.0,
+          "target_logprob_gain_nats": -2.812597836050966,
+          "target_rank_gain": -37441.56459930907,
+          "top5_overlap_fraction_gain": -0.020944338312759367
+        },
+        "observation_count": 293,
+        "paired_wins": {
+          "observation_kl": {
+            "jacobian": 81,
+            "logit": 212,
+            "ties": 0
+          },
+          "request_mean_kl": {
+            "jacobian": 0,
+            "logit": 9,
+            "ties": 0
+          }
+        },
+        "request_count": 9,
+        "request_level": [
+          {
+            "jacobian_kl": 10.732303101282854,
+            "kl_gain": -2.45810021345432,
+            "logit_kl": 8.274202887828533,
+            "observation_count": 26,
+            "request_index": 1,
+            "target_logprob_gain": -2.326897320839075,
+            "target_rank_gain": -21686.96153846154,
+            "top5_overlap_gain": -0.06153846153846154
+          },
+          {
+            "jacobian_kl": 10.356854811310768,
+            "kl_gain": -1.3852361589670181,
+            "logit_kl": 8.97161865234375,
+            "observation_count": 20,
+            "request_index": 2,
+            "target_logprob_gain": -1.3084593623876573,
+            "target_rank_gain": -35293.55,
+            "top5_overlap_gain": 0.04
+          },
+          {
+            "jacobian_kl": 10.114401449027815,
+            "kl_gain": -2.6684381077164097,
+            "logit_kl": 7.445963341311405,
+            "observation_count": 95,
+            "request_index": 3,
+            "target_logprob_gain": -2.7262134401421796,
+            "target_rank_gain": -29587.21052631579,
+            "top5_overlap_gain": -0.09263157894736843
+          },
+          {
+            "jacobian_kl": 11.941523411273955,
+            "kl_gain": -3.0727582287788393,
+            "logit_kl": 8.868765182495117,
+            "observation_count": 25,
+            "request_index": 4,
+            "target_logprob_gain": -3.2162032079696656,
+            "target_rank_gain": -46901.88,
+            "top5_overlap_gain": -0.04
+          },
+          {
+            "jacobian_kl": 13.394709667989186,
+            "kl_gain": -4.086455749613898,
+            "logit_kl": 9.308253918375287,
+            "observation_count": 28,
+            "request_index": 5,
+            "target_logprob_gain": -4.418404438665935,
+            "target_rank_gain": -56852.17857142857,
+            "top5_overlap_gain": 0.021428571428571432
+          },
+          {
+            "jacobian_kl": 10.226294163501624,
+            "kl_gain": -2.4066460277094985,
+            "logit_kl": 7.819648135792125,
+            "observation_count": 33,
+            "request_index": 6,
+            "target_logprob_gain": -2.4590287425301294,
+            "target_rank_gain": -18802.0,
+            "top5_overlap_gain": -0.06666666666666667
+          },
+          {
+            "jacobian_kl": 12.391871480779214,
+            "kl_gain": -3.7604326619343325,
+            "logit_kl": 8.631438818844883,
+            "observation_count": 22,
+            "request_index": 7,
+            "target_logprob_gain": -3.752818457104943,
+            "target_rank_gain": -82487.90909090909,
+            "top5_overlap_gain": -0.009090909090909092
+          },
+          {
+            "jacobian_kl": 11.179002332687379,
+            "kl_gain": -1.8642670869827271,
+            "logit_kl": 9.31473524570465,
+            "observation_count": 20,
+            "request_index": 8,
+            "target_logprob_gain": -1.7778631091117858,
+            "target_rank_gain": -27708.1,
+            "top5_overlap_gain": 0.02
+          },
+          {
+            "jacobian_kl": 10.587167551120123,
+            "kl_gain": -2.8381040592988334,
+            "logit_kl": 7.749063491821289,
+            "observation_count": 24,
+            "request_index": 9,
+            "target_logprob_gain": -3.327492445707321,
+            "target_rank_gain": -17654.291666666668,
+            "top5_overlap_gain": 0.0
+          }
+        ]
+      },
+      "62": {
+        "macro_equal_request": {
+          "jacobian_kl": 0.9628001735553872,
+          "kl_gain_exact_one_sided_sign_flip_p": 0.072265625,
+          "kl_gain_nats": 0.1055683517181617,
+          "logit_kl": 1.0683685252735489,
+          "relative_kl_reduction": 0.0988126748596713,
+          "relative_kl_reduction_ci": {
+            "confidence_level": 0.95,
+            "lower": 0.005484928208436339,
+            "method": "deterministic paired request-level percentile bootstrap",
+            "samples": 20000,
+            "seed": 1021733709,
+            "upper": 0.19537792791934003
+          },
+          "target_logprob_gain_ci": {
+            "confidence_level": 0.95,
+            "lower": -0.024700454904837337,
+            "method": "deterministic request-level percentile bootstrap",
+            "samples": 20000,
+            "seed": 1048441528,
+            "upper": 0.16332836395084904
+          },
+          "target_logprob_gain_exact_one_sided_sign_flip_p": 0.119140625,
+          "target_logprob_gain_nats": 0.06548041247621836,
+          "target_rank_gain": 1.3467288851499377,
+          "top5_overlap_fraction_gain": 0.03610188836504626
+        },
+        "observation_count": 293,
+        "paired_wins": {
+          "observation_kl": {
+            "jacobian": 163,
+            "logit": 130,
+            "ties": 0
+          },
+          "request_mean_kl": {
+            "jacobian": 7,
+            "logit": 2,
+            "ties": 0
+          }
+        },
+        "request_count": 9,
+        "request_level": [
+          {
+            "jacobian_kl": 0.48191670223408994,
+            "kl_gain": -0.053360366199950264,
+            "logit_kl": 0.4285563360341397,
+            "observation_count": 26,
+            "request_index": 1,
+            "target_logprob_gain": 0.004112316635935433,
+            "target_rank_gain": -0.46153846153846156,
+            "top5_overlap_gain": 0.03846153846153846
+          },
+          {
+            "jacobian_kl": 1.3323919292207393,
+            "kl_gain": 0.3477345292031714,
+            "logit_kl": 1.6801264584239106,
+            "observation_count": 20,
+            "request_index": 2,
+            "target_logprob_gain": 0.30458095084550224,
+            "target_rank_gain": 1.3,
+            "top5_overlap_gain": 0.05
+          },
+          {
+            "jacobian_kl": 0.5918353925503652,
+            "kl_gain": 0.024933303959584777,
+            "logit_kl": 0.61676869650995,
+            "observation_count": 95,
+            "request_index": 3,
+            "target_logprob_gain": 0.041037488630488374,
+            "target_rank_gain": 0.031578947368421054,
+            "top5_overlap_gain": 0.014736842105263158
+          },
+          {
+            "jacobian_kl": 0.8580015794447899,
+            "kl_gain": 0.36250770922603803,
+            "logit_kl": 1.220509288670828,
+            "observation_count": 25,
+            "request_index": 4,
+            "target_logprob_gain": 0.16460334029045043,
+            "target_rank_gain": 2.32,
+            "top5_overlap_gain": 0.07200000000000001
+          },
+          {
+            "jacobian_kl": 1.6429455796725239,
+            "kl_gain": 0.007177121388610074,
+            "logit_kl": 1.650122701061134,
+            "observation_count": 28,
+            "request_index": 5,
+            "target_logprob_gain": -0.019607992198319022,
+            "target_rank_gain": 0.8214285714285714,
+            "top5_overlap_gain": 0.05714285714285715
+          },
+          {
+            "jacobian_kl": 1.0596194132061403,
+            "kl_gain": -0.07871945245433105,
+            "logit_kl": 0.9808999607518093,
+            "observation_count": 33,
+            "request_index": 6,
+            "target_logprob_gain": -0.13848784613307516,
+            "target_rank_gain": 5.606060606060606,
+            "top5_overlap_gain": 0.036363636363636376
+          },
+          {
+            "jacobian_kl": 0.4951417268371394,
+            "kl_gain": 0.271692040131153,
+            "logit_kl": 0.7668337669682924,
+            "observation_count": 22,
+            "request_index": 7,
+            "target_logprob_gain": 0.27281647119533853,
+            "target_rank_gain": 0.13636363636363635,
+            "top5_overlap_gain": -0.045454545454545456
+          },
+          {
+            "jacobian_kl": 1.620614229249395,
+            "kl_gain": 0.06137794307674085,
+            "logit_kl": 1.681992172326136,
+            "observation_count": 20,
+            "request_index": 8,
+            "target_logprob_gain": 0.04570796881207571,
+            "target_rank_gain": 2.2,
+            "top5_overlap_gain": 0.06000000000000001
+          },
+          {
+            "jacobian_kl": 0.5827350095833026,
+            "kl_gain": 0.006772337132436708,
+            "logit_kl": 0.5895073467157393,
+            "observation_count": 24,
+            "request_index": 9,
+            "target_logprob_gain": -0.0854389857924313,
+            "target_rank_gain": 0.16666666666666666,
+            "top5_overlap_gain": 0.041666666666666664
+          }
+        ]
+      }
+    },
+    "predictive_diagnostic_passed": false,
+    "predictive_improvement_diagnostic": {
+      "criteria": {
+        "at_least_7_of_9_positive_request_means": false,
+        "bootstrap_ci_lower_above_zero": false,
+        "relative_kl_reduction_at_least_10_percent": false
+      },
+      "interpretation": "Next-token distribution calibration only. Jacobian Lens is fit to future-summed causal transport, so this is not a lens-quality gate.",
+      "passed": false
+    }
+  },
+  "schema_version": 1,
+  "statistics": {
+    "bootstrap_samples": 20000,
+    "bootstrap_seed": 36027,
+    "request_macro_weighting": "equal across nine requests"
+  }
+}

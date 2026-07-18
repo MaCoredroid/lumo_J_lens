@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "kind": "swe_verified_event_semantic_contrasts",
+  "model": {
+    "repo_id": "nvidia/Qwen3.6-27B-NVFP4",
+    "revision": "0893e1606ff3d5f97a441f405d5fc541a6bdf404"
+  },
+  "task": "sympy__sympy-13480",
+  "primary_layers": [39, 40],
+  "selection_note": "Exploratory contrasts derived from certified tool outcomes and reasoning boundaries, not from lens scores.",
+  "probes": [
+    {
+      "id": "correct_identifier",
+      "request_index": 3,
+      "offset": 32,
+      "state": "source shows the defined identifier immediately before the model names it",
+      "positive": [{"text": "co", "token_id": 981}],
+      "negative": [{"text": "cot", "token_id": 62317}]
+    },
+    {
+      "id": "failure_confirmed",
+      "request_index": 4,
+      "offset": 0,
+      "state": "the reproduction command has failed with the expected NameError",
+      "positive": [
+        {"text": " confirm", "token_id": 7440},
+        {"text": " confirmed", "token_id": 10457},
+        {"text": " confirmation", "token_id": 18944},
+        {"text": " bug", "token_id": 9584},
+        {"text": " typo", "token_id": 82170}
+      ],
+      "negative": [
+        {"text": " doubt", "token_id": 10179},
+        {"text": " uncertain", "token_id": 33955}
+      ]
+    },
+    {
+      "id": "fix_succeeded",
+      "request_index": 6,
+      "offset": 0,
+      "state": "the patched source and original reproduction have both succeeded",
+      "positive": [
+        {"text": " success", "token_id": 2316},
+        {"text": " successful", "token_id": 6635},
+        {"text": " works", "token_id": 4138},
+        {"text": " fixed", "token_id": 8097}
+      ],
+      "negative": [
+        {"text": " failure", "token_id": 7652},
+        {"text": " failed", "token_id": 4490},
+        {"text": " broken", "token_id": 10548},
+        {"text": " error", "token_id": 1412}
+      ]
+    },
+    {
+      "id": "pytest_unavailable",
+      "request_index": 8,
+      "offset": 0,
+      "state": "the attempted pytest command reports that pytest is not installed",
+      "positive": [
+        {"text": " unavailable", "token_id": 33829},
+        {"text": " missing", "token_id": 7167},
+        {"text": " absent", "token_id": 26334},
+        {"text": " lack", "token_id": 6639}
+      ],
+      "negative": [
+        {"text": " available", "token_id": 2420},
+        {"text": " installed", "token_id": 9969},
+        {"text": " present", "token_id": 2945},
+        {"text": " found", "token_id": 1669}
+      ]
+    },
+    {
+      "id": "focused_test_passed",
+      "request_index": 9,
+      "offset": 0,
+      "state": "the focused SymPy test command has exited successfully",
+      "positive": [
+        {"text": " passed", "token_id": 5642},
+        {"text": " success", "token_id": 2316},
+        {"text": " resolved", "token_id": 19072},
+        {"text": " done", "token_id": 2725}
+      ],
+      "negative": [
+        {"text": " failure", "token_id": 7652},
+        {"text": " failed", "token_id": 4490},
+        {"text": " broken", "token_id": 10548},
+        {"text": " error", "token_id": 1412}
+      ]
+    }
+  ]
+}

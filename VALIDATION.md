@@ -182,6 +182,20 @@ one-token greedy generation, and no MTP draft block. Prefix caching, chunked
 prefill, FP8 E4M3 KV, and the original 1,024-token Mamba cache block remain
 enabled.
 
+The evaluation target follows Anthropic's published objective. J-lens averages
+causal transport from a source residual to final-layer residuals at present and
+future positions (`t' >= t`); it is not an affine predictor of the current
+next-token distribution. Anthropic's
+own quantitative comparison reports deliberately poor next-token KL through
+most layers. Consequently, exact-rank intermediate recovery is the
+method-aligned readout metric here. Dense next-token KL/NLL and semantic
+distance to the captured final distribution are calibration diagnostics only,
+not J-lens quality or reproduction gates. The pinned sources are the
+[method](https://transformer-circuits.pub/2026/workspace/index.html#methods-jlens),
+[objective comparison](https://transformer-circuits.pub/2026/workspace/index.html#methods-compare),
+[quantitative appendix](https://transformer-circuits.pub/2026/workspace/index.html#app-quant),
+and [upstream evaluation conventions](https://github.com/anthropics/jacobian-lens/blob/581d398613e5602a5af361e1c34d3a92ea82ba8e/data/evaluations/README.md).
+
 | Claim | Result | Evidence |
 |---|---|---|
 | Exact prompt reconstruction | PASS; all nine template renders match recorded counts `11,861..15,678` | [`provenance`](validation/jlens-swe-qwen-code-prompt-provenance-2026-07-17.json) |
@@ -190,7 +204,68 @@ enabled.
 | Public `n=1000` all-layer control | COMPLETED on independently replayed, byte-identical residual manifests | [`public report`](validation/jlens-swe-qwen-code-public-2026-07-17.json) |
 | Paired native/public comparison | REPORTED; 567 paired observations and exact logit-lens identity | [`paired report`](validation/jlens-swe-qwen-code-native-vs-public-2026-07-17.json) |
 | Same-context `co` versus `cot` probe | REPORTED for both native and public lenses over all 63 layers | [`native`](validation/jlens-swe-qwen-code-candidate-probe-2026-07-17.json), [`public`](validation/jlens-swe-qwen-code-candidate-probe-public-2026-07-17.json) |
+| Pinned Anthropic multihop intermediate recovery | REPORTED; public and native J-lenses both outperform logit lens in the fixed middle band, with paired 95% CIs excluding zero | [`analysis`](validation/jlens-upstream-multihop-control-analysis-2026-07-17.json) |
+| Dense 293-state next-token trajectory | CALIBRATION ONLY; J-lens is worse than logit lens on final-output KL/NLL, which is not its fit objective | [`analysis`](validation/jlens-swe-qwen-code-trajectory-calibration-2026-07-17.json) |
+| Ten-state, 17-intermediate SWE concept probe | EXPLORATORY; fixed layer band and exact ranks reported, but one task, transcript leakage, and no preregistered claims gate | [`analysis`](validation/jlens-swe-qwen-code-intermediate-analysis-2026-07-17.json) |
+| Ten-state semantic final-margin comparison | CALIBRATION ONLY; final-margin closeness is not a J-lens quality gate | [`analysis`](validation/jlens-swe-qwen-code-semantic-calibration-2026-07-17.json) |
 | Official task outcome | PASS; `sympy__sympy-13480`, 1/1 resolved, zero errors | [`certified record`](validation/2026-07-15-publication-certified.json), [`patch`](validation/sympy__sympy-13480.patch) |
+
+The method-aligned external control uses the pinned upstream
+`lens-eval-multihop.json`: 93 items, 103 intermediate occurrences, 94
+single-token-scorable occurrences, and nine exclusions counted as misses.
+Over the primary fixed middle band, layers 24 through 47, the public J-lens
+normalized exact log-rank AUC was `0.6237377` versus logit-lens `0.4707330`, a
+gain of `+0.1530047` with paired item-bootstrap 95% CI
+`[0.1148996, 0.1901072]`. Public pass-at-10 was `0.2903226` versus
+`0.1344086`, a gain of `+0.1559140` with CI `[0.0645161, 0.2473118]`.
+The native lens measured AUC `0.6190194`, gain `+0.1482864` with CI
+`[0.1098553, 0.1862643]`, and pass-at-10 `0.2795699`, gain `+0.1451613`
+with CI `[0.0537634, 0.2365591]`. The bootstrap resamples upstream items,
+20,000 times at seed 36027.
+
+Those multihop comparisons are numerically paired but not strict adapter
+certificates. Public and native reports each retain `status: failed`: greedy
+final top-1 and final-norm tolerance passed on 90/93 prompts, final top-5
+parity on 85/93, and full final-logit tolerance on 72/93. Prompt IDs, token
+inputs, residual manifests, and logit-lens fields match between the public and
+native reports. The paired intermediate-rank comparison remains descriptive;
+imperfect final-output parity limits causal claims.
+
+The one-task SWE adaptation freezes ten exact trajectory points, 17 semantic
+intermediates, and contiguous layers 16 through 47 before scoring; the
+accepted next token is not a scored intermediate target. Public J-lens AUC was `0.7154340` versus
+logit-lens `0.6918246`, a gain of `+0.0236094` with paired item-bootstrap 95%
+CI `[-0.0736269, 0.1022612]` (7/10 item gains positive). Native J-lens was
+`0.6916674`, a gain of `-0.0001572` with CI
+`[-0.0969315, 0.0851788]` (6/10 positive). Public/native pass-at-10 were
+`0.35`/`0.25`, versus logit-lens `0.40`. Seven post-tool boundary items mostly
+name concepts already present in prior tool output. Their public/native AUC
+gains were `+0.1062543`, CI `[0.0833565, 0.1291646]`, and `+0.0784104`, CI
+`[0.0230768, 0.1347097]`; these same-task, mostly transcript-explicit items
+can measure retention rather than novel inference. At the exact pre-identifier
+state, public/native ranks for the two semantic concepts were
+`[191,525]`/`[175,787]`, versus logit-lens `[3,463]`. This exact-identifier
+weakness agrees with the old `co`/`cot` contrast: the J-lenses usually favored
+`co`, but logit lens did so more strongly and both alternatives remained
+outside the middle-layer top 10. All ten rows passed model-greedy top-1,
+top-5, and final-norm checks, but only 5/10 passed full-final-logit tolerance;
+the recorded accepted target matched greedy generation on 9/10 and was not a
+scored intermediate. There is no preregistered claims gate and no
+benchmark-generalization or latent-reasoning claim.
+
+The dense trajectory makes the objective mismatch concrete. Over its fixed
+middle slice, public J-lens final-output KL was `12.22461` versus logit-lens
+`8.77098`; native J-lens was `13.09468`. Accepted-target log-probability gains
+relative to logit lens were negative for public (`-3.52156`, request-bootstrap
+95% CI `[-3.96742, -3.08083]`) and native (`-4.40035`, CI
+`[-4.90920, -3.96555]`). These intervals quantify within-episode variation
+over nine correlated requests, not task-level uncertainty. Only 192/293 prompts
+passed the full strict numerical gate in either report. These values diagnose
+output calibration and do not constitute a failed J-lens reproduction. The
+earlier final-margin semantic
+analysis is labeled the same way: public/native J-lens margins were positive
+on 8/10 states, logit lens on 10/10, and J-lens was closer to the final margin
+on only 4/10.
 
 At stages 3 and 4, after source inspection and failure reproduction, native
 layers 39/40 decode semantically clustered vocabulary such as
@@ -360,7 +435,7 @@ After the final documentation-alignment changes, `scripts/check.sh` passed:
 - all shell scripts passed `bash -n`;
 - all Python entry points and tests passed `py_compile`;
 - 24 standalone envelope/tool-boundary assertions passed;
-- 29 discovered unit tests passed;
+- 426 discovered unit tests passed with one intentional skip;
 - both Python environments passed compatibility and exact-freeze checks; and
 - the installed Qwen Code version was 0.19.4.
 

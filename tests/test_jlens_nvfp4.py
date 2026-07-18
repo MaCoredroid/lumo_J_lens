@@ -114,6 +114,92 @@ class JacobianLensHelpersTest(unittest.TestCase):
         self.assertEqual(result["target_logprob"], float(expected))
         self.assertNotEqual(result["target_logprob"], round(float(expected), 6))
 
+    def test_compact_topk_records_requested_vocabulary_scores(self):
+        import torch
+
+        logits = torch.tensor([0.5, 1.5, -0.5], dtype=torch.float32)
+        result = MODULE._compact_topk(
+            logits,
+            top_k=2,
+            target_token_id=1,
+            score_token_ids=(0, 2),
+        )
+        expected_logprobs = torch.log_softmax(logits, dim=-1)
+        self.assertEqual(
+            result["scored_tokens"],
+            [
+                {
+                    "token_id": 0,
+                    "score": float(logits[0]),
+                    "logprob": float(expected_logprobs[0]),
+                    "rank": 2,
+                },
+                {
+                    "token_id": 2,
+                    "score": float(logits[2]),
+                    "logprob": float(expected_logprobs[2]),
+                    "rank": 3,
+                },
+            ],
+        )
+
+    def test_scored_vocabulary_ids_are_range_checked(self):
+        class Tokenizer:
+            def __len__(self):
+                return 3
+
+        MODULE._validate_vocabulary_ids(
+            Tokenizer(),
+            prompt_id="valid",
+            token_ids=[0, 1],
+            target_token_id=2,
+            score_token_ids=(0, 2),
+        )
+        with self.assertRaisesRegex(ValueError, "scored token IDs"):
+            MODULE._validate_vocabulary_ids(
+                Tokenizer(),
+                prompt_id="invalid",
+                token_ids=[0, 1],
+                target_token_id=2,
+                score_token_ids=(3,),
+            )
+
+    def test_distribution_fidelity_is_zero_for_identical_logits(self):
+        import torch
+
+        logits = torch.tensor([3.0, 1.0, -2.0], dtype=torch.float32)
+        result = MODULE._distribution_fidelity(
+            logits,
+            logits.clone(),
+            reference_top_ids=[0, 1, 2],
+            candidate_top_ids=[0, 1, 2],
+        )
+        self.assertEqual(result["kl_final_to_readout"], 0.0)
+        self.assertEqual(result["kl_readout_to_final"], 0.0)
+        self.assertAlmostEqual(result["jensen_shannon_divergence"], 0.0, places=7)
+        self.assertEqual(result["total_variation_distance"], 0.0)
+        self.assertTrue(result["top1_matches_final"])
+        self.assertEqual(result["top_k_overlap_fraction"], 1.0)
+
+    def test_distribution_fidelity_detects_divergence_and_topk_mismatch(self):
+        import torch
+
+        reference = torch.tensor([5.0, 2.0, 0.0, -1.0], dtype=torch.float32)
+        candidate = torch.tensor([-1.0, 0.0, 2.0, 5.0], dtype=torch.float32)
+        result = MODULE._distribution_fidelity(
+            reference,
+            candidate,
+            reference_top_ids=[0, 1, 2, 3],
+            candidate_top_ids=[3, 2, 1, 0],
+            top_k=2,
+        )
+        self.assertGreater(result["kl_final_to_readout"], 0.0)
+        self.assertGreater(result["kl_readout_to_final"], 0.0)
+        self.assertGreater(result["jensen_shannon_divergence"], 0.0)
+        self.assertGreater(result["total_variation_distance"], 0.0)
+        self.assertFalse(result["top1_matches_final"])
+        self.assertEqual(result["top_k_overlap_fraction"], 0.0)
+
     def test_stream_capture_selects_each_chunk_tail(self):
         import torch
 
@@ -219,6 +305,7 @@ class JacobianLensHelpersTest(unittest.TestCase):
                 "text": "display text",
                 "token_ids": [3, 5, 8],
                 "target_token_id": 13,
+                "score_token_ids": [21, 34],
                 "metadata": {"instance_id": "sympy__sympy-123"},
             }
         ]
@@ -273,6 +360,9 @@ class JacobianLensHelpersTest(unittest.TestCase):
             {"token_ids": []},
             {"token_ids": [1, True]},
             {"token_ids": [1], "target_token_id": -1},
+            {"token_ids": [1], "score_token_ids": []},
+            {"token_ids": [1], "score_token_ids": [2, 2]},
+            {"token_ids": [1], "score_token_ids": [True]},
             {"metadata": {"missing": "input"}},
         )
         for entry in invalid_entries:
@@ -286,6 +376,15 @@ class JacobianLensHelpersTest(unittest.TestCase):
                 )
                 with self.assertRaises(ValueError):
                     MODULE._load_prompts(args)
+
+    def test_prompt_score_ids_extend_global_ids_without_duplicates(self):
+        self.assertEqual(
+            MODULE._prompt_score_token_ids(
+                (2, 3), {"score_token_ids": [3, 5, 8]}
+            ),
+            (2, 3, 5, 8),
+        )
+        self.assertEqual(MODULE._prompt_score_token_ids((2, 3), {}), (2, 3))
 
     def test_runtime_pin_defaults_disable_prefix_cache_settings(self):
         args = MODULE.build_parser().parse_args([])
