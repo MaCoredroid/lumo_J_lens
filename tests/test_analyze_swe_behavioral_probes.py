@@ -402,6 +402,63 @@ class BehavioralPromptTests(unittest.TestCase):
         self.assertIsNone(row["tool_execution_label"])
         self.assertIsNone(row["validation_label"])
 
+    def test_nonbinary_official_scorer_state_is_missing_never_failure(self):
+        prompt = behavioral_prompt()
+        official = prompt["metadata"]["labels"]["official_outcome"]
+        official.update({"verdict": "error", "class_id": "failure"})
+        prompt["metadata"]["provenance"]["prompt_record_payload_sha256"] = (
+            ANALYZE._prompt_payload_hash(prompt)
+        )
+        with self.assertRaisesRegex(ValueError, "aggregate label is inconsistent"):
+            ANALYZE.validate_prompt_bundle([prompt], protocol=PROTOCOL)
+
+        official.update(
+            {
+                "status": "missing",
+                "class_id": None,
+                "verdict": "error",
+                "derivation": "official_nonbinary_infrastructure_or_empty_outcome",
+            }
+        )
+        prompt["metadata"]["provenance"]["prompt_record_payload_sha256"] = (
+            ANALYZE._prompt_payload_hash(prompt)
+        )
+        result = ANALYZE.validate_prompt_bundle([prompt], protocol=PROTOCOL)
+        self.assertEqual(result["prompts"][0]["official_outcome_status"], "missing")
+        self.assertIsNone(result["prompts"][0]["official_outcome"])
+
+    def test_protocol_labels_pooled_scope_and_fixed_foil(self):
+        self.assertEqual(
+            PROTOCOL["probe_vs_refit"]["claim_scope"],
+            "pooled_predeclared_development_plus_replication_repository_crossfit",
+        )
+        self.assertEqual(
+            PROTOCOL["probe_vs_refit"]["replication_interpretation"],
+            "cohort_subgroups_descriptive_only_not_an_independent_replication_test",
+        )
+        self.assertEqual(
+            PROTOCOL["future_target"]["foil_reduction"],
+            "fixed_hidden_foil_by_seeded_sha256_v1",
+        )
+        self.assertEqual(
+            PROTOCOL["official_outcome"]["available_verdict_mapping"],
+            {"resolved": "success", "unresolved": "failure"},
+        )
+        self.assertEqual(
+            PROTOCOL["crossfit"]["majority_baseline"]["kind"],
+            "fit_checkpoint_class_prior",
+        )
+        self.assertEqual(
+            PROTOCOL["probe_vs_refit"]["next_action_estimand"][
+                "point_estimate_weighting"
+            ],
+            "one_equal_weight_per_checkpoint_row",
+        )
+        legacy = copy.deepcopy(PROTOCOL_VALUE)
+        legacy["analysis_version"] = "task-held-out-v1"
+        with self.assertRaisesRegex(ValueError, "version/selection contract"):
+            ANALYZE.validate_protocol(legacy, protocol_sha256="a" * 64)
+
     def test_cross_task_hidden_foil_fails_closed(self):
         prompt = behavioral_prompt(foil_task="other__task-2")
         prompt["metadata"]["provenance"]["prompt_record_payload_sha256"] = (
@@ -625,6 +682,18 @@ class SplitIsolationTests(unittest.TestCase):
             (-math.log(4.0 / 6.0) - math.log(2.0 / 6.0)) / 2.0,
         )
 
+    def test_fit_prior_matches_checkpoint_row_estimand(self):
+        fit = [
+            {"task_id": "long", "label": "success"},
+            {"task_id": "long", "label": "success"},
+            {"task_id": "long", "label": "success"},
+            {"task_id": "short", "label": "failure"},
+        ]
+        self.assertEqual(
+            ANALYZE._fit_prior(fit, self.class_ids, 1.0),
+            [4.0 / 6.0, 2.0 / 6.0],
+        )
+
     def test_bootstrap_enforces_minimum_valid_fraction(self):
         records = [
             {
@@ -683,6 +752,7 @@ class SplitIsolationTests(unittest.TestCase):
             protocol=PROTOCOL,
             bootstrap_samples=0,
             seed_base=0,
+            decision_track="official_outcome",
         )
         self.assertTrue(disabled["all_method_split_support_rules_pass"])
         self.assertFalse(disabled["all_method_bootstrap_valid_fraction_rules_pass"])
@@ -695,6 +765,7 @@ class SplitIsolationTests(unittest.TestCase):
             protocol=PROTOCOL,
             bootstrap_samples=20,
             seed_base=0,
+            decision_track="official_outcome",
         )
         self.assertTrue(enabled["all_method_bootstrap_valid_fraction_rules_pass"])
         self.assertTrue(enabled["all_method_inference_support_rules_pass"])
@@ -776,7 +847,7 @@ class FutureTargetCohortTests(unittest.TestCase):
             for label in ANALYZE.REPORT_LABELS
         }
         detailed, aggregate = ANALYZE.build_future_target_rows(
-            {"prompts": [prompt]}, reports
+            {"prompts": [prompt]}, reports, PROTOCOL
         )
         self.assertEqual(detailed, [])
         self.assertTrue(all(not rows for rows in aggregate.values()))
@@ -797,6 +868,405 @@ class FutureTargetCohortTests(unittest.TestCase):
         self.assertEqual(result["status"], "descriptive_only_no_subgroup_refitting")
         self.assertEqual(
             set(result["cohorts"]), {"development", "replication"}
+        )
+
+    def test_fixed_foil_is_seeded_and_score_independent(self):
+        target = {"id": "target-z"}
+        foils = [{"id": "foil-b"}, {"id": "foil-a"}]
+        expected = min(
+            foils,
+            key=lambda foil: (
+                ANALYZE.sha256_text(
+                    f"{PROTOCOL['future_target']['foil_selection_seed']}\0"
+                    f"{target['id']}\0{foil['id']}"
+                ),
+                foil["id"],
+            ),
+        )
+        selected = ANALYZE._fixed_hidden_foil(target, foils, PROTOCOL)
+        self.assertEqual(selected["id"], expected["id"])
+        self.assertNotIn("score", selected)
+
+    def test_future_metrics_weight_tasks_not_target_rows(self):
+        rows = [
+            {
+                "row_id": f"many-{index}",
+                "task_id": "many",
+                "repo": "a/repo",
+                "cohort_id": "pooled",
+                "correct": True,
+                "probability": 0.9,
+                "margin": 1.0,
+            }
+            for index in range(10)
+        ] + [
+            {
+                "row_id": "one",
+                "task_id": "one",
+                "repo": "b/repo",
+                "cohort_id": "pooled",
+                "correct": False,
+                "probability": 0.1,
+                "margin": -1.0,
+            }
+        ]
+        metrics = ANALYZE._future_metrics(rows)
+        self.assertEqual(metrics["row_count"], 11)
+        self.assertEqual(metrics["task_count"], 2)
+        self.assertEqual(metrics["target_preference_accuracy"], 0.5)
+
+
+class PairedInferenceTests(unittest.TestCase):
+    @staticmethod
+    def classification_rows(*, correct: bool):
+        class_ids = ["success", "failure"]
+        rows = []
+        for repository in range(6):
+            for class_index, label in enumerate(class_ids):
+                predicted_index = class_index if correct else 1 - class_index
+                probabilities = [0.1, 0.1]
+                probabilities[predicted_index] = 0.9
+                rows.append(
+                    {
+                        "row_id": f"r{repository}-{label}",
+                        "task_id": f"task-{repository}",
+                        "repo": f"repo-{repository}",
+                        "cohort_id": "pooled",
+                        "label": label,
+                        "prediction": class_ids[predicted_index],
+                        "probabilities": probabilities,
+                    }
+                )
+        return rows
+
+    def test_paired_bootstrap_uses_exact_identity_and_same_draw_delta(self):
+        result = ANALYZE.bootstrap_paired_classification(
+            self.classification_rows(correct=True),
+            self.classification_rows(correct=False),
+            ["success", "failure"],
+            samples=200,
+            seed=7,
+            confidence_level=0.95,
+            minimum_valid_fraction=0.8,
+        )
+        self.assertEqual(result["status"], "available")
+        self.assertTrue(result["same_draw_for_candidate_and_reference"])
+        self.assertTrue(result["pairing"]["exact_row_coverage"])
+        self.assertEqual(
+            result["observed_benefit_deltas"]["balanced_accuracy_gain"], 1.0
+        )
+        self.assertEqual(
+            result["intervals"]["balanced_accuracy_gain"]["lower"], 1.0
+        )
+
+        mismatched = self.classification_rows(correct=False)[:-1]
+        mismatch = ANALYZE.bootstrap_paired_classification(
+            self.classification_rows(correct=True),
+            mismatched,
+            ["success", "failure"],
+            samples=20,
+            seed=7,
+            confidence_level=0.95,
+            minimum_valid_fraction=0.8,
+        )
+        self.assertEqual(mismatch["status"], "insufficient_unpaired_row_coverage")
+        self.assertFalse(mismatch["pairing"]["exact_row_coverage"])
+
+    def test_paired_future_is_task_averaged_and_uses_the_same_fixed_contrast(self):
+        candidate = []
+        reference = []
+        for task in range(6):
+            for target in range(task + 1):
+                identity = {
+                    "row_id": f"task-{task}-target-{target}",
+                    "prompt_id": f"prompt-{task}",
+                    "target_id": f"target-{target}",
+                    "task_id": f"task-{task}",
+                    "repo": f"repo-{task}",
+                    "cohort_id": "pooled",
+                    "fixed_hidden_foil_id": f"foil-{task}-{target}",
+                }
+                candidate.append(
+                    {
+                        **identity,
+                        "correct": task != 0,
+                        "probability": 0.9 if task != 0 else 0.1,
+                        "margin": 1.0 if task != 0 else -1.0,
+                    }
+                )
+                reference.append(
+                    {
+                        **identity,
+                        "correct": False,
+                        "probability": 0.1,
+                        "margin": -1.0,
+                    }
+                )
+        result = ANALYZE.bootstrap_paired_future(
+            candidate,
+            reference,
+            samples=200,
+            seed=8,
+            confidence_level=0.95,
+            minimum_valid_fraction=0.8,
+        )
+        self.assertEqual(result["status"], "available")
+        self.assertTrue(result["task_averaged"])
+        self.assertTrue(
+            result["pairing"]["exact_fixed_foil_contrast_across_methods"]
+        )
+        self.assertEqual(result["pairing"]["paired_task_count"], 6)
+        self.assertEqual(
+            result["observed_benefit_deltas"][
+                "target_preference_accuracy_gain"
+            ],
+            5.0 / 6.0,
+        )
+
+        missing = ANALYZE.bootstrap_paired_future(
+            candidate,
+            reference[:-1],
+            samples=20,
+            seed=8,
+            confidence_level=0.95,
+            minimum_valid_fraction=0.8,
+        )
+        self.assertEqual(
+            missing["status"], "insufficient_unpaired_target_row_coverage"
+        )
+
+        wrong_foil = copy.deepcopy(reference)
+        wrong_foil[0]["fixed_hidden_foil_id"] = "different-foil"
+        with self.assertRaisesRegex(ValueError, "different fixed foils"):
+            ANALYZE.bootstrap_paired_future(
+                candidate,
+                wrong_foil,
+                samples=20,
+                seed=8,
+                confidence_level=0.95,
+                minimum_valid_fraction=0.8,
+            )
+
+
+class ProbeVersusRefitDecisionTests(unittest.TestCase):
+    @staticmethod
+    def comparison(metric: str, point: float, lower: float, upper: float):
+        return {
+            "status": "available",
+            "observed_benefit_deltas": {metric: point},
+            "metric_status": {metric: "available"},
+            "intervals": {
+                metric: {"lower": lower, "upper": upper, "valid_samples": 5000}
+            },
+        }
+
+    def comparisons(self):
+        action = {
+            "public_jacobian_vs_ordinary_logit": self.comparison(
+                "balanced_accuracy_gain", 0.05, -0.02, 0.12
+            ),
+            "public_jacobian_vs_majority_baseline": self.comparison(
+                "balanced_accuracy_gain", 0.04, -0.03, 0.11
+            ),
+            "public_jacobian_vs_native_jacobian": self.comparison(
+                "balanced_accuracy_gain", 0.15, 0.02, 0.25
+            ),
+            "public_jacobian_vs_nf4_jacobian": self.comparison(
+                "balanced_accuracy_gain", 0.03, -0.04, 0.10
+            ),
+        }
+        future = {
+            "public_jacobian_vs_ordinary_logit": self.comparison(
+                "target_preference_accuracy_gain", 0.10, 0.01, 0.20
+            ),
+            "public_jacobian_vs_native_jacobian": self.comparison(
+                "target_preference_accuracy_gain", 0.08, 0.01, 0.15
+            ),
+            "public_jacobian_vs_nf4_jacobian": self.comparison(
+                "target_preference_accuracy_gain", 0.01, -0.06, 0.08
+            ),
+        }
+        return action, future
+
+    def decide(
+        self,
+        action,
+        future,
+        *,
+        coverage=True,
+        samples=5000,
+        operational_status="held_out_evaluation_complete",
+        outcome=None,
+    ):
+        return ANALYZE.build_probe_vs_refit_decision(
+            operational_status=operational_status,
+            joint_coverage={
+                "all_predeclared_joint_coverage_gates_pass": coverage,
+            },
+            action_comparisons=action,
+            outcome_comparisons=action if outcome is None else outcome,
+            future_comparisons=future,
+            protocol=PROTOCOL,
+            bootstrap_samples=samples,
+        )
+
+    def test_refit_native_candidate_branch_and_status_separation(self):
+        action, future = self.comparisons()
+        result = self.decide(action, future)
+        self.assertEqual(result["classification"], "refit_native_candidate")
+        self.assertEqual(result["operational_status"], "held_out_evaluation_complete")
+        self.assertTrue(result["operational_status_is_not_scientific_decision"])
+        self.assertEqual(
+            result["claim_scope"],
+            "pooled_predeclared_development_plus_replication_repository_crossfit",
+        )
+
+    def test_no_refit_evidence_branch(self):
+        action, future = self.comparisons()
+        action["public_jacobian_vs_native_jacobian"] = self.comparison(
+            "balanced_accuracy_gain", 0.05, -0.04, 0.13
+        )
+        result = self.decide(action, future)
+        self.assertEqual(result["classification"], "no_refit_evidence")
+        self.assertTrue(result["probe_valid"])
+
+    def test_readout_or_task_problem_branch(self):
+        action, future = self.comparisons()
+        future["public_jacobian_vs_ordinary_logit"] = self.comparison(
+            "target_preference_accuracy_gain", -0.05, -0.12, 0.0
+        )
+        result = self.decide(action, future)
+        self.assertEqual(result["classification"], "readout_or_task_problem")
+        self.assertFalse(result["probe_valid"])
+
+    def test_insufficient_support_branches_never_recommend_refit(self):
+        action, future = self.comparisons()
+        coverage = self.decide(action, future, coverage=False)
+        self.assertEqual(coverage["classification"], "insufficient_support")
+        self.assertIn("do not refit", coverage["next_step"])
+
+        samples = self.decide(action, future, samples=4999)
+        self.assertEqual(samples["classification"], "insufficient_support")
+        self.assertFalse(samples["support"]["paired_bootstrap_sample_gate_pass"])
+
+        operational = self.decide(
+            action,
+            future,
+            operational_status="insufficient_split_or_class_support",
+        )
+        self.assertEqual(operational["classification"], "insufficient_support")
+        self.assertFalse(operational["support"]["operational_inference_gate_pass"])
+
+        unavailable_outcome = copy.deepcopy(action)
+        unavailable_outcome["public_jacobian_vs_native_jacobian"]["metric_status"][
+            "balanced_accuracy_gain"
+        ] = "insufficient_valid_bootstrap_fraction"
+        unavailable_outcome["public_jacobian_vs_native_jacobian"]["intervals"][
+            "balanced_accuracy_gain"
+        ] = None
+        outcome_gate = self.decide(
+            action,
+            future,
+            outcome=unavailable_outcome,
+        )
+        self.assertEqual(outcome_gate["classification"], "insufficient_support")
+        self.assertFalse(
+            outcome_gate["support"]["required_metric_evidence_available"]
+        )
+
+    def test_joint_coverage_gates_pass_and_fail_explicitly(self):
+        prompt_contract = {
+            "primary_prompt_count": 80,
+            "task_count": 20,
+            "selected_task_count": 20,
+            "unprobed_task_ids": [],
+            "repository_count": 10,
+        }
+        action = []
+        for task in range(20):
+            for label in PROTOCOL["action_ids"]:
+                action.append(
+                    {
+                        "row_id": f"a-{task}-{label}",
+                        "task_id": f"task-{task}",
+                        "repo": f"repo-{task % 10}",
+                        "label": label,
+                    }
+                )
+        outcome = [
+            {
+                "row_id": f"o-{task}",
+                "task_id": f"task-{task}",
+                "repo": f"repo-{task % 10}",
+                "label": PROTOCOL["outcome_ids"][task % 2],
+            }
+            for task in range(20)
+        ]
+        future = [
+            {
+                "row_id": f"f-{task}",
+                "task_id": f"task-{task}",
+                "repo": f"repo-{task % 6}",
+                "cohort_id": "pooled",
+                "correct": True,
+                "probability": 0.75,
+                "margin": 1.0,
+            }
+            for task in range(10)
+        ]
+        passed = ANALYZE.build_joint_decision_coverage(
+            prompt_contract=prompt_contract,
+            action_records=action,
+            outcome_records=outcome,
+            future_records=future,
+            protocol=PROTOCOL,
+        )
+        self.assertTrue(passed["all_predeclared_joint_coverage_gates_pass"])
+        self.assertEqual(passed["next_action"]["selected_row_count"], 80)
+        self.assertEqual(
+            passed["next_action"]["jointly_certified_selected_row_fraction"], 1.0
+        )
+        self.assertTrue(all(passed["next_action"]["gates"].values()))
+        self.assertTrue(all(passed["official_outcome"]["gates"].values()))
+        self.assertTrue(all(passed["future_identifier"]["gates"].values()))
+
+        action_failed = [
+            row
+            for row in action
+            if row["label"] != PROTOCOL["action_ids"][-1]
+            or int(row["task_id"].split("-")[-1]) < 4
+        ]
+        failed = ANALYZE.build_joint_decision_coverage(
+            prompt_contract=prompt_contract,
+            action_records=action_failed,
+            outcome_records=outcome[:15],
+            future_records=future[:9],
+            protocol=PROTOCOL,
+        )
+        self.assertFalse(failed["all_predeclared_joint_coverage_gates_pass"])
+        self.assertFalse(failed["next_action"]["gates"]["minimum_tasks_per_class"])
+        self.assertFalse(
+            failed["official_outcome"]["gates"]["minimum_jointly_certified_tasks"]
+        )
+        self.assertFalse(failed["future_identifier"]["gates"]["minimum_tasks"])
+
+        below_fraction = ANALYZE.build_joint_decision_coverage(
+            prompt_contract=prompt_contract,
+            action_records=action[:63],
+            outcome_records=outcome,
+            future_records=future,
+            protocol=PROTOCOL,
+        )
+        self.assertEqual(
+            below_fraction["next_action"][
+                "jointly_certified_selected_row_fraction"
+            ],
+            63 / 80,
+        )
+        self.assertFalse(
+            below_fraction["next_action"]["gates"][
+                "minimum_jointly_certified_selected_row_fraction"
+            ]
         )
 
 

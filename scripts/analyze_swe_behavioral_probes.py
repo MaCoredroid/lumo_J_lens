@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Evaluate behavioral J-lens probes with repository-held-out calibration."""
+"""Evaluate behavioral J-lens probes and predeclared probe-versus-refit evidence."""
 
 from __future__ import annotations
 
@@ -31,6 +31,7 @@ METHODS = (
     "native_jacobian",
     "ordinary_logit",
 )
+JACOBIAN_METHODS = METHODS[:3]
 REPORT_LABELS = ("public", "nf4", "native")
 MAX_CHECKPOINTS = 8
 RESIDUAL_MANIFEST_ALGORITHM = (
@@ -212,7 +213,7 @@ def validate_protocol(protocol: Mapping[str, Any], *, protocol_sha256: str) -> d
     require(protocol.get("schema_version") == 1, "readout protocol schema mismatch")
     require(protocol.get("kind") == PROTOCOL_KIND, "readout protocol kind mismatch")
     require(
-        protocol.get("analysis_version") == "task-held-out-v1"
+        protocol.get("analysis_version") == "task-held-out-paired-decision-v2"
         and protocol.get("lens_outputs_used_for_selection_or_labels") is False,
         "readout protocol version/selection contract mismatch",
     )
@@ -309,12 +310,22 @@ def validate_protocol(protocol: Mapping[str, Any], *, protocol_sha256: str) -> d
         "cross-fitting isolation contract changed",
     )
     calibrator = mapping(crossfit.get("calibrator"), "calibrator")
+    majority = mapping(crossfit.get("majority_baseline"), "majority baseline")
     require(
         calibrator.get("kind")
         == "per_class_additive_bias_then_scalar_temperature"
         and calibrator.get("bias_reference_class") == "last_declared_class"
         and calibrator.get("layer_selection") == "none",
         "calibrator form changed",
+    )
+    require(
+        majority
+        == {
+            "kind": "fit_checkpoint_class_prior",
+            "laplace_alpha": 1.0,
+            "ties": "declared_class_order",
+        },
+        "majority baseline must match the checkpoint-row estimand",
     )
     numerical = mapping(
         protocol.get("numerical_certification"), "numerical certification"
@@ -344,6 +355,135 @@ def validate_protocol(protocol: Mapping[str, Any], *, protocol_sha256: str) -> d
         0.0 < minimum_valid_fraction <= 1.0,
         "bootstrap minimum valid fraction must be in (0, 1]",
     )
+    future_target = mapping(protocol.get("future_target"), "future target")
+    require(
+        future_target
+        == {
+            "eligibility_status": "eligible",
+            "foil_scope": "same_task_only",
+            "foil_reduction": "fixed_hidden_foil_by_seeded_sha256_v1",
+            "foil_selection_seed": 36029,
+            "lens_outputs_used_to_choose_candidate_set": False,
+        },
+        "future-target selection must use the predeclared score-independent foil",
+    )
+    decision = mapping(
+        protocol.get("probe_vs_refit_decision"), "probe-versus-refit decision"
+    )
+    require(
+        decision.get("schema_version") == 1
+        and decision.get("claim_scope")
+        == "pooled_predeclared_development_plus_replication_repository_crossfit"
+        and decision.get("replication_interpretation")
+        == "cohort_subgroups_descriptive_only_not_an_independent_replication_test"
+        and decision.get("thresholds_source")
+        == "predeclared_before_official_outcome_scoring"
+        and decision.get("required_operational_status_for_actionable_decision")
+        == "held_out_evaluation_complete"
+        and decision.get("next_action_estimand")
+        == {
+            "observation_unit": "jointly_certified_uniform_probeable_checkpoint_row",
+            "point_estimate_weighting": "one_equal_weight_per_checkpoint_row",
+            "hierarchical_bootstrap_effect": (
+                "cluster_resampling_does_not_task_equalize_checkpoint_rows"
+            ),
+        }
+        and decision.get("classifications")
+        == [
+            "refit_native_candidate",
+            "readout_or_task_problem",
+            "no_refit_evidence",
+            "insufficient_support",
+        ]
+        and decision.get("inconclusive_future_control_policy")
+        == "insufficient_support_collect_more_no_refit"
+        and decision.get("no_post_outcome_threshold_tuning") is True,
+        "probe-versus-refit decision identity changed",
+    )
+    paired = mapping(decision.get("paired_bootstrap"), "paired bootstrap decision")
+    require(
+        paired.get("algorithm")
+        == "paired_hierarchical_repository_then_task_percentile_v1"
+        and paired.get("minimum_samples") == 5000
+        and paired.get("minimum_valid_fraction") == 0.8
+        and paired.get("confidence_level") == 0.95
+        and paired.get("row_resampling_forbidden") is True
+        and paired.get("same_draw_for_both_methods") is True
+        and paired.get("seed_offsets")
+        == {
+            "next_action": 3000,
+            "official_outcome": 4000,
+            "future_identifier": 5000,
+        },
+        "paired-bootstrap decision contract changed",
+    )
+    coverage = mapping(decision.get("joint_coverage"), "joint coverage decision")
+    require(
+        coverage.get("next_action")
+        == {
+            "minimum_jointly_certified_selected_row_fraction": 0.8,
+            "require_every_selected_task": True,
+            "require_every_selected_repository": True,
+            "minimum_tasks_per_class": 5,
+            "minimum_repositories_per_class": 3,
+        }
+        and coverage.get("official_outcome")
+        == {
+            "minimum_jointly_certified_tasks": 16,
+            "minimum_tasks_per_class": 8,
+            "minimum_repositories_per_class": 4,
+        }
+        and coverage.get("future_identifier")
+        == {"task_averaged": True, "minimum_tasks": 10, "minimum_repositories": 6},
+        "joint-coverage decision contract changed",
+    )
+    probe_validity = mapping(decision.get("probe_validity"), "probe validity")
+    native_refit = mapping(
+        decision.get("native_refit_candidate"), "native refit candidate"
+    )
+    require(
+        probe_validity
+        == {
+            "future_public_minus_ordinary_logit_target_preference_accuracy": {
+                "minimum_point_delta_exclusive": 0.0,
+                "minimum_confidence_interval_lower_exclusive": 0.0,
+            },
+            "next_action_public_balanced_accuracy_directional_controls": [
+                "ordinary_logit",
+                "majority_baseline",
+            ],
+            "minimum_directional_point_delta_exclusive": 0.0,
+        }
+        and native_refit
+        == {
+            "future_public_minus_native_target_preference_accuracy": {
+                "minimum_point_delta_exclusive": 0.0,
+                "minimum_confidence_interval_lower_exclusive": 0.0,
+            },
+            "next_action_public_minus_native_balanced_accuracy": {
+                "minimum_point_delta_inclusive": 0.1,
+                "minimum_confidence_interval_lower_exclusive": 0.0,
+            },
+        },
+        "probe-validity or native-refit thresholds changed",
+    )
+    official_outcome = mapping(protocol.get("official_outcome"), "official outcome")
+    require(
+        official_outcome
+        == {
+            "observation_unit": "one_latest_uniform_probeable_checkpoint_per_task",
+            "repeat_stage_observations": False,
+            "missing_is_not_imputed": True,
+            "available_verdict_mapping": {
+                "resolved": "success",
+                "unresolved": "failure",
+            },
+            "nonbinary_scorer_states": ["error", "empty", "missing"],
+            "nonbinary_scorer_state_policy": "missing_for_inference_never_failure",
+            "action_protocol_or_generation_status_used_as_official_outcome": False,
+        },
+        "official outcome must preserve binary scorer verdicts and missing states",
+    )
     return {
         "sha256": protocol_sha256,
         "model": dict(model),
@@ -362,13 +502,12 @@ def validate_protocol(protocol: Mapping[str, Any], *, protocol_sha256: str) -> d
         "crossfit": dict(crossfit),
         "bootstrap": dict(bootstrap),
         "numerical_certification": dict(numerical),
-        "future_target": dict(mapping(protocol.get("future_target"), "future target")),
-        "official_outcome": dict(
-            mapping(protocol.get("official_outcome"), "official outcome")
-        ),
+        "future_target": dict(future_target),
+        "official_outcome": dict(official_outcome),
         "development": dict(
             mapping(protocol.get("development_contract"), "development contract")
         ),
+        "probe_vs_refit": dict(decision),
     }
 
 
@@ -871,10 +1010,12 @@ def validate_prompt_bundle(
             official.get("derivation"), "official outcome derivation"
         )
         if official_status == "available":
+            verdict_mapping = protocol["official_outcome"][
+                "available_verdict_mapping"
+            ]
             require(
-                verdict in {"resolved", "unresolved", "error", "empty"}
-                and official_class
-                == ("success" if verdict == "resolved" else "failure")
+                verdict in verdict_mapping
+                and official_class == verdict_mapping[verdict]
                 and official_derivation == "bound_official_swe_bench_aggregate",
                 f"{prompt_id} official aggregate label is inconsistent",
             )
@@ -898,7 +1039,9 @@ def validate_prompt_bundle(
                 )
             else:
                 require(
-                    verdict in {"error", "empty"}
+                    verdict in protocol["official_outcome"][
+                        "nonbinary_scorer_states"
+                    ]
                     and official_derivation
                     == "official_nonbinary_infrastructure_or_empty_outcome",
                     f"{prompt_id} missing official outcome was imputed from a nonbinary verdict",
@@ -2262,6 +2405,7 @@ def crossfit_track(
                 "majority_prior": {
                     class_id: prior[index] for index, class_id in enumerate(class_ids)
                 },
+                "majority_prior_weighting": "one_equal_vote_per_fit_checkpoint_row",
                 "fit_payload_sha256": sha256_json(
                     [
                         {
@@ -2419,6 +2563,198 @@ def bootstrap_classification(
     }
 
 
+def _paired_records(
+    candidate: Sequence[Mapping[str, Any]],
+    reference: Sequence[Mapping[str, Any]],
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    def indexed(
+        records: Sequence[Mapping[str, Any]], label: str
+    ) -> dict[str, Mapping[str, Any]]:
+        result: dict[str, Mapping[str, Any]] = {}
+        for record in records:
+            row_id = nonempty_string(record.get("row_id"), f"{label} row ID")
+            require(row_id not in result, f"duplicate {label} row ID: {row_id}")
+            result[row_id] = record
+        return result
+
+    candidate_by_id = indexed(candidate, "candidate")
+    reference_by_id = indexed(reference, "reference")
+    candidate_ids = set(candidate_by_id)
+    reference_ids = set(reference_by_id)
+    audit = {
+        "candidate_row_count": len(candidate_by_id),
+        "reference_row_count": len(reference_by_id),
+        "paired_row_count": len(candidate_ids & reference_ids),
+        "candidate_only_row_ids": sorted(candidate_ids - reference_ids),
+        "reference_only_row_ids": sorted(reference_ids - candidate_ids),
+        "exact_row_coverage": candidate_ids == reference_ids,
+    }
+    if candidate_ids != reference_ids:
+        return [], audit
+    pairs: list[dict[str, Any]] = []
+    for row_id in sorted(candidate_ids):
+        left = candidate_by_id[row_id]
+        right = reference_by_id[row_id]
+        for field in ("task_id", "repo", "label"):
+            require(
+                left.get(field) == right.get(field),
+                f"paired row {row_id} differs in {field}",
+            )
+        require(
+            str(left.get("cohort_id", "unspecified"))
+            == str(right.get("cohort_id", "unspecified")),
+            f"paired row {row_id} differs in cohort",
+        )
+        pairs.append(
+            {
+                "row_id": row_id,
+                "task_id": str(left["task_id"]),
+                "repo": str(left["repo"]),
+                "candidate": left,
+                "reference": right,
+            }
+        )
+    return pairs, audit
+
+
+def _classification_benefit_deltas(
+    candidate: Sequence[Mapping[str, Any]],
+    reference: Sequence[Mapping[str, Any]],
+    class_ids: Sequence[str],
+) -> dict[str, float | None]:
+    candidate_metrics = classification_metrics(candidate, class_ids)
+    reference_metrics = classification_metrics(reference, class_ids)
+
+    def difference(
+        candidate_key: str, reference_key: str, *, lower_is_better: bool = False
+    ) -> float | None:
+        candidate_value = candidate_metrics[candidate_key]
+        reference_value = reference_metrics[reference_key]
+        if candidate_value is None or reference_value is None:
+            return None
+        if lower_is_better:
+            return float(reference_value) - float(candidate_value)
+        return float(candidate_value) - float(reference_value)
+
+    return {
+        "micro_accuracy_gain": difference("micro_accuracy", "micro_accuracy"),
+        "balanced_accuracy_gain": difference(
+            "balanced_accuracy", "balanced_accuracy"
+        ),
+        "negative_log_likelihood_reduction": difference(
+            "negative_log_likelihood",
+            "negative_log_likelihood",
+            lower_is_better=True,
+        ),
+        "multiclass_brier_reduction": difference(
+            "multiclass_brier", "multiclass_brier", lower_is_better=True
+        ),
+    }
+
+
+def bootstrap_paired_classification(
+    candidate: Sequence[Mapping[str, Any]],
+    reference: Sequence[Mapping[str, Any]],
+    class_ids: Sequence[str],
+    *,
+    samples: int,
+    seed: int,
+    confidence_level: float,
+    minimum_valid_fraction: float,
+) -> dict[str, Any]:
+    require(
+        0.0 < minimum_valid_fraction <= 1.0,
+        "paired bootstrap minimum valid fraction must be in (0, 1]",
+    )
+    pairs, pairing = _paired_records(candidate, reference)
+    base = {
+        "algorithm": "paired_hierarchical_repository_then_task_percentile_v1",
+        "unit": "paired_hierarchical_repository_then_task_never_rows",
+        "same_draw_for_candidate_and_reference": True,
+        "pairing": pairing,
+        "samples_requested": samples,
+        "minimum_valid_fraction": minimum_valid_fraction,
+    }
+    if not pairing["exact_row_coverage"]:
+        return {
+            **base,
+            "status": "insufficient_unpaired_row_coverage",
+            "samples_valid": 0,
+            "valid_fraction": 0.0,
+            "observed_benefit_deltas": {},
+            "metric_status": {},
+            "valid_fraction_by_metric": {},
+            "intervals": {},
+        }
+    if samples <= 0 or not pairs:
+        return {
+            **base,
+            "status": "disabled" if samples <= 0 else "insufficient_no_rows",
+            "samples_valid": 0,
+            "valid_fraction": 0.0,
+            "observed_benefit_deltas": (
+                _classification_benefit_deltas(candidate, reference, class_ids)
+                if pairs
+                else {}
+            ),
+            "metric_status": {},
+            "valid_fraction_by_metric": {},
+            "intervals": {},
+        }
+    observed = _classification_benefit_deltas(candidate, reference, class_ids)
+    values = {key: [] for key in observed}
+    rng = random.Random(seed)
+    for _ in range(samples):
+        sampled = _hierarchical_sample(pairs, rng)
+        deltas = _classification_benefit_deltas(
+            [pair["candidate"] for pair in sampled],
+            [pair["reference"] for pair in sampled],
+            class_ids,
+        )
+        for key, value in deltas.items():
+            if value is not None:
+                values[key].append(float(value))
+    valid_fractions = {key: len(items) / samples for key, items in values.items()}
+    metric_status = {
+        key: (
+            "available"
+            if observed[key] is not None
+            and valid_fractions[key] >= minimum_valid_fraction
+            else "insufficient_valid_bootstrap_fraction"
+        )
+        for key in values
+    }
+    alpha = (1.0 - confidence_level) / 2.0
+    intervals = {
+        key: (
+            {
+                "lower": percentile(items, alpha),
+                "upper": percentile(items, 1.0 - alpha),
+                "valid_samples": len(items),
+            }
+            if items and metric_status[key] == "available"
+            else None
+        )
+        for key, items in values.items()
+    }
+    return {
+        **base,
+        "status": (
+            "available"
+            if all(status == "available" for status in metric_status.values())
+            else "insufficient_valid_bootstrap_fraction"
+        ),
+        "samples_valid": min((len(items) for items in values.values()), default=0),
+        "valid_fraction": min(valid_fractions.values(), default=0.0),
+        "seed": seed,
+        "confidence_level": confidence_level,
+        "observed_benefit_deltas": observed,
+        "metric_status": metric_status,
+        "valid_fraction_by_metric": valid_fractions,
+        "intervals": intervals,
+    }
+
+
 def _add_bootstrap(
     result: dict[str, Any],
     *,
@@ -2568,9 +2904,33 @@ def _foil_group(foil: Mapping[str, Any]) -> dict[str, Any]:
     return {"id": foil["id"], "tokens": foil["forms"]}
 
 
+def _fixed_hidden_foil(
+    target: Mapping[str, Any],
+    foils: Sequence[Mapping[str, Any]],
+    protocol: Mapping[str, Any],
+) -> Mapping[str, Any]:
+    require(bool(foils), "cannot select a fixed foil from an empty set")
+    selection = mapping(protocol.get("future_target"), "future target selection")
+    require(
+        selection.get("foil_reduction")
+        == "fixed_hidden_foil_by_seeded_sha256_v1",
+        "future foil selection is not score independent",
+    )
+    seed = integer(selection.get("foil_selection_seed"), "future foil seed")
+    target_id = nonempty_string(target.get("id"), "future target ID")
+    return min(
+        foils,
+        key=lambda foil: (
+            sha256_text(f"{seed}\0{target_id}\0{foil['id']}"),
+            str(foil["id"]),
+        ),
+    )
+
+
 def build_future_target_rows(
     prompt_contract: Mapping[str, Any],
     reports: Mapping[str, Mapping[str, Any]],
+    protocol: Mapping[str, Any],
 ) -> tuple[list[dict[str, Any]], dict[str, list[dict[str, Any]]]]:
     detailed: list[dict[str, Any]] = []
     aggregate: dict[str, list[dict[str, Any]]] = {method: [] for method in METHODS}
@@ -2592,23 +2952,21 @@ def build_future_target_rows(
                 and all(foil["task_instance_id"] == prompt["task_id"] for foil in foils),
                 "eligible future target lacks a same-task hidden foil",
             )
+            fixed_foil = _fixed_hidden_foil(target, foils, protocol)
             methods: dict[str, Any] = {}
             if certified:
                 for method in METHODS:
-                    groups = [_target_group(target)] + [_foil_group(foil) for foil in foils]
+                    groups = [_target_group(target), _foil_group(fixed_foil)]
                     band = _group_band_scores(
                         _method_evidence(reports, row_index, method), groups
                     )
                     scores = band["band_mean_class_scores"]
-                    strongest = max(
-                        foils, key=lambda foil: (scores[foil["id"]], foil["id"])
-                    )
-                    margin = float(scores["target"] - scores[strongest["id"]])
+                    margin = float(scores["target"] - scores[fixed_foil["id"]])
                     probability = 1.0 / (1.0 + math.exp(-max(-700.0, min(700.0, margin))))
                     method_record = {
-                        "strongest_hidden_foil_id": strongest["id"],
-                        "strongest_hidden_foil": strongest["target"],
-                        "target_minus_strongest_foil_margin": margin,
+                        "fixed_hidden_foil_id": fixed_foil["id"],
+                        "fixed_hidden_foil": fixed_foil["target"],
+                        "target_minus_fixed_foil_margin": margin,
                         "target_probability": probability,
                         "target_preferred": margin > 0.0,
                         "raw_fixed_band": band,
@@ -2625,7 +2983,7 @@ def build_future_target_rows(
                             "margin": margin,
                             "probability": probability,
                             "correct": margin > 0.0,
-                            "strongest_hidden_foil_id": strongest["id"],
+                            "fixed_hidden_foil_id": fixed_foil["id"],
                         }
                     )
             detailed.append(
@@ -2637,11 +2995,75 @@ def build_future_target_rows(
                     "target_id": target["id"],
                     "target": target["target"],
                     "eligible_hidden_foil_ids": sorted(retained),
+                    "fixed_hidden_foil_id": fixed_foil["id"],
+                    "fixed_hidden_foil_selection": {
+                        "algorithm": "fixed_hidden_foil_by_seeded_sha256_v1",
+                        "seed": protocol["future_target"]["foil_selection_seed"],
+                        "lens_scores_used": False,
+                    },
                     "numerically_certified_across_all_reports": certified,
                     "methods": methods,
                 }
             )
     return detailed, aggregate
+
+
+def _future_task_averages(
+    records: Sequence[Mapping[str, Any]],
+) -> list[dict[str, Any]]:
+    by_task: dict[tuple[str, str], list[Mapping[str, Any]]] = {}
+    for record in records:
+        key = (str(record["repo"]), str(record["task_id"]))
+        by_task.setdefault(key, []).append(record)
+    result: list[dict[str, Any]] = []
+    for (repo, task_id), task_rows in sorted(by_task.items()):
+        cohort_ids = {str(row.get("cohort_id", "unspecified")) for row in task_rows}
+        require(len(cohort_ids) == 1, f"future task {task_id} crosses cohorts")
+        probabilities = [float(row["probability"]) for row in task_rows]
+        result.append(
+            {
+                "row_id": task_id,
+                "task_id": task_id,
+                "repo": repo,
+                "cohort_id": next(iter(cohort_ids)),
+                "target_row_count": len(task_rows),
+                "target_preference_accuracy": math.fsum(
+                    float(bool(row["correct"])) for row in task_rows
+                )
+                / len(task_rows),
+                "negative_log_likelihood": math.fsum(
+                    -math.log(max(probability, 1e-300))
+                    for probability in probabilities
+                )
+                / len(task_rows),
+                "binary_brier": math.fsum(
+                    (1.0 - probability) ** 2 for probability in probabilities
+                )
+                / len(task_rows),
+                "mean_margin": math.fsum(float(row["margin"]) for row in task_rows)
+                / len(task_rows),
+            }
+        )
+    return result
+
+
+def _future_task_metrics(records: Sequence[Mapping[str, Any]]) -> dict[str, float | None]:
+    if not records:
+        return {
+            "target_preference_accuracy": None,
+            "negative_log_likelihood": None,
+            "binary_brier": None,
+            "mean_margin": None,
+        }
+    return {
+        key: math.fsum(float(record[key]) for record in records) / len(records)
+        for key in (
+            "target_preference_accuracy",
+            "negative_log_likelihood",
+            "binary_brier",
+            "mean_margin",
+        )
+    }
 
 
 def _future_metrics(records: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
@@ -2654,24 +3076,16 @@ def _future_metrics(records: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
             "binary_brier": None,
             "mean_margin": None,
         }
+    task_records = _future_task_averages(records)
+    metrics = _future_task_metrics(task_records)
     return {
-        "status": "descriptive_only_dynamic_target_vocabulary",
+        "status": "descriptive_only_dynamic_target_vocabulary_task_averaged",
         "row_count": len(records),
-        "task_count": len({record["task_id"] for record in records}),
-        "repository_count": len({record["repo"] for record in records}),
-        "target_preference_accuracy": sum(record["correct"] for record in records)
-        / len(records),
-        "negative_log_likelihood": math.fsum(
-            -math.log(max(float(record["probability"]), 1e-300)) for record in records
-        )
-        / len(records),
-        "binary_brier": math.fsum(
-            (1.0 - float(record["probability"])) ** 2 for record in records
-        )
-        / len(records),
-        "mean_margin": math.fsum(float(record["margin"]) for record in records)
-        / len(records),
-        "foil_rule": "strongest_hidden_same_task_foil_by_fixed_band_score",
+        "task_count": len(task_records),
+        "repository_count": len({record["repo"] for record in task_records}),
+        **metrics,
+        "task_averaged": True,
+        "foil_rule": "fixed_hidden_foil_by_seeded_sha256_v1",
     }
 
 
@@ -2706,10 +3120,19 @@ def _bootstrap_future(
             "unit": "hierarchical_repository_then_task_never_rows",
             "intervals": {},
         }
+    task_records = _future_task_averages(records)
     rng = random.Random(seed)
-    values = {key: [] for key in ("target_preference_accuracy", "negative_log_likelihood", "binary_brier", "mean_margin")}
+    values = {
+        key: []
+        for key in (
+            "target_preference_accuracy",
+            "negative_log_likelihood",
+            "binary_brier",
+            "mean_margin",
+        )
+    }
     for _ in range(samples):
-        metrics = _future_metrics(_hierarchical_sample(records, rng))
+        metrics = _future_task_metrics(_hierarchical_sample(task_records, rng))
         for key in values:
             values[key].append(float(metrics[key]))
     alpha = (1.0 - confidence_level) / 2.0
@@ -2729,6 +3152,232 @@ def _bootstrap_future(
     }
 
 
+def _future_benefit_deltas(
+    candidate: Sequence[Mapping[str, Any]],
+    reference: Sequence[Mapping[str, Any]],
+) -> dict[str, float | None]:
+    candidate_metrics = _future_task_metrics(candidate)
+    reference_metrics = _future_task_metrics(reference)
+    if not candidate or not reference:
+        return {
+            "target_preference_accuracy_gain": None,
+            "negative_log_likelihood_reduction": None,
+            "binary_brier_reduction": None,
+            "mean_margin_gain": None,
+        }
+    return {
+        "target_preference_accuracy_gain": float(
+            candidate_metrics["target_preference_accuracy"]
+        )
+        - float(reference_metrics["target_preference_accuracy"]),
+        "negative_log_likelihood_reduction": float(
+            reference_metrics["negative_log_likelihood"]
+        )
+        - float(candidate_metrics["negative_log_likelihood"]),
+        "binary_brier_reduction": float(reference_metrics["binary_brier"])
+        - float(candidate_metrics["binary_brier"]),
+        "mean_margin_gain": float(candidate_metrics["mean_margin"])
+        - float(reference_metrics["mean_margin"]),
+    }
+
+
+def bootstrap_paired_future(
+    candidate: Sequence[Mapping[str, Any]],
+    reference: Sequence[Mapping[str, Any]],
+    *,
+    samples: int,
+    seed: int,
+    confidence_level: float,
+    minimum_valid_fraction: float,
+) -> dict[str, Any]:
+    require(
+        0.0 < minimum_valid_fraction <= 1.0,
+        "paired future bootstrap minimum valid fraction must be in (0, 1]",
+    )
+    def raw_index(
+        records: Sequence[Mapping[str, Any]], label: str
+    ) -> dict[str, Mapping[str, Any]]:
+        result: dict[str, Mapping[str, Any]] = {}
+        for record in records:
+            row_id = nonempty_string(record.get("row_id"), f"{label} future row ID")
+            require(row_id not in result, f"duplicate {label} future row ID: {row_id}")
+            result[row_id] = record
+        return result
+
+    candidate_raw = raw_index(candidate, "candidate")
+    reference_raw = raw_index(reference, "reference")
+    candidate_raw_ids = set(candidate_raw)
+    reference_raw_ids = set(reference_raw)
+    raw_coverage_equal = candidate_raw_ids == reference_raw_ids
+    if raw_coverage_equal:
+        for row_id in sorted(candidate_raw_ids):
+            left = candidate_raw[row_id]
+            right = reference_raw[row_id]
+            require(
+                left.get("task_id") == right.get("task_id")
+                and left.get("repo") == right.get("repo")
+                and str(left.get("cohort_id", "unspecified"))
+                == str(right.get("cohort_id", "unspecified")),
+                f"paired future row {row_id} differs in identity",
+            )
+            for field in ("prompt_id", "target_id"):
+                require(
+                    nonempty_string(
+                        left.get(field), f"candidate future row {row_id} {field}"
+                    )
+                    == nonempty_string(
+                        right.get(field), f"reference future row {row_id} {field}"
+                    ),
+                    f"paired future row {row_id} differs in {field}",
+                )
+            require(
+                nonempty_string(
+                    left.get("fixed_hidden_foil_id"),
+                    f"candidate future row {row_id} fixed foil",
+                )
+                == nonempty_string(
+                    right.get("fixed_hidden_foil_id"),
+                    f"reference future row {row_id} fixed foil",
+                ),
+                f"paired future row {row_id} uses different fixed foils",
+            )
+    candidate_tasks = _future_task_averages(candidate)
+    reference_tasks = _future_task_averages(reference)
+    candidate_by_id = {str(row["row_id"]): row for row in candidate_tasks}
+    reference_by_id = {str(row["row_id"]): row for row in reference_tasks}
+    require(
+        len(candidate_by_id) == len(candidate_tasks)
+        and len(reference_by_id) == len(reference_tasks),
+        "future task IDs are not unique",
+    )
+    candidate_ids = set(candidate_by_id)
+    reference_ids = set(reference_by_id)
+    pairing = {
+        "candidate_task_count": len(candidate_by_id),
+        "reference_task_count": len(reference_by_id),
+        "paired_task_count": len(candidate_ids & reference_ids),
+        "candidate_only_task_ids": sorted(candidate_ids - reference_ids),
+        "reference_only_task_ids": sorted(reference_ids - candidate_ids),
+        "exact_task_coverage": candidate_ids == reference_ids,
+        "candidate_target_row_count": len(candidate_raw),
+        "reference_target_row_count": len(reference_raw),
+        "paired_target_row_count": len(candidate_raw_ids & reference_raw_ids),
+        "candidate_only_target_row_ids": sorted(candidate_raw_ids - reference_raw_ids),
+        "reference_only_target_row_ids": sorted(reference_raw_ids - candidate_raw_ids),
+        "exact_target_row_coverage": raw_coverage_equal,
+        "exact_fixed_foil_contrast_across_methods": raw_coverage_equal,
+    }
+    base = {
+        "algorithm": "paired_hierarchical_repository_then_task_percentile_v1",
+        "unit": "paired_hierarchical_repository_then_task_averaged_never_target_rows",
+        "same_draw_for_candidate_and_reference": True,
+        "task_averaged": True,
+        "pairing": pairing,
+        "samples_requested": samples,
+        "minimum_valid_fraction": minimum_valid_fraction,
+    }
+    if not raw_coverage_equal:
+        return {
+            **base,
+            "status": "insufficient_unpaired_target_row_coverage",
+            "samples_valid": 0,
+            "valid_fraction": 0.0,
+            "observed_benefit_deltas": {},
+            "metric_status": {},
+            "intervals": {},
+        }
+    if candidate_ids != reference_ids:
+        return {
+            **base,
+            "status": "insufficient_unpaired_task_coverage",
+            "samples_valid": 0,
+            "valid_fraction": 0.0,
+            "observed_benefit_deltas": {},
+            "metric_status": {},
+            "intervals": {},
+        }
+    pairs: list[dict[str, Any]] = []
+    for task_id in sorted(candidate_ids):
+        left = candidate_by_id[task_id]
+        right = reference_by_id[task_id]
+        require(
+            left["repo"] == right["repo"]
+            and left["cohort_id"] == right["cohort_id"]
+            and left["target_row_count"] == right["target_row_count"],
+            f"paired future task {task_id} differs in identity or target coverage",
+        )
+        pairs.append(
+            {
+                "row_id": task_id,
+                "task_id": task_id,
+                "repo": left["repo"],
+                "candidate": left,
+                "reference": right,
+            }
+        )
+    observed = _future_benefit_deltas(candidate_tasks, reference_tasks)
+    if samples <= 0 or not pairs:
+        return {
+            **base,
+            "status": "disabled" if samples <= 0 else "insufficient_no_rows",
+            "samples_valid": 0,
+            "valid_fraction": 0.0,
+            "observed_benefit_deltas": observed,
+            "metric_status": {},
+            "intervals": {},
+        }
+    values = {key: [] for key in observed}
+    rng = random.Random(seed)
+    for _ in range(samples):
+        sampled = _hierarchical_sample(pairs, rng)
+        deltas = _future_benefit_deltas(
+            [pair["candidate"] for pair in sampled],
+            [pair["reference"] for pair in sampled],
+        )
+        for key, value in deltas.items():
+            if value is not None:
+                values[key].append(float(value))
+    valid_fractions = {key: len(items) / samples for key, items in values.items()}
+    metric_status = {
+        key: (
+            "available"
+            if observed[key] is not None
+            and valid_fractions[key] >= minimum_valid_fraction
+            else "insufficient_valid_bootstrap_fraction"
+        )
+        for key in values
+    }
+    alpha = (1.0 - confidence_level) / 2.0
+    intervals = {
+        key: (
+            {
+                "lower": percentile(items, alpha),
+                "upper": percentile(items, 1.0 - alpha),
+                "valid_samples": len(items),
+            }
+            if items and metric_status[key] == "available"
+            else None
+        )
+        for key, items in values.items()
+    }
+    return {
+        **base,
+        "status": (
+            "available"
+            if all(status == "available" for status in metric_status.values())
+            else "insufficient_valid_bootstrap_fraction"
+        ),
+        "samples_valid": min((len(items) for items in values.values()), default=0),
+        "valid_fraction": min(valid_fractions.values(), default=0.0),
+        "seed": seed,
+        "confidence_level": confidence_level,
+        "observed_benefit_deltas": observed,
+        "metric_status": metric_status,
+        "valid_fraction_by_metric": valid_fractions,
+        "intervals": intervals,
+    }
+
+
 def _track_analysis(
     features: Mapping[str, Sequence[Mapping[str, Any]]],
     *,
@@ -2737,6 +3386,7 @@ def _track_analysis(
     protocol: Mapping[str, Any],
     bootstrap_samples: int,
     seed_base: int,
+    decision_track: str,
 ) -> dict[str, Any]:
     raw = {
         method: {
@@ -2780,6 +3430,73 @@ def _track_analysis(
                 seed_offset=seed_base + 100,
             )
         crossfit[method] = result
+    paired_contract = mapping(
+        protocol["probe_vs_refit"].get("paired_bootstrap"),
+        "paired bootstrap decision",
+    )
+    seed_offsets = mapping(paired_contract.get("seed_offsets"), "paired seed offsets")
+    comparison_specs: list[
+        tuple[str, str, Sequence[Mapping[str, Any]], Sequence[Mapping[str, Any]]]
+    ] = []
+    majority_predictions = crossfit["ordinary_logit"]["majority_baseline"][
+        "predictions"
+    ]
+    for method in JACOBIAN_METHODS:
+        comparison_specs.extend(
+            [
+                (
+                    f"{method}_vs_ordinary_logit",
+                    "ordinary_logit",
+                    crossfit[method]["predictions"],
+                    crossfit["ordinary_logit"]["predictions"],
+                ),
+                (
+                    f"{method}_vs_majority_baseline",
+                    "majority_baseline",
+                    crossfit[method]["predictions"],
+                    majority_predictions,
+                ),
+            ]
+        )
+    comparison_specs.extend(
+        [
+            (
+                "public_jacobian_vs_nf4_jacobian",
+                "nf4_jacobian",
+                crossfit["public_jacobian"]["predictions"],
+                crossfit["nf4_jacobian"]["predictions"],
+            ),
+            (
+                "public_jacobian_vs_native_jacobian",
+                "native_jacobian",
+                crossfit["public_jacobian"]["predictions"],
+                crossfit["native_jacobian"]["predictions"],
+            ),
+        ]
+    )
+    paired_comparisons: dict[str, Any] = {}
+    for comparison_index, (name, reference_name, candidate, reference) in enumerate(
+        comparison_specs
+    ):
+        paired_comparisons[name] = {
+            "candidate": name.split("_vs_", 1)[0],
+            "reference": reference_name,
+            **bootstrap_paired_classification(
+                candidate,
+                reference,
+                class_ids,
+                samples=bootstrap_samples,
+                seed=(
+                    int(protocol["bootstrap"]["seed"])
+                    + int(seed_offsets[decision_track])
+                    + comparison_index
+                ),
+                confidence_level=float(paired_contract["confidence_level"]),
+                minimum_valid_fraction=float(
+                    paired_contract["minimum_valid_fraction"]
+                ),
+            ),
+        }
     split_support_pass = all(
         result["all_split_and_support_rules_pass"] for result in crossfit.values()
     )
@@ -2791,11 +3508,445 @@ def _track_analysis(
         "task_held_out_crossfit": crossfit,
         "majority_baseline": crossfit["ordinary_logit"]["majority_baseline"],
         "ordinary_logit_baseline": crossfit["ordinary_logit"],
+        "paired_method_comparisons": paired_comparisons,
+        "point_estimate_estimand": (
+            protocol["probe_vs_refit"]["next_action_estimand"]
+            if decision_track == "next_action"
+            else {
+                "observation_unit": (
+                    "one_latest_uniform_probeable_checkpoint_per_task"
+                ),
+                "point_estimate_weighting": "one_equal_weight_per_observed_task",
+            }
+        ),
         "all_method_split_support_rules_pass": split_support_pass,
         "all_method_bootstrap_valid_fraction_rules_pass": bootstrap_support_pass,
         "all_method_inference_support_rules_pass": (
             split_support_pass and bootstrap_support_pass
         ),
+    }
+
+
+def _class_group_support(
+    records: Sequence[Mapping[str, Any]], class_ids: Sequence[str]
+) -> dict[str, dict[str, int]]:
+    return {
+        class_id: {
+            "row_count": sum(str(record["label"]) == class_id for record in records),
+            "task_count": len(
+                {
+                    str(record["task_id"])
+                    for record in records
+                    if str(record["label"]) == class_id
+                }
+            ),
+            "repository_count": len(
+                {
+                    str(record["repo"])
+                    for record in records
+                    if str(record["label"]) == class_id
+                }
+            ),
+        }
+        for class_id in class_ids
+    }
+
+
+def build_joint_decision_coverage(
+    *,
+    prompt_contract: Mapping[str, Any],
+    action_records: Sequence[Mapping[str, Any]],
+    outcome_records: Sequence[Mapping[str, Any]],
+    future_records: Sequence[Mapping[str, Any]],
+    protocol: Mapping[str, Any],
+) -> dict[str, Any]:
+    contract = mapping(
+        protocol["probe_vs_refit"].get("joint_coverage"), "joint coverage"
+    )
+    action_rule = mapping(contract.get("next_action"), "next-action coverage")
+    selected_rows = int(prompt_contract["primary_prompt_count"])
+    action_fraction = len(action_records) / selected_rows if selected_rows else 0.0
+    action_support = _class_group_support(action_records, protocol["action_ids"])
+    action_gates = {
+        "minimum_jointly_certified_selected_row_fraction": action_fraction
+        >= float(action_rule["minimum_jointly_certified_selected_row_fraction"]),
+        "every_selected_task_represented": (
+            len({str(record["task_id"]) for record in action_records})
+            == int(prompt_contract["task_count"])
+            and not prompt_contract["unprobed_task_ids"]
+        ),
+        "every_selected_repository_represented": len(
+            {str(record["repo"]) for record in action_records}
+        )
+        == int(prompt_contract["repository_count"]),
+        "minimum_tasks_per_class": all(
+            values["task_count"] >= int(action_rule["minimum_tasks_per_class"])
+            for values in action_support.values()
+        ),
+        "minimum_repositories_per_class": all(
+            values["repository_count"]
+            >= int(action_rule["minimum_repositories_per_class"])
+            for values in action_support.values()
+        ),
+    }
+    outcome_rule = mapping(
+        contract.get("official_outcome"), "official-outcome coverage"
+    )
+    outcome_support = _class_group_support(outcome_records, protocol["outcome_ids"])
+    outcome_gates = {
+        "minimum_jointly_certified_tasks": len(outcome_records)
+        >= int(outcome_rule["minimum_jointly_certified_tasks"]),
+        "minimum_tasks_per_class": all(
+            values["task_count"] >= int(outcome_rule["minimum_tasks_per_class"])
+            for values in outcome_support.values()
+        ),
+        "minimum_repositories_per_class": all(
+            values["repository_count"]
+            >= int(outcome_rule["minimum_repositories_per_class"])
+            for values in outcome_support.values()
+        ),
+    }
+    future_rule = mapping(
+        contract.get("future_identifier"), "future-identifier coverage"
+    )
+    future_tasks = _future_task_averages(future_records)
+    future_gates = {
+        "minimum_tasks": len(future_tasks) >= int(future_rule["minimum_tasks"]),
+        "minimum_repositories": len({row["repo"] for row in future_tasks})
+        >= int(future_rule["minimum_repositories"]),
+        "task_averaged": future_rule.get("task_averaged") is True,
+    }
+    return {
+        "next_action": {
+            "status": "pass" if all(action_gates.values()) else "insufficient_support",
+            "selected_row_count": selected_rows,
+            "jointly_certified_labeled_row_count": len(action_records),
+            "jointly_certified_selected_row_fraction": action_fraction,
+            "represented_task_count": len(
+                {str(record["task_id"]) for record in action_records}
+            ),
+            "represented_repository_count": len(
+                {str(record["repo"]) for record in action_records}
+            ),
+            "class_support": action_support,
+            "thresholds": dict(action_rule),
+            "gates": action_gates,
+        },
+        "official_outcome": {
+            "status": "pass" if all(outcome_gates.values()) else "insufficient_support",
+            "selected_task_count": int(prompt_contract["selected_task_count"]),
+            "jointly_certified_binary_outcome_task_count": len(outcome_records),
+            "class_support": outcome_support,
+            "nonbinary_error_empty_or_missing_imputed_as_failure": False,
+            "thresholds": dict(outcome_rule),
+            "gates": outcome_gates,
+        },
+        "future_identifier": {
+            "status": "pass" if all(future_gates.values()) else "insufficient_support",
+            "eligible_target_row_count": len(future_records),
+            "task_averaged_observation_count": len(future_tasks),
+            "repository_count": len({row["repo"] for row in future_tasks}),
+            "thresholds": dict(future_rule),
+            "gates": future_gates,
+        },
+        "all_predeclared_joint_coverage_gates_pass": bool(
+            all(action_gates.values())
+            and all(outcome_gates.values())
+            and all(future_gates.values())
+        ),
+    }
+
+
+def _paired_metric_evidence(
+    comparisons: Mapping[str, Any], comparison_name: str, metric: str
+) -> dict[str, Any]:
+    comparison = mapping(comparisons.get(comparison_name), comparison_name)
+    observed = mapping(
+        comparison.get("observed_benefit_deltas"),
+        f"{comparison_name} observed deltas",
+    ).get(metric)
+    interval = mapping(comparison.get("intervals"), f"{comparison_name} intervals").get(
+        metric
+    )
+    metric_status = mapping(
+        comparison.get("metric_status"), f"{comparison_name} metric status"
+    ).get(metric)
+    supported = bool(
+        metric_status == "available"
+        and isinstance(observed, (int, float))
+        and not isinstance(observed, bool)
+        and math.isfinite(float(observed))
+        and isinstance(interval, dict)
+        and math.isfinite(float(interval.get("lower")))
+        and math.isfinite(float(interval.get("upper")))
+    )
+    return {
+        "comparison": comparison_name,
+        "metric": metric,
+        "supported": supported,
+        "observed_benefit_delta": float(observed) if supported else None,
+        "confidence_interval": dict(interval) if supported else None,
+    }
+
+
+def build_probe_vs_refit_decision(
+    *,
+    operational_status: str,
+    joint_coverage: Mapping[str, Any],
+    action_comparisons: Mapping[str, Any],
+    outcome_comparisons: Mapping[str, Any],
+    future_comparisons: Mapping[str, Any],
+    protocol: Mapping[str, Any],
+    bootstrap_samples: int,
+) -> dict[str, Any]:
+    rule = mapping(protocol.get("probe_vs_refit"), "probe-versus-refit rule")
+    paired_rule = mapping(rule.get("paired_bootstrap"), "paired-bootstrap rule")
+    action_public_logit = _paired_metric_evidence(
+        action_comparisons,
+        "public_jacobian_vs_ordinary_logit",
+        "balanced_accuracy_gain",
+    )
+    action_public_majority = _paired_metric_evidence(
+        action_comparisons,
+        "public_jacobian_vs_majority_baseline",
+        "balanced_accuracy_gain",
+    )
+    action_public_native = _paired_metric_evidence(
+        action_comparisons,
+        "public_jacobian_vs_native_jacobian",
+        "balanced_accuracy_gain",
+    )
+    action_public_nf4 = _paired_metric_evidence(
+        action_comparisons,
+        "public_jacobian_vs_nf4_jacobian",
+        "balanced_accuracy_gain",
+    )
+    outcome_public_logit = _paired_metric_evidence(
+        outcome_comparisons,
+        "public_jacobian_vs_ordinary_logit",
+        "balanced_accuracy_gain",
+    )
+    outcome_public_majority = _paired_metric_evidence(
+        outcome_comparisons,
+        "public_jacobian_vs_majority_baseline",
+        "balanced_accuracy_gain",
+    )
+    outcome_public_native = _paired_metric_evidence(
+        outcome_comparisons,
+        "public_jacobian_vs_native_jacobian",
+        "balanced_accuracy_gain",
+    )
+    future_public_logit = _paired_metric_evidence(
+        future_comparisons,
+        "public_jacobian_vs_ordinary_logit",
+        "target_preference_accuracy_gain",
+    )
+    future_public_native = _paired_metric_evidence(
+        future_comparisons,
+        "public_jacobian_vs_native_jacobian",
+        "target_preference_accuracy_gain",
+    )
+    future_public_nf4 = _paired_metric_evidence(
+        future_comparisons,
+        "public_jacobian_vs_nf4_jacobian",
+        "target_preference_accuracy_gain",
+    )
+    required_evidence = [
+        action_public_logit,
+        action_public_majority,
+        action_public_native,
+        outcome_public_logit,
+        outcome_public_majority,
+        outcome_public_native,
+        future_public_logit,
+        future_public_native,
+    ]
+    sample_gate = bootstrap_samples >= int(paired_rule["minimum_samples"])
+    operational_inference_gate = (
+        operational_status
+        == rule["required_operational_status_for_actionable_decision"]
+    )
+    support_complete = bool(
+        joint_coverage["all_predeclared_joint_coverage_gates_pass"]
+        and sample_gate
+        and operational_inference_gate
+        and all(item["supported"] for item in required_evidence)
+    )
+
+    future_probe_rule = rule["probe_validity"][
+        "future_public_minus_ordinary_logit_target_preference_accuracy"
+    ]
+    direction_threshold = float(
+        rule["probe_validity"]["minimum_directional_point_delta_exclusive"]
+    )
+
+    def point_above(evidence: Mapping[str, Any], threshold: float) -> bool:
+        return bool(
+            evidence["supported"]
+            and float(evidence["observed_benefit_delta"]) > threshold
+        )
+
+    def lower_above(evidence: Mapping[str, Any], threshold: float) -> bool:
+        return bool(
+            evidence["supported"]
+            and float(evidence["confidence_interval"]["lower"]) > threshold
+        )
+
+    future_public_control_pass = bool(
+        point_above(
+            future_public_logit,
+            float(future_probe_rule["minimum_point_delta_exclusive"]),
+        )
+        and lower_above(
+            future_public_logit,
+            float(future_probe_rule["minimum_confidence_interval_lower_exclusive"]),
+        )
+    )
+    action_directional_pass = bool(
+        point_above(action_public_logit, direction_threshold)
+        and point_above(action_public_majority, direction_threshold)
+    )
+    probe_valid = bool(
+        support_complete and future_public_control_pass and action_directional_pass
+    )
+
+    native_future_rule = rule["native_refit_candidate"][
+        "future_public_minus_native_target_preference_accuracy"
+    ]
+    native_action_rule = rule["native_refit_candidate"][
+        "next_action_public_minus_native_balanced_accuracy"
+    ]
+    native_future_deficit = bool(
+        point_above(
+            future_public_native,
+            float(native_future_rule["minimum_point_delta_exclusive"]),
+        )
+        and lower_above(
+            future_public_native,
+            float(native_future_rule["minimum_confidence_interval_lower_exclusive"]),
+        )
+    )
+    native_action_deficit = bool(
+        action_public_native["supported"]
+        and float(action_public_native["observed_benefit_delta"])
+        >= float(native_action_rule["minimum_point_delta_inclusive"])
+        and lower_above(
+            action_public_native,
+            float(native_action_rule["minimum_confidence_interval_lower_exclusive"]),
+        )
+    )
+    native_refit_supported = bool(
+        probe_valid and native_future_deficit and native_action_deficit
+    )
+    nf4_matches_native_pattern = bool(
+        action_public_nf4["supported"]
+        and future_public_nf4["supported"]
+        and float(action_public_nf4["observed_benefit_delta"])
+        >= float(native_action_rule["minimum_point_delta_inclusive"])
+        and lower_above(
+            action_public_nf4,
+            float(native_action_rule["minimum_confidence_interval_lower_exclusive"]),
+        )
+        and point_above(
+            future_public_nf4,
+            float(native_future_rule["minimum_point_delta_exclusive"]),
+        )
+        and lower_above(
+            future_public_nf4,
+            float(native_future_rule["minimum_confidence_interval_lower_exclusive"]),
+        )
+    )
+    definitive_readout_failure = bool(
+        support_complete
+        and (
+            float(future_public_logit["confidence_interval"]["upper"]) <= 0.0
+            or float(action_public_logit["confidence_interval"]["upper"]) <= 0.0
+            or float(action_public_majority["confidence_interval"]["upper"]) <= 0.0
+        )
+    )
+    if not support_complete:
+        classification = "insufficient_support"
+        reason_codes = ["predeclared_coverage_or_paired_inference_gate_failed"]
+        next_step = "collect the missing jointly certified task-level controls; do not refit"
+    elif native_refit_supported:
+        classification = "refit_native_candidate"
+        reason_codes = [
+            "public_probe_valid",
+            "native_future_identifier_deficit",
+            "native_next_action_balanced_accuracy_deficit_at_least_0_10",
+        ]
+        next_step = "fit a larger predeclared native NVFP4 lens cohort and rerun unchanged probes"
+    elif probe_valid:
+        classification = "no_refit_evidence"
+        reason_codes = ["public_probe_valid", "native_specific_refit_threshold_not_met"]
+        next_step = "retain the frozen lenses and expand task-stage probes without refitting"
+    elif definitive_readout_failure:
+        classification = "readout_or_task_problem"
+        reason_codes = ["public_n1000_lens_failed_a_predeclared_control_comparison"]
+        next_step = "refine the fixed readout or task labels before fitting another native lens"
+    else:
+        classification = "insufficient_support"
+        reason_codes = ["paired_effects_are_inconclusive_under_predeclared_thresholds"]
+        next_step = "collect more fixed-foil task-level controls; do not refit"
+    require(classification in rule["classifications"], "undeclared scientific decision")
+    return {
+        "classification": classification,
+        "operational_status": operational_status,
+        "operational_status_is_not_scientific_decision": True,
+        "claim_scope": rule["claim_scope"],
+        "replication_interpretation": rule["replication_interpretation"],
+        "thresholds_source": rule["thresholds_source"],
+        "reason_codes": reason_codes,
+        "next_step": next_step,
+        "support": {
+            "complete": support_complete,
+            "bootstrap_samples_requested": bootstrap_samples,
+            "minimum_paired_bootstrap_samples": int(paired_rule["minimum_samples"]),
+            "paired_bootstrap_sample_gate_pass": sample_gate,
+            "operational_inference_gate_pass": operational_inference_gate,
+            "required_operational_status": rule[
+                "required_operational_status_for_actionable_decision"
+            ],
+            "required_metric_evidence_available": all(
+                item["supported"] for item in required_evidence
+            ),
+            "joint_coverage": dict(joint_coverage),
+        },
+        "probe_valid": probe_valid,
+        "probe_validity_evidence": {
+            "future_public_minus_ordinary_logit": future_public_logit,
+            "future_positive_control_pass": future_public_control_pass,
+            "next_action_public_minus_ordinary_logit": action_public_logit,
+            "next_action_public_minus_majority": action_public_majority,
+            "next_action_directional_controls_pass": action_directional_pass,
+        },
+        "native_refit_evidence": {
+            "public_minus_native_future_identifier": future_public_native,
+            "future_identifier_deficit_pass": native_future_deficit,
+            "public_minus_native_next_action": action_public_native,
+            "next_action_deficit_pass": native_action_deficit,
+            "refit_threshold_pass": native_refit_supported,
+        },
+        "nf4_diagnostic": {
+            "public_minus_nf4_future_identifier": future_public_nf4,
+            "public_minus_nf4_next_action": action_public_nf4,
+            "matches_native_refit_pattern": nf4_matches_native_pattern,
+            "interpretation_if_native_refit_candidate": (
+                "both_n10_local_lenses_lag_public_fit_capacity_or_shared_local_path"
+                if nf4_matches_native_pattern
+                else "native_nvfp4_specific_lag"
+            ),
+        },
+        "official_outcome_role": {
+            "used_as_mandatory_joint_coverage_and_paired_support_track": True,
+            "used_to_tune_thresholds": False,
+            "nonbinary_error_empty_or_missing_treated_as_failure": False,
+            "paired_comparison_count": len(outcome_comparisons),
+            "public_minus_ordinary_logit": outcome_public_logit,
+            "public_minus_majority": outcome_public_majority,
+            "public_minus_native": outcome_public_native,
+        },
+        "decision_rule": dict(rule),
     }
 
 
@@ -2831,7 +3982,9 @@ def build_analysis(
     detailed_outcome, outcome_features = build_official_outcome_rows(
         prompt_contract, reports, protocol
     )
-    detailed_future, future_features = build_future_target_rows(prompt_contract, reports)
+    detailed_future, future_features = build_future_target_rows(
+        prompt_contract, reports, protocol
+    )
     all_repositories = sorted(
         {prompt["repo"] for prompt in prompt_contract["prompts"] if prompt["primary"]}
     )
@@ -2842,6 +3995,7 @@ def build_analysis(
         protocol=protocol,
         bootstrap_samples=bootstrap_samples,
         seed_base=0,
+        decision_track="next_action",
     )
     outcome_analysis = _track_analysis(
         outcome_features,
@@ -2850,6 +4004,7 @@ def build_analysis(
         protocol=protocol,
         bootstrap_samples=bootstrap_samples,
         seed_base=1000,
+        decision_track="official_outcome",
     )
     future_summary: dict[str, Any] = {}
     for method_index, method in enumerate(METHODS):
@@ -2865,30 +4020,103 @@ def build_analysis(
                 confidence_level=float(protocol["bootstrap"]["confidence_level"]),
             ),
         }
+    paired_rule = protocol["probe_vs_refit"]["paired_bootstrap"]
+    future_comparison_specs = [
+        (
+            f"{method}_vs_ordinary_logit",
+            method,
+            "ordinary_logit",
+            future_features[method],
+            future_features["ordinary_logit"],
+        )
+        for method in JACOBIAN_METHODS
+    ] + [
+        (
+            "public_jacobian_vs_nf4_jacobian",
+            "public_jacobian",
+            "nf4_jacobian",
+            future_features["public_jacobian"],
+            future_features["nf4_jacobian"],
+        ),
+        (
+            "public_jacobian_vs_native_jacobian",
+            "public_jacobian",
+            "native_jacobian",
+            future_features["public_jacobian"],
+            future_features["native_jacobian"],
+        ),
+    ]
+    future_comparisons: dict[str, Any] = {}
+    for comparison_index, (
+        name,
+        candidate_name,
+        reference_name,
+        candidate,
+        reference,
+    ) in enumerate(future_comparison_specs):
+        future_comparisons[name] = {
+            "candidate": candidate_name,
+            "reference": reference_name,
+            **bootstrap_paired_future(
+                candidate,
+                reference,
+                samples=bootstrap_samples,
+                seed=(
+                    int(protocol["bootstrap"]["seed"])
+                    + int(
+                        paired_rule["seed_offsets"]["future_identifier"]
+                    )
+                    + comparison_index
+                ),
+                confidence_level=float(paired_rule["confidence_level"]),
+                minimum_valid_fraction=float(paired_rule["minimum_valid_fraction"]),
+            ),
+        }
+    joint_coverage = build_joint_decision_coverage(
+        prompt_contract=prompt_contract,
+        action_records=action_features["public_jacobian"],
+        outcome_records=outcome_features["public_jacobian"],
+        future_records=future_features["public_jacobian"],
+        protocol=protocol,
+    )
     all_support = bool(
         action_analysis["all_method_inference_support_rules_pass"]
         and outcome_analysis["all_method_inference_support_rules_pass"]
         and not prompt_contract["unprobed_task_ids"]
     )
     task_count = prompt_contract["task_count"]
-    minimum_nondevelopment = int(protocol["development"]["minimum_tasks_for_non_development_claim"])
+    minimum_nondevelopment = int(
+        protocol["development"]["minimum_tasks_for_non_development_claim"]
+    )
     if task_count < minimum_nondevelopment:
-        decision_status = (
+        operational_status = (
             "development_support_complete"
             if all_support
             else "development_insufficient_split_or_class_support"
         )
     else:
-        decision_status = (
+        operational_status = (
             "held_out_evaluation_complete"
             if all_support
             else "insufficient_split_or_class_support"
         )
+    scientific_decision = build_probe_vs_refit_decision(
+        operational_status=operational_status,
+        joint_coverage=joint_coverage,
+        action_comparisons=action_analysis["paired_method_comparisons"],
+        outcome_comparisons=outcome_analysis["paired_method_comparisons"],
+        future_comparisons=future_comparisons,
+        protocol=protocol,
+        bootstrap_samples=bootstrap_samples,
+    )
     return {
         "schema_version": 1,
         "kind": "swe_verified_behavioral_task_held_out_analysis",
-        "analysis_version": "task-held-out-v1",
-        "status": decision_status,
+        "analysis_version": "task-held-out-paired-decision-v2",
+        "status": operational_status,
+        "operational_status": operational_status,
+        "evaluation_scope": protocol["probe_vs_refit"]["claim_scope"],
+        "scientific_decision": scientific_decision,
         "inputs": dict(input_hashes),
         "protocol": {
             "path": str(DEFAULT_PROTOCOL.relative_to(ROOT)),
@@ -2898,6 +4126,11 @@ def build_analysis(
             "cross_fitting": protocol_value["cross_fitting"],
             "prompt_context": protocol_value["prompt_context"],
             "numerical_certification": protocol_value["numerical_certification"],
+            "future_target": protocol_value["future_target"],
+            "official_outcome": protocol_value["official_outcome"],
+            "probe_vs_refit_decision": protocol_value[
+                "probe_vs_refit_decision"
+            ],
             "bootstrap": {
                 **dict(protocol_value["bootstrap"]),
                 "samples": bootstrap_samples,
@@ -2936,6 +4169,10 @@ def build_analysis(
             ),
             "flags": prompt_contract["lifecycle_checkpoint_flags"],
             "primary_decision_cohort": "uniform_probeable_request_index_only",
+            "pooled_claim_scope": protocol["probe_vs_refit"]["claim_scope"],
+            "replication_interpretation": protocol["probe_vs_refit"][
+                "replication_interpretation"
+            ],
         },
         "pairing": pairing,
         "numerical_eligibility": {
@@ -2950,14 +4187,19 @@ def build_analysis(
             "official_outcome": {
                 "observation_unit": "one_latest_uniform_probeable_checkpoint_per_task",
                 "stage_repetition_forbidden": True,
+                "binary_available_verdicts": ["resolved", "unresolved"],
+                "error_empty_or_missing_policy": "missing_not_imputed",
                 "rows": detailed_outcome,
                 **outcome_analysis,
             },
-            "future_target_vs_strongest_hidden_same_task_foil": {
-                "observation_unit": "eligible_target_at_uniform_probeable_checkpoint",
+            "future_target_vs_fixed_hidden_same_task_foil": {
+                "observation_unit": (
+                    "task_averaged_eligible_targets_at_uniform_probeable_checkpoints"
+                ),
                 "selection": protocol["future_target"],
                 "rows": detailed_future,
                 "methods": future_summary,
+                "paired_method_comparisons": future_comparisons,
             },
         },
         "decision_audit": {
@@ -2970,13 +4212,20 @@ def build_analysis(
             "selected_task_count": prompt_contract["selected_task_count"],
             "unprobed_task_count": len(prompt_contract["unprobed_task_ids"]),
             "minimum_tasks_for_non_development_claim": minimum_nondevelopment,
-            "status": decision_status,
+            "status": operational_status,
+            "status_is_operational_not_probe_vs_refit_decision": True,
+            "scientific_decision_classification": scientific_decision[
+                "classification"
+            ],
+            "evaluation_scope": protocol["probe_vs_refit"]["claim_scope"],
+            "replication_is_independent_confirmatory_test": False,
             "no_missing_fold_or_label_was_imputed": True,
             "evaluation_repositories_never_enter_fit_or_calibration": True,
             "fit_and_calibration_repositories_are_disjoint": True,
             "bootstrap_resamples_repositories_then_tasks_never_rows": True,
             "ordinary_logit_is_verified_identical_across_all_three_reports": True,
             "official_outcome_is_observed_once_per_task": True,
+            "official_error_empty_and_missing_are_never_imputed_as_failure": True,
         },
     }
 

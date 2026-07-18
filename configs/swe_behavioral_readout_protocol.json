@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "kind": "swe_verified_behavioral_readout_protocol",
-  "analysis_version": "task-held-out-v1",
+  "analysis_version": "task-held-out-paired-decision-v2",
   "lens_outputs_used_for_selection_or_labels": false,
   "pins": {
     "model": {
@@ -157,7 +157,7 @@
       "layer_selection": "none"
     },
     "majority_baseline": {
-      "kind": "fit_task_class_prior",
+      "kind": "fit_checkpoint_class_prior",
       "laplace_alpha": 1.0,
       "ties": "declared_class_order"
     }
@@ -195,17 +195,102 @@
   "future_target": {
     "eligibility_status": "eligible",
     "foil_scope": "same_task_only",
-    "foil_reduction": "strongest_hidden_foil_by_fixed_band_score",
+    "foil_reduction": "fixed_hidden_foil_by_seeded_sha256_v1",
+    "foil_selection_seed": 36029,
     "lens_outputs_used_to_choose_candidate_set": false
   },
   "official_outcome": {
     "observation_unit": "one_latest_uniform_probeable_checkpoint_per_task",
     "repeat_stage_observations": false,
-    "missing_is_not_imputed": true
+    "missing_is_not_imputed": true,
+    "available_verdict_mapping": {
+      "resolved": "success",
+      "unresolved": "failure"
+    },
+    "nonbinary_scorer_states": [
+      "error",
+      "empty",
+      "missing"
+    ],
+    "nonbinary_scorer_state_policy": "missing_for_inference_never_failure",
+    "action_protocol_or_generation_status_used_as_official_outcome": false
   },
   "development_contract": {
     "n10_policy": "development_unless_every_repository_fold_and_class_support_rule_passes",
     "minimum_tasks_for_non_development_claim": 20,
     "incomplete_crossfit_policy": "report_insufficient_without_imputation"
+  },
+  "probe_vs_refit_decision": {
+    "schema_version": 1,
+    "claim_scope": "pooled_predeclared_development_plus_replication_repository_crossfit",
+    "replication_interpretation": "cohort_subgroups_descriptive_only_not_an_independent_replication_test",
+    "thresholds_source": "predeclared_before_official_outcome_scoring",
+    "required_operational_status_for_actionable_decision": "held_out_evaluation_complete",
+    "next_action_estimand": {
+      "observation_unit": "jointly_certified_uniform_probeable_checkpoint_row",
+      "point_estimate_weighting": "one_equal_weight_per_checkpoint_row",
+      "hierarchical_bootstrap_effect": "cluster_resampling_does_not_task_equalize_checkpoint_rows"
+    },
+    "paired_bootstrap": {
+      "algorithm": "paired_hierarchical_repository_then_task_percentile_v1",
+      "minimum_samples": 5000,
+      "minimum_valid_fraction": 0.8,
+      "confidence_level": 0.95,
+      "row_resampling_forbidden": true,
+      "same_draw_for_both_methods": true,
+      "seed_offsets": {
+        "next_action": 3000,
+        "official_outcome": 4000,
+        "future_identifier": 5000
+      }
+    },
+    "joint_coverage": {
+      "next_action": {
+        "minimum_jointly_certified_selected_row_fraction": 0.8,
+        "require_every_selected_task": true,
+        "require_every_selected_repository": true,
+        "minimum_tasks_per_class": 5,
+        "minimum_repositories_per_class": 3
+      },
+      "official_outcome": {
+        "minimum_jointly_certified_tasks": 16,
+        "minimum_tasks_per_class": 8,
+        "minimum_repositories_per_class": 4
+      },
+      "future_identifier": {
+        "task_averaged": true,
+        "minimum_tasks": 10,
+        "minimum_repositories": 6
+      }
+    },
+    "probe_validity": {
+      "future_public_minus_ordinary_logit_target_preference_accuracy": {
+        "minimum_point_delta_exclusive": 0.0,
+        "minimum_confidence_interval_lower_exclusive": 0.0
+      },
+      "next_action_public_balanced_accuracy_directional_controls": [
+        "ordinary_logit",
+        "majority_baseline"
+      ],
+      "minimum_directional_point_delta_exclusive": 0.0
+    },
+    "native_refit_candidate": {
+      "future_public_minus_native_target_preference_accuracy": {
+        "minimum_point_delta_exclusive": 0.0,
+        "minimum_confidence_interval_lower_exclusive": 0.0
+      },
+      "next_action_public_minus_native_balanced_accuracy": {
+        "minimum_point_delta_inclusive": 0.1,
+        "minimum_confidence_interval_lower_exclusive": 0.0
+      }
+    },
+    "classifications": [
+      "refit_native_candidate",
+      "readout_or_task_problem",
+      "no_refit_evidence",
+      "insufficient_support"
+    ],
+    "inconclusive_future_control_policy": "insufficient_support_collect_more_no_refit",
+    "no_post_outcome_threshold_tuning": true
   }
 }
