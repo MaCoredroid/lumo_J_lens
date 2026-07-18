@@ -41,7 +41,8 @@ shift
 if [[ "$script" == - ]]; then
   if [[ "${1:-}" == behavioral-pilot-manifest-v1 || \
         "${1:-}" == behavioral-pilot-prompt-length-v1 || \
-        "${1:-}" == behavioral-pilot-campaign-v1 ]]; then
+        "${1:-}" == behavioral-pilot-campaign-v1 || \
+        "${1:-}" == behavioral-pilot-analysis-v2 ]]; then
     exec python3 - "$@"
   fi
   cat >/dev/null
@@ -62,6 +63,12 @@ fi
 
 output=
 summary=
+prompts=
+public_report=
+nf4_report=
+native_report=
+protocol=
+bootstrap_samples=
 while (($#)); do
   case "$1" in
     --output)
@@ -70,6 +77,30 @@ while (($#)); do
       ;;
     --summary)
       summary=$2
+      shift 2
+      ;;
+    --prompts)
+      prompts=$2
+      shift 2
+      ;;
+    --public-report)
+      public_report=$2
+      shift 2
+      ;;
+    --nf4-report)
+      nf4_report=$2
+      shift 2
+      ;;
+    --native-report)
+      native_report=$2
+      shift 2
+      ;;
+    --protocol)
+      protocol=$2
+      shift 2
+      ;;
+    --bootstrap-samples)
+      bootstrap_samples=$2
       shift 2
       ;;
     *)
@@ -83,7 +114,84 @@ if [[ -n "$output" ]]; then
         "${FAKE_MATERIALIZER_NO_OUTPUT:-0}" == 1 ]]; then
     :
   elif [[ "$(basename "$script")" == analyze_swe_behavioral_probes.py ]]; then
-    printf '{"status":"insufficient_split_or_class_support"}\n' >"$output"
+    python3 - \
+      "$output" "$prompts" "$public_report" "$nf4_report" "$native_report" \
+      "$protocol" "$bootstrap_samples" <<'PY'
+import hashlib
+import json
+import os
+from pathlib import Path
+import sys
+
+(
+    output_arg,
+    prompts_arg,
+    public_arg,
+    nf4_arg,
+    native_arg,
+    protocol_arg,
+    samples_arg,
+) = sys.argv[1:]
+operational_status = os.environ.get(
+    "FAKE_ANALYSIS_OPERATIONAL_STATUS", "insufficient_split_or_class_support"
+)
+top_status = os.environ.get("FAKE_ANALYSIS_TOP_STATUS", operational_status)
+classification = os.environ.get(
+    "FAKE_ANALYSIS_CLASSIFICATION", "insufficient_support"
+)
+decision_operational_status = os.environ.get(
+    "FAKE_ANALYSIS_DECISION_OPERATIONAL_STATUS", operational_status
+)
+decision_flag = os.environ.get("FAKE_ANALYSIS_DECISION_SEPARATION", "1") == "1"
+
+
+def digest(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+value = {
+    "schema_version": 1,
+    "kind": "swe_verified_behavioral_task_held_out_analysis",
+    "analysis_version": os.environ.get(
+        "FAKE_ANALYSIS_VERSION", "task-held-out-paired-decision-v2"
+    ),
+    "status": top_status,
+    "operational_status": operational_status,
+    "inputs": {
+        "prompts": digest(prompts_arg),
+        "public_report": digest(public_arg),
+        "nf4_report": digest(nf4_arg),
+        "native_report": digest(native_arg),
+        "protocol": digest(protocol_arg),
+    },
+    "campaign": {"task_count": 20},
+    "protocol": {
+        "fixed_layers": list(range(24, 48)),
+        "bootstrap": {"samples": int(samples_arg)},
+    },
+    "decision_audit": {
+        "status": operational_status,
+        "status_is_operational_not_probe_vs_refit_decision": True,
+        "scientific_decision_classification": classification,
+        "no_missing_fold_or_label_was_imputed": True,
+        "evaluation_repositories_never_enter_fit_or_calibration": True,
+        "fit_and_calibration_repositories_are_disjoint": True,
+        "bootstrap_resamples_repositories_then_tasks_never_rows": True,
+        "ordinary_logit_is_verified_identical_across_all_three_reports": True,
+        "official_outcome_is_observed_once_per_task": True,
+    },
+}
+if os.environ.get("FAKE_ANALYSIS_OMIT_DECISION", "0") != "1":
+    value["scientific_decision"] = {
+        "classification": classification,
+        "operational_status": decision_operational_status,
+        "operational_status_is_not_scientific_decision": decision_flag,
+    }
+Path(output_arg).write_text(
+    json.dumps(value, indent=2, sort_keys=True, ensure_ascii=True) + "\n",
+    encoding="ascii",
+)
+PY
   elif [[ "$(basename "$script")" == materialize_swe_behavioral_probes.py && \
           "${FAKE_OVERSIZED_PROMPT:-0}" == 1 ]]; then
     python3 -c 'import json, sys; json.dump([{"id": "too-long", "token_ids": [0] * 65536}], open(sys.argv[1], "w", encoding="ascii"))' "$output"
@@ -143,6 +251,9 @@ class RunSweBehavioralPilotTest(unittest.TestCase):
             'server_log_path = run_root / "server.log"',
             '"SpecDecoding metrics:"',
             '"weighted_acceptance_rate"',
+            "behavioral-pilot-analysis-v2",
+            'analysis.get("analysis_version") != "task-held-out-paired-decision-v2"',
+            'scientific_decision.get("operational_status_is_not_scientific_decision")',
             "attempts/",
             "promote_attempt latest",
             '"mtp_enabled": False',
@@ -1005,7 +1116,9 @@ ensure_capture_resources_idle public
             self.assertEqual(fatal["patch"]["bytes"], 0)
             self.assertEqual(fatal["patch"]["sha256"], hashlib.sha256(b"").hexdigest())
 
-    def test_reuse_completion_preserves_scientific_status_and_promotes_atomically(self) -> None:
+    def test_reuse_completion_separates_scientific_classification_and_promotes_atomically(
+        self,
+    ) -> None:
         with tempfile.TemporaryDirectory() as raw_directory:
             directory = Path(raw_directory)
             environment, output = self._environment(directory)
@@ -1023,12 +1136,79 @@ ensure_capture_resources_idle public
             self.assertNotEqual(latest, prior.resolve())
             self.assertTrue(prior.is_dir())
             manifest = json.loads((latest / "run_manifest.json").read_bytes())
+            analysis = json.loads((latest / "analysis.json").read_bytes())
             self.assertEqual(manifest["status"], "complete")
             self.assertEqual(manifest["execution_status"], "complete")
             self.assertEqual(
-                manifest["scientific_status"],
+                analysis["status"], "insufficient_split_or_class_support"
+            )
+            self.assertEqual(
+                analysis["operational_status"],
                 "insufficient_split_or_class_support",
             )
+            self.assertEqual(
+                analysis["scientific_decision"]["classification"],
+                "insufficient_support",
+            )
+            self.assertEqual(
+                manifest["scientific_status"],
+                "insufficient_support",
+            )
+            self.assertNotEqual(
+                manifest["scientific_status"], analysis["operational_status"]
+            )
+
+    def test_analysis_v2_rejects_missing_or_mismatched_scientific_decision(
+        self,
+    ) -> None:
+        cases = {
+            "missing_nested_decision": (
+                {"FAKE_ANALYSIS_OMIT_DECISION": "1"},
+                "scientific decision is missing or unsupported",
+            ),
+            "nested_operational_mismatch": (
+                {
+                    "FAKE_ANALYSIS_DECISION_OPERATIONAL_STATUS": (
+                        "held_out_evaluation_complete"
+                    )
+                },
+                "scientific decision operational status differs",
+            ),
+            "separation_flag_false": (
+                {"FAKE_ANALYSIS_DECISION_SEPARATION": "0"},
+                "does not separate operational and scientific status",
+            ),
+            "top_level_operational_mismatch": (
+                {"FAKE_ANALYSIS_TOP_STATUS": "held_out_evaluation_complete"},
+                "top-level operational statuses differ",
+            ),
+        }
+        for name, (overrides, expected) in cases.items():
+            with self.subTest(name=name), tempfile.TemporaryDirectory() as raw_directory:
+                directory = Path(raw_directory)
+                environment, output = self._environment(directory)
+                prior = self._seed_latest_reports(output)
+                environment.update(overrides)
+                result = subprocess.run(
+                    [str(SCRIPT), "--reuse-reports"],
+                    cwd=ROOT,
+                    env=environment,
+                    text=True,
+                    capture_output=True,
+                    check=False,
+                )
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn(expected, result.stderr)
+                attempt = next(path for path in self._attempts(output) if path != prior)
+                self.assertEqual(
+                    (attempt / "analyze.exit_status").read_text().strip(),
+                    "invalid-analysis",
+                )
+                manifest = json.loads((attempt / "run_manifest.json").read_bytes())
+                self.assertEqual(manifest["status"], "failed")
+                self.assertEqual(manifest["failure"]["phase"], "analyze")
+                self.assertEqual(manifest["scientific_status"], "not_run")
+                self.assertEqual((output / "latest").resolve(), prior.resolve())
 
 
 if __name__ == "__main__":

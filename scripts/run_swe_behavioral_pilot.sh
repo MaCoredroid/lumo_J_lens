@@ -1338,7 +1338,7 @@ PY
 }
 
 validate_analysis() {
-  "$VLLM_PY" - \
+  "$VLLM_PY" - behavioral-pilot-analysis-v2 \
     "$ANALYSIS" "$PROMPTS" "$PUBLIC_REPORT" "$NF4_REPORT" "$NATIVE_REPORT" \
     "$READOUT_PROTOCOL" "$BOOTSTRAP_SAMPLES" <<'PY'
 import hashlib
@@ -1346,7 +1346,9 @@ import json
 from pathlib import Path
 import sys
 
-analysis_arg, prompts_arg, public_arg, nf4_arg, native_arg, protocol_arg, samples_arg = sys.argv[1:]
+if sys.argv[1] != "behavioral-pilot-analysis-v2":
+    raise SystemExit("analysis validator marker mismatch")
+analysis_arg, prompts_arg, public_arg, nf4_arg, native_arg, protocol_arg, samples_arg = sys.argv[2:]
 
 
 def digest(path):
@@ -1367,14 +1369,38 @@ paths = {
 analysis = json.loads(Path(analysis_arg).read_bytes())
 if analysis.get("schema_version") != 1 or analysis.get("kind") != "swe_verified_behavioral_task_held_out_analysis":
     raise SystemExit("behavioral analysis kind/schema mismatch")
-allowed_statuses = {
+if analysis.get("analysis_version") != "task-held-out-paired-decision-v2":
+    raise SystemExit("behavioral analysis version mismatch")
+allowed_operational_statuses = {
     "development_support_complete",
     "development_insufficient_split_or_class_support",
     "held_out_evaluation_complete",
     "insufficient_split_or_class_support",
 }
-if analysis.get("status") not in allowed_statuses:
-    raise SystemExit("behavioral analysis scientific status is missing or unsupported")
+status = analysis.get("status")
+operational_status = analysis.get("operational_status")
+if status not in allowed_operational_statuses:
+    raise SystemExit("behavioral analysis top-level operational status is unsupported")
+if operational_status not in allowed_operational_statuses:
+    raise SystemExit("behavioral analysis operational_status is unsupported")
+if status != operational_status:
+    raise SystemExit("behavioral analysis top-level operational statuses differ")
+scientific_decision = analysis.get("scientific_decision")
+allowed_classifications = {
+    "refit_native_candidate",
+    "readout_or_task_problem",
+    "no_refit_evidence",
+    "insufficient_support",
+}
+if (
+    not isinstance(scientific_decision, dict)
+    or scientific_decision.get("classification") not in allowed_classifications
+):
+    raise SystemExit("behavioral analysis scientific decision is missing or unsupported")
+if scientific_decision.get("operational_status") != operational_status:
+    raise SystemExit("behavioral analysis scientific decision operational status differs")
+if scientific_decision.get("operational_status_is_not_scientific_decision") is not True:
+    raise SystemExit("behavioral analysis does not separate operational and scientific status")
 if analysis.get("inputs") != {key: digest(path) for key, path in paths.items()}:
     raise SystemExit("analysis does not bind the exact prompt/report/protocol hashes")
 if analysis.get("campaign", {}).get("task_count") != 20:
@@ -1384,8 +1410,15 @@ if analysis.get("protocol", {}).get("fixed_layers") != list(range(24, 48)):
 if analysis.get("protocol", {}).get("bootstrap", {}).get("samples") != int(samples_arg):
     raise SystemExit("analysis bootstrap count differs from the pinned contract")
 decision = analysis.get("decision_audit", {})
-if decision.get("status") != analysis.get("status"):
-    raise SystemExit("analysis and decision-audit scientific statuses differ")
+if decision.get("status") != operational_status:
+    raise SystemExit("analysis and decision-audit operational statuses differ")
+if decision.get("status_is_operational_not_probe_vs_refit_decision") is not True:
+    raise SystemExit("decision audit does not identify status as operational")
+if (
+    decision.get("scientific_decision_classification")
+    != scientific_decision.get("classification")
+):
+    raise SystemExit("analysis and decision-audit scientific classifications differ")
 for field in (
     "no_missing_fold_or_label_was_imputed",
     "evaluation_repositories_never_enter_fit_or_calibration",
@@ -1978,11 +2011,15 @@ import json
 from pathlib import Path
 import sys
 
-print(json.loads(Path(sys.argv[1]).read_bytes())["status"])
+print(
+    json.loads(Path(sys.argv[1]).read_bytes())["scientific_decision"][
+        "classification"
+    ]
+)
 PY
 ); then
-  printf 'scientific-status-read-failed\n' >"$OUT_DIR/analyze.exit_status"
-  die "could not preserve the validated analysis scientific status"
+  printf 'scientific-classification-read-failed\n' >"$OUT_DIR/analyze.exit_status"
+  die "could not preserve the validated analysis scientific classification"
 fi
 write_sha256_sidecar "$ANALYSIS" "$ANALYSIS_CHECKSUM"
 verify_sha256_sidecar "$ANALYSIS" "$ANALYSIS_CHECKSUM" "behavioral analysis"
