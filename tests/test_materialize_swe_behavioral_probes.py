@@ -426,6 +426,91 @@ index 1111111..2222222 100644
     return campaign_value, all_requests
 
 
+def write_fatal_turn_run(
+    root: Path,
+    tokenizer: FakeTokenizer,
+) -> tuple[dict[str, object], str]:
+    instance_id = "owner__limit-53"
+    campaign_value = campaign([instance_id])
+    max_turns = int(campaign_value["generation"]["max_session_turns"])
+    commands = [
+        (
+            f"Inspect request {index}.",
+            f"rg item_{index} src",
+            f"src/module.py:item_{index}",
+            0,
+        )
+        for index in range(1, max_turns + 1)
+    ]
+    requests = task_requests(instance_id, commands, 1)
+    proxy = root / "proxy_dumps"
+    proxy.mkdir(parents=True)
+    usage_rows: list[dict[str, object]] = []
+    for global_index, request_value in enumerate(requests, 1):
+        (proxy / f"chat_{global_index:04d}.json").write_text(
+            json.dumps(request_value), encoding="utf-8"
+        )
+        _, token_ids, _, _ = MODULE.C1.render_request(
+            tokenizer, request=request_value, template=TEMPLATE
+        )
+        usage_rows.append(
+            {
+                "idx": global_index,
+                # Deliberately descending: timestamps are not mapping evidence.
+                "ts": 10_000.0 - global_index,
+                "usage": {
+                    "prompt_tokens": len(token_ids),
+                    "completion_tokens": 10,
+                    "total_tokens": len(token_ids) + 10,
+                },
+                "finish_reason": "tool_calls",
+            }
+        )
+    (proxy / "usage.jsonl").write_text(
+        "".join(json.dumps(row) + "\n" for row in usage_rows), encoding="utf-8"
+    )
+
+    task_root = root / "generation/verified/per_task" / instance_id
+    task_root.mkdir(parents=True)
+    patch_bytes = (
+        "diff --git a/src/module.py b/src/module.py\n"
+        "--- a/src/module.py\n"
+        "+++ b/src/module.py\n"
+        "@@ -0,0 +1 @@\n"
+        "+LimitThing = True\n"
+    ).encode("utf-8")
+    (task_root / "patch.diff").write_bytes(patch_bytes)
+    (task_root / "qwen_trace.json").write_bytes(b"")
+    (task_root / "qwen_stderr.log").write_bytes(MODULE.FATAL_TURN_LIMIT_STDERR)
+    metadata = {
+        "instance_id": instance_id,
+        "repo": "owner/limit",
+        "base_commit": "c" * 40,
+        "agent": "qwen_code",
+        "eval_mode": "skip",
+        "qwen": {
+            "elapsed_s": 123.5,
+            "exit_code": 53,
+            "timed_out": False,
+            "cli_exit_is_verdict": False,
+            "parsed": False,
+            "subtype": None,
+            "num_turns": None,
+            "duration_api_ms": None,
+            "usage": None,
+            "tool_calls": None,
+            "tool_by_name": None,
+            "result_tail": "",
+        },
+        "patch_bytes": len(patch_bytes),
+        "terminal_cause": None,
+    }
+    (task_root / "runner_metadata.json").write_text(
+        json.dumps(metadata), encoding="utf-8"
+    )
+    return campaign_value, instance_id
+
+
 def build(root: Path) -> tuple[list[dict[str, object]], dict[str, object], FakeTokenizer]:
     tokenizer = FakeTokenizer()
     campaign_value, _ = write_run(root, tokenizer)
@@ -469,6 +554,225 @@ class BehavioralMaterializerTests(unittest.TestCase):
             )
         )
 
+    def test_exact_fatal_turn_limit_recovers_fifty_requests_without_terminal_imputation(
+        self,
+    ) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            tokenizer = FakeTokenizer()
+            campaign_value, instance_id = write_fatal_turn_run(root, tokenizer)
+            tasks = MODULE._load_task_metadata(
+                root,
+                campaign_value["instance_ids"],
+                campaign=campaign_value,
+            )
+            self.assertEqual(tasks[0]["request_count"], 50)
+            mapped, binding = MODULE.map_global_captures(
+                run_root=root,
+                campaign=campaign_value,
+                task_records=tasks,
+                tokenizer=tokenizer,
+                template=TEMPLATE,
+            )
+            protocol = MODULE.validate_action_protocol(
+                ACTION_PROTOCOL, tokenizer=tokenizer, campaign=campaign_value
+            )
+            completions = [
+                MODULE.derive_completion(mapped[0], index, protocol=protocol)
+                for index in range(1, 51)
+            ]
+            prompts, summary = MODULE.build_behavioral_bundle(
+                run_root=root,
+                campaign=campaign_value,
+                campaign_sha256=MODULE.sha256_json(campaign_value),
+                action_protocol=ACTION_PROTOCOL,
+                action_protocol_sha256=MODULE.sha256_bytes(ACTION_PROTOCOL_BYTES),
+                tokenizer=tokenizer,
+                template=TEMPLATE,
+                template_sha256=MODULE.sha256_text(TEMPLATE),
+            )
+
+        self.assertEqual(binding["global_request_count"], 50)
+        self.assertEqual(len(binding["request_count_recoveries"]), 1)
+        self.assertEqual(
+            binding["mapping_algorithm"],
+            "campaign_order_cumulative_verified_request_counts_v2",
+        )
+        self.assertTrue(
+            all(
+                completion["status"] == "materialized_in_following_request"
+                and completion["next_request_global_index"] == index + 1
+                and completion["extension_sha256"] is not None
+                for index, completion in enumerate(completions[:49], 1)
+            )
+        )
+        self.assertEqual(completions[49]["status"], "unobserved_after_task_end")
+        self.assertEqual(completions[49]["action"]["status"], "missing")
+        self.assertEqual(completions[49]["action"]["derivation"], "no_following_capture")
+        self.assertEqual(len(prompts), 8)
+        endpoint = next(
+            prompt
+            for prompt in prompts
+            if prompt["metadata"]["selection"]["task_request_index"] == 50
+        )
+        self.assertEqual(endpoint["metadata"]["task"]["instance_id"], instance_id)
+        self.assertTrue(endpoint["metadata"]["labels"]["terminal"]["is_episode_endpoint"])
+        self.assertFalse(endpoint["metadata"]["labels"]["terminal"]["is_terminal_completion"])
+        self.assertEqual(endpoint["metadata"]["labels"]["action"]["status"], "missing")
+        provenance = endpoint["metadata"]["provenance"]["request_count"]
+        self.assertEqual(
+            provenance["derivation"],
+            "campaign_max_session_turns_from_exact_fatal_turn_limit_v1",
+        )
+        self.assertEqual(provenance["fatal_turn_limit"]["stderr_bytes"], 212)
+        self.assertEqual(
+            provenance["fatal_turn_limit"]["stderr_sha256"],
+            MODULE.sha256_bytes(MODULE.FATAL_TURN_LIMIT_STDERR),
+        )
+        self.assertEqual(provenance["fatal_turn_limit"]["qwen_trace_bytes"], 0)
+        self.assertEqual(
+            provenance["proxy_capture_binding"]["global_request_start"], 1
+        )
+        self.assertEqual(
+            provenance["proxy_capture_binding"]["global_request_end"], 50
+        )
+        self.assertEqual(
+            summary["task_audits"][0]["terminal_trace_serving_evidence"][
+                "derivation"
+            ],
+            "terminal_qwen_trace_empty",
+        )
+
+    def test_exact_fatal_turn_limit_accepts_hash_bound_empty_patch_without_imputation(
+        self,
+    ) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            tokenizer = FakeTokenizer()
+            campaign_value, instance_id = write_fatal_turn_run(root, tokenizer)
+            task_root = root / "generation/verified/per_task" / instance_id
+            (task_root / "patch.diff").write_bytes(b"")
+            metadata_path = task_root / "runner_metadata.json"
+            metadata = json.loads(metadata_path.read_bytes())
+            metadata["patch_bytes"] = 0
+            metadata_path.write_text(json.dumps(metadata), encoding="utf-8")
+            prompts, summary = MODULE.build_behavioral_bundle(
+                run_root=root,
+                campaign=campaign_value,
+                campaign_sha256=MODULE.sha256_json(campaign_value),
+                action_protocol=ACTION_PROTOCOL,
+                action_protocol_sha256=MODULE.sha256_bytes(ACTION_PROTOCOL_BYTES),
+                tokenizer=tokenizer,
+                template=TEMPLATE,
+                template_sha256=MODULE.sha256_text(TEMPLATE),
+            )
+
+        endpoint = next(
+            prompt
+            for prompt in prompts
+            if prompt["metadata"]["selection"]["task_request_index"] == 50
+        )
+        empty_sha256 = MODULE.sha256_bytes(b"")
+        fatal = endpoint["metadata"]["provenance"]["request_count"][
+            "fatal_turn_limit"
+        ]
+        self.assertEqual(fatal["runner_metadata_patch_bytes"], 0)
+        self.assertEqual(fatal["generated_patch_bytes"], 0)
+        self.assertEqual(fatal["generated_patch_sha256"], empty_sha256)
+        self.assertEqual(
+            endpoint["metadata"]["provenance"]["generated_patch_sha256"],
+            empty_sha256,
+        )
+        self.assertEqual(endpoint["metadata"]["targets"], [])
+        self.assertEqual(endpoint["metadata"]["labels"]["action"]["status"], "missing")
+        self.assertEqual(
+            endpoint["metadata"]["labels"]["official_outcome"]["status"],
+            "missing",
+        )
+        self.assertEqual(summary["dynamic_target_count"], 0)
+        self.assertEqual(len(summary["global_capture_binding"]["request_count_recoveries"]), 1)
+
+    def test_fatal_turn_limit_recovery_requires_exact_runner_artifacts(self) -> None:
+        cases = (
+            ("metadata", "exact fatal-turn metadata"),
+            ("stderr", "does not exactly match"),
+            ("trace", "not exactly empty"),
+            ("patch", "patch byte count differs"),
+        )
+        for mutation, message in cases:
+            with self.subTest(mutation=mutation), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                tokenizer = FakeTokenizer()
+                campaign_value, instance_id = write_fatal_turn_run(root, tokenizer)
+                task_root = root / "generation/verified/per_task" / instance_id
+                if mutation == "metadata":
+                    metadata_path = task_root / "runner_metadata.json"
+                    metadata = json.loads(metadata_path.read_bytes())
+                    metadata["qwen"]["parsed"] = True
+                    metadata_path.write_text(json.dumps(metadata), encoding="utf-8")
+                elif mutation == "stderr":
+                    (task_root / "qwen_stderr.log").write_bytes(
+                        MODULE.FATAL_TURN_LIMIT_STDERR + b"\n"
+                    )
+                elif mutation == "trace":
+                    (task_root / "qwen_trace.json").write_bytes(b"[]")
+                else:
+                    (task_root / "patch.diff").write_bytes(b"")
+                with self.assertRaisesRegex(ValueError, message):
+                    MODULE._load_task_metadata(
+                        root,
+                        campaign_value["instance_ids"],
+                        campaign=campaign_value,
+                    )
+
+    def test_fatal_turn_limit_mapping_requires_pinned_span_usage_and_boundary(self) -> None:
+        cases = (
+            ("pin", "global chat count differs"),
+            ("usage", "lacks exact proxy usage coverage"),
+            ("finish", "did not end in a tool call"),
+            ("boundary", "task-start capture does not contain"),
+        )
+        for mutation, message in cases:
+            with self.subTest(mutation=mutation), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                tokenizer = FakeTokenizer()
+                campaign_value, _ = write_fatal_turn_run(root, tokenizer)
+                if mutation == "pin":
+                    campaign_value["generation"]["max_session_turns"] = 49
+                elif mutation == "usage":
+                    usage_path = root / "proxy_dumps/usage.jsonl"
+                    rows = [json.loads(line) for line in usage_path.read_text().splitlines()]
+                    usage_path.write_text(
+                        "".join(json.dumps(row) + "\n" for row in rows[:-1]),
+                        encoding="utf-8",
+                    )
+                elif mutation == "finish":
+                    usage_path = root / "proxy_dumps/usage.jsonl"
+                    rows = [json.loads(line) for line in usage_path.read_text().splitlines()]
+                    rows[-1]["finish_reason"] = "stop"
+                    usage_path.write_text(
+                        "".join(json.dumps(row) + "\n" for row in rows),
+                        encoding="utf-8",
+                    )
+                else:
+                    chat_path = root / "proxy_dumps/chat_0001.json"
+                    chat = json.loads(chat_path.read_bytes())
+                    chat["messages"][1]["content"] = "Task owner__other-1"
+                    chat_path.write_text(json.dumps(chat), encoding="utf-8")
+                tasks = MODULE._load_task_metadata(
+                    root,
+                    campaign_value["instance_ids"],
+                    campaign=campaign_value,
+                )
+                with self.assertRaisesRegex(ValueError, message):
+                    MODULE.map_global_captures(
+                        run_root=root,
+                        campaign=campaign_value,
+                        task_records=tasks,
+                        tokenizer=tokenizer,
+                        template=TEMPLATE,
+                    )
+
     def test_action_precedence_and_separate_tool_and_validation_labels(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -477,7 +781,11 @@ class BehavioralMaterializerTests(unittest.TestCase):
             protocol = MODULE.validate_action_protocol(
                 ACTION_PROTOCOL, tokenizer=tokenizer, campaign=campaign_value
             )
-            tasks = MODULE._load_task_metadata(root, campaign_value["instance_ids"])
+            tasks = MODULE._load_task_metadata(
+                root,
+                campaign_value["instance_ids"],
+                campaign=campaign_value,
+            )
             mapped, _ = MODULE.map_global_captures(
                 run_root=root,
                 campaign=campaign_value,
@@ -854,7 +1162,11 @@ class BehavioralMaterializerTests(unittest.TestCase):
             value = json.loads(chat.read_bytes())
             value["seed"] += 1
             chat.write_text(json.dumps(value), encoding="utf-8")
-            tasks = MODULE._load_task_metadata(root, campaign_value["instance_ids"])
+            tasks = MODULE._load_task_metadata(
+                root,
+                campaign_value["instance_ids"],
+                campaign=campaign_value,
+            )
             with self.assertRaisesRegex(ValueError, "seed sequence"):
                 MODULE.map_global_captures(
                     run_root=root,

@@ -53,6 +53,20 @@ EXPECTED_SAMPLING = {
 REQUESTED_MAX_TOKENS = 8192
 CONTEXT_FIT_MARGIN = 64
 CONTEXT_FIT_MIN_ROOM = 256
+FATAL_TURN_LIMIT_EXIT_CODE = 53
+FATAL_TURN_LIMIT_ERROR = {
+    "error": {
+        "type": "FatalTurnLimitedError",
+        "message": (
+            "Reached max session turns for this session. Increase the number of turns "
+            "by specifying maxSessionTurns in settings.json."
+        ),
+        "code": FATAL_TURN_LIMIT_EXIT_CODE,
+    }
+}
+FATAL_TURN_LIMIT_STDERR = (
+    json.dumps(FATAL_TURN_LIMIT_ERROR, indent=2, ensure_ascii=True) + "\n"
+).encode("ascii")
 
 IDENTIFIER_RE = re.compile(r"(?u)(?:[^\W\d]|_)\w*")
 ASCII_SEGMENT_RE = re.compile(
@@ -224,6 +238,13 @@ def validate_campaign(campaign: Mapping[str, Any]) -> list[str]:
         "qwen_code_version",
     ):
         nonempty_string(generation.get(field), f"campaign generation {field}")
+    max_session_turns = generation.get("max_session_turns")
+    require(
+        isinstance(max_session_turns, int)
+        and not isinstance(max_session_turns, bool)
+        and max_session_turns >= 1,
+        "campaign max_session_turns is invalid",
+    )
     instance_ids = [
         nonempty_string(value, f"campaign instance {index}")
         for index, value in enumerate(sequence(campaign.get("instance_ids"), "instances"))
@@ -395,7 +416,15 @@ def _terminal_trace_serving_evidence(task: Mapping[str, Any]) -> dict[str, Any]:
             "derivation": "terminal_qwen_trace_absent",
             "trace_sha256": None,
         }
-    value = json.loads(path.read_bytes())
+    trace_bytes = path.read_bytes()
+    if trace_bytes == b"":
+        return {
+            "status": "unknown",
+            "derivation": "terminal_qwen_trace_empty",
+            "trace_sha256": sha256_bytes(trace_bytes),
+            "trace_bytes": 0,
+        }
+    value = json.loads(trace_bytes)
     require(isinstance(value, list), "qwen trace is not a JSON array")
     assistants = [
         mapping(row, "qwen trace row")
@@ -505,7 +534,120 @@ def _read_usage(path: Path) -> list[dict[str, Any]]:
     return [dict(mapping(json.loads(line), f"usage row {index}")) for index, line in enumerate(lines, 1)]
 
 
-def _load_task_metadata(run_root: Path, instance_ids: Sequence[str]) -> list[dict[str, Any]]:
+def _fatal_turn_limit_request_count(
+    *,
+    run_root: Path,
+    task_root: Path,
+    instance_id: str,
+    metadata: Mapping[str, Any],
+    qwen: Mapping[str, Any],
+    max_session_turns: int,
+) -> tuple[int, dict[str, Any]]:
+    expected_qwen = {
+        "exit_code": FATAL_TURN_LIMIT_EXIT_CODE,
+        "timed_out": False,
+        "cli_exit_is_verdict": False,
+        "parsed": False,
+        "subtype": None,
+        "num_turns": None,
+        "duration_api_ms": None,
+        "usage": None,
+        "tool_calls": None,
+        "tool_by_name": None,
+        "result_tail": "",
+    }
+    require(
+        set(qwen) == {"elapsed_s", *expected_qwen}
+        and all(
+            field in qwen
+            and type(qwen[field]) is type(expected)
+            and qwen[field] == expected
+            for field, expected in expected_qwen.items()
+        ),
+        f"{instance_id} null qwen.num_turns lacks exact fatal-turn metadata",
+    )
+    elapsed = qwen.get("elapsed_s")
+    require(
+        isinstance(elapsed, (int, float))
+        and not isinstance(elapsed, bool)
+        and math.isfinite(float(elapsed))
+        and float(elapsed) >= 0.0,
+        f"{instance_id} fatal-turn elapsed time is invalid",
+    )
+
+    stderr_path = task_root / "qwen_stderr.log"
+    require(stderr_path.is_file(), f"{instance_id} fatal-turn stderr is missing")
+    stderr_bytes = stderr_path.read_bytes()
+    require(
+        stderr_bytes == FATAL_TURN_LIMIT_STDERR,
+        f"{instance_id} fatal-turn stderr does not exactly match FatalTurnLimitedError",
+    )
+    require(
+        json.loads(stderr_bytes) == FATAL_TURN_LIMIT_ERROR,
+        f"{instance_id} fatal-turn stderr JSON differs",
+    )
+
+    qwen_trace_path = task_root / "qwen_trace.json"
+    require(qwen_trace_path.is_file(), f"{instance_id} fatal-turn qwen trace is missing")
+    qwen_trace_bytes = qwen_trace_path.read_bytes()
+    require(
+        qwen_trace_bytes == b"",
+        f"{instance_id} fatal-turn qwen trace is not exactly empty",
+    )
+
+    patch_path = task_root / "patch.diff"
+    require(patch_path.is_file(), f"{instance_id} fatal-turn patch is missing")
+    patch_bytes = patch_path.read_bytes()
+    require(
+        isinstance(metadata.get("patch_bytes"), int)
+        and not isinstance(metadata.get("patch_bytes"), bool)
+        and metadata.get("patch_bytes") == len(patch_bytes),
+        f"{instance_id} fatal-turn patch byte count differs from runner metadata",
+    )
+
+    return max_session_turns, {
+        "derivation": "campaign_max_session_turns_from_exact_fatal_turn_limit_v1",
+        "recovered": True,
+        "request_count": max_session_turns,
+        "runner_qwen_num_turns": None,
+        "campaign_max_session_turns": max_session_turns,
+        "fatal_turn_limit": {
+            "error": copy.deepcopy(FATAL_TURN_LIMIT_ERROR["error"]),
+            "qwen_exit_code": FATAL_TURN_LIMIT_EXIT_CODE,
+            "qwen_parsed": False,
+            "qwen_timed_out": False,
+            "stderr_path": _relative_file(run_root, stderr_path, "fatal-turn stderr"),
+            "stderr_sha256": sha256_bytes(stderr_bytes),
+            "stderr_bytes": len(stderr_bytes),
+            "qwen_trace_path": _relative_file(
+                run_root, qwen_trace_path, "fatal-turn qwen trace"
+            ),
+            "qwen_trace_sha256": sha256_bytes(qwen_trace_bytes),
+            "qwen_trace_bytes": len(qwen_trace_bytes),
+            "generated_patch_path": _relative_file(
+                run_root, patch_path, "fatal-turn generated patch"
+            ),
+            "runner_metadata_patch_bytes": metadata["patch_bytes"],
+            "generated_patch_sha256": sha256_bytes(patch_bytes),
+            "generated_patch_bytes": len(patch_bytes),
+        },
+    }
+
+
+def _load_task_metadata(
+    run_root: Path,
+    instance_ids: Sequence[str],
+    *,
+    campaign: Mapping[str, Any],
+) -> list[dict[str, Any]]:
+    generation = mapping(campaign.get("generation"), "campaign generation")
+    max_session_turns = generation.get("max_session_turns")
+    require(
+        isinstance(max_session_turns, int)
+        and not isinstance(max_session_turns, bool)
+        and max_session_turns >= 1,
+        "campaign max_session_turns is invalid",
+    )
     tasks: list[dict[str, Any]] = []
     for selection_index, instance_id in enumerate(instance_ids):
         task_root = run_root / "generation/verified/per_task" / instance_id
@@ -513,17 +655,45 @@ def _load_task_metadata(run_root: Path, instance_ids: Sequence[str]) -> list[dic
         require(metadata_path.is_file(), f"runner metadata is missing for {instance_id}")
         metadata = mapping(json.loads(metadata_path.read_bytes()), f"{instance_id} runner metadata")
         require(metadata.get("instance_id") == instance_id, "runner metadata task order mismatch")
+        patch_path = task_root / "patch.diff"
+        qwen_trace_path = task_root / "qwen_trace.json"
         qwen_value = metadata.get("qwen")
         if isinstance(qwen_value, dict):
             num_turns = qwen_value.get("num_turns")
-            require(
-                isinstance(num_turns, int) and not isinstance(num_turns, bool) and num_turns >= 0,
-                f"{instance_id} qwen.num_turns is invalid",
-            )
+            if isinstance(num_turns, int) and not isinstance(num_turns, bool) and num_turns >= 0:
+                require(
+                    qwen_value.get("exit_code") != FATAL_TURN_LIMIT_EXIT_CODE,
+                    f"{instance_id} fatal-turn exit contradicts qwen.num_turns",
+                )
+                request_count_provenance = {
+                    "derivation": "runner_metadata_qwen_num_turns",
+                    "recovered": False,
+                    "request_count": num_turns,
+                    "runner_qwen_num_turns": num_turns,
+                    "campaign_max_session_turns": max_session_turns,
+                    "fatal_turn_limit": None,
+                }
+            elif num_turns is None:
+                num_turns, request_count_provenance = _fatal_turn_limit_request_count(
+                    run_root=run_root,
+                    task_root=task_root,
+                    instance_id=instance_id,
+                    metadata=metadata,
+                    qwen=qwen_value,
+                    max_session_turns=max_session_turns,
+                )
+            else:
+                raise ValueError(f"{instance_id} qwen.num_turns is invalid")
         else:
             num_turns = 0
-        patch_path = task_root / "patch.diff"
-        qwen_trace_path = task_root / "qwen_trace.json"
+            request_count_provenance = {
+                "derivation": "runner_metadata_qwen_record_absent",
+                "recovered": False,
+                "request_count": 0,
+                "runner_qwen_num_turns": None,
+                "campaign_max_session_turns": max_session_turns,
+                "fatal_turn_limit": None,
+            }
         tasks.append(
             {
                 "selection_index": selection_index,
@@ -532,6 +702,7 @@ def _load_task_metadata(run_root: Path, instance_ids: Sequence[str]) -> list[dic
                 "metadata_path": metadata_path,
                 "metadata": dict(metadata),
                 "request_count": num_turns,
+                "request_count_provenance": request_count_provenance,
                 "patch_path": patch_path if patch_path.is_file() else None,
                 "qwen_trace_path": qwen_trace_path if qwen_trace_path.is_file() else None,
             }
@@ -622,6 +793,19 @@ def map_global_captures(
     for raw_task in task_records:
         task = dict(raw_task)
         request_count = int(task["request_count"])
+        request_count_provenance = copy.deepcopy(
+            dict(
+                mapping(
+                    task.get("request_count_provenance"),
+                    f"{task['instance_id']} request-count provenance",
+                )
+            )
+        )
+        recovered_fatal_turn_limit = request_count_provenance.get("recovered") is True
+        require(
+            request_count_provenance.get("request_count") == request_count,
+            f"{task['instance_id']} request-count provenance differs",
+        )
         records: list[dict[str, Any]] = []
         previous_messages: list[Any] | None = None
         previous_rendered = ""
@@ -653,14 +837,16 @@ def map_global_captures(
             require(request.get("tools") == campaign_tools, "campaign tool schema drifted")
             messages = sequence(request.get("messages"), f"request {global_index} messages")
             if local_index == 1:
+                initial_messages = [mapping(message, "initial message") for message in messages]
                 require(
-                    [mapping(message, "initial message").get("role") for message in messages]
-                    == ["system", "user"],
+                    [message.get("role") for message in initial_messages] == ["system", "user"],
                     f"{task['instance_id']} does not start at an exact task boundary",
                 )
+                initial_user_text = "\n".join(
+                    _flatten_strings(initial_messages[1].get("content"))
+                )
                 require(
-                    str(task["instance_id"])
-                    in json.dumps(messages, sort_keys=True, ensure_ascii=False),
+                    str(task["instance_id"]) in initial_user_text,
                     f"task-start capture does not contain {task['instance_id']}",
                 )
             else:
@@ -680,6 +866,11 @@ def map_global_captures(
                     "canonical token prefix drifted",
                 )
             require(usage.get("idx") == global_index, "usage/global request index mismatch")
+            if recovered_fatal_turn_limit:
+                require(
+                    observed_usage is not None,
+                    f"{task['instance_id']} fatal-turn recovery lacks exact proxy usage coverage",
+                )
             if observed_usage is not None:
                 usage_values = mapping(usage.get("usage"), "usage token counts")
                 require(
@@ -699,7 +890,12 @@ def map_global_captures(
                     finish_reason in {"tool_calls", "stop", "length"},
                     "unsupported finish reason",
                 )
-                if local_index < request_count:
+                if recovered_fatal_turn_limit:
+                    require(
+                        finish_reason == "tool_calls",
+                        f"{task['instance_id']} fatal-turn request did not end in a tool call",
+                    )
+                elif local_index < request_count:
                     require(finish_reason == "tool_calls", "nonterminal capture did not call a tool")
             records.append(
                 {
@@ -719,6 +915,35 @@ def map_global_captures(
             previous_messages = copy.deepcopy(messages)
             previous_rendered = rendered
             previous_token_ids = list(token_ids)
+        if recovered_fatal_turn_limit:
+            require(
+                len(records) == request_count
+                and request_count
+                == request_count_provenance.get("campaign_max_session_turns"),
+                f"{task['instance_id']} fatal-turn proxy span differs from campaign pin",
+            )
+            request_count_provenance["proxy_capture_binding"] = {
+                "derivation": "contiguous_raw_prefix_and_complete_proxy_usage_v1",
+                "global_request_start": global_offset + 1,
+                "global_request_end": global_offset + request_count,
+                "raw_capture_count": len(records),
+                "usage_record_count": sum(
+                    record["usage"].get("telemetry_status") == "available"
+                    for record in records
+                ),
+                "all_finish_reasons": "tool_calls",
+                "initial_message_roles": ["system", "user"],
+                "initial_task_id_verified": True,
+                "initial_user_content_sha256": sha256_text(initial_user_text),
+                "raw_prefix_chain_verified": True,
+                "canonical_rendered_prefix_chain_verified": True,
+                "canonical_token_prefix_chain_verified": True,
+                "first_raw_request_path": records[0]["path"],
+                "first_raw_request_sha256": records[0]["sha256"],
+                "last_raw_request_path": records[-1]["path"],
+                "last_raw_request_sha256": records[-1]["sha256"],
+            }
+        task["request_count_provenance"] = request_count_provenance
         task["captures"] = records
         task["global_request_start"] = global_offset + 1 if request_count else None
         task["global_request_end"] = global_offset + request_count if request_count else None
@@ -731,7 +956,18 @@ def map_global_captures(
         "global_request_count": expected_total,
         "usage_record_count": len(usage_records),
         "missing_usage_indices": missing_usage_indices,
-        "mapping_algorithm": "campaign_order_cumulative_runner_num_turns_v1",
+        "mapping_algorithm": "campaign_order_cumulative_verified_request_counts_v2",
+        "request_count_recoveries": [
+            {
+                "instance_id": task["instance_id"],
+                **copy.deepcopy(task["request_count_provenance"]),
+            }
+            for task in mapped_tasks
+            if mapping(
+                task.get("request_count_provenance"), "request-count provenance"
+            ).get("recovered")
+            is True
+        ],
         "exact_raw_request_coverage": True,
         "exact_usage_index_coverage": not missing_usage_indices,
         "exact_global_coverage": not missing_usage_indices,
@@ -1770,7 +2006,11 @@ def build_behavioral_bundle(
     )
     max_prompt_tokens = max_model_len - 1
     protocol = validate_action_protocol(action_protocol, tokenizer=tokenizer, campaign=campaign)
-    task_records = _load_task_metadata(run_root, instance_ids)
+    task_records = _load_task_metadata(
+        run_root,
+        instance_ids,
+        campaign=campaign,
+    )
     mapped_tasks, global_binding = map_global_captures(
         run_root=run_root,
         campaign=campaign,
@@ -1914,6 +2154,9 @@ def build_behavioral_bundle(
                     ),
                     "provenance": {
                         "mapping_algorithm": global_binding["mapping_algorithm"],
+                        "request_count": copy.deepcopy(
+                            task["request_count_provenance"]
+                        ),
                         "raw_request_path": capture["path"],
                         "raw_request_sha256": capture["sha256"],
                         "usage_path": global_binding["usage_path"],
@@ -1974,6 +2217,9 @@ def build_behavioral_bundle(
                 "instance_id": task["instance_id"],
                 "runner_status": task["metadata"].get("status", "completed"),
                 "request_count": task["request_count"],
+                "request_count_provenance": copy.deepcopy(
+                    task["request_count_provenance"]
+                ),
                 "global_request_start": task["global_request_start"],
                 "global_request_end": task["global_request_end"],
                 "selected_request_indices": selected,
