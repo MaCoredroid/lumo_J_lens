@@ -1,0 +1,1066 @@
+{
+  "cards": [
+    {
+      "cohort": "development",
+      "fields": {
+        "EVIDENCE": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "field_is_observed_context_not_inferred_from_lens"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "observed_from_bound_qwen_code_trajectory",
+            "value": "The inspected branch handles P-format VLAs, while QD reaches the generic np.where comparison."
+          }
+        },
+        "NEXT": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "field_is_observed_context_not_inferred_from_lens"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "observed_from_bound_qwen_code_trajectory",
+            "value": "Reproduce QD behavior, extend the VLA branch to Q, and run FITS diff tests."
+          }
+        },
+        "WHERE": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "field_is_observed_context_not_inferred_from_lens"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "observed_from_bound_qwen_code_trajectory",
+            "value": "astropy/io/fits/diff.py, FITSDiff array comparison"
+          }
+        },
+        "WHY": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "public_target_margin_update_positive",
+              "public_context_selectivity_positive",
+              "public_minus_logit_target_margin_update_positive",
+              "public_minus_logit_context_selectivity_positive"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "not_an_observed_card_field",
+            "value": null
+          }
+        }
+      },
+      "instance_id": "astropy__astropy-14539",
+      "lens_why_guard": {
+        "criteria": {
+          "immediate_next_token_control_pass": true,
+          "primary_control_eligible": true,
+          "public_before_and_after_primary_stable_gate": true,
+          "public_context_selectivity_positive": false,
+          "public_minus_logit_context_selectivity_positive": false,
+          "public_minus_logit_target_margin_update_positive": false,
+          "public_target_margin_update_positive": false
+        },
+        "scores": {
+          "public_context_selectivity": -0.5339282893713323,
+          "public_minus_logit_context_selectivity": -0.3635527789994641,
+          "public_minus_logit_target_margin_update": -0.29949528294080263,
+          "public_target_margin_update": -0.18159476280443165
+        },
+        "status": "withheld",
+        "withheld_reasons": [
+          "public_target_margin_update_positive",
+          "public_context_selectivity_positive",
+          "public_minus_logit_target_margin_update_positive",
+          "public_minus_logit_context_selectivity_positive"
+        ]
+      },
+      "repo": "astropy/astropy",
+      "target_concept_id": "where-fallback",
+      "task_id": "astropy-14539-where"
+    },
+    {
+      "cohort": "development",
+      "fields": {
+        "EVIDENCE": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "field_is_observed_context_not_inferred_from_lens"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "observed_from_bound_qwen_code_trajectory",
+            "value": "The storage implementation defers to FILE_UPLOAD_PERMISSIONS and the tests exercise several explicit modes."
+          }
+        },
+        "NEXT": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "field_is_observed_context_not_inferred_from_lens"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "observed_from_bound_qwen_code_trajectory",
+            "value": "Set the default permission mode and validate overridden and default storage behavior."
+          }
+        },
+        "WHERE": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "field_is_observed_context_not_inferred_from_lens"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "observed_from_bound_qwen_code_trajectory",
+            "value": "django/conf/global_settings.py and FileSystemStorage.file_permissions_mode"
+          }
+        },
+        "WHY": {
+          "lens": {
+            "claim": "Fixed-band public J-lens evidence for 'file permission mode' increased more than its same-task foils, task-external targets, and the corresponding ordinary-logit effects.",
+            "status": "supported_contextual_evidence_summary",
+            "withheld_reasons": []
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "not_an_observed_card_field",
+            "value": null
+          }
+        }
+      },
+      "instance_id": "django__django-10914",
+      "lens_why_guard": {
+        "criteria": {
+          "immediate_next_token_control_pass": true,
+          "primary_control_eligible": true,
+          "public_before_and_after_primary_stable_gate": true,
+          "public_context_selectivity_positive": true,
+          "public_minus_logit_context_selectivity_positive": true,
+          "public_minus_logit_target_margin_update_positive": true,
+          "public_target_margin_update_positive": true
+        },
+        "scores": {
+          "public_context_selectivity": 0.6583437559148608,
+          "public_minus_logit_context_selectivity": 0.5817732356463471,
+          "public_minus_logit_target_margin_update": 0.2563604160222215,
+          "public_target_margin_update": 0.25137134597278
+        },
+        "status": "supported",
+        "withheld_reasons": []
+      },
+      "repo": "django/django",
+      "target_concept_id": "file-mode",
+      "task_id": "django-10914-mode"
+    },
+    {
+      "cohort": "development",
+      "fields": {
+        "EVIDENCE": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "field_is_observed_context_not_inferred_from_lens"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "observed_from_bound_qwen_code_trajectory",
+            "value": "The inspected mapping stores weak-reference keys and values, while neighboring iterator and sibling helpers are not the diagnosis."
+          }
+        },
+        "NEXT": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "field_is_observed_context_not_inferred_from_lens"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "observed_from_bound_qwen_code_trajectory",
+            "value": "Add explicit Grouper state serialization and reproduce figure pickling."
+          }
+        },
+        "WHERE": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "field_is_observed_context_not_inferred_from_lens"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "observed_from_bound_qwen_code_trajectory",
+            "value": "matplotlib.cbook.Grouper serialization methods"
+          }
+        },
+        "WHY": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "public_minus_logit_target_margin_update_positive",
+              "public_minus_logit_context_selectivity_positive"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "not_an_observed_card_field",
+            "value": null
+          }
+        }
+      },
+      "instance_id": "matplotlib__matplotlib-25332",
+      "lens_why_guard": {
+        "criteria": {
+          "immediate_next_token_control_pass": true,
+          "primary_control_eligible": true,
+          "public_before_and_after_primary_stable_gate": true,
+          "public_context_selectivity_positive": true,
+          "public_minus_logit_context_selectivity_positive": false,
+          "public_minus_logit_target_margin_update_positive": false,
+          "public_target_margin_update_positive": true
+        },
+        "scores": {
+          "public_context_selectivity": 1.270480671579211,
+          "public_minus_logit_context_selectivity": -0.1470100137125847,
+          "public_minus_logit_target_margin_update": -0.3642582450231373,
+          "public_target_margin_update": 0.2716488028264892
+        },
+        "status": "withheld",
+        "withheld_reasons": [
+          "public_minus_logit_target_margin_update_positive",
+          "public_minus_logit_context_selectivity_positive"
+        ]
+      },
+      "repo": "matplotlib/matplotlib",
+      "target_concept_id": "weak-reference",
+      "task_id": "matplotlib-25332-weak"
+    },
+    {
+      "cohort": "development",
+      "fields": {
+        "EVIDENCE": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "field_is_observed_context_not_inferred_from_lens"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "observed_from_bound_qwen_code_trajectory",
+            "value": "The inspected selection and squeeze path retains the coordinate in the one-level stacking case."
+          }
+        },
+        "NEXT": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "field_is_observed_context_not_inferred_from_lens"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "observed_from_bound_qwen_code_trajectory",
+            "value": "Drop the stale dimension coordinate after selection and add a one-level MultiIndex regression test."
+          }
+        },
+        "WHERE": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "field_is_observed_context_not_inferred_from_lens"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "observed_from_bound_qwen_code_trajectory",
+            "value": "xarray.core.dataset.Dataset.to_unstacked_dataset"
+          }
+        },
+        "WHY": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "public_context_selectivity_positive"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "not_an_observed_card_field",
+            "value": null
+          }
+        }
+      },
+      "instance_id": "pydata__xarray-4094",
+      "lens_why_guard": {
+        "criteria": {
+          "immediate_next_token_control_pass": true,
+          "primary_control_eligible": true,
+          "public_before_and_after_primary_stable_gate": true,
+          "public_context_selectivity_positive": false,
+          "public_minus_logit_context_selectivity_positive": true,
+          "public_minus_logit_target_margin_update_positive": true,
+          "public_target_margin_update_positive": true
+        },
+        "scores": {
+          "public_context_selectivity": -0.18445328276857784,
+          "public_minus_logit_context_selectivity": 0.021734951644538425,
+          "public_minus_logit_target_margin_update": 1.1760766062115016,
+          "public_target_margin_update": 1.1335323585821158
+        },
+        "status": "withheld",
+        "withheld_reasons": [
+          "public_context_selectivity_positive"
+        ]
+      },
+      "repo": "pydata/xarray",
+      "target_concept_id": "squeeze",
+      "task_id": "xarray-4094-squeeze"
+    },
+    {
+      "cohort": "replication",
+      "fields": {
+        "EVIDENCE": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "field_is_observed_context_not_inferred_from_lens"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "observed_from_bound_qwen_code_trajectory",
+            "value": "The inspected serializer applies only(pk), while manager-level select_related state remains on the queryset."
+          }
+        },
+        "NEXT": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "field_is_observed_context_not_inferred_from_lens"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "observed_from_bound_qwen_code_trajectory",
+            "value": "Clear inherited select_related state before iterating the m2m queryset and run serializer tests."
+          }
+        },
+        "WHERE": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "field_is_observed_context_not_inferred_from_lens"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "observed_from_bound_qwen_code_trajectory",
+            "value": "django/core/serializers/python.py queryset_iterator"
+          }
+        },
+        "WHY": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "primary_control_eligible",
+              "public_target_margin_update_positive",
+              "public_context_selectivity_positive",
+              "public_minus_logit_target_margin_update_positive",
+              "public_minus_logit_context_selectivity_positive"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "not_an_observed_card_field",
+            "value": null
+          }
+        }
+      },
+      "instance_id": "django__django-16938",
+      "lens_why_guard": {
+        "criteria": {
+          "immediate_next_token_control_pass": true,
+          "primary_control_eligible": false,
+          "public_before_and_after_primary_stable_gate": true,
+          "public_context_selectivity_positive": false,
+          "public_minus_logit_context_selectivity_positive": false,
+          "public_minus_logit_target_margin_update_positive": false,
+          "public_target_margin_update_positive": false
+        },
+        "scores": {
+          "public_context_selectivity": -2.8239059944473235,
+          "public_minus_logit_context_selectivity": -2.1600018092208693,
+          "public_minus_logit_target_margin_update": -2.594288942212161,
+          "public_target_margin_update": -3.863373030337904
+        },
+        "status": "withheld",
+        "withheld_reasons": [
+          "primary_control_eligible",
+          "public_target_margin_update_positive",
+          "public_context_selectivity_positive",
+          "public_minus_logit_target_margin_update_positive",
+          "public_minus_logit_context_selectivity_positive"
+        ]
+      },
+      "repo": "django/django",
+      "target_concept_id": "only",
+      "task_id": "django-16938-only"
+    },
+    {
+      "cohort": "replication",
+      "fields": {
+        "EVIDENCE": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "field_is_observed_context_not_inferred_from_lens"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "observed_from_bound_qwen_code_trajectory",
+            "value": "The inspected locator call passes renderer state through code paths where figure attachment is absent."
+          }
+        },
+        "NEXT": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "field_is_observed_context_not_inferred_from_lens"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "observed_from_bound_qwen_code_trajectory",
+            "value": "Propagate the figure and supply a renderer fallback, then run inset locator tests."
+          }
+        },
+        "WHERE": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "field_is_observed_context_not_inferred_from_lens"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "observed_from_bound_qwen_code_trajectory",
+            "value": "matplotlib offsetbox and inset locator call path"
+          }
+        },
+        "WHY": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "public_target_margin_update_positive",
+              "public_context_selectivity_positive",
+              "public_minus_logit_context_selectivity_positive"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "not_an_observed_card_field",
+            "value": null
+          }
+        }
+      },
+      "instance_id": "matplotlib__matplotlib-26291",
+      "lens_why_guard": {
+        "criteria": {
+          "immediate_next_token_control_pass": true,
+          "primary_control_eligible": true,
+          "public_before_and_after_primary_stable_gate": true,
+          "public_context_selectivity_positive": false,
+          "public_minus_logit_context_selectivity_positive": false,
+          "public_minus_logit_target_margin_update_positive": true,
+          "public_target_margin_update_positive": false
+        },
+        "scores": {
+          "public_context_selectivity": -0.055640497781312165,
+          "public_minus_logit_context_selectivity": -0.0021099847596507126,
+          "public_minus_logit_target_margin_update": 0.034995392999113806,
+          "public_target_margin_update": -0.23418804643927138
+        },
+        "status": "withheld",
+        "withheld_reasons": [
+          "public_target_margin_update_positive",
+          "public_context_selectivity_positive",
+          "public_minus_logit_context_selectivity_positive"
+        ]
+      },
+      "repo": "matplotlib/matplotlib",
+      "target_concept_id": "renderer",
+      "task_id": "matplotlib-26291-renderer"
+    },
+    {
+      "cohort": "replication",
+      "fields": {
+        "EVIDENCE": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "field_is_observed_context_not_inferred_from_lens"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "observed_from_bound_qwen_code_trajectory",
+            "value": "The inspected transformer delegates to generic CSV splitting even when commas occur inside regex braces."
+          }
+        },
+        "NEXT": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "field_is_observed_context_not_inferred_from_lens"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "observed_from_bound_qwen_code_trajectory",
+            "value": "Add a regex-aware split helper and validate comma-containing and invalid patterns."
+          }
+        },
+        "WHERE": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "field_is_observed_context_not_inferred_from_lens"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "observed_from_bound_qwen_code_trajectory",
+            "value": "pylint/config/argument.py _regexp_csv_transfomer"
+          }
+        },
+        "WHY": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "primary_control_eligible"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "not_an_observed_card_field",
+            "value": null
+          }
+        }
+      },
+      "instance_id": "pylint-dev__pylint-8898",
+      "lens_why_guard": {
+        "criteria": {
+          "immediate_next_token_control_pass": true,
+          "primary_control_eligible": false,
+          "public_before_and_after_primary_stable_gate": true,
+          "public_context_selectivity_positive": true,
+          "public_minus_logit_context_selectivity_positive": true,
+          "public_minus_logit_target_margin_update_positive": true,
+          "public_target_margin_update_positive": true
+        },
+        "scores": {
+          "public_context_selectivity": 0.34101358393571823,
+          "public_minus_logit_context_selectivity": 0.2709263617243637,
+          "public_minus_logit_target_margin_update": 0.3789012298365002,
+          "public_target_margin_update": 0.2699397674506048
+        },
+        "status": "withheld",
+        "withheld_reasons": [
+          "primary_control_eligible"
+        ]
+      },
+      "repo": "pylint-dev/pylint",
+      "target_concept_id": "balanced",
+      "task_id": "pylint-8898-balanced"
+    },
+    {
+      "cohort": "replication",
+      "fields": {
+        "EVIDENCE": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "field_is_observed_context_not_inferred_from_lens"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "observed_from_bound_qwen_code_trajectory",
+            "value": "The multiple-inheritance reproduction sees one base marker while the sibling marker remains absent."
+          }
+        },
+        "NEXT": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "field_is_observed_context_not_inferred_from_lens"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "observed_from_bound_qwen_code_trajectory",
+            "value": "Collect markers across the relevant MRO entries and rerun mark inheritance tests."
+          }
+        },
+        "WHERE": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "field_is_observed_context_not_inferred_from_lens"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "observed_from_bound_qwen_code_trajectory",
+            "value": "_pytest.mark structures, get_unpacked_marks"
+          }
+        },
+        "WHY": {
+          "lens": {
+            "claim": "Fixed-band public J-lens evidence for 'getattr MRO lookup' increased more than its same-task foils, task-external targets, and the corresponding ordinary-logit effects.",
+            "status": "supported_contextual_evidence_summary",
+            "withheld_reasons": []
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "not_an_observed_card_field",
+            "value": null
+          }
+        }
+      },
+      "instance_id": "pytest-dev__pytest-10356",
+      "lens_why_guard": {
+        "criteria": {
+          "immediate_next_token_control_pass": true,
+          "primary_control_eligible": true,
+          "public_before_and_after_primary_stable_gate": true,
+          "public_context_selectivity_positive": true,
+          "public_minus_logit_context_selectivity_positive": true,
+          "public_minus_logit_target_margin_update_positive": true,
+          "public_target_margin_update_positive": true
+        },
+        "scores": {
+          "public_context_selectivity": 0.07718941489923142,
+          "public_minus_logit_context_selectivity": 0.5964683932879893,
+          "public_minus_logit_target_margin_update": 1.2054068320275928,
+          "public_target_margin_update": 0.6760084776052866
+        },
+        "status": "supported",
+        "withheld_reasons": []
+      },
+      "repo": "pytest-dev/pytest",
+      "target_concept_id": "getattr",
+      "task_id": "pytest-10356-getattr"
+    },
+    {
+      "cohort": "replication",
+      "fields": {
+        "EVIDENCE": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "field_is_observed_context_not_inferred_from_lens"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "observed_from_bound_qwen_code_trajectory",
+            "value": "The inspected CV wrapper materializes an iterable, while the selector repeatedly passes the original iterator."
+          }
+        },
+        "NEXT": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "field_is_observed_context_not_inferred_from_lens"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "observed_from_bound_qwen_code_trajectory",
+            "value": "Materialize the CV iterable once before candidate scoring and add an iterator regression test."
+          }
+        },
+        "WHERE": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "field_is_observed_context_not_inferred_from_lens"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "observed_from_bound_qwen_code_trajectory",
+            "value": "sklearn.feature_selection.SequentialFeatureSelector fit and scoring loop"
+          }
+        },
+        "WHY": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "primary_control_eligible"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "not_an_observed_card_field",
+            "value": null
+          }
+        }
+      },
+      "instance_id": "scikit-learn__scikit-learn-25973",
+      "lens_why_guard": {
+        "criteria": {
+          "immediate_next_token_control_pass": true,
+          "primary_control_eligible": false,
+          "public_before_and_after_primary_stable_gate": true,
+          "public_context_selectivity_positive": true,
+          "public_minus_logit_context_selectivity_positive": true,
+          "public_minus_logit_target_margin_update_positive": true,
+          "public_target_margin_update_positive": true
+        },
+        "scores": {
+          "public_context_selectivity": 0.4833823319928291,
+          "public_minus_logit_context_selectivity": 0.43800223302104474,
+          "public_minus_logit_target_margin_update": 0.47665256651661736,
+          "public_target_margin_update": 0.4117884420271234
+        },
+        "status": "withheld",
+        "withheld_reasons": [
+          "primary_control_eligible"
+        ]
+      },
+      "repo": "scikit-learn/scikit-learn",
+      "target_concept_id": "consumed",
+      "task_id": "sklearn-25973-consumed"
+    },
+    {
+      "cohort": "replication",
+      "fields": {
+        "EVIDENCE": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "field_is_observed_context_not_inferred_from_lens"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "observed_from_bound_qwen_code_trajectory",
+            "value": "The reproduction modifies separately read documents, but included content still bypasses that modification."
+          }
+        },
+        "NEXT": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "field_is_observed_context_not_inferred_from_lens"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "observed_from_bound_qwen_code_trajectory",
+            "value": "Emit source-read while the Include directive reads the included file and add an include regression test."
+          }
+        },
+        "WHERE": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "field_is_observed_context_not_inferred_from_lens"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "observed_from_bound_qwen_code_trajectory",
+            "value": "sphinx.directives.other.Include"
+          }
+        },
+        "WHY": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "primary_control_eligible",
+              "public_target_margin_update_positive",
+              "public_context_selectivity_positive",
+              "public_minus_logit_target_margin_update_positive",
+              "public_minus_logit_context_selectivity_positive"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "not_an_observed_card_field",
+            "value": null
+          }
+        }
+      },
+      "instance_id": "sphinx-doc__sphinx-11510",
+      "lens_why_guard": {
+        "criteria": {
+          "immediate_next_token_control_pass": true,
+          "primary_control_eligible": false,
+          "public_before_and_after_primary_stable_gate": true,
+          "public_context_selectivity_positive": false,
+          "public_minus_logit_context_selectivity_positive": false,
+          "public_minus_logit_target_margin_update_positive": false,
+          "public_target_margin_update_positive": false
+        },
+        "scores": {
+          "public_context_selectivity": -1.4671372017236686,
+          "public_minus_logit_context_selectivity": -1.3070175978742502,
+          "public_minus_logit_target_margin_update": -0.792093124777622,
+          "public_target_margin_update": -0.8283336618506163
+        },
+        "status": "withheld",
+        "withheld_reasons": [
+          "primary_control_eligible",
+          "public_target_margin_update_positive",
+          "public_context_selectivity_positive",
+          "public_minus_logit_target_margin_update_positive",
+          "public_minus_logit_context_selectivity_positive"
+        ]
+      },
+      "repo": "sphinx-doc/sphinx",
+      "target_concept_id": "include-directive",
+      "task_id": "sphinx-11510-include"
+    },
+    {
+      "cohort": "replication",
+      "fields": {
+        "EVIDENCE": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "field_is_observed_context_not_inferred_from_lens"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "observed_from_bound_qwen_code_trajectory",
+            "value": "idna.encode('.example.com') raises Empty Label while the current ASCII branch bypasses IDNA validation."
+          }
+        },
+        "NEXT": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "field_is_observed_context_not_inferred_from_lens"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "observed_from_bound_qwen_code_trajectory",
+            "value": "Validate ASCII and non-ASCII hosts through the same IDNA path and run URL preparation tests."
+          }
+        },
+        "WHERE": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "field_is_observed_context_not_inferred_from_lens"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "observed_from_bound_qwen_code_trajectory",
+            "value": "requests.models.PreparedRequest.prepare_url"
+          }
+        },
+        "WHY": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "public_target_margin_update_positive",
+              "public_context_selectivity_positive",
+              "public_minus_logit_target_margin_update_positive",
+              "public_minus_logit_context_selectivity_positive"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "not_an_observed_card_field",
+            "value": null
+          }
+        }
+      },
+      "instance_id": "psf__requests-5414",
+      "lens_why_guard": {
+        "criteria": {
+          "immediate_next_token_control_pass": true,
+          "primary_control_eligible": true,
+          "public_before_and_after_primary_stable_gate": true,
+          "public_context_selectivity_positive": false,
+          "public_minus_logit_context_selectivity_positive": false,
+          "public_minus_logit_target_margin_update_positive": false,
+          "public_target_margin_update_positive": false
+        },
+        "scores": {
+          "public_context_selectivity": -0.20666338024525394,
+          "public_minus_logit_context_selectivity": -0.5905220863750476,
+          "public_minus_logit_target_margin_update": -0.8883330245697887,
+          "public_target_margin_update": -0.546273877406493
+        },
+        "status": "withheld",
+        "withheld_reasons": [
+          "public_target_margin_update_positive",
+          "public_context_selectivity_positive",
+          "public_minus_logit_target_margin_update_positive",
+          "public_minus_logit_context_selectivity_positive"
+        ]
+      },
+      "repo": "psf/requests",
+      "target_concept_id": "caught",
+      "task_id": "requests-5414-caught"
+    },
+    {
+      "cohort": "development",
+      "fields": {
+        "EVIDENCE": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "field_is_observed_context_not_inferred_from_lens"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "observed_from_bound_qwen_code_trajectory",
+            "value": "The anchor GET path checks the fragment without first validating the HTTP response status."
+          }
+        },
+        "NEXT": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "field_is_observed_context_not_inferred_from_lens"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "observed_from_bound_qwen_code_trajectory",
+            "value": "Raise for status before anchor lookup and add a 404-with-anchor regression test."
+          }
+        },
+        "WHERE": {
+          "lens": {
+            "claim": null,
+            "status": "withheld",
+            "withheld_reasons": [
+              "field_is_observed_context_not_inferred_from_lens"
+            ]
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "observed_from_bound_qwen_code_trajectory",
+            "value": "sphinx.builders.linkcheck.check_uri"
+          }
+        },
+        "WHY": {
+          "lens": {
+            "claim": "Fixed-band public J-lens evidence for 'masking the HTTP error' increased more than its same-task foils, task-external targets, and the corresponding ordinary-logit effects.",
+            "status": "supported_contextual_evidence_summary",
+            "withheld_reasons": []
+          },
+          "observed": {
+            "lens_inference": false,
+            "status": "not_an_observed_card_field",
+            "value": null
+          }
+        }
+      },
+      "instance_id": "sphinx-doc__sphinx-8269",
+      "lens_why_guard": {
+        "criteria": {
+          "immediate_next_token_control_pass": true,
+          "primary_control_eligible": true,
+          "public_before_and_after_primary_stable_gate": true,
+          "public_context_selectivity_positive": true,
+          "public_minus_logit_context_selectivity_positive": true,
+          "public_minus_logit_target_margin_update_positive": true,
+          "public_target_margin_update_positive": true
+        },
+        "scores": {
+          "public_context_selectivity": 0.39446917447752483,
+          "public_minus_logit_context_selectivity": 0.1694647390391878,
+          "public_minus_logit_target_margin_update": 1.4169578050475462,
+          "public_target_margin_update": 1.204437081409723
+        },
+        "status": "supported",
+        "withheld_reasons": []
+      },
+      "repo": "sphinx-doc/sphinx",
+      "target_concept_id": "masking",
+      "task_id": "sphinx-8269-masking"
+    }
+  ],
+  "kind": "swe_contextual_evidence_cards",
+  "label": "OBSERVED trajectory fields plus guarded lens evidence; not recovered chain of thought",
+  "limitations": [
+    "The lens scores predeclared concept/entity tokens; it does not recover private chain-of-thought text.",
+    "Concept alignment is not evidence for a causal relation, semantic proposition, or why the model acted.",
+    "Targets exposed in the prompt measure contextual evidence reweighting, not hidden-future prediction."
+  ],
+  "schema_version": 1
+}

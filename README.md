@@ -33,7 +33,10 @@ for the leakage-audited multi-task C0/C1 probe, and
 [docs/JLENS_SWE_MULTISTAGE_2026-07-18.md](docs/JLENS_SWE_MULTISTAGE_2026-07-18.md)
 for the eight-stage lifecycle replay and next-step decision,
 [docs/JLENS_SWE_BEHAVIORAL_N20_2026-07-18.md](docs/JLENS_SWE_BEHAVIORAL_N20_2026-07-18.md)
-for the 20-task behavioral replay and probe-versus-refit decision, and
+for the 20-task behavioral replay and probe-versus-refit decision,
+[docs/JLENS_SWE_CONTEXTUAL_EVIDENCE_2026-07-18.md](docs/JLENS_SWE_CONTEXTUAL_EVIDENCE_2026-07-18.md)
+for the paired contextual-evidence pilot and its guarded, non-COT task cards,
+and
 [docs/JLENS_NF4_EXPERIMENT.md](docs/JLENS_NF4_EXPERIMENT.md) for the fresh-fit
 experiment.
 
@@ -210,6 +213,16 @@ Compact evidence is in
 [`validation/jlens-upstream-multihop-control-analysis-2026-07-17.json`](validation/jlens-upstream-multihop-control-analysis-2026-07-17.json).
 
 ### J-lens on the certified SWE episode
+
+The later 12-task contextual-evidence pilot compares adjacent Qwen Code
+boundaries after task evidence enters the prompt. The public lens passed its
+frozen directional point rule, but all four decision confidence-interval lower
+bounds were nonpositive, exact-token copy baselines retrieved task targets far
+better, and only 3/12 guarded entity-level `WHY` fields were emitted. Public,
+NF4, and native NVFP4/FP8-STE lenses were statistically indistinguishable in
+this small sample. See the
+[contextual-evidence report](docs/JLENS_SWE_CONTEXTUAL_EVIDENCE_2026-07-18.md);
+it explicitly does not claim chain-of-thought recovery.
 
 The exact nine request contexts from the successful Qwen Code run were
 re-rendered with the pinned template and tokenizer. Their lengths exactly

@@ -1,0 +1,1168 @@
+{
+  "schema_version": 1,
+  "kind": "swe_contextual_evidence_update_protocol",
+  "analysis_version": "paired-evidence-update-development-v1",
+  "status": "development_protocol_frozen_before_contextual_replay",
+  "lens_outputs_used_for_boundary_or_labels": false,
+  "contamination_disclosure": {
+    "existing_n20_reports_predate_this_protocol": true,
+    "existing_generic_action_and_patch_identifier_results_were_known": true,
+    "new_contextual_candidate_scores_were_not_inspected_before_freeze": true,
+    "interpretation": "development_pilot_not_independent_confirmation"
+  },
+  "pins": {
+    "model": {
+      "repo_id": "nvidia/Qwen3.6-27B-NVFP4",
+      "revision": "0893e1606ff3d5f97a441f405d5fc541a6bdf404",
+      "config_sha256": "c04a19ba293737ad7be4f6e96d6666cb7e479cbe19ecc0c289fad267135b0338",
+      "index_sha256": "7aa103a2582b7d26631988de33dea19e8a308ee9c239e8e14feb374af30905e2"
+    },
+    "tokenizer": {
+      "repo_id": "nvidia/Qwen3.6-27B-NVFP4",
+      "revision": "0893e1606ff3d5f97a441f405d5fc541a6bdf404",
+      "json_sha256": "5f9e4d4901a92b997e463c1f46055088b6cca5ca61a6522d1b9f64c4bb81cb42",
+      "vocabulary_size": 248077,
+      "logit_vocabulary_size": 248320
+    },
+    "chat_template": {
+      "path": "configs/qwen3-openai-codex.jinja",
+      "sha256": "c166a05aaf5ad4b807a7c46497f92180e3df24e64d4b54d27fd26ec61bec38da"
+    },
+    "sources": {
+      "development": {
+        "run_root": "runs/swe_behavioral_n10_20260718",
+        "campaign_path": "configs/swe_behavioral_campaign.json",
+        "campaign_sha256": "24d1e885f830c1738294a3e1cdfda50fce307a942bb0badb6f9b1fa55f1de1a0"
+      },
+      "replication": {
+        "run_root": "runs/swe_behavioral_replication_n10_20260718",
+        "campaign_path": "configs/swe_behavioral_replication_campaign.json",
+        "campaign_sha256": "c861a0f13a9a8225855696a301d51000538b9f78bee1f14f0a028963644708ae"
+      }
+    },
+    "lenses": {
+      "public": {
+        "repo_id": "neuronpedia/jacobian-lens",
+        "revision": "a4114d7752d11eb546e6cf372213d7e75526d3a1",
+        "sha256": "1718c8c52dd8a9dad03738d4d625937c1fbba10be325b872ed446c7290fc11e1",
+        "n_prompts": 1000
+      },
+      "nf4": {
+        "path": ".cache/Qwen3.6-27B-jlens-nf4-n10-fp32.pt",
+        "sha256": "54d95f9626d8d120d56c161cfc8943ec76fd77172a9c0c54d5d913a5a639424f",
+        "provenance_sha256": "08dfe022cc74bab226308dcd77a3901ec18806f8832dc8dec46524374fa3b1e7",
+        "n_prompts": 10
+      },
+      "native_nvfp4_ste": {
+        "path": ".cache/Qwen3.6-27B-jlens-nvfp4-ste-n10-fp32.pt",
+        "sha256": "82be61c805d127427b37b2b4715885b756c2ca7af96291578fa4da9cd783e057",
+        "provenance_sha256": "289e93a0c99579a0d5637cb37b42c4575b73eb2c38d35d47963de85178e90601",
+        "state_sha256": "f5ee70cfda416327be6b2583a67f5662cbe4036dbc68ce4ba470884383bfbcf6",
+        "n_prompts": 10
+      }
+    }
+  },
+  "fixed_layer_band": {
+    "start": 24,
+    "end": 47,
+    "end_inclusive": true,
+    "layers": [
+      24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35,
+      36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47
+    ]
+  },
+  "prompt_context": {
+    "max_model_len": 65536,
+    "reserved_generation_tokens": 1,
+    "maximum_prompt_tokens": 65535,
+    "positions": [-1]
+  },
+  "score_reduction": {
+    "within_concept": "logmeanexp_over_declared_token_scores",
+    "within_foil_set": "logmeanexp_over_three_concept_scores",
+    "across_layers": "arithmetic_mean_over_fixed_layers_24_through_47",
+    "layer_selection": "none"
+  },
+  "numerical_certification": {
+    "primary_stable": {
+      "provenance": "frozen_for_new_study_from_prior_n20_bf16_reconstruction_envelope_before_new_contextual_scores",
+      "final_norm_max_abs_tolerance": 0.125,
+      "final_norm_rms_tolerance": 0.006,
+      "final_logits_max_abs_tolerance": 0.125,
+      "final_logits_rms_tolerance": 0.02,
+      "top_k_prefix": 5
+    },
+    "legacy_strict": {
+      "provenance": "original_n20_primary_contract",
+      "final_norm_max_abs_tolerance": 0.125,
+      "final_norm_rms_tolerance": 0.006,
+      "final_logits_max_abs_tolerance": 0.0625,
+      "final_logits_rms_tolerance": 0.01,
+      "top_k_prefix": 5
+    }
+  },
+  "controls": {
+    "ordinary_logit_lens": "same_residual_same_tokens_same_layers",
+    "copy_frequency": "paired_log1p_exact_form_token_count_margin",
+    "copy_recency": "paired_negative_log1p_last_exact_form_token_distance_margin",
+    "wrong_task": "score_every_task_target_on_every_task_pair_and_rank_own_target_by_after_minus_before_update",
+    "same_repository_sibling": "report_when_a_second_audited_task_from_the_same_repository_exists",
+    "progress": "paired_adjacent_requests_within_one_task",
+    "immediate_next_token": "report_and_exclude_exact_generated_target_token_matches",
+    "gold_data_used": false
+  },
+  "bootstrap": {
+    "algorithm": "hierarchical_repository_then_task_percentile_v1",
+    "seed": 36040,
+    "samples": 5000,
+    "confidence_level": 0.95,
+    "row_resampling_forbidden": true,
+    "minimum_valid_fraction": 0.8
+  },
+  "decision": {
+    "observation_unit": "one_before_after_pair_per_audited_task",
+    "task_weighting": "equal",
+    "minimum_primary_tasks": 8,
+    "minimum_primary_repositories": 6,
+    "public_useful_requires": [
+      "positive_mean_target_margin_update",
+      "positive_public_j_minus_ordinary_logit_target_margin_update",
+      "positive_mean_wrong_task_context_selectivity",
+      "positive_public_j_minus_ordinary_logit_context_selectivity"
+    ],
+    "native_refit_consideration": "only_if_public_useful_and_native_materially_trails_public",
+    "causal_swap_next_step": "only_after_a_readout_passes_copy_progress_and_logit_controls",
+    "broad_claim_policy": "development_only_until_independent_tasks_are_preregistered_and_run"
+  },
+  "task_card_policy": {
+    "observed_fields": ["evidence", "where", "next"],
+    "lens_scored_field": "why",
+    "supported_requires": [
+      "primary_stable_pair_gate",
+      "positive_public_target_margin_update",
+      "positive_public_context_selectivity",
+      "positive_corresponding_public_j_minus_logit_effects"
+    ],
+    "forbidden_claims": [
+      "literal_hidden_sentence",
+      "chain_of_thought_recovery",
+      "causal_relation_recovery_from_entity_scores"
+    ]
+  },
+  "tasks": [
+    {
+      "id": "astropy-14539-where",
+      "instance_id": "astropy__astropy-14539",
+      "repo": "astropy/astropy",
+      "cohort": "development",
+      "after_global_request_index": 10,
+      "after_task_request_index": 10,
+      "primary_control_eligible": true,
+      "control_match_status": "matched_exposed_target_and_foils",
+      "raw_sha256": {
+        "before": "60e1e365ef76a0964b4ae72ce690193959d4c006bf4d2630b45a537e819efcaf",
+        "after": "0fdbfd3185a45078d53fcff33bc6d2c39e6877598ab45816e2f305428c725730",
+        "label": "edc9e52f8ffa4cb99359e7aa91f121f87e686a49d5c6621b9cb51ebca7d6fd05"
+      },
+      "stratum": "evidence_reweighting",
+      "target": {
+        "id": "where-fallback",
+        "label": "np.where fallback",
+        "aliases": ["where"],
+        "forms": [
+          {"kind": "bare", "text": "where", "token_id": 2777},
+          {"kind": "leading_space", "text": " where", "token_id": 1332}
+        ],
+        "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+        "expected_exposure": {
+          "before": {"present": true, "identifier_occurrences": 14},
+          "after": {"present": true, "identifier_occurrences": 15}
+        },
+        "future_present": true
+      },
+      "foils": [
+        {
+          "id": "len",
+          "label": "len",
+          "aliases": ["len"],
+          "forms": [
+            {"kind": "bare", "text": "len", "token_id": 2798},
+            {"kind": "leading_space", "text": " len", "token_id": 2343}
+          ],
+          "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+          "expected_exposure": {
+            "before": {"present": true, "identifier_occurrences": 22},
+            "after": {"present": true, "identifier_occurrences": 24}
+          },
+          "future_present": false
+        },
+        {
+          "id": "set",
+          "label": "set",
+          "aliases": ["set"],
+          "forms": [
+            {"kind": "bare", "text": "set", "token_id": 723},
+            {"kind": "leading_space", "text": " set", "token_id": 716}
+          ],
+          "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+          "expected_exposure": {
+            "before": {"present": true, "identifier_occurrences": 7},
+            "after": {"present": true, "identifier_occurrences": 8}
+          },
+          "future_present": false
+        },
+        {
+          "id": "range",
+          "label": "range",
+          "aliases": ["range"],
+          "forms": [
+            {"kind": "bare", "text": "range", "token_id": 9381},
+            {"kind": "leading_space", "text": " range", "token_id": 2020}
+          ],
+          "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+          "expected_exposure": {
+            "before": {"present": true, "identifier_occurrences": 4},
+            "after": {"present": true, "identifier_occurrences": 5}
+          },
+          "future_present": false
+        }
+      ],
+      "task_card": {
+        "why": "Q-format variable-length arrays fall through to np.where instead of the VLA comparison branch.",
+        "where": "astropy/io/fits/diff.py, FITSDiff array comparison",
+        "evidence": "The inspected branch handles P-format VLAs, while QD reaches the generic np.where comparison.",
+        "next": "Reproduce QD behavior, extend the VLA branch to Q, and run FITS diff tests.",
+        "claim_scope": "entity_emphasis_for_an_exposed_fallback_not_relation_recovery"
+      }
+    },
+    {
+      "id": "django-10914-mode",
+      "instance_id": "django__django-10914",
+      "repo": "django/django",
+      "cohort": "development",
+      "after_global_request_index": 39,
+      "after_task_request_index": 5,
+      "primary_control_eligible": true,
+      "control_match_status": "matched_exposed_target_and_foils",
+      "raw_sha256": {
+        "before": "b5db568062f6b0037bf8ea57cfc9c0808e3004799c3dcc5fcd7c015ca60d2519",
+        "after": "b4d025000602e628e763d87ffff6f8ad7cd8b8bccd9b8aaa383e94215ebfb746",
+        "label": "734ab4b72ebc7399796982c9bde0900182a0e6475226ecaa23f31f46374c5301"
+      },
+      "stratum": "evidence_reweighting",
+      "target": {
+        "id": "file-mode",
+        "label": "file permission mode",
+        "aliases": ["mode"],
+        "forms": [
+          {"kind": "bare", "text": "mode", "token_id": 8255},
+          {"kind": "leading_space", "text": " mode", "token_id": 3728}
+        ],
+        "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+        "expected_exposure": {
+          "before": {"present": true, "identifier_occurrences": 6},
+          "after": {"present": true, "identifier_occurrences": 12}
+        },
+        "future_present": true
+      },
+      "foils": [
+        {
+          "id": "storage",
+          "label": "storage",
+          "aliases": ["storage"],
+          "forms": [
+            {"kind": "bare", "text": "storage", "token_id": 15696},
+            {"kind": "leading_space", "text": " storage", "token_id": 5638}
+          ],
+          "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+          "expected_exposure": {
+            "before": {"present": true, "identifier_occurrences": 9},
+            "after": {"present": true, "identifier_occurrences": 14}
+          },
+          "future_present": false
+        },
+        {
+          "id": "location",
+          "label": "location",
+          "aliases": ["location"],
+          "forms": [
+            {"kind": "bare", "text": "location", "token_id": 2447},
+            {"kind": "leading_space", "text": " location", "token_id": 3602}
+          ],
+          "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+          "expected_exposure": {
+            "before": {"present": true, "identifier_occurrences": 16},
+            "after": {"present": true, "identifier_occurrences": 18}
+          },
+          "future_present": false
+        },
+        {
+          "id": "setting",
+          "label": "setting",
+          "aliases": ["setting"],
+          "forms": [
+            {"kind": "bare", "text": "setting", "token_id": 14874},
+            {"kind": "leading_space", "text": " setting", "token_id": 6047}
+          ],
+          "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+          "expected_exposure": {
+            "before": {"present": true, "identifier_occurrences": 9},
+            "after": {"present": true, "identifier_occurrences": 18}
+          },
+          "future_present": false
+        }
+      ],
+      "task_card": {
+        "why": "A None default leaves final file permissions dependent on the upload path; the intended default is explicit.",
+        "where": "django/conf/global_settings.py and FileSystemStorage.file_permissions_mode",
+        "evidence": "The storage implementation defers to FILE_UPLOAD_PERMISSIONS and the tests exercise several explicit modes.",
+        "next": "Set the default permission mode and validate overridden and default storage behavior.",
+        "claim_scope": "entity_emphasis_for_an_exposed_configuration_path_not_relation_recovery"
+      }
+    },
+    {
+      "id": "matplotlib-25332-weak",
+      "instance_id": "matplotlib__matplotlib-25332",
+      "repo": "matplotlib/matplotlib",
+      "cohort": "development",
+      "after_global_request_index": 60,
+      "after_task_request_index": 5,
+      "primary_control_eligible": true,
+      "control_match_status": "matched_newly_exposed_target_and_foils",
+      "raw_sha256": {
+        "before": "580b3c51b5ddf31f0380ccd63c29ade7f6174b10b849e3779e7e1f937f88bcb0",
+        "after": "69f5e560ae7e4158d55da9b20801725cbe0ad535efd69bb375022657d26f86fb",
+        "label": "633f02ff66f563563e7cc0fc4b95f7dd312010be94fd2476ab7602e37df4290e"
+      },
+      "stratum": "evidence_reweighting",
+      "target": {
+        "id": "weak-reference",
+        "label": "weak references",
+        "aliases": ["weak"],
+        "forms": [
+          {"kind": "bare", "text": "weak", "token_id": 12768},
+          {"kind": "leading_space", "text": " weak", "token_id": 7234}
+        ],
+        "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+        "expected_exposure": {
+          "before": {"present": false, "identifier_occurrences": 0},
+          "after": {"present": true, "identifier_occurrences": 2}
+        },
+        "future_present": true
+      },
+      "foils": [
+        {
+          "id": "iterator",
+          "label": "iterator",
+          "aliases": ["iterator"],
+          "forms": [
+            {"kind": "bare", "text": "iterator", "token_id": 6640},
+            {"kind": "leading_space", "text": " iterator", "token_id": 14650}
+          ],
+          "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+          "expected_exposure": {
+            "before": {"present": false, "identifier_occurrences": 0},
+            "after": {"present": true, "identifier_occurrences": 2}
+          },
+          "future_present": false
+        },
+        {
+          "id": "siblings",
+          "label": "siblings",
+          "aliases": ["siblings"],
+          "forms": [
+            {"kind": "bare", "text": "siblings", "token_id": 50174},
+            {"kind": "leading_space", "text": " siblings", "token_id": 35467}
+          ],
+          "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+          "expected_exposure": {
+            "before": {"present": false, "identifier_occurrences": 0},
+            "after": {"present": true, "identifier_occurrences": 2}
+          },
+          "future_present": false
+        },
+        {
+          "id": "foo",
+          "label": "Foo",
+          "aliases": ["Foo"],
+          "forms": [
+            {"kind": "bare", "text": "Foo", "token_id": 39572},
+            {"kind": "leading_space", "text": " Foo", "token_id": 32320}
+          ],
+          "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+          "expected_exposure": {
+            "before": {"present": false, "identifier_occurrences": 0},
+            "after": {"present": true, "identifier_occurrences": 2}
+          },
+          "future_present": false
+        }
+      ],
+      "task_card": {
+        "why": "Grouper serialization crosses weak-reference state that needs explicit pickle handling.",
+        "where": "matplotlib.cbook.Grouper serialization methods",
+        "evidence": "The inspected mapping stores weak-reference keys and values, while neighboring iterator and sibling helpers are not the diagnosis.",
+        "next": "Add explicit Grouper state serialization and reproduce figure pickling.",
+        "claim_scope": "newly_exposed_entity_retrieval_not_hidden_inference"
+      }
+    },
+    {
+      "id": "xarray-4094-squeeze",
+      "instance_id": "pydata__xarray-4094",
+      "repo": "pydata/xarray",
+      "cohort": "development",
+      "after_global_request_index": 159,
+      "after_task_request_index": 13,
+      "primary_control_eligible": true,
+      "control_match_status": "matched_static_exposed_target_and_foils",
+      "raw_sha256": {
+        "before": "0d10c77426d9470e110f45aed6537527adf6930ee8aefad248411b8d7d940dae",
+        "after": "6e5b8f71ba816022efc92b2f2d00379f9b031261cb0c8725a846dc205de1772c",
+        "label": "2a98a0791f0fe43db47395c678c990cf24a5c861ee2eb7a3ced802d149ad85a4"
+      },
+      "stratum": "evidence_reweighting",
+      "target": {
+        "id": "squeeze",
+        "label": "squeeze",
+        "aliases": ["squeeze"],
+        "forms": [
+          {"kind": "bare", "text": "squeeze", "token_id": 50167},
+          {"kind": "leading_space", "text": " squeeze", "token_id": 35355}
+        ],
+        "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+        "expected_exposure": {
+          "before": {"present": true, "identifier_occurrences": 20},
+          "after": {"present": true, "identifier_occurrences": 20}
+        },
+        "future_present": true
+      },
+      "foils": [
+        {
+          "id": "sel",
+          "label": "sel",
+          "aliases": ["sel"],
+          "forms": [
+            {"kind": "bare", "text": "sel", "token_id": 9227},
+            {"kind": "leading_space", "text": " sel", "token_id": 11467}
+          ],
+          "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+          "expected_exposure": {
+            "before": {"present": true, "identifier_occurrences": 20},
+            "after": {"present": true, "identifier_occurrences": 20}
+          },
+          "future_present": false
+        },
+        {
+          "id": "index",
+          "label": "index",
+          "aliases": ["index"],
+          "forms": [
+            {"kind": "bare", "text": "index", "token_id": 1209},
+            {"kind": "leading_space", "text": " index", "token_id": 1857}
+          ],
+          "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+          "expected_exposure": {
+            "before": {"present": true, "identifier_occurrences": 15},
+            "after": {"present": true, "identifier_occurrences": 15}
+          },
+          "future_present": false
+        },
+        {
+          "id": "array",
+          "label": "array",
+          "aliases": ["array"],
+          "forms": [
+            {"kind": "bare", "text": "array", "token_id": 1595},
+            {"kind": "leading_space", "text": " array", "token_id": 1287}
+          ],
+          "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+          "expected_exposure": {
+            "before": {"present": true, "identifier_occurrences": 11},
+            "after": {"present": true, "identifier_occurrences": 11}
+          },
+          "future_present": false
+        }
+      ],
+      "task_card": {
+        "why": "Selecting a one-level MultiIndex leaves a scalar coordinate that squeeze does not remove before Dataset merge.",
+        "where": "xarray.core.dataset.Dataset.to_unstacked_dataset",
+        "evidence": "The inspected selection and squeeze path retains the coordinate in the one-level stacking case.",
+        "next": "Drop the stale dimension coordinate after selection and add a one-level MultiIndex regression test.",
+        "claim_scope": "entity_emphasis_for_an_exposed_reduction_step_not_relation_recovery"
+      }
+    },
+    {
+      "id": "django-16938-only",
+      "instance_id": "django__django-16938",
+      "repo": "django/django",
+      "cohort": "replication",
+      "after_global_request_index": 38,
+      "after_task_request_index": 5,
+      "primary_control_eligible": false,
+      "control_match_status": "descriptive_exposure_frequency_mismatch",
+      "raw_sha256": {
+        "before": "f3ada96116ff39f1d8b6180456ffe4af62ae5148c256473ba3b7120e3a7f617e",
+        "after": "adc506757e377a8fd84d59e3b8dec65d378a6011507c332e2c8443bfec8a6418",
+        "label": "662fc0433621dd68de25e21e18a2ec99f414adc87aa5e3f420d9c5fc9510aa44"
+      },
+      "stratum": "evidence_reweighting",
+      "target": {
+        "id": "only",
+        "label": "QuerySet.only",
+        "aliases": ["only"],
+        "forms": [
+          {"kind": "bare", "text": "only", "token_id": 3138},
+          {"kind": "leading_space", "text": " only", "token_id": 1132}
+        ],
+        "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+        "expected_exposure": {
+          "before": {"present": true, "identifier_occurrences": 28},
+          "after": {"present": true, "identifier_occurrences": 32}
+        },
+        "future_present": true
+      },
+      "foils": [
+        {
+          "id": "serializers",
+          "label": "serializers",
+          "aliases": ["serializers"],
+          "forms": [
+            {"kind": "leading_space", "text": " serializers", "token_id": 36955}
+          ],
+          "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+          "expected_exposure": {
+            "before": {"present": true, "identifier_occurrences": 11},
+            "after": {"present": true, "identifier_occurrences": 15}
+          },
+          "future_present": false
+        },
+        {
+          "id": "data",
+          "label": "data",
+          "aliases": ["data"],
+          "forms": [
+            {"kind": "bare", "text": "data", "token_id": 673},
+            {"kind": "leading_space", "text": " data", "token_id": 795}
+          ],
+          "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+          "expected_exposure": {
+            "before": {"present": true, "identifier_occurrences": 4},
+            "after": {"present": true, "identifier_occurrences": 20}
+          },
+          "future_present": false
+        },
+        {
+          "id": "value",
+          "label": "value",
+          "aliases": ["value"],
+          "forms": [
+            {"kind": "bare", "text": "value", "token_id": 927},
+            {"kind": "leading_space", "text": " value", "token_id": 869}
+          ],
+          "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+          "expected_exposure": {
+            "before": {"present": false, "identifier_occurrences": 0},
+            "after": {"present": true, "identifier_occurrences": 25}
+          },
+          "future_present": false
+        }
+      ],
+      "task_card": {
+        "why": "Serializer QuerySet.only(pk) defers a relation already selected by a custom manager, creating a compile-time conflict.",
+        "where": "django/core/serializers/python.py queryset_iterator",
+        "evidence": "The inspected serializer applies only(pk), while manager-level select_related state remains on the queryset.",
+        "next": "Clear inherited select_related state before iterating the m2m queryset and run serializer tests.",
+        "claim_scope": "entity_emphasis_for_an_exposed_query_operation_not_relation_recovery"
+      }
+    },
+    {
+      "id": "matplotlib-26291-renderer",
+      "instance_id": "matplotlib__matplotlib-26291",
+      "repo": "matplotlib/matplotlib",
+      "cohort": "replication",
+      "after_global_request_index": 83,
+      "after_task_request_index": 4,
+      "primary_control_eligible": true,
+      "control_match_status": "matched_exposed_target_and_foils",
+      "raw_sha256": {
+        "before": "768748af8a3397859b08cda00714f0dc450dd96b1d7b72f3af0e8f9cd11cb6e1",
+        "after": "5a1f93db52d26c522939a78cb101a74a303c91a7771b62fceb628b45a8dd426b",
+        "label": "f1c2f768ff2e09cfdaa84ab7bffdff7bf82ae856b012fcc064262c7158b3e5bf"
+      },
+      "stratum": "evidence_reweighting",
+      "target": {
+        "id": "renderer",
+        "label": "renderer",
+        "aliases": ["renderer"],
+        "forms": [
+          {"kind": "bare", "text": "renderer", "token_id": 26084},
+          {"kind": "leading_space", "text": " renderer", "token_id": 19113}
+        ],
+        "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+        "expected_exposure": {
+          "before": {"present": true, "identifier_occurrences": 21},
+          "after": {"present": true, "identifier_occurrences": 41}
+        },
+        "future_present": true
+      },
+      "foils": [
+        {
+          "id": "fig",
+          "label": "fig",
+          "aliases": ["fig"],
+          "forms": [
+            {"kind": "bare", "text": "fig", "token_id": 876},
+            {"kind": "leading_space", "text": " fig", "token_id": 4008}
+          ],
+          "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+          "expected_exposure": {
+            "before": {"present": true, "identifier_occurrences": 5},
+            "after": {"present": true, "identifier_occurrences": 34}
+          },
+          "future_present": false
+        },
+        {
+          "id": "width",
+          "label": "width",
+          "aliases": ["width"],
+          "forms": [
+            {"kind": "bare", "text": "width", "token_id": 2998},
+            {"kind": "leading_space", "text": " width", "token_id": 2297}
+          ],
+          "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+          "expected_exposure": {
+            "before": {"present": true, "identifier_occurrences": 25},
+            "after": {"present": true, "identifier_occurrences": 26}
+          },
+          "future_present": false
+        },
+        {
+          "id": "height",
+          "label": "height",
+          "aliases": ["height"],
+          "forms": [
+            {"kind": "bare", "text": "height", "token_id": 2479},
+            {"kind": "leading_space", "text": " height", "token_id": 2521}
+          ],
+          "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+          "expected_exposure": {
+            "before": {"present": true, "identifier_occurrences": 23},
+            "after": {"present": true, "identifier_occurrences": 24}
+          },
+          "future_present": false
+        }
+      ],
+      "task_card": {
+        "why": "The anchored locator can be called without a usable renderer or attached figure.",
+        "where": "matplotlib offsetbox and inset locator call path",
+        "evidence": "The inspected locator call passes renderer state through code paths where figure attachment is absent.",
+        "next": "Propagate the figure and supply a renderer fallback, then run inset locator tests.",
+        "claim_scope": "entity_emphasis_for_newly_repeated_runtime_state_not_relation_recovery"
+      }
+    },
+    {
+      "id": "pylint-8898-balanced",
+      "instance_id": "pylint-dev__pylint-8898",
+      "repo": "pylint-dev/pylint",
+      "cohort": "replication",
+      "after_global_request_index": 223,
+      "after_task_request_index": 16,
+      "primary_control_eligible": false,
+      "control_match_status": "descriptive_novel_target_with_exposed_foils",
+      "raw_sha256": {
+        "before": "f2b42e3b3a0d82227c1bea0806dd43aa10f0ab5216883807703a21ef9a505a98",
+        "after": "75a39454de006749c8a84e1d91e90d252dbfaf6ba63fb0796bada2feb03d7318",
+        "label": "938d708f974e5d4524370801197f6eb765b689f81ec34fcf5a6dff687aa7cf0c"
+      },
+      "stratum": "novel_inference",
+      "target": {
+        "id": "balanced",
+        "label": "balanced delimiters",
+        "aliases": ["balanced"],
+        "forms": [
+          {"kind": "bare", "text": "balanced", "token_id": 56435},
+          {"kind": "leading_space", "text": " balanced", "token_id": 23086}
+        ],
+        "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+        "expected_exposure": {
+          "before": {"present": false, "identifier_occurrences": 0},
+          "after": {"present": false, "identifier_occurrences": 0}
+        },
+        "future_present": true
+      },
+      "foils": [
+        {
+          "id": "split",
+          "label": "split",
+          "aliases": ["split"],
+          "forms": [
+            {"kind": "bare", "text": "split", "token_id": 6744},
+            {"kind": "leading_space", "text": " split", "token_id": 6507}
+          ],
+          "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+          "expected_exposure": {
+            "before": {"present": true, "identifier_occurrences": 4},
+            "after": {"present": true, "identifier_occurrences": 5}
+          },
+          "future_present": false
+        },
+        {
+          "id": "strip",
+          "label": "strip",
+          "aliases": ["strip"],
+          "forms": [
+            {"kind": "bare", "text": "strip", "token_id": 12726},
+            {"kind": "leading_space", "text": " strip", "token_id": 12931}
+          ],
+          "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+          "expected_exposure": {
+            "before": {"present": true, "identifier_occurrences": 4},
+            "after": {"present": true, "identifier_occurrences": 6}
+          },
+          "future_present": false
+        },
+        {
+          "id": "sep",
+          "label": "sep",
+          "aliases": ["sep"],
+          "forms": [
+            {"kind": "bare", "text": "sep", "token_id": 27129},
+            {"kind": "leading_space", "text": " sep", "token_id": 20374}
+          ],
+          "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+          "expected_exposure": {
+            "before": {"present": true, "identifier_occurrences": 11},
+            "after": {"present": true, "identifier_occurrences": 16}
+          },
+          "future_present": false
+        }
+      ],
+      "task_card": {
+        "why": "Naive comma splitting breaks regex quantifiers; the parser must respect balanced delimiters.",
+        "where": "pylint/config/argument.py _regexp_csv_transfomer",
+        "evidence": "The inspected transformer delegates to generic CSV splitting even when commas occur inside regex braces.",
+        "next": "Add a regex-aware split helper and validate comma-containing and invalid patterns.",
+        "claim_scope": "future_reasoning_concept_absent_from_both_prompt_states_with_conservative_exposed_foils"
+      }
+    },
+    {
+      "id": "pytest-10356-getattr",
+      "instance_id": "pytest-dev__pytest-10356",
+      "repo": "pytest-dev/pytest",
+      "cohort": "replication",
+      "after_global_request_index": 291,
+      "after_task_request_index": 34,
+      "primary_control_eligible": true,
+      "control_match_status": "matched_exposed_target_and_foils",
+      "raw_sha256": {
+        "before": "5006ccf21337f9f10ff17b3f2299aadabd7b1c73a72fd7ca5d8146f1611b70a2",
+        "after": "baacdc5bebfd00355e085f168e84adcf6f6df8e04d4d722fd98f95fed86a4418",
+        "label": "b0b4a9636690fb81954da51ab413fdc7ec1e91d218b18f00bd925ea51fddd55f"
+      },
+      "stratum": "evidence_reweighting",
+      "target": {
+        "id": "getattr",
+        "label": "getattr MRO lookup",
+        "aliases": ["getattr"],
+        "forms": [
+          {"kind": "bare", "text": "getattr", "token_id": 78913},
+          {"kind": "leading_space", "text": " getattr", "token_id": 29017}
+        ],
+        "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+        "expected_exposure": {
+          "before": {"present": true, "identifier_occurrences": 34},
+          "after": {"present": true, "identifier_occurrences": 36}
+        },
+        "future_present": true
+      },
+      "foils": [
+        {
+          "id": "print",
+          "label": "print",
+          "aliases": ["print"],
+          "forms": [
+            {"kind": "bare", "text": "print", "token_id": 1302},
+            {"kind": "leading_space", "text": " print", "token_id": 1133}
+          ],
+          "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+          "expected_exposure": {
+            "before": {"present": true, "identifier_occurrences": 15},
+            "after": {"present": true, "identifier_occurrences": 21}
+          },
+          "future_present": false
+        },
+        {
+          "id": "cls",
+          "label": "cls",
+          "aliases": ["cls"],
+          "forms": [
+            {"kind": "bare", "text": "cls", "token_id": 17535},
+            {"kind": "leading_space", "text": " cls", "token_id": 12423}
+          ],
+          "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+          "expected_exposure": {
+            "before": {"present": true, "identifier_occurrences": 20},
+            "after": {"present": true, "identifier_occurrences": 26}
+          },
+          "future_present": false
+        },
+        {
+          "id": "pm",
+          "label": "pm",
+          "aliases": ["pm"],
+          "forms": [
+            {"kind": "bare", "text": "pm", "token_id": 5022},
+            {"kind": "leading_space", "text": " pm", "token_id": 8569}
+          ],
+          "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+          "expected_exposure": {
+            "before": {"present": true, "identifier_occurrences": 6},
+            "after": {"present": true, "identifier_occurrences": 10}
+          },
+          "future_present": false
+        }
+      ],
+      "task_card": {
+        "why": "A single getattr lookup follows MRO to the first pytestmark and misses a sibling base class marker.",
+        "where": "_pytest.mark structures, get_unpacked_marks",
+        "evidence": "The multiple-inheritance reproduction sees one base marker while the sibling marker remains absent.",
+        "next": "Collect markers across the relevant MRO entries and rerun mark inheritance tests.",
+        "claim_scope": "entity_emphasis_for_an_exposed_lookup_operation_not_relation_recovery"
+      }
+    },
+    {
+      "id": "sklearn-25973-consumed",
+      "instance_id": "scikit-learn__scikit-learn-25973",
+      "repo": "scikit-learn/scikit-learn",
+      "cohort": "replication",
+      "after_global_request_index": 317,
+      "after_task_request_index": 10,
+      "primary_control_eligible": false,
+      "control_match_status": "descriptive_novel_target_with_exposed_foils",
+      "raw_sha256": {
+        "before": "d9cf415cb3f63f16206941ddaf81a9fdb19ba7241ecb3ef53e6c9be99a52b736",
+        "after": "4673d91caaad7fb472c9bb6828bbc4900154ccd5bd21a28c48bed968623de2f9",
+        "label": "915de604c19e7a34884e3c4f6298767ac0f40ab3df9be9876b02b4b7533ba458"
+      },
+      "stratum": "novel_inference",
+      "target": {
+        "id": "consumed",
+        "label": "consumed iterator",
+        "aliases": ["consumed"],
+        "forms": [
+          {"kind": "leading_space", "text": " consumed", "token_id": 25152}
+        ],
+        "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+        "expected_exposure": {
+          "before": {"present": false, "identifier_occurrences": 0},
+          "after": {"present": false, "identifier_occurrences": 0}
+        },
+        "future_present": true
+      },
+      "foils": [
+        {
+          "id": "train",
+          "label": "train",
+          "aliases": ["train"],
+          "forms": [
+            {"kind": "bare", "text": "train", "token_id": 10087},
+            {"kind": "leading_space", "text": " train", "token_id": 5257}
+          ],
+          "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+          "expected_exposure": {
+            "before": {"present": true, "identifier_occurrences": 8},
+            "after": {"present": true, "identifier_occurrences": 11}
+          },
+          "future_present": false
+        },
+        {
+          "id": "test",
+          "label": "test",
+          "aliases": ["test"],
+          "forms": [
+            {"kind": "bare", "text": "test", "token_id": 1877},
+            {"kind": "leading_space", "text": " test", "token_id": 1228}
+          ],
+          "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+          "expected_exposure": {
+            "before": {"present": true, "identifier_occurrences": 26},
+            "after": {"present": true, "identifier_occurrences": 30}
+          },
+          "future_present": false
+        },
+        {
+          "id": "yield",
+          "label": "yield",
+          "aliases": ["yield"],
+          "forms": [
+            {"kind": "bare", "text": "yield", "token_id": 28726},
+            {"kind": "leading_space", "text": " yield", "token_id": 7302}
+          ],
+          "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+          "expected_exposure": {
+            "before": {"present": true, "identifier_occurrences": 1},
+            "after": {"present": true, "identifier_occurrences": 2}
+          },
+          "future_present": false
+        }
+      ],
+      "task_card": {
+        "why": "The same CV iterator is reused across candidate scores and is consumed after the first pass.",
+        "where": "sklearn.feature_selection.SequentialFeatureSelector fit and scoring loop",
+        "evidence": "The inspected CV wrapper materializes an iterable, while the selector repeatedly passes the original iterator.",
+        "next": "Materialize the CV iterable once before candidate scoring and add an iterator regression test.",
+        "claim_scope": "future_reasoning_concept_absent_from_both_prompt_states_with_conservative_exposed_foils"
+      }
+    },
+    {
+      "id": "sphinx-11510-include",
+      "instance_id": "sphinx-doc__sphinx-11510",
+      "repo": "sphinx-doc/sphinx",
+      "cohort": "replication",
+      "after_global_request_index": 366,
+      "after_task_request_index": 19,
+      "primary_control_eligible": false,
+      "control_match_status": "descriptive_exposure_frequency_mismatch",
+      "raw_sha256": {
+        "before": "d77da099a7f2d3199bc80d0a58a7daa807bfc59921c35e3a2df339f58a8212f3",
+        "after": "32701e97c0c4576c7c7ed3f5de22c1eb438515dd408d9b3ac81f9ca813354e45",
+        "label": "771e31d002ab3135d473276964bf3069ad4e8865b0874954fd87586e8e9a6eea"
+      },
+      "stratum": "evidence_reweighting",
+      "target": {
+        "id": "include-directive",
+        "label": "Include directive",
+        "aliases": ["Include"],
+        "forms": [
+          {"kind": "bare", "text": "Include", "token_id": 21592},
+          {"kind": "leading_space", "text": " Include", "token_id": 28763}
+        ],
+        "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+        "expected_exposure": {
+          "before": {"present": true, "identifier_occurrences": 92},
+          "after": {"present": true, "identifier_occurrences": 92}
+        },
+        "future_present": true
+      },
+      "foils": [
+        {
+          "id": "reader",
+          "label": "Reader",
+          "aliases": ["Reader"],
+          "forms": [
+            {"kind": "bare", "text": "Reader", "token_id": 4900},
+            {"kind": "leading_space", "text": " Reader", "token_id": 24367}
+          ],
+          "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+          "expected_exposure": {
+            "before": {"present": true, "identifier_occurrences": 1},
+            "after": {"present": true, "identifier_occurrences": 1}
+          },
+          "future_present": false
+        },
+        {
+          "id": "parser",
+          "label": "Parser",
+          "aliases": ["Parser"],
+          "forms": [
+            {"kind": "bare", "text": "Parser", "token_id": 6363},
+            {"kind": "leading_space", "text": " Parser", "token_id": 20455}
+          ],
+          "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+          "expected_exposure": {
+            "before": {"present": true, "identifier_occurrences": 3},
+            "after": {"present": true, "identifier_occurrences": 3}
+          },
+          "future_present": false
+        },
+        {
+          "id": "directive",
+          "label": "Directive",
+          "aliases": ["Directive"],
+          "forms": [
+            {"kind": "bare", "text": "Directive", "token_id": 59984},
+            {"kind": "leading_space", "text": " Directive", "token_id": 54855}
+          ],
+          "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+          "expected_exposure": {
+            "before": {"present": true, "identifier_occurrences": 22},
+            "after": {"present": true, "identifier_occurrences": 22}
+          },
+          "future_present": false
+        }
+      ],
+      "task_card": {
+        "why": "The Include directive reads included content outside the source-read event path used for normal documents.",
+        "where": "sphinx.directives.other.Include",
+        "evidence": "The reproduction modifies separately read documents, but included content still bypasses that modification.",
+        "next": "Emit source-read while the Include directive reads the included file and add an include regression test.",
+        "claim_scope": "entity_emphasis_with_large_static_exposure_mismatch_not_relation_recovery"
+      }
+    },
+    {
+      "id": "requests-5414-caught",
+      "instance_id": "psf__requests-5414",
+      "repo": "psf/requests",
+      "cohort": "replication",
+      "after_global_request_index": 116,
+      "after_task_request_index": 7,
+      "primary_control_eligible": true,
+      "control_match_status": "matched_novel_unexposed_target_and_foils",
+      "raw_sha256": {
+        "before": "aa03bca3ce7070c2885e3d0ad341e6061ce605aa685bb5167d17ab092cfcd76d",
+        "after": "ae7b3b8247e568816f5c32eb9eda4eec013d0fffbd60852ada7714bc98eebe5f",
+        "label": "f1beb89c03984aa458e192b1e4e5b2b2d9d49dc0411d16c1293cee7070426010"
+      },
+      "stratum": "novel_inference",
+      "target": {
+        "id": "caught",
+        "label": "caught early",
+        "aliases": ["caught"],
+        "forms": [
+          {"kind": "bare", "text": "caught", "token_id": 59143},
+          {"kind": "leading_space", "text": " caught", "token_id": 10255}
+        ],
+        "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+        "expected_exposure": {
+          "before": {"present": false, "identifier_occurrences": 0},
+          "after": {"present": false, "identifier_occurrences": 0}
+        },
+        "future_present": true
+      },
+      "foils": [
+        {
+          "id": "decoded",
+          "label": "decoded",
+          "aliases": ["decoded"],
+          "forms": [
+            {"kind": "bare", "text": "decoded", "token_id": 60794},
+            {"kind": "leading_space", "text": " decoded", "token_id": 28258}
+          ],
+          "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+          "expected_exposure": {
+            "before": {"present": false, "identifier_occurrences": 0},
+            "after": {"present": false, "identifier_occurrences": 0}
+          },
+          "future_present": false
+        },
+        {
+          "id": "normalized",
+          "label": "normalized",
+          "aliases": ["normalized"],
+          "forms": [
+            {"kind": "bare", "text": "normalized", "token_id": 37183},
+            {"kind": "leading_space", "text": " normalized", "token_id": 28450}
+          ],
+          "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+          "expected_exposure": {
+            "before": {"present": false, "identifier_occurrences": 0},
+            "after": {"present": false, "identifier_occurrences": 0}
+          },
+          "future_present": false
+        },
+        {
+          "id": "redirected",
+          "label": "redirected",
+          "aliases": ["redirected"],
+          "forms": [
+            {"kind": "leading_space", "text": " redirected", "token_id": 47289}
+          ],
+          "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+          "expected_exposure": {
+            "before": {"present": false, "identifier_occurrences": 0},
+            "after": {"present": false, "identifier_occurrences": 0}
+          },
+          "future_present": false
+        }
+      ],
+      "task_card": {
+        "why": "ASCII host validation skips IDNA, so an invalid empty label is not caught until a later failure.",
+        "where": "requests.models.PreparedRequest.prepare_url",
+        "evidence": "idna.encode('.example.com') raises Empty Label while the current ASCII branch bypasses IDNA validation.",
+        "next": "Validate ASCII and non-ASCII hosts through the same IDNA path and run URL preparation tests.",
+        "claim_scope": "future_reasoning_concept_absent_from_both_prompt_states_and_matched_unexposed_foils"
+      }
+    },
+    {
+      "id": "sphinx-8269-masking",
+      "instance_id": "sphinx-doc__sphinx-8269",
+      "repo": "sphinx-doc/sphinx",
+      "cohort": "development",
+      "after_global_request_index": 249,
+      "after_task_request_index": 4,
+      "primary_control_eligible": true,
+      "control_match_status": "matched_novel_unexposed_target_and_foils",
+      "raw_sha256": {
+        "before": "74d1342624af29dde1c348303869e09f9414acb81f8069fe045bb555ab154a14",
+        "after": "cb3f9f31a5ed276275008f2153f20bd8a0cc5e6ebb5f04b28e0d3bc51c3bbd03",
+        "label": "07b5a92254cd9d1bf8b973053cf1d31671ef46366226d415dbf4bd945de92e04"
+      },
+      "stratum": "novel_inference",
+      "target": {
+        "id": "masking",
+        "label": "masking the HTTP error",
+        "aliases": ["masking"],
+        "forms": [
+          {"kind": "leading_space", "text": " masking", "token_id": 75401}
+        ],
+        "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+        "expected_exposure": {
+          "before": {"present": false, "identifier_occurrences": 0},
+          "after": {"present": false, "identifier_occurrences": 0}
+        },
+        "future_present": true
+      },
+      "foils": [
+        {
+          "id": "blocking",
+          "label": "blocking",
+          "aliases": ["blocking"],
+          "forms": [
+            {"kind": "bare", "text": "blocking", "token_id": 67976},
+            {"kind": "leading_space", "text": " blocking", "token_id": 21500}
+          ],
+          "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+          "expected_exposure": {
+            "before": {"present": false, "identifier_occurrences": 0},
+            "after": {"present": false, "identifier_occurrences": 0}
+          },
+          "future_present": false
+        },
+        {
+          "id": "ignoring",
+          "label": "ignoring",
+          "aliases": ["ignoring"],
+          "forms": [
+            {"kind": "leading_space", "text": " ignoring", "token_id": 29890}
+          ],
+          "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+          "expected_exposure": {
+            "before": {"present": false, "identifier_occurrences": 0},
+            "after": {"present": false, "identifier_occurrences": 0}
+          },
+          "future_present": false
+        },
+        {
+          "id": "caching",
+          "label": "caching",
+          "aliases": ["caching"],
+          "forms": [
+            {"kind": "leading_space", "text": " caching", "token_id": 45850}
+          ],
+          "exposure_normalization": "case_sensitive_identifier_boundary_v1",
+          "expected_exposure": {
+            "before": {"present": false, "identifier_occurrences": 0},
+            "after": {"present": false, "identifier_occurrences": 0}
+          },
+          "future_present": false
+        }
+      ],
+      "task_card": {
+        "why": "Anchor checking omits raise_for_status, masking a 404 as an anchor-not-found error.",
+        "where": "sphinx.builders.linkcheck.check_uri",
+        "evidence": "The anchor GET path checks the fragment without first validating the HTTP response status.",
+        "next": "Raise for status before anchor lookup and add a 404-with-anchor regression test.",
+        "claim_scope": "future_reasoning_concept_absent_from_both_prompt_states_and_matched_unexposed_foils"
+      }
+    }
+  ]
+}

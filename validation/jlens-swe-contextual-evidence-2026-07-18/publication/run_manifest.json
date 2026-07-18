@@ -1,0 +1,222 @@
+{
+  "schema_version": 1,
+  "kind": "swe_contextual_evidence_compact_publication",
+  "status": "complete",
+  "created_from_completed_run_at": "2026-07-18T22:38:01.185872+00:00",
+  "study": {
+    "analysis_version": "paired-evidence-update-development-v1",
+    "fixed_layers": [
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47
+    ],
+    "primary_control_eligible_tasks": 8,
+    "primary_repositories": 7,
+    "prompt_count": 24,
+    "scored_token_count": 90,
+    "task_count": 12
+  },
+  "claim_boundary": {
+    "classification_is_not_operational_usefulness": true,
+    "compact_bundle_supports": [
+      "inspection of the exact published analysis, cards, and materialization manifest",
+      "verification of source, prompt, report, lens, runtime, and numerical lineage",
+      "verification of the frozen directional point rule and its separate uncertainty and copy-control diagnostics"
+    ],
+    "independent_raw_reanalysis_requires_omitted_artifacts": true,
+    "not_available_in_this_bundle": [
+      "the 8.5 MB prompt bundle",
+      "the three 46.5 MB layer-by-layer reports",
+      "raw Qwen Code proxy captures and task workspaces",
+      "model checkpoints and fitted lens tensors"
+    ],
+    "omitted_hashes_are_identity_bindings_not_content_availability": true,
+    "raw_prompts_and_reports_committed": false
+  },
+  "included_artifacts": {
+    "analysis": {
+      "bytes": 539989,
+      "path": "analysis.json",
+      "sha256": "7ff997dc97c4fdc8d4b66f78ee795cd4a762645852fb977e473646a5a38f511b"
+    },
+    "cards": {
+      "bytes": 37973,
+      "path": "cards.json",
+      "sha256": "f9aedb3f8052f47be9b9841b601bc96485a8d56e368ee66ad17a1957f7125cdf"
+    },
+    "materialization_manifest": {
+      "bytes": 331506,
+      "path": "materialization-manifest.json",
+      "sha256": "9f7f0fdd4c90c596147b78cd17d9eb1469922dd6324103f058a1d42986fda01c"
+    }
+  },
+  "omitted_artifacts": {
+    "prompt_bundle": {
+      "bytes": 8520573,
+      "committed": false,
+      "count": 24,
+      "path": ".cache/swe_contextual_evidence/prompts.json",
+      "sha256": "0662a327c4d13e4f359935e5766df53803939917095d00f1d5122865b425497d"
+    },
+    "reports": {
+      "native": {
+        "bytes": 46520445,
+        "committed": false,
+        "completed_at": "2026-07-18T22:38:01.185872+00:00",
+        "elapsed_seconds": 120.147293,
+        "experiment_count": 24,
+        "lens": {
+          "n_prompts": 10,
+          "sha256": "82be61c805d127427b37b2b4715885b756c2ca7af96291578fa4da9cd783e057",
+          "tensor_dtype": "torch.float32"
+        },
+        "path": ".cache/swe_contextual_evidence/reports/native-report.json",
+        "runtime": {
+          "capture_adapter": "vLLM apply_model forward hooks",
+          "enable_prefix_caching": true,
+          "enforce_eager": true,
+          "gpu_memory_utilization": 0.78,
+          "kv_cache_dtype": "fp8_e4m3",
+          "kv_offloading_backend": "native",
+          "kv_offloading_size": 8.0,
+          "language_model_only": true,
+          "mamba_block_size": 1024,
+          "max_model_len": 65536,
+          "max_num_batched_tokens": 4096,
+          "model_load_seconds": 17.702816,
+          "mtp_enabled": false,
+          "readout_dtype": "torch.bfloat16",
+          "stream_final_only": true,
+          "timing_scope": "artifact resolution and validation through readout",
+          "transport_dtype": "torch.float32"
+        },
+        "schema_version": 3,
+        "sha256": "79ff0cce0c2d51d7091e3e0bb5b3b6ea70d9885170b07251403c13fc92f8f71c",
+        "started_at": "2026-07-18T22:36:01.038688+00:00",
+        "status": "failed"
+      },
+      "nf4": {
+        "bytes": 46519992,
+        "committed": false,
+        "completed_at": "2026-07-18T22:34:36.894234+00:00",
+        "elapsed_seconds": 116.838376,
+        "experiment_count": 24,
+        "lens": {
+          "n_prompts": 10,
+          "sha256": "54d95f9626d8d120d56c161cfc8943ec76fd77172a9c0c54d5d913a5a639424f",
+          "tensor_dtype": "torch.float32"
+        },
+        "path": ".cache/swe_contextual_evidence/reports/nf4-report.json",
+        "runtime": {
+          "capture_adapter": "vLLM apply_model forward hooks",
+          "enable_prefix_caching": true,
+          "enforce_eager": true,
+          "gpu_memory_utilization": 0.78,
+          "kv_cache_dtype": "fp8_e4m3",
+          "kv_offloading_backend": "native",
+          "kv_offloading_size": 8.0,
+          "language_model_only": true,
+          "mamba_block_size": 1024,
+          "max_model_len": 65536,
+          "max_num_batched_tokens": 4096,
+          "model_load_seconds": 11.305563,
+          "mtp_enabled": false,
+          "readout_dtype": "torch.bfloat16",
+          "stream_final_only": true,
+          "timing_scope": "artifact resolution and validation through readout",
+          "transport_dtype": "torch.float32"
+        },
+        "schema_version": 3,
+        "sha256": "30dc0d7fcaa4951c9c5f2bcb2785b380664e1381fb767aaf73f93b8d042e05ed",
+        "started_at": "2026-07-18T22:32:40.055966+00:00",
+        "status": "failed"
+      },
+      "public": {
+        "bytes": 46514668,
+        "committed": false,
+        "completed_at": "2026-07-18T22:31:00.117708+00:00",
+        "elapsed_seconds": 115.704715,
+        "experiment_count": 24,
+        "lens": {
+          "n_prompts": 1000,
+          "repo_id": "neuronpedia/jacobian-lens",
+          "revision": "a4114d7752d11eb546e6cf372213d7e75526d3a1",
+          "sha256": "1718c8c52dd8a9dad03738d4d625937c1fbba10be325b872ed446c7290fc11e1",
+          "tensor_dtype": "torch.float16"
+        },
+        "path": ".cache/swe_contextual_evidence/reports/public-report.json",
+        "runtime": {
+          "capture_adapter": "vLLM apply_model forward hooks",
+          "enable_prefix_caching": true,
+          "enforce_eager": true,
+          "gpu_memory_utilization": 0.78,
+          "kv_cache_dtype": "fp8_e4m3",
+          "kv_offloading_backend": "native",
+          "kv_offloading_size": 8.0,
+          "language_model_only": true,
+          "mamba_block_size": 1024,
+          "max_model_len": 65536,
+          "max_num_batched_tokens": 4096,
+          "model_load_seconds": 15.772749,
+          "mtp_enabled": false,
+          "readout_dtype": "torch.bfloat16",
+          "stream_final_only": true,
+          "timing_scope": "artifact resolution and validation through readout",
+          "transport_dtype": "torch.float32"
+        },
+        "schema_version": 3,
+        "sha256": "3f166a2c6a84054323c423c121662022694e6154dd2ec991d6b185155ce1018f",
+        "started_at": "2026-07-18T22:29:04.413100+00:00",
+        "status": "failed"
+      }
+    }
+  },
+  "source_inputs": {
+    "analyzer": {
+      "bytes": 86320,
+      "path": "scripts/analyze_swe_contextual_evidence.py",
+      "sha256": "fee3fa80f922b4465cad6c9ba62a9905fa73d00bd29d84e90aa05e7559c9bc8e"
+    },
+    "analyzer_test": {
+      "bytes": 24753,
+      "path": "tests/test_analyze_swe_contextual_evidence.py",
+      "sha256": "7a63d3257693c90e112ecb488931eea06de93803c16cb4d2141815eb55111e40"
+    },
+    "materializer": {
+      "bytes": 42302,
+      "path": "scripts/materialize_swe_contextual_evidence.py",
+      "sha256": "49199e77b504723d0a7db0268c3acf0f421114165ee3e5d50f674435e8eda4a1"
+    },
+    "materializer_test": {
+      "bytes": 14984,
+      "path": "tests/test_materialize_swe_contextual_evidence.py",
+      "sha256": "0637773bf97e716007ad40cecb7fbc3ab99cc0687b5dc9fecfdd3e1c7efe3e3a"
+    },
+    "protocol": {
+      "bytes": 48643,
+      "path": "configs/swe_contextual_evidence_protocol.json",
+      "sha256": "d2e32b4aa027ed387f1c8105046b2a102c3cfbe51d7879dbe86ebd804b58160a"
+    }
+  }
+}
