@@ -25,6 +25,7 @@ mapfile -t python_sources < <(
 "$PYTHON_BIN" "$ROOT/scripts/check_validation.py"
 "$PYTHON_BIN" "$ROOT/scripts/check_historical_validation.py"
 "$PYTHON_BIN" "$ROOT/scripts/check_swe_multistage_publication.py"
+"$PYTHON_BIN" "$ROOT/scripts/check_swe_behavioral_n20_publication.py"
 "$PYTHON_BIN" "$ROOT/scripts/check_jlens_result.py"
 "$PYTHON_BIN" "$ROOT/scripts/check_jlens_nf4_result.py"
 "$PYTHON_BIN" "$ROOT/scripts/check_jlens_nvfp4_ste_result.py"

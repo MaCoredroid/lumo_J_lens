@@ -1,0 +1,196 @@
+{
+  "cohorts": [
+    {
+      "campaign_sha256": "24d1e885f830c1738294a3e1cdfda50fce307a942bb0badb6f9b1fa55f1de1a0",
+      "cohort": "development",
+      "fatal_turn_limit_tasks": [],
+      "instance_ids": [
+        "astropy__astropy-14539",
+        "django__django-10914",
+        "matplotlib__matplotlib-25332",
+        "mwaskom__seaborn-3069",
+        "psf__requests-6028",
+        "pydata__xarray-4094",
+        "pylint-dev__pylint-4970",
+        "pytest-dev__pytest-8399",
+        "scikit-learn__scikit-learn-12585",
+        "sphinx-doc__sphinx-8269"
+      ],
+      "mtp_speculative_decoding": {
+        "accepted_tokens": 32650,
+        "drafted_tokens": 37756,
+        "metric_format": "vllm_spec_decoding_metrics_v1",
+        "metric_line_count": 171,
+        "metric_lines_sha256": "498919e30d57189cc0a1d1e99615b3575d253af3dad25f9857cb41da87265f6f",
+        "server_log": {
+          "bytes": 260031,
+          "path": "server.log",
+          "sha256": "46b2c79a2a01926a63ff5a2a968af9f5d6b92883d5cfab2f99c45e904283714e"
+        },
+        "weighted_acceptance_definition": "sum(accepted_tokens)/sum(drafted_tokens)",
+        "weighted_acceptance_rate": 0.8647632164424197
+      },
+      "proxy_capture_binding": {
+        "algorithm": "filename_length_payload_sha256_v1",
+        "request_count": 267,
+        "sha256": "b4863c48b1d1ce40b67f94850abfe52310ab24f44f454bacee6c4b6c2d542526"
+      }
+    },
+    {
+      "campaign_sha256": "c861a0f13a9a8225855696a301d51000538b9f78bee1f14f0a028963644708ae",
+      "cohort": "replication",
+      "fatal_turn_limit_tasks": [
+        {
+          "empty_trace": {
+            "bytes": 0,
+            "path": "generation/verified/per_task/pydata__xarray-4687/qwen_trace.json",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "instance_id": "pydata__xarray-4687",
+          "max_session_turns": 50,
+          "patch": {
+            "bytes": 576,
+            "path": "generation/verified/per_task/pydata__xarray-4687/patch.diff",
+            "sha256": "57009b1672814906eca93c16cdc64bec6e51a320773c07a8fd8ef2860a74b357"
+          },
+          "proxy_request_count": 50,
+          "proxy_request_range": {
+            "count": 50,
+            "end_inclusive": 207,
+            "start_inclusive": 158
+          },
+          "stderr": {
+            "path": "generation/verified/per_task/pydata__xarray-4687/qwen_stderr.log",
+            "sha256": "4e5c07643ea47d73bc163ea33473b52fe5c377359c1f24220d7ec7e585a7a625"
+          },
+          "termination": "exact_fatal_turn_limit_53",
+          "usage": {
+            "path": "generation/verified/per_task/pydata__xarray-4687/qwen_home/.qwen/usage_record.jsonl",
+            "sha256": "20bb388d46dcc60a0fbbdc9aac3dbf6703a608cfb3bdda88c4f8c678873dd1bf"
+          }
+        },
+        {
+          "empty_trace": {
+            "bytes": 0,
+            "path": "generation/verified/per_task/pylint-dev__pylint-8898/qwen_trace.json",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "instance_id": "pylint-dev__pylint-8898",
+          "max_session_turns": 50,
+          "patch": {
+            "bytes": 1867,
+            "path": "generation/verified/per_task/pylint-dev__pylint-8898/patch.diff",
+            "sha256": "2a5a31f285f3ae7054582d033926778e44ad95c4b2929efea536028d3a6f943d"
+          },
+          "proxy_request_count": 50,
+          "proxy_request_range": {
+            "count": 50,
+            "end_inclusive": 257,
+            "start_inclusive": 208
+          },
+          "stderr": {
+            "path": "generation/verified/per_task/pylint-dev__pylint-8898/qwen_stderr.log",
+            "sha256": "4e5c07643ea47d73bc163ea33473b52fe5c377359c1f24220d7ec7e585a7a625"
+          },
+          "termination": "exact_fatal_turn_limit_53",
+          "usage": {
+            "path": "generation/verified/per_task/pylint-dev__pylint-8898/qwen_home/.qwen/usage_record.jsonl",
+            "sha256": "2fce3cff107b6f0e5cd17072ce7d9c99900e9cf673a2840f0ac43da816b4b26a"
+          }
+        },
+        {
+          "empty_trace": {
+            "bytes": 0,
+            "path": "generation/verified/per_task/pytest-dev__pytest-10356/qwen_trace.json",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "instance_id": "pytest-dev__pytest-10356",
+          "max_session_turns": 50,
+          "patch": {
+            "bytes": 1716,
+            "path": "generation/verified/per_task/pytest-dev__pytest-10356/patch.diff",
+            "sha256": "c448342b8552561a79fa614e681b0cce53196a27091d24ca493f4d3769e8c7b0"
+          },
+          "proxy_request_count": 50,
+          "proxy_request_range": {
+            "count": 50,
+            "end_inclusive": 307,
+            "start_inclusive": 258
+          },
+          "stderr": {
+            "path": "generation/verified/per_task/pytest-dev__pytest-10356/qwen_stderr.log",
+            "sha256": "4e5c07643ea47d73bc163ea33473b52fe5c377359c1f24220d7ec7e585a7a625"
+          },
+          "termination": "exact_fatal_turn_limit_53",
+          "usage": {
+            "path": "generation/verified/per_task/pytest-dev__pytest-10356/qwen_home/.qwen/usage_record.jsonl",
+            "sha256": "00b82f3e3cd79b0ab5b943741f0af54e041e1be571e9b4af576628cb857766c9"
+          }
+        },
+        {
+          "empty_trace": {
+            "bytes": 0,
+            "path": "generation/verified/per_task/sphinx-doc__sphinx-11510/qwen_trace.json",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "instance_id": "sphinx-doc__sphinx-11510",
+          "max_session_turns": 50,
+          "patch": {
+            "bytes": 2458,
+            "path": "generation/verified/per_task/sphinx-doc__sphinx-11510/patch.diff",
+            "sha256": "bbbb81c9a7595a557737f308dbbb68feead426309759838c53d07f0b888eb23e"
+          },
+          "proxy_request_count": 50,
+          "proxy_request_range": {
+            "count": 50,
+            "end_inclusive": 397,
+            "start_inclusive": 348
+          },
+          "stderr": {
+            "path": "generation/verified/per_task/sphinx-doc__sphinx-11510/qwen_stderr.log",
+            "sha256": "4e5c07643ea47d73bc163ea33473b52fe5c377359c1f24220d7ec7e585a7a625"
+          },
+          "termination": "exact_fatal_turn_limit_53",
+          "usage": {
+            "path": "generation/verified/per_task/sphinx-doc__sphinx-11510/qwen_home/.qwen/usage_record.jsonl",
+            "sha256": "4b3335b71701374c0a5847e25fc6b3da68c15a0382577116426c50b3ed7e139c"
+          }
+        }
+      ],
+      "instance_ids": [
+        "astropy__astropy-14508",
+        "django__django-16938",
+        "matplotlib__matplotlib-26291",
+        "psf__requests-5414",
+        "pydata__xarray-4687",
+        "pylint-dev__pylint-8898",
+        "pytest-dev__pytest-10356",
+        "scikit-learn__scikit-learn-25973",
+        "sphinx-doc__sphinx-11510",
+        "sympy__sympy-24066"
+      ],
+      "mtp_speculative_decoding": {
+        "accepted_tokens": 59139,
+        "drafted_tokens": 67277,
+        "metric_format": "vllm_spec_decoding_metrics_v1",
+        "metric_line_count": 307,
+        "metric_lines_sha256": "15a2015cfa5bf04fa94cef055d0a1e28761e2dccce29061c0769c7b4833e6264",
+        "server_log": {
+          "bytes": 411916,
+          "path": "server.log",
+          "sha256": "9f336bb513e4409f83f5a9916163afacdc09978107efa51144e05d5dbd04c510"
+        },
+        "weighted_acceptance_definition": "sum(accepted_tokens)/sum(drafted_tokens)",
+        "weighted_acceptance_rate": 0.8790374124886663
+      },
+      "proxy_capture_binding": {
+        "algorithm": "filename_length_payload_sha256_v1",
+        "request_count": 432,
+        "sha256": "aa9910fbce249c6adbe09cb27948bdd4e835ca7f3dcebb1ba369bd13f365755e"
+      }
+    }
+  ],
+  "kind": "swe_behavioral_campaign_replay_evidence",
+  "schema_version": 1,
+  "task_count": 20
+}

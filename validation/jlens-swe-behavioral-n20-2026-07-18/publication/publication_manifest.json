@@ -1,0 +1,171 @@
+{
+  "schema_version": 2,
+  "kind": "swe_verified_behavioral_n20_compact_publication",
+  "source_attempt": {
+    "id": "attempt-20260718T184758Z-9CsrJ9",
+    "path": "attempts/attempt-20260718T184758Z-9CsrJ9",
+    "run_manifest_sha256": "f7dc2883ead45f3f59c36d4fc0d43fdd41bb31b485e81ad98bc9320869074257",
+    "execution_status": "complete",
+    "scientific_status": "insufficient_support"
+  },
+  "included_artifacts": {
+    "analysis": {
+      "path": "analysis.json",
+      "bytes": 4042839,
+      "sha256": "93379532f3023e181d4db6ac1869a9728466b853e9bb1897b9f1dd4fb511883a"
+    },
+    "next_token_transport_analysis": {
+      "path": "next-token-transport-analysis.json",
+      "bytes": 409843,
+      "sha256": "2956ed14c2a4bcaa7441cf2987572b72e786a8a9894b269044657bb0fe3c41d1"
+    },
+    "action_layer_readout": {
+      "path": "action-layer-readout.json",
+      "bytes": 3207656,
+      "sha256": "a28a40f219e7c00efee1c85b28d3d7ee4e64f6a3a119afe38e819714c32eaf3a"
+    },
+    "campaign_evidence": {
+      "path": "campaign_evidence.json",
+      "bytes": 7986,
+      "sha256": "aef2161f666ce2d8997cdfef53c921a20e67fff6c9e8bfec0f013a7a7875752f"
+    },
+    "prompts_summary": {
+      "path": "prompts_summary.json",
+      "bytes": 131435,
+      "sha256": "895767116e4c75bfc1b57086532756dd518c07c2bfc30c3710bf7ff80880f028"
+    },
+    "run_manifest": {
+      "path": "run_manifest.json",
+      "bytes": 16969,
+      "sha256": "f7dc2883ead45f3f59c36d4fc0d43fdd41bb31b485e81ad98bc9320869074257"
+    },
+    "analysis_checksum": {
+      "path": "checksums/analysis.sha256",
+      "bytes": 80,
+      "sha256": "4eef1e65cd7fde59d744ae00ac568d1ca2ec2ee9024ca7372f379d6b35b3e9d1"
+    },
+    "prompts_checksum": {
+      "path": "checksums/prompts.sha256",
+      "bytes": 79,
+      "sha256": "f955f56f4b7147d0335e386fa979b4797166e6b1e4e4bb32db2f6e808aed1ed4"
+    },
+    "public_report_checksum": {
+      "path": "checksums/public-report.sha256",
+      "bytes": 85,
+      "sha256": "fadbe89d3c80e83ff7d316aabd8be63643f55c289d86b4338ff7d3b7f5c62b4e"
+    },
+    "nf4_report_checksum": {
+      "path": "checksums/nf4-report.sha256",
+      "bytes": 82,
+      "sha256": "d12b5b84d2116fd8413ce07314cc1c1af88fb3d907a4a56c39a864e0f9849d3f"
+    },
+    "native_report_checksum": {
+      "path": "checksums/native-report.sha256",
+      "bytes": 85,
+      "sha256": "5e58842168607365befbd9fb64285235c91972f3418312dc25183a7f20802ad2"
+    },
+    "run_manifest_checksum": {
+      "path": "checksums/run_manifest.sha256",
+      "bytes": 84,
+      "sha256": "d349cb19c1b73c607a777a4de93bdf33edc944873dd3af7efae4a893b92060c5"
+    },
+    "official_outcomes_development": {
+      "path": "official-outcomes/development.json",
+      "bytes": 7862,
+      "sha256": "71d9eb50ac735700bd4d28f4b6c9d72fd208afe4c4f7b78fe231494209024f87"
+    },
+    "official_outcomes_replication": {
+      "path": "official-outcomes/replication.json",
+      "bytes": 8044,
+      "sha256": "662a7391010c949ad44dffa4c3cd8fe596d6853f33cd3ca5e17b5693cd2884de"
+    }
+  },
+  "omitted_artifacts": {
+    "prompts": {
+      "path": "prompts.json",
+      "bytes": 86989478,
+      "sha256": "a84abaf67e991409bb0e192c8a4c84d3251e4aaf4595bc1087244c391c2b698d",
+      "reason": "not_committed_compact_bundle_policy"
+    },
+    "public_report": {
+      "path": "public-report.json",
+      "bytes": 274005560,
+      "sha256": "b8a5e1d2b4998fc6081cbbb23f243b2b5be705a7aafc602a56e28882c50a3f8a",
+      "report_status": "failed",
+      "reason": "not_committed_exceeds_github_single_file_limit"
+    },
+    "nf4_report": {
+      "path": "nf4-report.json",
+      "bytes": 274023369,
+      "sha256": "81d93103e2b67910db3ea5b2e2868c1b0a8bc00d75e43e2700eedfffa9464d84",
+      "report_status": "failed",
+      "reason": "not_committed_exceeds_github_single_file_limit"
+    },
+    "native_report": {
+      "path": "native-report.json",
+      "bytes": 274004434,
+      "sha256": "13cc6ed98327288e344b89e5f40541f7fdbd0820bce9b7bd1a38d5c1a2ea5821",
+      "report_status": "failed",
+      "reason": "not_committed_exceeds_github_single_file_limit"
+    }
+  },
+  "supplemental_analyses": {
+    "next_token_transport": {
+      "artifact_key": "next_token_transport_analysis",
+      "source_attempt_relative_path": "next-token-transport-analysis.json",
+      "decision_role": "supplemental_fit_capacity_diagnostic_only",
+      "analyzer": {
+        "path": "scripts/analyze_swe_next_token_transport.py",
+        "bytes": 58761,
+        "sha256": "154f463794c61f49bd8dc9e2d6530bb2a31e93af5614e679c1355f05ef0c90af"
+      },
+      "test": {
+        "path": "tests/test_analyze_swe_next_token_transport.py",
+        "bytes": 14460,
+        "sha256": "9479c1650440d713b6d3d4ac211e005e60577ad8eb398d5ad4459a7cb5f551d0"
+      },
+      "protocol": {
+        "path": "configs/swe_next_token_transport_protocol.json",
+        "bytes": 8751,
+        "sha256": "2474b31630f3074daea03577a64f32ce74332e3d4f028a3990b0817e50d6a331"
+      }
+    },
+    "action_layer_readout": {
+      "artifact_key": "action_layer_readout",
+      "source_attempt_relative_path": "action-layer-readout.json",
+      "decision_role": "supplemental_readout_refinement_only",
+      "analyzer": {
+        "path": "scripts/analyze_swe_action_layer_readout.py",
+        "bytes": 73582,
+        "sha256": "2d8b5ba9115a58a4086af27ae4170f1fd91fd7e396df5430a093bcd1a0acaf34"
+      },
+      "test": {
+        "path": "tests/test_analyze_swe_action_layer_readout.py",
+        "bytes": 13084,
+        "sha256": "50f820eb7ef9e002fef7908a80e38f3f468939d52d91d49ffbaa2ec6c7cbe00c"
+      },
+      "protocol": {
+        "path": "configs/swe_action_layer_readout_protocol.json",
+        "bytes": 6636,
+        "sha256": "b3119725902d567a9c7a2b916fea9de8f1cc00b1290e95304b8809c0e77eecc5"
+      }
+    }
+  },
+  "claim_boundary": {
+    "raw_artifacts_committed": false,
+    "omitted_hashes_are_identity_bindings_not_content_availability": true,
+    "independent_reanalysis_requires_omitted_artifacts": true,
+    "compact_bundle_supports": [
+      "inspection of the exact published analysis and materialization summary",
+      "inspection of the exact supplemental next-token transport and learned action-layer analyses",
+      "verification of official binary outcome coverage and counts",
+      "verification of source-manifest, analyzer, focused-test, protocol, sidecar, and omitted-artifact hash lineage"
+    ],
+    "not_available_in_this_bundle": [
+      "the full prompt bundle and three layer-by-layer J-lens reports",
+      "raw Qwen Code proxy captures, task workspaces, and vLLM server logs",
+      "SWE-bench harness logs and per-instance reports",
+      "model checkpoints and fitted lens tensors"
+    ]
+  }
+}

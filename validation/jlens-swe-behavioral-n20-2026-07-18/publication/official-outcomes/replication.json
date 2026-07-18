@@ -1,0 +1,167 @@
+{
+  "attempt_path": "/home/mark/lumo_J_lens/runs/swe_behavioral_replication_n10_20260718/official_score/attempts/lumo_j_lens_swe_behavioral_replication_n10_20260718_behavioral_233d671bc88fa25a/attempt-0001",
+  "counts": {
+    "empty": 0,
+    "error": 0,
+    "resolved": 4,
+    "unresolved": 6
+  },
+  "evidence_id": "233d671bc88fa25a47e96b21a49e9d74511b9b6b8de6a5d3a84a7f909822f072",
+  "inputs": {
+    "empty_prediction_ids": [],
+    "hashes": {
+      "campaign_config_sha256": "c861a0f13a9a8225855696a301d51000538b9f78bee1f14f0a028963644708ae",
+      "complete_predictions_sha256": "fd0371e269dcb01aa6df7d101d2a9aa587b836ed7df88387c9b200c8cfc18553",
+      "dataset_sha256": "5acafb98e6deabccaa4ec233eac87ae5e09c6059602803cc6136544bb2f79594",
+      "image_manifest_sha256": "9c1c44b3c38451c39dc38e6329e8092e4ae281a8dd94f556accb85aad1c65c6e",
+      "source_predictions_sha256": "e083b221e794c202fd453920ba0d8325d2711eee08e8b455a64cf6d34baec7d1"
+    },
+    "missing_prediction_ids": [],
+    "model_name_or_path": "qwen3.6-27b-nvfp4-mtp::qwen-code-0.19.4",
+    "score_input_manifest_sha256": "c15c6a4c62b456fc410b1c79990dffde1d81e08f842d3f5779e07e564ec07bc9"
+  },
+  "instance_ids": [
+    "astropy__astropy-14508",
+    "django__django-16938",
+    "matplotlib__matplotlib-26291",
+    "psf__requests-5414",
+    "pydata__xarray-4687",
+    "pylint-dev__pylint-8898",
+    "pytest-dev__pytest-10356",
+    "scikit-learn__scikit-learn-25973",
+    "sphinx-doc__sphinx-11510",
+    "sympy__sympy-24066"
+  ],
+  "kind": "swe_verified_behavioral_official_outcomes",
+  "official_harness": {
+    "aggregate_report": {
+      "bytes": 1469,
+      "path": "harness/qwen3.6-27b-nvfp4-mtp::qwen-code-0.19.4.lumo_j_lens_swe_behavioral_replication_n10_20260718_behavioral_233d671bc88fa25a.json",
+      "sha256": "17cc526f8d15dd8fd7dd5aad26b3894d7b6929b1527a1ea9fb29e9e22a6cd562"
+    },
+    "exit_status": 0,
+    "max_workers": 1,
+    "status": {
+      "bytes": 2,
+      "path": "harness.exit_status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "stderr": {
+      "bytes": 2250,
+      "path": "harness.stderr.log",
+      "sha256": "447b7d60a21cbdae7bb6b58e5c607b4417cc153b0683ed96069b5543983edcf8"
+    },
+    "stdout": {
+      "bytes": 522,
+      "path": "harness.stdout.log",
+      "sha256": "289a41d72907b22d4641a27c4e691f34cb05aa6a4b7ed6c82095c15477538b90"
+    },
+    "swebench_version": "4.1.0",
+    "timeout_seconds": 1800
+  },
+  "outcomes": [
+    {
+      "instance_id": "astropy__astropy-14508",
+      "official_instance_report": {
+        "path": "harness/logs/run_evaluation/lumo_j_lens_swe_behavioral_replication_n10_20260718_behavioral_233d671bc88fa25a/qwen3.6-27b-nvfp4-mtp::qwen-code-0.19.4/astropy__astropy-14508/report.json",
+        "sha256": "7025731eeac0fcefdc6e799c45d3c6d75a28d5fc010e67b5b4261cc93b882707"
+      },
+      "outcome": "unresolved",
+      "patch_bytes": 2059,
+      "patch_sha256": "a376ece37ef1420eb4de02221677fad0c69b36535fc159308987752d8bb8c232"
+    },
+    {
+      "instance_id": "django__django-16938",
+      "official_instance_report": {
+        "path": "harness/logs/run_evaluation/lumo_j_lens_swe_behavioral_replication_n10_20260718_behavioral_233d671bc88fa25a/qwen3.6-27b-nvfp4-mtp::qwen-code-0.19.4/django__django-16938/report.json",
+        "sha256": "65324eec046a617e9091644ad7026470377082b869b1afb256a3290df9e8e756"
+      },
+      "outcome": "unresolved",
+      "patch_bytes": 657,
+      "patch_sha256": "d2f988c75ed3b73ffee532271c02ef29b61760d3b2c29655d11017a945742563"
+    },
+    {
+      "instance_id": "matplotlib__matplotlib-26291",
+      "official_instance_report": {
+        "path": "harness/logs/run_evaluation/lumo_j_lens_swe_behavioral_replication_n10_20260718_behavioral_233d671bc88fa25a/qwen3.6-27b-nvfp4-mtp::qwen-code-0.19.4/matplotlib__matplotlib-26291/report.json",
+        "sha256": "58030779067f4f51220d07b23aec731ba8897991bfc89950092a01f187ed528c"
+      },
+      "outcome": "resolved",
+      "patch_bytes": 684,
+      "patch_sha256": "d8d2c099e68de71e6eec1c4e1e8c3286ebcc8eff78544acea56944272d4b386b"
+    },
+    {
+      "instance_id": "psf__requests-5414",
+      "official_instance_report": {
+        "path": "harness/logs/run_evaluation/lumo_j_lens_swe_behavioral_replication_n10_20260718_behavioral_233d671bc88fa25a/qwen3.6-27b-nvfp4-mtp::qwen-code-0.19.4/psf__requests-5414/report.json",
+        "sha256": "6743b717fb0124e1becb29078095984d6df1bd486ea77cdedadfc6a1c05ae600"
+      },
+      "outcome": "resolved",
+      "patch_bytes": 1187,
+      "patch_sha256": "d618095976ef2963a3a55aaca7c3e97a9d97357b00177cb97b0afa34e28fdf2a"
+    },
+    {
+      "instance_id": "pydata__xarray-4687",
+      "official_instance_report": {
+        "path": "harness/logs/run_evaluation/lumo_j_lens_swe_behavioral_replication_n10_20260718_behavioral_233d671bc88fa25a/qwen3.6-27b-nvfp4-mtp::qwen-code-0.19.4/pydata__xarray-4687/report.json",
+        "sha256": "da7ea36c3986855c2bd3ffa4aa50144145111540ba006f2e3b7b1aa811e16bfb"
+      },
+      "outcome": "unresolved",
+      "patch_bytes": 576,
+      "patch_sha256": "57009b1672814906eca93c16cdc64bec6e51a320773c07a8fd8ef2860a74b357"
+    },
+    {
+      "instance_id": "pylint-dev__pylint-8898",
+      "official_instance_report": {
+        "path": "harness/logs/run_evaluation/lumo_j_lens_swe_behavioral_replication_n10_20260718_behavioral_233d671bc88fa25a/qwen3.6-27b-nvfp4-mtp::qwen-code-0.19.4/pylint-dev__pylint-8898/report.json",
+        "sha256": "c7bf3d9a65df546184f31b46b6a64f026fb3d1d37604e314627cedb6b836d1d7"
+      },
+      "outcome": "unresolved",
+      "patch_bytes": 1867,
+      "patch_sha256": "2a5a31f285f3ae7054582d033926778e44ad95c4b2929efea536028d3a6f943d"
+    },
+    {
+      "instance_id": "pytest-dev__pytest-10356",
+      "official_instance_report": {
+        "path": "harness/logs/run_evaluation/lumo_j_lens_swe_behavioral_replication_n10_20260718_behavioral_233d671bc88fa25a/qwen3.6-27b-nvfp4-mtp::qwen-code-0.19.4/pytest-dev__pytest-10356/report.json",
+        "sha256": "395c05cb33dc71d77e7c6dda0501c8aff39fb8c8c5b0701dd104fd7f19ee8237"
+      },
+      "outcome": "unresolved",
+      "patch_bytes": 1716,
+      "patch_sha256": "c448342b8552561a79fa614e681b0cce53196a27091d24ca493f4d3769e8c7b0"
+    },
+    {
+      "instance_id": "scikit-learn__scikit-learn-25973",
+      "official_instance_report": {
+        "path": "harness/logs/run_evaluation/lumo_j_lens_swe_behavioral_replication_n10_20260718_behavioral_233d671bc88fa25a/qwen3.6-27b-nvfp4-mtp::qwen-code-0.19.4/scikit-learn__scikit-learn-25973/report.json",
+        "sha256": "96d0cc7bbaa470869ae69ecff553f24de5d40c945b8abdb207150f957a046e59"
+      },
+      "outcome": "resolved",
+      "patch_bytes": 1015,
+      "patch_sha256": "6672e828f3f55a035032b0d3e8b400ee9334e7e89cd568a0b779f83a7c96fa26"
+    },
+    {
+      "instance_id": "sphinx-doc__sphinx-11510",
+      "official_instance_report": {
+        "path": "harness/logs/run_evaluation/lumo_j_lens_swe_behavioral_replication_n10_20260718_behavioral_233d671bc88fa25a/qwen3.6-27b-nvfp4-mtp::qwen-code-0.19.4/sphinx-doc__sphinx-11510/report.json",
+        "sha256": "9c2fe44a91163d0300968bb4f04f2d275e47bccf7d2ce43913960ad78504e4dc"
+      },
+      "outcome": "unresolved",
+      "patch_bytes": 2458,
+      "patch_sha256": "bbbb81c9a7595a557737f308dbbb68feead426309759838c53d07f0b888eb23e"
+    },
+    {
+      "instance_id": "sympy__sympy-24066",
+      "official_instance_report": {
+        "path": "harness/logs/run_evaluation/lumo_j_lens_swe_behavioral_replication_n10_20260718_behavioral_233d671bc88fa25a/qwen3.6-27b-nvfp4-mtp::qwen-code-0.19.4/sympy__sympy-24066/report.json",
+        "sha256": "4e709a8f0cf34a30ac421595147a8629c58846993306893aaa86bffc1daf3b18"
+      },
+      "outcome": "resolved",
+      "patch_bytes": 809,
+      "patch_sha256": "6a61e6f9cb93994cca9bf6242f96630c880f82c7019977be828614c74455c716"
+    }
+  ],
+  "run_id": "lumo_j_lens_swe_behavioral_replication_n10_20260718_behavioral_233d671bc88fa25a",
+  "run_name": "swe_behavioral_replication_n10_20260718",
+  "schema_version": 1
+}

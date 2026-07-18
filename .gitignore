@@ -11,3 +11,9 @@ __pycache__/
 .server-state
 .pytest_cache/
 /configs/qwen3-openai-codex.jinja
+/validation/jlens-swe-behavioral-n20-2026-07-18/attempts/
+/validation/jlens-swe-behavioral-n20-2026-07-18/latest
+/validation/jlens-swe-behavioral-n20-2026-07-18/latest-prepared
+/validation/jlens-swe-behavioral-n20-2026-07-18/.pilot.lock/
+/validation/jlens-swe-behavioral-n20-2026-07-18/.latest.tmp.*
+/validation/jlens-swe-behavioral-n20-2026-07-18/.latest-prepared.tmp.*

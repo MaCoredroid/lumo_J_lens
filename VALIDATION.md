@@ -418,6 +418,70 @@ calibrated readout. The complete report, command, and limitations are in
 the machine-readable result is
 [`validation/jlens-swe-multistage-2026-07-18/analysis.json`](validation/jlens-swe-multistage-2026-07-18/analysis.json).
 
+## Twenty-Task SWE Behavioral Study
+
+Date: 2026-07-18
+
+The N20 run contains two predeclared ten-task cohorts spanning 11 repositories,
+699 Qwen Code requests, 20 nonempty generated patches, and 160 uniform
+checkpoint prefixes. Generation used the pinned compiled NVFP4/FP8 server and
+one-token MTP; 91,789/105,033 speculative draft tokens were accepted. Replay
+used the same pinned main model in eager mode with MTP disabled and evaluated
+public `n=1000`, NF4 `n=10`, native NVFP4/FP8-STE `n=10`, and ordinary logit
+readouts at position `-1` over fixed layers 24-47.
+
+| Claim | Result | Evidence |
+|---|---|---|
+| Exact task/request cohort | PASS; 20 tasks, 11 repositories, 699 requests, 8 uniform checkpoints per task | [`prompt summary`](validation/jlens-swe-behavioral-n20-2026-07-18/publication/prompts_summary.json) |
+| MTP generation evidence | PASS; combined weighted acceptance `0.873906` | [`campaign evidence`](validation/jlens-swe-behavioral-n20-2026-07-18/publication/campaign_evidence.json) |
+| Official SWE-bench score | COMPLETE; 9 resolved, 11 unresolved, zero error/empty | [`development`](validation/jlens-swe-behavioral-n20-2026-07-18/publication/official-outcomes/development.json), [`replication`](validation/jlens-swe-behavioral-n20-2026-07-18/publication/official-outcomes/replication.json) |
+| Exact three-report pairing | PASS; prompts, residual manifests, runtime, final reconstruction, and logit readouts match | [`primary analysis`](validation/jlens-swe-behavioral-n20-2026-07-18/publication/analysis.json) |
+| Strict numerical coverage | FAIL support gate; 68/160 jointly certified checkpoints versus 128 required | [`primary analysis`](validation/jlens-swe-behavioral-n20-2026-07-18/publication/analysis.json) |
+| Preregistered behavioral decision | `insufficient_support`; action, outcome, and future-identifier coverage gates fail | [`protocol`](configs/swe_behavioral_readout_protocol.json), [`analysis`](validation/jlens-swe-behavioral-n20-2026-07-18/publication/analysis.json) |
+| Greedy next-token transport sensitivity | SUPPLEMENTAL; 155/160 eligible, but ordinary logit beats public J-lens | [`protocol`](configs/swe_next_token_transport_protocol.json), [`result`](validation/jlens-swe-behavioral-n20-2026-07-18/publication/next-token-transport-analysis.json) |
+| Learned action-layer readout | SUPPLEMENTAL; all classes recovered, but strict support is 66 rows and learned ordinary logit beats learned public J-lens | [`protocol`](configs/swe_action_layer_readout_protocol.json), [`result`](validation/jlens-swe-behavioral-n20-2026-07-18/publication/action-layer-readout.json) |
+
+All three replay processes completed their 160 rows and returned report status
+`failed` because the strict gate is conjunctive. Per report, 159/160 greedy
+top-1 and top-5 checks pass, 157/160 final-norm checks pass, 70/160 full-logit
+checks pass, and 68/160 pass every check. The same reconstruction evidence is
+present before lens-specific scores are compared. It diagnoses the residual
+adapter rather than an individual lens, while still limiting the primary
+scientific claim.
+
+The strict behavioral analysis has only 66 action-labeled certified rows, 8
+certified latest-task official outcomes, and four future-identifier rows from
+one task. Its frozen decision is therefore `insufficient_support` and its next
+step is to collect the missing jointly certified task controls without
+refitting. A sensitivity amendment was frozen after public numerical
+diagnostics but before lens ranks or log probabilities were inspected. It
+retains 155/160 rows, yet public J-lens minus ordinary logit normalized
+greedy-token rank utility is `-0.23449`, paired 95% CI
+`[-0.26190, -0.20507]`. Public minus native is `+0.06914`, CI
+`[0.06313, 0.07519]`, and public minus NF4 is `+0.13924`, CI
+`[0.13169, 0.14722]`. Because the public positive control fails, those local
+deficits do not authorize a refit.
+
+The nested leave-one-repository-out action supplement learns from all 96 fixed
+layer-by-class features. On 66 strict rows, balanced accuracy is `0.80729` for
+ordinary logit, `0.78125` for NF4 J-lens, `0.75000` for native J-lens, and
+`0.68229` for public J-lens. Learned public improves over the frozen public
+band-average readout by `+0.20833`, CI `[-0.04666, 0.46348]`, but trails
+learned ordinary logit by `-0.12500`, CI `[-0.33786, -0.00962]`. The
+149-row sensitivity track misses its six-rows-per-task requirement and remains
+descriptive. A post-hoc, outer-held-out checkpoint-ordinal prior reaches
+`0.63542` strict balanced accuracy, demonstrating that uniform checkpoint
+position itself carries substantial task-phase information. These descriptive
+results justify testing a progress-aware action readout with adequate support;
+they do not justify a new native lens fit.
+
+The complete accounting, estimator distinctions, supplemental controls, raw
+artifact boundary, and next-step decision are in
+[`docs/JLENS_SWE_BEHAVIORAL_N20_2026-07-18.md`](docs/JLENS_SWE_BEHAVIORAL_N20_2026-07-18.md).
+The compact publication intentionally omits the 86,989,478-byte prompt bundle
+and three approximately 274 MB full lens reports; their hashes bind identity
+but do not make their content independently available.
+
 ## Publication-Certified Run
 
 Date: 2026-07-15 (America/Los_Angeles)

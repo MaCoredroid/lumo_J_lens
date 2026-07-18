@@ -31,7 +31,9 @@ for the layer-by-layer replay of the certified Qwen Code episode,
 [docs/JLENS_SWE_MULTITASK_CHECKPOINTS_2026-07-18.md](docs/JLENS_SWE_MULTITASK_CHECKPOINTS_2026-07-18.md)
 for the leakage-audited multi-task C0/C1 probe, and
 [docs/JLENS_SWE_MULTISTAGE_2026-07-18.md](docs/JLENS_SWE_MULTISTAGE_2026-07-18.md)
-for the eight-stage lifecycle replay and next-step decision, and
+for the eight-stage lifecycle replay and next-step decision,
+[docs/JLENS_SWE_BEHAVIORAL_N20_2026-07-18.md](docs/JLENS_SWE_BEHAVIORAL_N20_2026-07-18.md)
+for the 20-task behavioral replay and probe-versus-refit decision, and
 [docs/JLENS_NF4_EXPERIMENT.md](docs/JLENS_NF4_EXPERIMENT.md) for the fresh-fit
 experiment.
 
@@ -346,6 +348,36 @@ action vocabulary or train a small readout with task-held-out splits. Refit only
 if method-aligned positive controls pass and the frozen lens then fails
 consistently across held-out tasks. See the
 [full multistage report](docs/JLENS_SWE_MULTISTAGE_2026-07-18.md).
+
+### Twenty-task SWE behavioral study
+
+The follow-on run automated 20 predeclared SWE-bench Verified tasks across 11
+repositories. Qwen Code made 699 model requests with native one-token MTP and
+produced 20 nonempty patches; the official scorer resolved 9/20. The lens
+replay then sampled eight uniform request prefixes per task, 160 checkpoints
+total, and applied the public `n=1000`, NF4 `n=10`, and native
+NVFP4/FP8-STE `n=10` lenses to exactly paired eager NVFP4 residuals at fixed
+layers 24-47.
+
+The preregistered result is `insufficient_support`, not a hidden-reasoning
+claim. Only 68/160 checkpoints passed the joint strict adapter gate, and the
+future-identifier control retained four rows from one task. A disclosed
+post-public-numerical-diagnostic sensitivity retained 155/160 checkpoints, but
+ordinary logit lens beat the public J-lens on transport of the replay model's
+own greedy token. The public lens still beat both local `n=10` artifacts, which
+is compatible with a shared small-fit limitation but does not justify a refit
+without a valid public-lens SWE positive control. A descriptive nested
+leave-one-repository-out action classifier recovered all four action classes,
+but strict support remained 66 rows and ordinary logit features reached
+`0.8073` balanced accuracy versus `0.6823` for public J-lens features. A
+post-hoc checkpoint-ordinal prior reached `0.6354`, exposing a strong task-phase
+confound. Both action-readout support gates still failed. The next step is to
+improve strict capture coverage and collect balanced, visibility-audited task
+controls with the current lenses frozen. See
+the [N20 report](docs/JLENS_SWE_BEHAVIORAL_N20_2026-07-18.md) and the compact
+[publication evidence](validation/jlens-swe-behavioral-n20-2026-07-18/publication/),
+including the exact [next-token transport result](validation/jlens-swe-behavioral-n20-2026-07-18/publication/next-token-transport-analysis.json)
+and [learned action-layer result](validation/jlens-swe-behavioral-n20-2026-07-18/publication/action-layer-readout.json).
 
 ### Fresh NF4 fit
 
