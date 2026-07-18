@@ -103,6 +103,25 @@ target-model lens. This applies a public FP16 lens whose fit-time model
 precision and quantization were not published to quantized activations; it is
 not an NVFP4 refit.
 
+For a fast task timeline, reuse that public `n=1000` lens and replay every
+agent-loop completion in one model load:
+
+```bash
+scripts/quick_swe_jlens.py
+```
+
+Here a request means one Qwen Code chat completion between tool executions,
+not a separate user task. The default extracts all nine exact completion
+contexts, reads layers `24,31,32,39,40,62` at each final prompt boundary, and
+writes a compact timeline under `.cache/swe_jlens_quick/`. Use
+`--requests 3` or `--requests 3-6` for a smaller slice, and `--dry-run` to
+inspect the exact one-load command without touching the GPU. The summary keeps
+the evaluated request count separate from the lens-fit prompt count and
+preserves a failed strict adapter status rather than treating it as a crash.
+On the reference RTX 5090, the final verified invocation took 38.60 seconds
+wall time; its measured runner lifecycle was 35.381 seconds, including an
+8.613-second model load.
+
 ### Native NVFP4/FP8-STE fit
 
 The NVIDIA checkpoint cannot be passed directly to `jlens.fit`: vLLM executes
@@ -294,6 +313,7 @@ only Git-tracked files after reviewing `git status` and `git ls-files`.
 - `scripts/download_jlens.py`: immutable 3.3 GB lens download and tensor gate
 - `scripts/run_jlens_nvfp4.sh`: CUDA environment and offline lens launcher
 - `scripts/run_jlens_nvfp4.py`: vLLM residual adapter and all-layer readout
+- `scripts/quick_swe_jlens.py`: one-load replay of selected Qwen Code completions
 - `scripts/run_nvfp4_ste_fit.py`: pinned, resumable native NVFP4/FP8-STE fitter
 - `scripts/export_nvfp4_ste_lens.py`: validated upstream-compatible lens exporter
 - `scripts/capture_nvfp4_fit_prompt.py`: isolated compiled capture/proof orchestration

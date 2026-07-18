@@ -332,6 +332,40 @@ final-norm, top-5-prefix, and greedy top-1 checks passed on all five.
 
 ## Reproduction
 
+### Quick one-load timeline
+
+One Qwen Code request is one model completion inside the agentic loop. Qwen
+receives the conversation accumulated so far, emits an assistant completion
+(often a tool call), the tool runs, and the enlarged conversation becomes the
+next request. The nine requests here are nine completion boundaries within one
+SWE task, not nine benchmark tasks.
+
+The quickest replay reuses the public `n=1000` lens and processes all nine
+exact token contexts in one model load:
+
+```bash
+scripts/quick_swe_jlens.py
+```
+
+It reads layers `24,31,32,39,40,62` at the final prompt-token boundary and
+writes both the raw runner report and a compact timeline under
+`.cache/swe_jlens_quick/`. Select a subset with `--requests 3` or
+`--requests 3-6`. `--dry-run` materializes the exact token bundle and prints
+the pinned GPU command without loading the model. The compact output names two
+different sample sizes: `task_request_count` is the number of evaluated agent
+completions, while `lens_fit_prompt_count` is the unrelated background corpus
+used once to estimate the lens (`1000` for the public default). The command
+returns success after a structurally valid replay even when the report's
+strict adapter certificate is `failed`; `--require-strict` instead propagates
+that failure as exit status 1.
+
+The final verified reference invocation processed all nine requests in 38.60
+seconds wall time on the RTX 5090. Its measured runner lifecycle was 35.381
+seconds, including an 8.613-second model load, and it produced all nine
+timeline rows. The report retained `failed` strict status because requests 2,
+5, 6, 7, and 8 exceeded only the maximum-logit tolerance; all nine passed the
+final top-1, top-5-prefix, final-norm RMS, and final-logit RMS checks.
+
 ### 1. Set up the pinned model and artifacts
 
 ```bash
