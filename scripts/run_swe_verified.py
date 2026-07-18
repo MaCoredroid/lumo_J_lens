@@ -79,6 +79,15 @@ DEFAULT_QWEN_MAX_OUTPUT_TOKENS = 32768   # flywheel R1 context-budget fix
 # QWEN_STREAM_IDLE_TIMEOUT_MS (precedence: config field > env > default). 240000 is the
 # flywheel QWEN_CODE_TEMPLATE value; their in-image path uses 600000 for B>=4 queueing.
 DEFAULT_QWEN_STREAM_IDLE_TIMEOUT_MS = 240000
+
+
+def _prediction_completeness_exit_code(
+    missing_predictions: list[str], *, allow_empty_predictions: bool
+) -> int:
+    """Keep failed/empty episodes only when an analysis campaign opts in."""
+    return 0 if allow_empty_predictions or not missing_predictions else 2
+
+
 DEFAULT_EVAL_TIMEOUT_S = 30 * 60
 
 # Proxy adapter: inject the certified thinking envelope, clamp max_tokens, and
@@ -345,7 +354,11 @@ def _docker_arch() -> str:
 
 def _container_image_for(instance_id: str) -> str:
     """Official image reference, using a certified digest where one is recorded."""
-    resolved = resolve_image(instance_id)
+    image_config = os.environ.get("SWE_IMAGE_CONFIG")
+    resolved = resolve_image(
+        instance_id,
+        Path(image_config) if image_config else REPO_ROOT / "configs/swe_image_digests.json",
+    )
     if not resolved["pinned"] and os.environ.get("ALLOW_UNPINNED_SWE_IMAGE") != "1":
         raise RuntimeError(
             f"no certified image digest for {instance_id}; "
@@ -1408,6 +1421,14 @@ def main(argv: list[str] | None = None) -> int:
                         "when an episode leaves NO patch (the historical tool-call-free-"
                         "terminal flake). Default None -> env SWE_EMPTY_PATCH_RETRIES "
                         "-> 0 (off). The reference-envelope run sets >=1.")
+    p.add_argument(
+        "--allow-empty-predictions",
+        action="store_true",
+        help=(
+            "retain failed or empty-patch episodes and return success after writing "
+            "their metadata; intended for outcome-probe campaigns, not submission runs"
+        ),
+    )
     args = p.parse_args(argv)
 
     dataset_name, instance_ids = _load_subset(args.subset)
@@ -1503,12 +1524,17 @@ def main(argv: list[str] | None = None) -> int:
                 valid_ids.add(str(prediction.get("instance_id") or ""))
     missing_predictions = sorted(set(instance_ids) - valid_ids)
     if missing_predictions:
+        severity = "WARNING" if args.allow_empty_predictions else "ERROR"
         print(
-            f"ERROR requested tasks lack a nonempty prediction: {missing_predictions}",
-            file=sys.stderr, flush=True,
+            f"{severity} requested tasks lack a nonempty prediction: "
+            f"{missing_predictions}",
+            file=sys.stderr,
+            flush=True,
         )
-        return 2
-    return 0
+    return _prediction_completeness_exit_code(
+        missing_predictions,
+        allow_empty_predictions=args.allow_empty_predictions,
+    )
 
 
 if __name__ == "__main__":

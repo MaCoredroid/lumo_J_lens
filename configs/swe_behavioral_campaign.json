@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "kind": "swe_verified_behavioral_trajectory_campaign",
+  "dataset": {
+    "repo_id": "princeton-nlp/SWE-bench_Verified",
+    "revision": "c104f840cc67f8b6eec6f759ebc8b2693d585d4a"
+  },
+  "selection": {
+    "lens_outputs_used": false,
+    "rule": "one cached x86_64 SWE-Verified image from each of ten repositories, selected before behavioral lens scoring",
+    "purpose": "independent full trajectories for next-action, transition-outcome, and leakage-free future-agent probes"
+  },
+  "generation": {
+    "model_repo_id": "nvidia/Qwen3.6-27B-NVFP4",
+    "model_revision": "0893e1606ff3d5f97a441f405d5fc541a6bdf404",
+    "served_model": "qwen3.6-27b-nvfp4",
+    "qwen_code_version": "0.19.4",
+    "max_model_len": 65536,
+    "max_session_turns": 50,
+    "agent_wall_seconds": 900,
+    "retain_empty_predictions": true
+  },
+  "instance_ids": [
+    "astropy__astropy-14539",
+    "django__django-10914",
+    "matplotlib__matplotlib-25332",
+    "mwaskom__seaborn-3069",
+    "psf__requests-6028",
+    "pydata__xarray-4094",
+    "pylint-dev__pylint-4970",
+    "pytest-dev__pytest-8399",
+    "scikit-learn__scikit-learn-12585",
+    "sphinx-doc__sphinx-8269"
+  ]
+}

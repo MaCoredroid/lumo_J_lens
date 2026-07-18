@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "images": {
+    "astropy__astropy-14508": {
+      "x86_64": {
+        "reference": "swebench/sweb.eval.x86_64.astropy_1776_astropy-14508@sha256:a6aea03ce1c6a2e897e78a4339e44f02643deb9007e0628a058034779181ce71",
+        "image_id": "sha256:a6aea03ce1c6a2e897e78a4339e44f02643deb9007e0628a058034779181ce71"
+      }
+    },
+    "django__django-16938": {
+      "x86_64": {
+        "reference": "swebench/sweb.eval.x86_64.django_1776_django-16938@sha256:82386fb686d8ee5f56219ed6e8b8b222837803dbe8236510cca48cf2443ef4da",
+        "image_id": "sha256:82386fb686d8ee5f56219ed6e8b8b222837803dbe8236510cca48cf2443ef4da"
+      }
+    },
+    "matplotlib__matplotlib-26291": {
+      "x86_64": {
+        "reference": "swebench/sweb.eval.x86_64.matplotlib_1776_matplotlib-26291@sha256:7316b5d5ec1ae2f106c08898caaed88b389f7431bc246cd6f689b9c692cc25cd",
+        "image_id": "sha256:7316b5d5ec1ae2f106c08898caaed88b389f7431bc246cd6f689b9c692cc25cd"
+      }
+    },
+    "psf__requests-5414": {
+      "x86_64": {
+        "reference": "swebench/sweb.eval.x86_64.psf_1776_requests-5414@sha256:168ae94842a3fb649583fe31fddea447fe17504fef03a858750dc8d8f21a8326",
+        "image_id": "sha256:168ae94842a3fb649583fe31fddea447fe17504fef03a858750dc8d8f21a8326"
+      }
+    },
+    "pydata__xarray-4687": {
+      "x86_64": {
+        "reference": "swebench/sweb.eval.x86_64.pydata_1776_xarray-4687@sha256:6a108e6ed8ef1eb43094cee8a1c1fc800929e06849ef0de08fa6217b15dea1c2",
+        "image_id": "sha256:6a108e6ed8ef1eb43094cee8a1c1fc800929e06849ef0de08fa6217b15dea1c2"
+      }
+    },
+    "pylint-dev__pylint-8898": {
+      "x86_64": {
+        "reference": "swebench/sweb.eval.x86_64.pylint-dev_1776_pylint-8898@sha256:4b8b097129a8100a92099844231b9df25fa79c77dcba22a4923afe70d978d885",
+        "image_id": "sha256:4b8b097129a8100a92099844231b9df25fa79c77dcba22a4923afe70d978d885"
+      }
+    },
+    "pytest-dev__pytest-10356": {
+      "x86_64": {
+        "reference": "swebench/sweb.eval.x86_64.pytest-dev_1776_pytest-10356@sha256:9457c438be7a30d0620cabc3db2e649f2c5544e3e66584a77978af07470ddff5",
+        "image_id": "sha256:9457c438be7a30d0620cabc3db2e649f2c5544e3e66584a77978af07470ddff5"
+      }
+    },
+    "scikit-learn__scikit-learn-25973": {
+      "x86_64": {
+        "reference": "swebench/sweb.eval.x86_64.scikit-learn_1776_scikit-learn-25973@sha256:d3fbac0e0ea7c8f3601fde21f67db6e95743d247f043e98a6792c9f3afa7b68a",
+        "image_id": "sha256:d3fbac0e0ea7c8f3601fde21f67db6e95743d247f043e98a6792c9f3afa7b68a"
+      }
+    },
+    "sphinx-doc__sphinx-11510": {
+      "x86_64": {
+        "reference": "swebench/sweb.eval.x86_64.sphinx-doc_1776_sphinx-11510@sha256:2086a0ee2a453131d0cf73c2c3984de8a1a6563745469c6f3f29c17e5b1e7551",
+        "image_id": "sha256:2086a0ee2a453131d0cf73c2c3984de8a1a6563745469c6f3f29c17e5b1e7551"
+      }
+    },
+    "sympy__sympy-24066": {
+      "x86_64": {
+        "reference": "swebench/sweb.eval.x86_64.sympy_1776_sympy-24066@sha256:d559cf2a843c6c229720d84edf53971cedbc5a8f3863c8aea2d615a5315c789d",
+        "image_id": "sha256:d559cf2a843c6c229720d84edf53971cedbc5a8f3863c8aea2d615a5315c789d"
+      }
+    }
+  }
+}

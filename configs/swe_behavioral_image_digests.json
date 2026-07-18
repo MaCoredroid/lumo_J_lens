@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "images": {
+    "astropy__astropy-14539": {
+      "x86_64": {
+        "reference": "swebench/sweb.eval.x86_64.astropy_1776_astropy-14539@sha256:a8d0f9829ec24dfb23a2f0097a245ee60faf1b396b33b3af5c22d7ac5f3c00ab",
+        "image_id": "sha256:a8d0f9829ec24dfb23a2f0097a245ee60faf1b396b33b3af5c22d7ac5f3c00ab"
+      }
+    },
+    "django__django-10914": {
+      "x86_64": {
+        "reference": "swebench/sweb.eval.x86_64.django_1776_django-10914@sha256:f821080544e1fe3d31e483adbfdf2cc25850f42add4068de5b1dda8935f4d2cb",
+        "image_id": "sha256:f821080544e1fe3d31e483adbfdf2cc25850f42add4068de5b1dda8935f4d2cb"
+      }
+    },
+    "matplotlib__matplotlib-25332": {
+      "x86_64": {
+        "reference": "swebench/sweb.eval.x86_64.matplotlib_1776_matplotlib-25332@sha256:35f2b8de86ccde88ae665fae171b46b39be20db664eee68954f814c2eb8a1b54",
+        "image_id": "sha256:35f2b8de86ccde88ae665fae171b46b39be20db664eee68954f814c2eb8a1b54"
+      }
+    },
+    "mwaskom__seaborn-3069": {
+      "x86_64": {
+        "reference": "swebench/sweb.eval.x86_64.mwaskom_1776_seaborn-3069@sha256:3feccf3ece6ca73c10ee665b62679937b7dbc2db28c35c9b4a1f192ed540e2dd",
+        "image_id": "sha256:3feccf3ece6ca73c10ee665b62679937b7dbc2db28c35c9b4a1f192ed540e2dd"
+      }
+    },
+    "psf__requests-6028": {
+      "x86_64": {
+        "reference": "swebench/sweb.eval.x86_64.psf_1776_requests-6028@sha256:e7bb372d262c4888eedb833e3c0685f9c3e6d6b1b1b1c2fe638fe5170160dafe",
+        "image_id": "sha256:e7bb372d262c4888eedb833e3c0685f9c3e6d6b1b1b1c2fe638fe5170160dafe"
+      }
+    },
+    "pydata__xarray-4094": {
+      "x86_64": {
+        "reference": "swebench/sweb.eval.x86_64.pydata_1776_xarray-4094@sha256:45e6b9897c749159b749a3737a7e79e5458baa7c8387844bc70ef0cbf46035c1",
+        "image_id": "sha256:45e6b9897c749159b749a3737a7e79e5458baa7c8387844bc70ef0cbf46035c1"
+      }
+    },
+    "pylint-dev__pylint-4970": {
+      "x86_64": {
+        "reference": "swebench/sweb.eval.x86_64.pylint-dev_1776_pylint-4970@sha256:d5b68120595f1541cadc12b08a01b7db2d4b0eddedf67e92f7ef065c1e46b82b",
+        "image_id": "sha256:d5b68120595f1541cadc12b08a01b7db2d4b0eddedf67e92f7ef065c1e46b82b"
+      }
+    },
+    "pytest-dev__pytest-8399": {
+      "x86_64": {
+        "reference": "swebench/sweb.eval.x86_64.pytest-dev_1776_pytest-8399@sha256:3aab9323e15fa084e404f097ed2867ef9d8dfb0b997a843db3f0b17f4c0d4d6f",
+        "image_id": "sha256:3aab9323e15fa084e404f097ed2867ef9d8dfb0b997a843db3f0b17f4c0d4d6f"
+      }
+    },
+    "scikit-learn__scikit-learn-12585": {
+      "x86_64": {
+        "reference": "swebench/sweb.eval.x86_64.scikit-learn_1776_scikit-learn-12585@sha256:438346134907344bb2444ac8f0764ffa90384cf9a4bcfc2b4b398ed95847308e",
+        "image_id": "sha256:438346134907344bb2444ac8f0764ffa90384cf9a4bcfc2b4b398ed95847308e"
+      }
+    },
+    "sphinx-doc__sphinx-8269": {
+      "x86_64": {
+        "reference": "swebench/sweb.eval.x86_64.sphinx-doc_1776_sphinx-8269@sha256:3ec0170669a3d10f942811e9259650b731af6b4d9c10ff875e54d2606c238492",
+        "image_id": "sha256:3ec0170669a3d10f942811e9259650b731af6b4d9c10ff875e54d2606c238492"
+      }
+    }
+  }
+}
