@@ -1,7 +1,7 @@
 {
-  "schema_version": 1,
-  "id": "swe-n20-greedy-next-token-transport-v1",
-  "status": "frozen_before_n20_rank_inspection",
+  "schema_version": 2,
+  "id": "swe-n20-greedy-next-token-transport-v2",
+  "status": "amended_before_n20_rank_inspection_after_public_numeric_only_audit",
   "frozen_at_utc": "2026-07-18T19:01:24Z",
   "frozen_source_commit": "ac1ef39f799ac742225a04283f5ebbf8fa296ab4",
   "design_disclosure": {
@@ -9,7 +9,12 @@
     "n20_public_rank_or_logprob_outcomes_inspected_before_freeze": false,
     "n20_nf4_or_native_reports_existed_at_freeze": false,
     "prior_n1_reports_informed_design": true,
-    "semantic_behavioral_protocol_replaced_or_overridden": false
+    "semantic_behavioral_protocol_replaced_or_overridden": false,
+    "amendment_at_utc": "2026-07-18T19:06:36Z",
+    "public_numerical_diagnostics_inspected_before_amendment": true,
+    "public_numeric_only_observation": "90 of 160 full-logit maximum errors were exactly 0.125 instead of the strict 0.0625 bound; all 160 full-logit RMS errors remained below 0.02; 159 greedy top-1 and top-5 checks passed; 157 final-norm checks passed",
+    "lens_target_ranks_or_logprobs_inspected_before_amendment": false,
+    "strict_primary_track_changed_by_amendment": false
   },
   "scope": {
     "cohort_manifest_sha256": "35dd5ff6c693256da840beb1bfe29a1841d9b87a9efc4c5b6ac7b1d6ec9e2ab9",
@@ -115,6 +120,32 @@
     "exact_prompt_pairing_required": true,
     "exact_residual_pairing_required": true,
     "exact_ordinary_logit_pairing_required": true
+  },
+  "paired_stable_reconstruction_sensitivity": {
+    "role": "pre-rank sensitivity track; cannot override the strict primary scientific decision",
+    "selection_uses_lens_rank_or_logprob": false,
+    "same_generated_token_and_pairing_identity_checks_as_primary": true,
+    "all_three_reports_must_pass_each_check": true,
+    "checks": {
+      "captured_and_reconstructed_greedy_top1_match": true,
+      "captured_and_reconstructed_top5_prefix_match": true,
+      "final_norm_within_existing_strict_tolerances": true,
+      "full_final_logits_rms_error_maximum_inclusive": 0.02,
+      "full_final_logits_max_abs_error_maximum_inclusive": 0.125
+    },
+    "support_gates": {
+      "minimum_jointly_eligible_checkpoints": 128,
+      "minimum_jointly_eligible_fraction": 0.8,
+      "all_20_tasks_represented": true,
+      "all_11_predeclared_repositories_represented": true,
+      "minimum_jointly_eligible_checkpoints_per_task": 6
+    },
+    "reporting": {
+      "same_estimand_bootstrap_and_effect_thresholds_as_primary": true,
+      "classification_prefix": "sensitivity_",
+      "must_be_labeled_post_public-numerical-diagnostic_amendment": true,
+      "decision_override_forbidden": true
+    }
   },
   "support_gates": {
     "minimum_jointly_certified_checkpoints": 128,
