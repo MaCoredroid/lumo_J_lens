@@ -1,0 +1,211 @@
+{
+  "schema_version": 1,
+  "kind": "swe_verified_behavioral_readout_protocol",
+  "analysis_version": "task-held-out-v1",
+  "lens_outputs_used_for_selection_or_labels": false,
+  "pins": {
+    "model": {
+      "repo_id": "nvidia/Qwen3.6-27B-NVFP4",
+      "revision": "0893e1606ff3d5f97a441f405d5fc541a6bdf404",
+      "config_sha256": "c04a19ba293737ad7be4f6e96d6666cb7e479cbe19ecc0c289fad267135b0338",
+      "index_sha256": "7aa103a2582b7d26631988de33dea19e8a308ee9c239e8e14feb374af30905e2"
+    },
+    "tokenizer": {
+      "json_sha256": "5f9e4d4901a92b997e463c1f46055088b6cca5ca61a6522d1b9f64c4bb81cb42",
+      "vocabulary_size": 248077,
+      "logit_vocabulary_size": 248320
+    },
+    "action_protocol": {
+      "path": "configs/swe_stage_action_probes.json",
+      "sha256": "bce204d03608e181456bb5c05a041c4bf4d305f48cb4b4e651ba34460d46d493"
+    },
+    "lenses": {
+      "public": {
+        "repo_id": "neuronpedia/jacobian-lens",
+        "revision": "a4114d7752d11eb546e6cf372213d7e75526d3a1",
+        "sha256": "1718c8c52dd8a9dad03738d4d625937c1fbba10be325b872ed446c7290fc11e1",
+        "n_prompts": 1000
+      },
+      "nf4": {
+        "sha256": "54d95f9626d8d120d56c161cfc8943ec76fd77172a9c0c54d5d913a5a639424f",
+        "provenance_sha256": "08dfe022cc74bab226308dcd77a3901ec18806f8832dc8dec46524374fa3b1e7",
+        "n_prompts": 10
+      },
+      "native_nvfp4_ste": {
+        "sha256": "82be61c805d127427b37b2b4715885b756c2ca7af96291578fa4da9cd783e057",
+        "provenance_sha256": "289e93a0c99579a0d5637cb37b42c4575b73eb2c38d35d47963de85178e90601",
+        "state_sha256": "f5ee70cfda416327be6b2583a67f5662cbe4036dbc68ce4ba470884383bfbcf6",
+        "n_prompts": 10
+      }
+    }
+  },
+  "fixed_layer_band": {
+    "start": 24,
+    "end": 47,
+    "end_inclusive": true,
+    "layers": [
+      24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35,
+      36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47
+    ]
+  },
+  "class_score_reduction": {
+    "within_class": "logmeanexp_over_declared_token_logits",
+    "across_layers": "arithmetic_mean_over_fixed_layers_24_through_47",
+    "layer_selection": "none"
+  },
+  "action_classes": [
+    {
+      "id": "inspect",
+      "tokens": [
+        {"text": " inspect", "token_id": 23331},
+        {"text": " read", "token_id": 1301},
+        {"text": " search", "token_id": 2624},
+        {"text": " examine", "token_id": 20321},
+        {"text": " locate", "token_id": 23748},
+        {"text": " explore", "token_id": 12804}
+      ]
+    },
+    {
+      "id": "edit",
+      "tokens": [
+        {"text": " edit", "token_id": 4351},
+        {"text": " modify", "token_id": 5427},
+        {"text": " change", "token_id": 2222},
+        {"text": " patch", "token_id": 10582},
+        {"text": " implement", "token_id": 4072},
+        {"text": " update", "token_id": 2560}
+      ]
+    },
+    {
+      "id": "validate",
+      "tokens": [
+        {"text": " test", "token_id": 1228},
+        {"text": " verify", "token_id": 9845},
+        {"text": " validate", "token_id": 9307},
+        {"text": " check", "token_id": 1716},
+        {"text": " confirm", "token_id": 7440},
+        {"text": " execute", "token_id": 8754}
+      ]
+    },
+    {
+      "id": "finalize",
+      "tokens": [
+        {"text": " finalize", "token_id": 52275},
+        {"text": " finish", "token_id": 6052},
+        {"text": " summarize", "token_id": 59987},
+        {"text": " report", "token_id": 1830},
+        {"text": " conclude", "token_id": 30076},
+        {"text": " respond", "token_id": 5707}
+      ]
+    }
+  ],
+  "outcome_classes": [
+    {
+      "id": "success",
+      "tokens": [
+        {"text": " passed", "token_id": 5642},
+        {"text": " fixed", "token_id": 8097},
+        {"text": " resolved", "token_id": 19072},
+        {"text": " successful", "token_id": 6635},
+        {"text": " success", "token_id": 2316},
+        {"text": " works", "token_id": 4138}
+      ]
+    },
+    {
+      "id": "failure",
+      "tokens": [
+        {"text": " failed", "token_id": 4490},
+        {"text": " failing", "token_id": 20738},
+        {"text": " unresolved", "token_id": 77397},
+        {"text": " blocked", "token_id": 18716},
+        {"text": " error", "token_id": 1412},
+        {"text": " broken", "token_id": 10548}
+      ]
+    }
+  ],
+  "primary_cohort": {
+    "cohort": "uniform_probeable_request_index",
+    "algorithm": "uniform_probeable_request_indices_v1",
+    "primary_for_action_evaluation": true,
+    "independent_of_next_action_label": true,
+    "label_conditioned_lifecycle_checkpoints_are_primary": false
+  },
+  "prompt_context": {
+    "max_model_len": 65536,
+    "reserved_generation_tokens": 1,
+    "maximum_prompt_tokens": 65535,
+    "over_limit_prompts_forbidden": true
+  },
+  "cross_fitting": {
+    "algorithm": "leave_one_repository_out_first_supported_calibration_subset_v1",
+    "group": "repository_then_task",
+    "evaluation_group": "repository",
+    "calibration_repository_count": 3,
+    "minimum_fit_repositories": 4,
+    "minimum_calibration_repositories": 2,
+    "minimum_fit_examples_per_class": 2,
+    "minimum_calibration_examples_per_class": 1,
+    "split_seed": 36027,
+    "held_out_labels_used_for_split_or_fit": false,
+    "calibrator": {
+      "kind": "per_class_additive_bias_then_scalar_temperature",
+      "bias_reference_class": "last_declared_class",
+      "bias_l2": 0.0001,
+      "temperature_min": 0.05,
+      "temperature_max": 20.0,
+      "temperature_search_iterations": 96,
+      "layer_selection": "none"
+    },
+    "majority_baseline": {
+      "kind": "fit_task_class_prior",
+      "laplace_alpha": 1.0,
+      "ties": "declared_class_order"
+    }
+  },
+  "metrics": {
+    "classification": [
+      "micro_accuracy",
+      "balanced_accuracy",
+      "macro_recall",
+      "negative_log_likelihood",
+      "multiclass_brier"
+    ],
+    "balanced_accuracy_requires_all_declared_classes": true,
+    "probability_transform": "softmax",
+    "multiclass_brier_reduction": "mean_sum_squared_probability_error"
+  },
+  "numerical_certification": {
+    "final_norm_max_abs_tolerance": 0.125,
+    "final_norm_rms_tolerance": 0.006,
+    "final_logits_max_abs_tolerance": 0.0625,
+    "final_logits_rms_tolerance": 0.01,
+    "top_k_prefix": 5,
+    "residual_tensor_count": 64,
+    "residual_d_model": 5120,
+    "residual_dtype_bytes": 4
+  },
+  "bootstrap": {
+    "algorithm": "hierarchical_repository_then_task_percentile_v1",
+    "seed": 36028,
+    "samples": 5000,
+    "confidence_level": 0.95,
+    "row_resampling_forbidden": true,
+    "minimum_valid_fraction": 0.8
+  },
+  "future_target": {
+    "eligibility_status": "eligible",
+    "foil_scope": "same_task_only",
+    "foil_reduction": "strongest_hidden_foil_by_fixed_band_score",
+    "lens_outputs_used_to_choose_candidate_set": false
+  },
+  "official_outcome": {
+    "observation_unit": "one_latest_uniform_probeable_checkpoint_per_task",
+    "repeat_stage_observations": false,
+    "missing_is_not_imputed": true
+  },
+  "development_contract": {
+    "n10_policy": "development_unless_every_repository_fold_and_class_support_rule_passes",
+    "minimum_tasks_for_non_development_claim": 20,
+    "incomplete_crossfit_policy": "report_insufficient_without_imputation"
+  }
+}

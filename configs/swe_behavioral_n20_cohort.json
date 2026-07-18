@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "kind": "swe_verified_behavioral_n20_cohort",
+  "lens_outputs_used_for_selection": false,
+  "official_outcomes_used_for_selection": false,
+  "action_protocol": {
+    "path": "configs/swe_stage_action_probes.json",
+    "sha256": "bce204d03608e181456bb5c05a041c4bf4d305f48cb4b4e651ba34460d46d493"
+  },
+  "chat_template": {
+    "path": "configs/qwen3-openai-codex.jinja",
+    "sha256": "c166a05aaf5ad4b807a7c46497f92180e3df24e64d4b54d27fd26ec61bec38da"
+  },
+  "cohorts": [
+    {
+      "id": "development",
+      "campaign_path": "configs/swe_behavioral_campaign.json",
+      "campaign_sha256": "24d1e885f830c1738294a3e1cdfda50fce307a942bb0badb6f9b1fa55f1de1a0",
+      "run_label": "swe_behavioral_n10_20260718",
+      "instance_ids": [
+        "astropy__astropy-14539",
+        "django__django-10914",
+        "matplotlib__matplotlib-25332",
+        "mwaskom__seaborn-3069",
+        "psf__requests-6028",
+        "pydata__xarray-4094",
+        "pylint-dev__pylint-4970",
+        "pytest-dev__pytest-8399",
+        "scikit-learn__scikit-learn-12585",
+        "sphinx-doc__sphinx-8269"
+      ]
+    },
+    {
+      "id": "replication",
+      "campaign_path": "configs/swe_behavioral_replication_campaign.json",
+      "campaign_sha256": "c861a0f13a9a8225855696a301d51000538b9f78bee1f14f0a028963644708ae",
+      "run_label": "swe_behavioral_replication_n10_20260718",
+      "instance_ids": [
+        "astropy__astropy-14508",
+        "django__django-16938",
+        "matplotlib__matplotlib-26291",
+        "psf__requests-5414",
+        "pydata__xarray-4687",
+        "pylint-dev__pylint-8898",
+        "pytest-dev__pytest-10356",
+        "scikit-learn__scikit-learn-25973",
+        "sphinx-doc__sphinx-11510",
+        "sympy__sympy-24066"
+      ]
+    }
+  ],
+  "instance_ids": [
+    "astropy__astropy-14539",
+    "django__django-10914",
+    "matplotlib__matplotlib-25332",
+    "mwaskom__seaborn-3069",
+    "psf__requests-6028",
+    "pydata__xarray-4094",
+    "pylint-dev__pylint-4970",
+    "pytest-dev__pytest-8399",
+    "scikit-learn__scikit-learn-12585",
+    "sphinx-doc__sphinx-8269",
+    "astropy__astropy-14508",
+    "django__django-16938",
+    "matplotlib__matplotlib-26291",
+    "psf__requests-5414",
+    "pydata__xarray-4687",
+    "pylint-dev__pylint-8898",
+    "pytest-dev__pytest-10356",
+    "scikit-learn__scikit-learn-25973",
+    "sphinx-doc__sphinx-11510",
+    "sympy__sympy-24066"
+  ]
+}
