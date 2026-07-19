@@ -2,7 +2,11 @@
 set -euo pipefail
 
 ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
-if [[ -f "$ROOT/.env" ]]; then set -a; source "$ROOT/.env"; set +a; fi
+if [[ ${LUMO_V3_CERTIFIED_NO_DOTENV:-0} != 1 && -f "$ROOT/.env" ]]; then
+  set -a
+  source "$ROOT/.env"
+  set +a
+fi
 UNIT=${UNIT:-lumo_j_lens_qwen27b}
 if [[ -f "$ROOT/.server-state" ]]; then
   # shellcheck disable=SC1091

@@ -1,0 +1,172 @@
+{
+  "action_classes": [
+    {
+      "id": "inspect",
+      "tokens": [
+        {"text": " inspect", "token_id": 23331},
+        {"text": " read", "token_id": 1301},
+        {"text": " search", "token_id": 2624},
+        {"text": " examine", "token_id": 20321},
+        {"text": " locate", "token_id": 23748},
+        {"text": " explore", "token_id": 12804},
+        {"text": " grep", "token_id": 20049},
+        {"text": " rg", "token_id": 17815}
+      ]
+    },
+    {
+      "id": "edit",
+      "tokens": [
+        {"text": " edit", "token_id": 4351},
+        {"text": " modify", "token_id": 5427},
+        {"text": " change", "token_id": 2222},
+        {"text": " patch", "token_id": 10582},
+        {"text": " implement", "token_id": 4072},
+        {"text": " update", "token_id": 2560},
+        {"text": " write", "token_id": 3165},
+        {"text": " replace", "token_id": 8032}
+      ]
+    },
+    {
+      "id": "validate",
+      "tokens": [
+        {"text": " test", "token_id": 1228},
+        {"text": " verify", "token_id": 9845},
+        {"text": " validate", "token_id": 9307},
+        {"text": " check", "token_id": 1716},
+        {"text": " confirm", "token_id": 7440},
+        {"text": " execute", "token_id": 8754},
+        {"text": " pytest", "token_id": 26864},
+        {"text": " run", "token_id": 1542}
+      ]
+    },
+    {
+      "id": "finalize",
+      "tokens": [
+        {"text": " finalize", "token_id": 52275},
+        {"text": " finish", "token_id": 6052},
+        {"text": " summarize", "token_id": 59987},
+        {"text": " report", "token_id": 1830},
+        {"text": " conclude", "token_id": 30076},
+        {"text": " respond", "token_id": 5707},
+        {"text": " answer", "token_id": 4087},
+        {"text": " done", "token_id": 2725}
+      ]
+    }
+  ],
+  "accepted_generated_token_policy": "exclude_from_all_class_forms_and_mark_unscorable_if_a_contrast_cannot_be_retained",
+  "class_margin_reduction": "expected_class_logmeanexp_minus_max_competing_class_logmeanexp",
+  "class_score_reduction": "logmeanexp_over_class_tokens",
+  "fixed_layer_band": {
+    "end": 47,
+    "end_inclusive": true,
+    "layers": [
+      24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35,
+      36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47
+    ],
+    "start": 24
+  },
+  "kind": "swe_verified_stage_action_probe_protocol",
+  "lens_outputs_used_for_labels": false,
+  "next_completion_classifier": {
+    "action_precedence": [
+      "terminal_no_tool_response",
+      "mutating_source_command",
+      "test_command",
+      "read_or_search_command",
+      "validation_intent_assistant_text"
+    ],
+    "diagnosis_assistant_text_regexes": [
+      "(?i)\\bnow i understand(?: the)? (?:issue|problem)\\b",
+      "(?i)\\b(?:root cause|issue|problem) is\\b",
+      "(?i)\\b(?:is|was) caused by\\b",
+      "(?i)\\bthe fix is to\\b",
+      "(?i)\\bneed(?:s)? to (?:add|change|pass|remove|replace|return|use|wrap)\\b"
+    ],
+    "generic_inspection_tool_names": [
+      "glob",
+      "grep_search",
+      "list_directory",
+      "read_file",
+      "search_file_content"
+    ],
+    "generic_mutation_tool_names": [
+      "apply_patch",
+      "edit",
+      "replace",
+      "write_file"
+    ],
+    "mutating_command_regexes": [
+      "(?im)(?:^|[;&|]\\s*|\\n\\s*)(?:cat|echo|printf)\\b[^\\n]*(?:>>?|\\btee\\b)",
+      "(?im)(?:^|[;&|]\\s*|\\n\\s*)tee\\b",
+      "(?im)\\bsed\\b[^\\n;|]*\\s-i(?:[.A-Za-z0-9_-]*)?\\b",
+      "(?im)\\b(?:apply_patch|git\\s+apply|patch\\s+-p\\d+)\\b",
+      "(?im)\\b(?:write_text|write_bytes)\\s*\\(",
+      "(?im)\\bopen\\s*\\([^\\n]*,[^\\n]*(?:['\"]w|['\"]a|['\"]x)",
+      "(?im)\\bwith\\s+open\\s*\\([^\\n]*,[^\\n]*(?:['\"]w|['\"]a|['\"]x)"
+    ],
+    "test_command_regexes": [
+      "(?i)(?:^|[;&|]\\s*|\\s)(?:python(?:3|[0-9.]*)?\\s+)?(?:[^\\s;|]*/)?runtests\\.py\\b",
+      "(?i)(?:^|[;&|]\\s*|\\s)(?:python(?:3|[0-9.]*)?\\s+-m\\s+)?(?:pytest|unittest)\\b",
+      "(?i)(?:^|[;&|]\\s*|\\s)(?:tox|nox|cargo\\s+test|go\\s+test|npm\\s+(?:run\\s+)?test|pnpm\\s+(?:run\\s+)?test|yarn\\s+test|make\\s+test)\\b",
+      "(?is)(?:^|[;&|]\\s*|\\n\\s*)python(?:3|[0-9.]*)?\\s+<<\\s*['\"]?[A-Za-z0-9_]+['\"]?[\\s\\S]*\\bassert\\b",
+      "(?i)(?:^|[;&|]\\s*|\\s)python(?:3|[0-9.]*)?\\s+[^\\s;|]*(?:test|check|verify)[^\\s;|]*\\.py\\b"
+    ],
+    "validation_assistant_text_regexes": [
+      "(?i)\\b(?:verify|validate|test|check|confirm)(?:ing)? (?:the |this |that )?(?:fix|change|patch|behavior|bug|scenario)\\b",
+      "(?i)\\b(?:run|write) (?:a |the )?(?:quick |specific |targeted )?(?:test|check|script) to (?:verify|validate|confirm|reproduce)\\b",
+      "(?i)\\b(?:tests?|checks?) pass(?:ed)?\\b"
+    ],
+    "unclassified_policy": "missing_not_imputed"
+  },
+  "outcome_classes": [
+    {
+      "id": "success",
+      "tokens": [
+        {"text": " passed", "token_id": 5642},
+        {"text": " fixed", "token_id": 8097},
+        {"text": " resolved", "token_id": 19072},
+        {"text": " successful", "token_id": 6635},
+        {"text": " success", "token_id": 2316},
+        {"text": " works", "token_id": 4138}
+      ]
+    },
+    {
+      "id": "failure",
+      "tokens": [
+        {"text": " failed", "token_id": 4490},
+        {"text": " failing", "token_id": 20738},
+        {"text": " unresolved", "token_id": 77397},
+        {"text": " blocked", "token_id": 18716},
+        {"text": " error", "token_id": 1412},
+        {"text": " broken", "token_id": 10548}
+      ]
+    }
+  ],
+  "outcome_control_contract": {
+    "official_verdict_mapping": {
+      "error": "failure",
+      "incomplete": "failure",
+      "resolved": "success",
+      "unresolved": "failure"
+    },
+    "transition_outcome": "all captured tool results successful, otherwise failure; terminal completion uses bound official verdict; length uses failure"
+  },
+  "pooled_one_vs_rest_role": "sensitivity_only_not_a_decision_margin",
+  "pins": {
+    "model": {
+      "repo_id": "nvidia/Qwen3.6-27B-NVFP4",
+      "revision": "0893e1606ff3d5f97a441f405d5fc541a6bdf404"
+    },
+    "tokenizer": {
+      "json_sha256": "5f9e4d4901a92b997e463c1f46055088b6cca5ca61a6522d1b9f64c4bb81cb42",
+      "vocabulary_size": 248077
+    }
+  },
+  "reasoning_state_contract": {
+    "included_in_action_accuracy": false,
+    "labels": ["diagnosis_expressed"],
+    "lens_scored_vocabulary": false,
+    "representation": "independent_binary_multilabel_metadata"
+  },
+  "schema_version": 1
+}

@@ -1,0 +1,442 @@
+{
+  "schema_version": 1,
+  "id": "swe-task-state-interpreter-v3",
+  "status": "predeclared_before_fresh_n60_generation_or_lens_replay",
+  "decision_scope": "fresh_development_only_reserved_validation_remains_closed",
+  "interpretation_target": "observable ensuing same-request Qwen Code completion action predicted at each numerically stable final-prompt boundary; never hidden prose or chain-of-thought",
+  "pins": {
+    "historical_v1_analyzer_sha256": "279d0a41742e9feeabd3dbd82b73f609326a4942c983cc2eee7125164ebd0594",
+    "historical_v1_protocol_sha256": "a6441137828866e8aad9dc547fc0fee37706ece390f503a81fdd9e0f53ed409a",
+    "historical_v2_analyzer_sha256": "eee2f7f49acbaaa5b51144410526f9d62526892c5f27cf929c858035ea07d72e",
+    "historical_v2_protocol_sha256": "40c74f9ba46b7ca0251e4cba7f23a871de5f6d2db9c08ff6722e9f8fbbac80c3",
+    "historical_action_protocol_sha256": "bce204d03608e181456bb5c05a041c4bf4d305f48cb4b4e651ba34460d46d493",
+    "v3_action_protocol_sha256": "0ebd258a2b46beb2a9be3d42cab24680803a2f971cb21e96acecb78e19cd81bf",
+    "behavioral_protocol_sha256": "ae96a783a6e6736ec6a12fc8d3a7a50b3896c57cf759aa3becd3aa33e257dfa8",
+    "materialized_bundle_checker_sha256": "0b0ddc053669fab6ef6c37ddd26ee523d66a135d7515bc9c6dece10ff979a21c",
+    "v3_materializer_sha256": "702998e411a2b8e1aa2564046a5aa4d5a90536cbf90899f8a50dc584bd6eb364",
+    "historical_materializer_sha256": "c63fac2907b887d973920c8fc71adf219affa1d6373a0aeb8ac2fffd59940a4e",
+    "replay_pipeline_sha256": "b869a9554efa39b7062a714fa8a117f3d76708bcc29437c7fa06829b00e69ef3",
+    "replay_shell_wrapper_sha256": "157a59a1fc580d32b280e9d920490909d87b3d1eefca3399151240151b83fced",
+    "v3_requirements_sha256": "71e8d7c1dc198ecf887493d455613c46e5098709ef7ea5a3134b854596725cf6",
+    "analyzer_runtime": {
+      "numpy": "2.5.1",
+      "scikit-learn": "1.9.0",
+      "joblib": "1.5.3",
+      "scipy": "1.18.0",
+      "threadpoolctl": "3.6.0",
+      "ijson": "3.5.0",
+      "zlib": "1.3.2"
+    },
+    "model": {
+      "repo_id": "nvidia/Qwen3.6-27B-NVFP4",
+      "revision": "0893e1606ff3d5f97a441f405d5fc541a6bdf404",
+      "config_sha256": "c04a19ba293737ad7be4f6e96d6666cb7e479cbe19ecc0c289fad267135b0338",
+      "index_sha256": "7aa103a2582b7d26631988de33dea19e8a308ee9c239e8e14feb374af30905e2"
+    },
+    "public_lens": {
+      "repo_id": "neuronpedia/jacobian-lens",
+      "revision": "a4114d7752d11eb546e6cf372213d7e75526d3a1",
+      "sha256": "1718c8c52dd8a9dad03738d4d625937c1fbba10be325b872ed446c7290fc11e1",
+      "n_prompts": 1000,
+      "stored_dtype": "float16",
+      "fit_precision": "unpublished"
+    },
+    "replay_runtime": {
+      "target_checkpoint_quantization": "ModelOpt NVFP4 weights with FP8 runtime state",
+      "enforce_eager": true,
+      "mtp_enabled": false,
+      "max_model_len": 65536,
+      "max_num_batched_tokens": 4096,
+      "mamba_block_size": 1024,
+      "kv_cache_dtype": "fp8_e4m3",
+      "kv_offloading_size": 8.0,
+      "kv_offloading_backend": "native",
+      "stream_final_only": true
+    },
+    "tokenizer": {
+      "json_sha256": "5f9e4d4901a92b997e463c1f46055088b6cca5ca61a6522d1b9f64c4bb81cb42",
+      "vocabulary_size": 248077
+    }
+  },
+  "development_data_contract": {
+    "cohort_manifest_path": "configs/swe_task_state_v3_development_cohort.json",
+    "cohort_kind": "swe_verified_state_interpreter_v3_n60_cohort",
+    "selection_proof_path": "validation/swe-task-state-v3-development-cohort-selection.json",
+    "selection_proof_sha256": "7adb31c20ae3b0fe8e0074e921afc0847f11e42d48e36863741cc09f4a86b9bf",
+    "task_count": 60,
+    "cohort_ids_in_order": ["development_a", "development_b"],
+    "campaign_paths_in_order": [
+      "configs/swe_task_state_v3_development_a_campaign.json",
+      "configs/swe_task_state_v3_development_b_campaign.json"
+    ],
+    "campaign_sha256s_in_order": [
+      "4379a32a60d3772421239c5bd2c27fa07e56089810a0adcd71bfb951caa0a0a2",
+      "98dab25c7f11e46fe7b29f72a15535d11c276f4d68b9b68c01ba7f1bfad53387"
+    ],
+    "combined_order": "campaign_a_then_campaign_b",
+    "combined_ordered_instance_ids_sha256": "6f91acea742ed3bb58b6276fdfee59a9b42e82071ada596b4034873d2da36388",
+    "combined_instance_ids_set_sha256": "9d7c5af77bc6e477cb9297927373cbf943ead89ba1876c8c1b146dfc4948b7de",
+    "per_campaign_generation_authorized_image_registry_required": true,
+    "run_root_image_manifest_and_per_task_runner_metadata_image_pins_required": true,
+    "cohort_manifest_must_bind_final_interpreter_protocol_and_analyzer_bytes": true,
+    "all_probeable_requests_for_every_frozen_task_required": true,
+    "materialized_prompt_and_summary_source_image_manifest_sha256_required": true,
+    "materialized_prompts_summary_required": true,
+    "declaration_validator": "scripts/check_swe_task_state_v3_development_cohort.py::validate_declaration",
+    "validator": "scripts/check_swe_task_state_v3_development_cohort.py::validate_materialized_bundle",
+    "every_prompt_payload_hash_and_full_task_cohort_campaign_order_must_validate": true
+  },
+  "bounded_memory_replay_contract": {
+    "master_prompt_order": "exact_materialized_N60_prompt_bundle_order",
+    "maximum_tasks_per_replay_chunk_inclusive": 15,
+    "chunk_partition": "task_disjoint_and_collectively_exhaustive_in_master_task_order",
+    "experiment_coverage": "every_master_prompt_experiment_exactly_once_in_master_prompt_order",
+    "chunk_model_lens_and_runtime_pins": "identical_to_each_other_and_the_frozen_protocol",
+    "combined_report_schema_version": 3,
+    "combined_report_preserves_each_source_chunk_sha256_and_provenance": true,
+    "production_analyzer_requires_authenticated_merge_manifest_receipt": true,
+    "experiment_payload_merge": "semantic_and_canonical_payload_unchanged_with_each_per_record_canonical_sha256_preserved",
+    "scores_metadata_and_token_ids": "value_identical_to_source_chunk_records",
+    "score_recomputation_or_averaging": "forbidden",
+    "additional_combined_chunk_provenance_is_allowed": true,
+    "production_analyzer_input": {
+      "exact_materialized_bundle_checker_preflight_required": true,
+      "prompt_context_pass": "stream_objects_and_retain_only_small_history_and_diagnostic_fields",
+      "prompt_report_feature_pass": "bounded_memory_lockstep_streaming",
+      "ijson_version": "3.5.0",
+      "requirements_path": "requirements-v3-state-interpreter.txt",
+      "requirements_sha256": "71e8d7c1dc198ecf887493d455613c46e5098709ef7ea5a3134b854596725cf6",
+      "duplicate_prompt_or_experiment_ids_rejected": true,
+      "misaligned_or_trailing_prompt_or_experiment_rows_rejected": true,
+      "in_memory_reference_parity_required": true
+    }
+  },
+  "analyzer_output_contract": {
+    "dedicated_root": ".cache/swe_state_interpreter_v3_development/interpreter",
+    "all_outputs_and_bootstrap_checkpoints_must_be_regular_non_symlink_descendants": true,
+    "canonical_inputs_outputs_and_checkpoint_must_be_distinct": true,
+    "new_outputs_are_no_clobber": true,
+    "only_an_identity_bound_self_consistency_validated_matching_bootstrap_checkpoint_may_be_updated_on_resume": true,
+    "reserved_or_validation_paths_are_forbidden_as_outputs": true
+  },
+  "target_contract": {
+    "classes_in_order": ["inspect", "edit", "check_or_finish"],
+    "source_action_classes_in_order": ["inspect", "edit", "validate", "finalize"],
+    "collapse": {
+      "inspect": "inspect",
+      "edit": "edit",
+      "validate": "check_or_finish",
+      "finalize": "check_or_finish"
+    },
+    "temporal_alignment": "ensuing_same_request_completion_observable_action_from_the_final_prompt_boundary",
+    "unknown_current_action": "prediction_emitted_but_metric_ineligible_and_explicitly_counted",
+    "target_is_prospective_ensuing_same_request_completion": true,
+    "later_request_actions_used_for_target_or_features": false
+  },
+  "auxiliary_diagnostics": {
+    "operational_model_or_gate_role": false,
+    "future_fields_enter_any_feature_fit_calibration_threshold_or_gate": false,
+    "milestone_within_2": {
+      "classes_in_order": ["none", "edit", "check_or_finish"],
+      "window": "exactly_two_completions_total_current_request_and_immediately_following_request",
+      "window_offsets_inclusive": [0, 1],
+      "milestones": {
+        "edit": "edit",
+        "validate": "check_or_finish",
+        "finalize": "check_or_finish"
+      },
+      "known_inspect": "continue_within_fixed_window_then_none_only_if_both_offsets_are_known_inspect",
+      "unknown": "unknown_if_an_unclassified_or_missing_completion_occurs_before_any_milestone",
+      "first_milestone_wins": true,
+      "arbitrary_horizon_inspection_skip_forbidden": true
+    },
+    "current_consequential_source_type": {
+      "classes_in_order": ["none", "edit", "check_or_finish"],
+      "mapping": {
+        "inspect": "none",
+        "edit": "edit",
+        "validate": "check_or_finish",
+        "finalize": "check_or_finish"
+      },
+      "unknown_current_action": "unknown"
+    }
+  },
+  "eligibility_contract": {
+    "prediction_requires_current_action_label": false,
+    "metric_eligibility_requires_known_current_action": true,
+    "prediction_emitted_for_every_numerically_stable_feature_complete_final_prompt_boundary": true,
+    "complete_consecutive_probe_bundle_required_for_causal_history": true,
+    "numerical_stability": {
+      "final_layer_top1_matches_greedy": true,
+      "final_norm_within_tolerance": true,
+      "final_logits_top_k_prefix_token_ids_match": true,
+      "final_logits_rms_error_maximum_inclusive": 0.02,
+      "final_logits_max_abs_error_maximum_inclusive": 0.125
+    },
+    "required_denominators": [
+      "all_replayed_prompts",
+      "numerically_stable_prompts",
+      "stable_feature_complete_predictions",
+      "known_current_action_predictions",
+      "accepted_predictions"
+    ],
+    "stable_feature_complete_prediction_fraction": "stable_feature_complete_predictions_divided_by_numerically_stable_prompts"
+  },
+  "feature_contract": {
+    "source_layers": [24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47],
+    "source_concepts_in_order": ["inspect", "edit", "validate", "finalize"],
+    "source_order": "layer_major_then_source_concept",
+    "within_concept_reduction": "logmeanexp_over_eight_pinned_single_token_forms",
+    "history_width": 14,
+    "history_helper": "historical_v1_exact_first_14_causal_prior_action_fields",
+    "history_is_computed_before_current_action_update": true,
+    "compact_score_width": 40,
+    "compact_score_helper": "historical_v2_compact_layer_shape",
+    "compact_summary_order": [
+      "mean_all_layers",
+      "standard_deviation_all_layers",
+      "minimum_all_layers",
+      "maximum_all_layers",
+      "mean_layers_24_to_29",
+      "mean_layers_30_to_41",
+      "mean_layers_42_to_47",
+      "least_squares_layer_slope",
+      "last_minus_first_layer",
+      "argmax_layer_index_divided_by_23"
+    ],
+    "compact_order": "summary_major_then_source_concept",
+    "variants_in_order": ["history_only", "history_j", "history_logit", "history_logit_j"],
+    "variant_blocks": {
+      "history_only": ["history"],
+      "history_j": ["history", "current_public_jacobian_compact"],
+      "history_logit": ["history", "current_ordinary_logit_compact"],
+      "history_logit_j": ["history", "current_ordinary_logit_compact", "current_public_jacobian_compact"]
+    },
+    "variant_widths": {
+      "history_only": 14,
+      "history_j": 54,
+      "history_logit": 54,
+      "history_logit_j": 94
+    },
+    "excluded_feature_families": [
+      "score_delta",
+      "score_ema_or_deviation",
+      "lexical_occurrence_or_recency",
+      "raw_or_log_request_progress",
+      "request_gap",
+      "forecast_horizon",
+      "future_trajectory_fields"
+    ]
+  },
+  "model_contract": {
+    "family": "fixed_multiseed_ExtraTreesClassifier_probability_ensemble",
+    "seeds_in_order": [271828, 314159, 161803, 141421, 173205],
+    "probability_reduction": "serial_tree_order_within_each_seed_then_arithmetic_mean_across_seed_estimators_then_floor_and_renormalize",
+    "probability_floor": 0.000001,
+    "parameters": {
+      "bootstrap": false,
+      "ccp_alpha": 0.0,
+      "class_weight": null,
+      "criterion": "gini",
+      "max_depth": null,
+      "max_features": 0.5,
+      "max_leaf_nodes": null,
+      "max_samples": null,
+      "min_impurity_decrease": 0.0,
+      "min_samples_leaf": 5,
+      "min_samples_split": 2,
+      "min_weight_fraction_leaf": 0.0,
+      "monotonic_cst": null,
+      "n_estimators": 100,
+      "n_jobs": 1,
+      "oob_score": false,
+      "verbose": 0,
+      "warm_start": false
+    },
+    "fit_execution": {
+      "parallel_unit": "one_variant_seed_estimator",
+      "backend": "sklearn_joblib_loky_processes",
+      "worker_count": 20,
+      "estimator_fit_n_jobs": 1,
+      "persisted_estimator_n_jobs": 1,
+      "submission_order": "variant_then_seed",
+      "result_collection_order": "variant_then_seed",
+      "deterministic_ordered_collection": true
+    },
+    "prediction_execution": {
+      "estimator_n_jobs": 1,
+      "tree_probability_reduction_order": "serial_estimator_order",
+      "repeated_prediction_must_be_bitwise_identical": true,
+      "parallel_prediction_forbidden": true,
+      "reason": "floating_point_tree_probability_accumulation_order_must_not_depend_on_worker_lock_scheduling"
+    },
+    "same_hyperparameters_and_seed_order_for_all_variants": true
+  },
+  "weighting_contract": {
+    "point_estimand": "equal_repository_then_equal_known_task_within_repository_then_equal_known_row_within_task",
+    "training": "restrict_and_renormalize_point_or_bayesian_base_weights_to_the_current_training_split_then_apply_split_local_exact_three_class_rebalance",
+    "calibration_threshold_and_evaluation": "restrict_and_renormalize_point_or_bayesian_base_weights_without_class_rebalance",
+    "point_weights_are_computed_once_on_all_known_development_rows_then_restricted_per_split": true,
+    "bayesian_draw_weights_are_computed_once_on_all_known_development_rows_then_restricted_per_split": true,
+    "same_row_weights_across_all_matched_variants": true,
+    "prevalidated_training_weight_fit_transport": "validate_positive_finite_float64_near_unit_mass_and_near_one_third_class_mass_then_preserve_every_float64_bit_without_second_normalization",
+    "prevalidated_training_weight_unit_mass_absolute_tolerance": 1e-12,
+    "prevalidated_crossfit_base_weight_transport": "validate_positive_finite_float64_and_near_unit_mass_then_preserve_every_float64_bit_before_inner_split_restriction",
+    "prevalidated_crossfit_base_weight_unit_mass_absolute_tolerance": 1e-12,
+    "unknown_current_actions_excluded_from_fit_and_metric_weights": true
+  },
+  "nested_evaluation": {
+    "outer_algorithm": "leave_one_repository_out",
+    "inner_algorithm": "leave_one_repository_out_within_outer_training",
+    "outer_heldout_labels_used_for_fit_calibration_or_threshold_selection": false,
+    "minimum_inner_repositories": 5,
+    "same_outer_and_inner_folds_weights_seed_order_and_hyperparameters_across_variants": true
+  },
+  "calibration": {
+    "algorithm": "temperature_grid_selected_on_inner_out_of_repository_predictions_only",
+    "temperature_grid": [0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 3.0, 4.0],
+    "selection_metric": "hierarchical_base_weighted_multiclass_negative_log_likelihood",
+    "tie_break": "smallest_absolute_numeric_distance_to_one_then_smallest",
+    "outer_heldout_labels_used": false
+  },
+  "abstention": {
+    "confidence": "maximum_calibrated_class_probability",
+    "accept_when": "confidence_greater_than_or_equal_to_threshold",
+    "confidence_threshold_grid": [0.0, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95],
+    "selection": {
+      "algorithm": "maximum_hierarchical_base_weighted_coverage_meeting_accuracy_and_coverage_floors",
+      "accepted_accuracy_minimum": 0.85,
+      "coverage_minimum": 0.7,
+      "minimum_accepted_rows_per_class": 2,
+      "tie_break": "lowest_threshold",
+      "fallback": "maximum_accepted_accuracy_subject_to_coverage_then_coverage_then_lowest_threshold",
+      "outer_heldout_labels_used": false
+    }
+  },
+  "metrics": {
+    "ece_equal_width_bin_count": 10,
+    "point_metric_estimand": "equal_repository_then_equal_known_task_within_repository_then_equal_known_row_within_task",
+    "point_metrics": [
+      "accuracy",
+      "balanced_accuracy",
+      "recall_inspect",
+      "recall_edit",
+      "recall_check_or_finish",
+      "multiclass_negative_log_likelihood",
+      "multiclass_brier",
+      "top_label_ece",
+      "selected_coverage",
+      "selected_accepted_accuracy"
+    ],
+    "unknown_action_predictions_are_reported_separately": true,
+    "selected_coverage_denominator": "known_current_action_metric_rows_only_not_all_stable_emissions",
+    "all_stable_emission_acceptance_is_reported_separately_as_inference_acceptance_fraction": true,
+    "per_repository_metrics_required": true
+  },
+  "bootstrap": {
+    "algorithm": "hierarchical_bayesian_bootstrap_with_full_nested_loro_model_refit",
+    "samples": 1000,
+    "seed": 918273,
+    "confidence_level": 0.95,
+    "interval_interpretation": "95_percent_equal_tail_hierarchical_bayesian_bootstrap_credible_interval",
+    "numpy_version": "2.5.1",
+    "bit_generator": "PCG64",
+    "seed_sequence_per_draw": "SeedSequence([918273,draw_index])",
+    "quantile_method": "inverted_cdf",
+    "repository_order": "sorted_original_repository_id",
+    "repository_weights": "independent_Gamma_shape_1_scale_1_then_normalize",
+    "task_order_within_repository": "sorted_known_task_id",
+    "task_weights_within_repository": "independent_Gamma_shape_1_scale_1_then_normalize",
+    "row_weight_formula": "repository_weight_times_within_repository_task_weight_divided_by_known_rows_in_task",
+    "all_original_repositories_tasks_and_rows_retained_every_draw": true,
+    "strictly_positive_finite_float64_weights_required": true,
+    "resampling_or_row_duplication_forbidden": true,
+    "zero_retries_any_draw_error_aborts": true,
+    "all_1000_draws_required": true,
+    "models_refit_inside_bootstrap": true,
+    "calibration_and_threshold_reselected_inside_each_bootstrap_draw": true,
+    "same_draws_folds_weights_and_seed_order_across_variants": true,
+    "persisted_evidence_scope": {
+      "retained_bytes_prove": "identity_bound_row_weight_probability_acceptance_metric_pair_and_interval_self_consistency",
+      "models_refit_inside_bootstrap_field": "in_process_execution_declaration_by_the_frozen_analyzer_not_persisted_refit_proof",
+      "cryptographic_refit_attestation": false,
+      "independent_refit_attestation": false,
+      "label_informed_self_consistent_malicious_artifact_authors": "out_of_scope",
+      "missing_or_internally_inconsistent_1000_draw_evidence_fails_bound_gates_closed": true,
+      "reserved_validation_data_used_for_evidence_or_gates": false
+    },
+    "draw_record_row_prediction_evidence": {
+      "schema_version": 1,
+      "row_order": "exact_analyzer_input_order_bound_by_ordered_row_identity_sha256",
+      "row_scope": "all_stable_feature_complete_prediction_rows_including_unknown_actions",
+      "class_order": ["inspect", "edit", "check_or_finish"],
+      "probability_encoding": "little_endian_float64_c_order_zlib_level_9_base64",
+      "acceptance_encoding": "numpy_packbits_bitorder_little_zlib_level_9_base64_zero_padding",
+      "validation": "decode_exact_row_level_evidence_recompute_probability_hash_and_all_variant_metrics_then_recompute_pairs_and_intervals"
+    },
+    "execution": {
+      "draw_parallelism": 1,
+      "draw_order": "serial_increasing_index_with_independent_per_draw_seed_sequence",
+      "estimator_parallelism": "twenty_ordered_variant_seed_fits_each_frozen_ExtraTrees_n_jobs_1",
+      "checkpoint_schema_version": 3,
+      "checkpoint_after_each_completed_draw": true,
+      "checkpoint_draw_records_are_the_sole_accumulator_source": true,
+      "resume_rederives_each_draw_rng_and_requires_exact_protocol_row_identity_draw_record_and_weight_hash_validation": true,
+      "checkpoint_identity_binds_current_analyzer_requirements_python_and_all_frozen_runtime_versions": true,
+      "silent_architecture_or_sample_downgrade_forbidden": true
+    },
+    "missing_or_incomplete_model_refit_bayesian_credible_intervals_fail_all_bound_gates_closed": true
+  },
+  "reliability_gates": {
+    "support": {
+      "minimum_stable_prediction_rows": 1500,
+      "minimum_known_action_rows": 1425,
+      "minimum_prediction_tasks": 55,
+      "minimum_prediction_repositories": 9,
+      "minimum_known_action_tasks": 55,
+      "minimum_known_action_repositories": 9,
+      "minimum_hierarchical_known_action_fraction": 0.95,
+      "minimum_known_inspect_tasks": 10,
+      "minimum_known_edit_tasks": 10,
+      "minimum_known_check_or_finish_tasks": 10,
+      "minimum_known_inspect_repositories": 6,
+      "minimum_known_edit_repositories": 6,
+      "minimum_known_check_or_finish_repositories": 6,
+      "minimum_numerical_stability_fraction": 0.9,
+      "minimum_stable_feature_complete_prediction_fraction": 0.9
+    },
+    "absolute": [
+      {"id": "known_action_fraction", "variant": "history_j", "metric": "known_action_fraction", "bound": "point", "operator": "minimum_inclusive", "value": 0.95},
+      {"id": "balanced_accuracy", "variant": "history_j", "metric": "balanced_accuracy", "bound": "point", "operator": "minimum_inclusive", "value": 0.75},
+      {"id": "balanced_accuracy_lower", "variant": "history_j", "metric": "balanced_accuracy", "bound": "bootstrap_lower", "operator": "minimum_inclusive", "value": 0.7},
+      {"id": "inspect_recall", "variant": "history_j", "metric": "recall_inspect", "bound": "point", "operator": "minimum_inclusive", "value": 0.75},
+      {"id": "inspect_recall_lower", "variant": "history_j", "metric": "recall_inspect", "bound": "bootstrap_lower", "operator": "minimum_inclusive", "value": 0.7},
+      {"id": "edit_recall", "variant": "history_j", "metric": "recall_edit", "bound": "point", "operator": "minimum_inclusive", "value": 0.65},
+      {"id": "edit_recall_lower", "variant": "history_j", "metric": "recall_edit", "bound": "bootstrap_lower", "operator": "minimum_inclusive", "value": 0.55},
+      {"id": "check_or_finish_recall", "variant": "history_j", "metric": "recall_check_or_finish", "bound": "point", "operator": "minimum_inclusive", "value": 0.75},
+      {"id": "check_or_finish_recall_lower", "variant": "history_j", "metric": "recall_check_or_finish", "bound": "bootstrap_lower", "operator": "minimum_inclusive", "value": 0.7},
+      {"id": "accepted_accuracy", "variant": "history_j", "metric": "selected_accepted_accuracy", "bound": "point", "operator": "minimum_inclusive", "value": 0.85},
+      {"id": "accepted_accuracy_lower", "variant": "history_j", "metric": "selected_accepted_accuracy", "bound": "bootstrap_lower", "operator": "minimum_inclusive", "value": 0.8},
+      {"id": "accepted_coverage", "variant": "history_j", "metric": "selected_coverage", "bound": "point", "operator": "minimum_inclusive", "value": 0.7},
+      {"id": "accepted_coverage_lower", "variant": "history_j", "metric": "selected_coverage", "bound": "bootstrap_lower", "operator": "minimum_inclusive", "value": 0.65},
+      {"id": "ece_upper", "variant": "history_j", "metric": "top_label_ece", "bound": "bootstrap_upper", "operator": "maximum_inclusive", "value": 0.1},
+      {"id": "nll", "variant": "history_j", "metric": "multiclass_negative_log_likelihood", "bound": "point", "operator": "maximum_inclusive", "value": 0.6},
+      {"id": "nll_upper", "variant": "history_j", "metric": "multiclass_negative_log_likelihood", "bound": "bootstrap_upper", "operator": "maximum_inclusive", "value": 0.65}
+    ],
+    "paired": [
+      {"id": "matched_accuracy", "candidate": "history_j", "reference": "history_logit", "metric": "accuracy", "bound": "bootstrap_lower", "operator": "minimum_exclusive", "value": 0.0},
+      {"id": "matched_balanced_accuracy", "candidate": "history_j", "reference": "history_logit", "metric": "balanced_accuracy", "bound": "bootstrap_lower", "operator": "minimum_exclusive", "value": 0.0},
+      {"id": "matched_nll", "candidate": "history_j", "reference": "history_logit", "metric": "multiclass_negative_log_likelihood", "bound": "bootstrap_upper", "operator": "maximum_exclusive", "value": 0.0},
+      {"id": "matched_brier", "candidate": "history_j", "reference": "history_logit", "metric": "multiclass_brier", "bound": "bootstrap_upper", "operator": "maximum_exclusive", "value": 0.0},
+      {"id": "conditional_accuracy", "candidate": "history_logit_j", "reference": "history_logit", "metric": "accuracy", "bound": "bootstrap_lower", "operator": "minimum_exclusive", "value": 0.0},
+      {"id": "conditional_balanced_accuracy", "candidate": "history_logit_j", "reference": "history_logit", "metric": "balanced_accuracy", "bound": "bootstrap_lower", "operator": "minimum_exclusive", "value": 0.0},
+      {"id": "conditional_nll", "candidate": "history_logit_j", "reference": "history_logit", "metric": "multiclass_negative_log_likelihood", "bound": "bootstrap_upper", "operator": "maximum_exclusive", "value": 0.0},
+      {"id": "conditional_brier", "candidate": "history_logit_j", "reference": "history_logit", "metric": "multiclass_brier", "bound": "bootstrap_upper", "operator": "maximum_exclusive", "value": 0.0}
+    ],
+    "all_support_absolute_and_paired_gates_must_pass": true,
+    "model_refit_bootstrap_required_for_operational_reliability": true
+  },
+  "primary_operational_branch": "history_j",
+  "conditional_j_comparison": ["history_logit_j", "history_logit"],
+  "reserved_validation_policy": "forbidden_until_fresh_development_support_capture_absolute_and_paired_gates_all_pass"
+}

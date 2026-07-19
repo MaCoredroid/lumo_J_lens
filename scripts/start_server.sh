@@ -2,7 +2,11 @@
 set -euo pipefail
 
 ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
-if [[ -f "$ROOT/.env" ]]; then set -a; source "$ROOT/.env"; set +a; fi
+if [[ ${LUMO_V3_CERTIFIED_NO_DOTENV:-0} != 1 && -f "$ROOT/.env" ]]; then
+  set -a
+  source "$ROOT/.env"
+  set +a
+fi
 UNIT=${UNIT:-lumo_j_lens_qwen27b}
 PORT=${PORT:-9952}
 SERVED_MODEL_NAME=${SERVED_MODEL_NAME:-qwen3.6-27b-nvfp4}
@@ -57,7 +61,8 @@ systemctl --user reset-failed "$UNIT.service" >/dev/null 2>&1 || true
 env_args=()
 for name in VLLM_BIN VLLM_PY MODEL_PATH MODEL_REVISION SERVED_MODEL_NAME PORT MAX_MODEL_LEN \
   MAX_NUM_BATCHED_TOKENS MAX_NUM_SEQS NUM_SPEC_TOKENS QUANTIZATION KV_CACHE_DTYPE \
-  KV_OFFLOAD_GB ATTENTION_BACKEND GPU_MEMORY_UTILIZATION HF_HUB_OFFLINE; do
+  KV_OFFLOAD_GB ATTENTION_BACKEND GPU_MEMORY_UTILIZATION HF_HUB_OFFLINE \
+  LUMO_V3_CERTIFIED_NO_DOTENV; do
   [[ -v "$name" ]] && env_args+=(--setenv="$name=${!name}")
 done
 

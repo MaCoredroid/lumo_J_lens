@@ -1,0 +1,3 @@
+# Complete V3 analyzer environment plus bounded-memory strict prompt traversal.
+-r requirements-readout-v2.txt
+ijson==3.5.0

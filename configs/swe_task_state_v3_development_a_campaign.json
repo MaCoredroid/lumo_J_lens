@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "kind": "swe_verified_behavioral_trajectory_campaign",
+  "dataset": {
+    "repo_id": "princeton-nlp/SWE-bench_Verified",
+    "revision": "c104f840cc67f8b6eec6f759ebc8b2693d585d4a"
+  },
+  "selection": {
+    "lens_outputs_used": false,
+    "official_outcomes_used": false,
+    "gold_patches_used": false,
+    "problem_statements_used": false,
+    "seed_text": "jlens-state-interpreter-v3-development-20260718",
+    "rule": "frozen V3 N60 identity-only selection; repository-local hash order followed by deterministic alternating assignment",
+    "purpose": "first disjoint N30 half of the fresh V3 task-state interpreter development cohort",
+    "ordered_instance_ids_sha256": "c3b98512bf1ba4aa0e271f919eef8c3d3a7293d8920acc12f55b56e809d2bbd2",
+    "instance_ids_set_sha256": "01b42cf9ee057bb62513093ae22e55be0aa4ea8e91ee9071712ee1f8e962ae29"
+  },
+  "generation": {
+    "model_repo_id": "nvidia/Qwen3.6-27B-NVFP4",
+    "model_revision": "0893e1606ff3d5f97a441f405d5fc541a6bdf404",
+    "served_model": "qwen3.6-27b-nvfp4",
+    "qwen_code_version": "0.19.4",
+    "max_model_len": 65536,
+    "max_session_turns": 50,
+    "agent_wall_seconds": 900,
+    "retain_empty_predictions": true
+  },
+  "instance_ids": [
+    "astropy__astropy-7671",
+    "astropy__astropy-13977",
+    "astropy__astropy-12907",
+    "django__django-15732",
+    "django__django-16493",
+    "django__django-13820",
+    "django__django-16116",
+    "matplotlib__matplotlib-25311",
+    "matplotlib__matplotlib-23412",
+    "matplotlib__matplotlib-25960",
+    "psf__requests-1766",
+    "psf__requests-1142",
+    "psf__requests-2931",
+    "pydata__xarray-6599",
+    "pydata__xarray-3677",
+    "pydata__xarray-2905",
+    "pylint-dev__pylint-6386",
+    "pylint-dev__pylint-7277",
+    "pytest-dev__pytest-5809",
+    "pytest-dev__pytest-5262",
+    "pytest-dev__pytest-7432",
+    "scikit-learn__scikit-learn-14894",
+    "scikit-learn__scikit-learn-14141",
+    "scikit-learn__scikit-learn-13496",
+    "sphinx-doc__sphinx-9591",
+    "sphinx-doc__sphinx-7462",
+    "sphinx-doc__sphinx-7590",
+    "sympy__sympy-24539",
+    "sympy__sympy-18199",
+    "sympy__sympy-24443"
+  ]
+}

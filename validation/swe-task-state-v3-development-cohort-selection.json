@@ -1,0 +1,423 @@
+{
+  "bindings": {
+    "action_protocol": {
+      "path": "configs/swe_task_state_v3_action_probes.json",
+      "sha256": "0ebd258a2b46beb2a9be3d42cab24680803a2f971cb21e96acecb78e19cd81bf"
+    }
+  },
+  "campaigns": {
+    "a": {
+      "image_registry": {
+        "generation_authorized": true,
+        "path": "configs/swe_task_state_v3_development_a_image_digests.json",
+        "sha256": "7faf123a36533c91a344bb9ce1d5d77d22c05d1944a5ef5b4ca13b9932d1c56a"
+      },
+      "instance_count": 30,
+      "instance_ids_set_sha256": "01b42cf9ee057bb62513093ae22e55be0aa4ea8e91ee9071712ee1f8e962ae29",
+      "ordered_instance_ids_sha256": "c3b98512bf1ba4aa0e271f919eef8c3d3a7293d8920acc12f55b56e809d2bbd2",
+      "path": "configs/swe_task_state_v3_development_a_campaign.json",
+      "sha256": "4379a32a60d3772421239c5bd2c27fa07e56089810a0adcd71bfb951caa0a0a2"
+    },
+    "b": {
+      "image_registry": {
+        "generation_authorized": true,
+        "path": "configs/swe_task_state_v3_development_b_image_digests.json",
+        "sha256": "9f2e70deb46db24033b1f359331f1a85fcf0a220cb2597e4c3beda964aaec404"
+      },
+      "instance_count": 30,
+      "instance_ids_set_sha256": "7d53617bb995a1b3c8171c2cd5e91e399349a80005345d68f3f0e1c004134e6d",
+      "ordered_instance_ids_sha256": "470bb5bfa9045b5a6ee2742550c7643b84054ccd7c7a44e7d2fa314158d6c5e4",
+      "path": "configs/swe_task_state_v3_development_b_campaign.json",
+      "sha256": "98dab25c7f11e46fe7b29f72a15535d11c276f4d68b9b68c01ba7f1bfad53387"
+    },
+    "combined_instance_count": 60,
+    "combined_instance_ids_set_sha256": "9d7c5af77bc6e477cb9297927373cbf943ead89ba1876c8c1b146dfc4948b7de",
+    "combined_order": "campaign_a_then_campaign_b",
+    "combined_ordered_instance_ids_sha256": "6f91acea742ed3bb58b6276fdfee59a9b42e82071ada596b4034873d2da36388"
+  },
+  "dataset": {
+    "cached_arrow_relative_path": "princeton-nlp___swe-bench_verified/default/0.0.0/c104f840cc67f8b6eec6f759ebc8b2693d585d4a/swe-bench_verified-test.arrow",
+    "cached_arrow_sha256": "0d119efe73413554335bd410a04d82fd4a586bfd312cee677ee40af5de2ac46e",
+    "official_instance_count": 500,
+    "official_instance_ids_set_sha256": "33e18be7a9bd9f674790b63ed4d0b3fb17c176994802e3062b7d5a430a4e7d16",
+    "official_repository_counts": {
+      "astropy/astropy": 22,
+      "django/django": 231,
+      "matplotlib/matplotlib": 34,
+      "mwaskom/seaborn": 2,
+      "pallets/flask": 1,
+      "psf/requests": 8,
+      "pydata/xarray": 22,
+      "pylint-dev/pylint": 10,
+      "pytest-dev/pytest": 19,
+      "scikit-learn/scikit-learn": 32,
+      "sphinx-doc/sphinx": 44,
+      "sympy/sympy": 75
+    },
+    "repo_id": "princeton-nlp/SWE-bench_Verified",
+    "revision": "c104f840cc67f8b6eec6f759ebc8b2693d585d4a",
+    "split": "test"
+  },
+  "disjointness": {
+    "campaign_a_intersection_campaign_b": 0,
+    "campaign_a_intersection_prior_reserved": 0,
+    "campaign_b_intersection_prior_reserved": 0,
+    "combined_intersection_prior_reserved": 0,
+    "combined_missing_from_official_set": 0
+  },
+  "hash_contract": {
+    "algorithm": "sha256",
+    "canonical_json": "sort_keys_true_separators_comma_colon_ensure_ascii_true",
+    "encoding": "compact_ascii_canonical_json",
+    "ordered_list_hash_input": "declared_instance_id_array",
+    "set_hash_input": "lexically_sorted_unique_instance_id_array"
+  },
+  "historical_exclusion": {
+    "git_commit": "06ddaf7583024571857ce3f7fbd0cb586a7ba90e",
+    "git_tree_root": "configs",
+    "matched_source_files": [
+      {
+        "git_blob": "7c4a9f5b7aa381c1800906c9d1efa86ec8eea340",
+        "match_count": 10,
+        "path": "configs/swe_behavioral_campaign.json"
+      },
+      {
+        "git_blob": "5937e1de4efca72a3b8ddf28ec10ea728fa58e85",
+        "match_count": 10,
+        "path": "configs/swe_behavioral_image_digests.json"
+      },
+      {
+        "git_blob": "f4ad2d305982b2a6832b07fffef596a8fd51163e",
+        "match_count": 20,
+        "path": "configs/swe_behavioral_n20_cohort.json"
+      },
+      {
+        "git_blob": "68f09df4e342bc2ea66f15f7f453ab99da631631",
+        "match_count": 10,
+        "path": "configs/swe_behavioral_replication_campaign.json"
+      },
+      {
+        "git_blob": "285b08a32d6dcefd0fd343fb3493e65afecf463b",
+        "match_count": 10,
+        "path": "configs/swe_behavioral_replication_image_digests.json"
+      },
+      {
+        "git_blob": "1597c1a349bb72d23734ed22944e82febd3b52cf",
+        "match_count": 12,
+        "path": "configs/swe_contextual_evidence_protocol.json"
+      },
+      {
+        "git_blob": "4199f7226b7f1d026bbfe749418277e625806c29",
+        "match_count": 2,
+        "path": "configs/swe_image_digests.json"
+      },
+      {
+        "git_blob": "de250a777ae47dab6ba0aa4030e3059a15ee1952",
+        "match_count": 1,
+        "path": "configs/swe_intermediate_concept_probes.json"
+      },
+      {
+        "git_blob": "613412d0211eb5f7691770bc34aa72522d7a61d7",
+        "match_count": 2,
+        "path": "configs/swe_multistage_trajectory_manifest.json"
+      },
+      {
+        "git_blob": "e9cd83efab35daf3b678bbdc028f4d46b7dd967c",
+        "match_count": 119,
+        "path": "configs/swe_multitask_initial_protocol.json"
+      },
+      {
+        "git_blob": "b65fa8f2dfbeaf309040842ca8851bd878549898",
+        "match_count": 1,
+        "path": "configs/swe_semantic_probes.json"
+      },
+      {
+        "git_blob": "4a9616b283da5245597a5d5c69d8daef44427bf7",
+        "match_count": 10,
+        "path": "configs/swe_task_state_validation_a_campaign.json"
+      },
+      {
+        "git_blob": "57aac6660eec727f1ada80ce973de866c8484b83",
+        "match_count": 10,
+        "path": "configs/swe_task_state_validation_b_campaign.json"
+      },
+      {
+        "git_blob": "d9f96f8c9fb8dcacf8d278fe1b25d340d0f0a6ec",
+        "match_count": 20,
+        "path": "configs/swe_task_state_validation_cohort.json"
+      },
+      {
+        "git_blob": "39a8e5ffa92cf050f0d9e6a4c7b260c549d9fb9c",
+        "match_count": 20,
+        "path": "configs/swe_task_state_validation_image_digests.json"
+      },
+      {
+        "git_blob": "f11820f9930dc0c61b669bbcba6d3ed33dae4d84",
+        "match_count": 1,
+        "path": "configs/swe_verified_smoke.json"
+      }
+    ],
+    "method": "exact ASCII occurrence of each pinned official instance ID in every tracked config blob at the frozen commit",
+    "prior_reserved_instance_count": 154,
+    "prior_reserved_instance_ids": [
+      "astropy__astropy-13033",
+      "astropy__astropy-13579",
+      "astropy__astropy-14182",
+      "astropy__astropy-14508",
+      "astropy__astropy-14539",
+      "astropy__astropy-14598",
+      "astropy__astropy-14995",
+      "astropy__astropy-7166",
+      "astropy__astropy-8872",
+      "django__django-10880",
+      "django__django-10914",
+      "django__django-10973",
+      "django__django-11119",
+      "django__django-11141",
+      "django__django-11333",
+      "django__django-11532",
+      "django__django-11740",
+      "django__django-11815",
+      "django__django-11885",
+      "django__django-12050",
+      "django__django-12304",
+      "django__django-12325",
+      "django__django-12419",
+      "django__django-12741",
+      "django__django-13033",
+      "django__django-13121",
+      "django__django-13128",
+      "django__django-13158",
+      "django__django-13297",
+      "django__django-13449",
+      "django__django-13569",
+      "django__django-14089",
+      "django__django-14155",
+      "django__django-14404",
+      "django__django-14434",
+      "django__django-14500",
+      "django__django-14580",
+      "django__django-14787",
+      "django__django-15098",
+      "django__django-15103",
+      "django__django-15127",
+      "django__django-15128",
+      "django__django-15161",
+      "django__django-15499",
+      "django__django-15554",
+      "django__django-15629",
+      "django__django-15930",
+      "django__django-16136",
+      "django__django-16256",
+      "django__django-16315",
+      "django__django-16502",
+      "django__django-16560",
+      "django__django-16662",
+      "django__django-16938",
+      "django__django-17087",
+      "django__django-7530",
+      "matplotlib__matplotlib-13989",
+      "matplotlib__matplotlib-14623",
+      "matplotlib__matplotlib-20859",
+      "matplotlib__matplotlib-24870",
+      "matplotlib__matplotlib-24970",
+      "matplotlib__matplotlib-25122",
+      "matplotlib__matplotlib-25287",
+      "matplotlib__matplotlib-25332",
+      "matplotlib__matplotlib-25479",
+      "matplotlib__matplotlib-25775",
+      "matplotlib__matplotlib-26291",
+      "matplotlib__matplotlib-26342",
+      "mwaskom__seaborn-3069",
+      "mwaskom__seaborn-3187",
+      "psf__requests-5414",
+      "psf__requests-6028",
+      "pydata__xarray-3095",
+      "pydata__xarray-3151",
+      "pydata__xarray-4075",
+      "pydata__xarray-4094",
+      "pydata__xarray-4687",
+      "pydata__xarray-4966",
+      "pydata__xarray-6461",
+      "pydata__xarray-6938",
+      "pydata__xarray-6992",
+      "pydata__xarray-7233",
+      "pydata__xarray-7393",
+      "pylint-dev__pylint-4551",
+      "pylint-dev__pylint-4604",
+      "pylint-dev__pylint-4970",
+      "pylint-dev__pylint-6528",
+      "pylint-dev__pylint-8898",
+      "pytest-dev__pytest-10356",
+      "pytest-dev__pytest-5631",
+      "pytest-dev__pytest-5787",
+      "pytest-dev__pytest-5840",
+      "pytest-dev__pytest-6197",
+      "pytest-dev__pytest-7236",
+      "pytest-dev__pytest-7324",
+      "pytest-dev__pytest-7490",
+      "pytest-dev__pytest-7571",
+      "pytest-dev__pytest-7982",
+      "pytest-dev__pytest-8399",
+      "scikit-learn__scikit-learn-11310",
+      "scikit-learn__scikit-learn-12585",
+      "scikit-learn__scikit-learn-12682",
+      "scikit-learn__scikit-learn-13439",
+      "scikit-learn__scikit-learn-13779",
+      "scikit-learn__scikit-learn-14053",
+      "scikit-learn__scikit-learn-14087",
+      "scikit-learn__scikit-learn-25102",
+      "scikit-learn__scikit-learn-25973",
+      "scikit-learn__scikit-learn-9288",
+      "sphinx-doc__sphinx-10323",
+      "sphinx-doc__sphinx-10435",
+      "sphinx-doc__sphinx-10673",
+      "sphinx-doc__sphinx-11510",
+      "sphinx-doc__sphinx-7440",
+      "sphinx-doc__sphinx-7757",
+      "sphinx-doc__sphinx-8120",
+      "sphinx-doc__sphinx-8265",
+      "sphinx-doc__sphinx-8269",
+      "sphinx-doc__sphinx-8593",
+      "sphinx-doc__sphinx-8621",
+      "sphinx-doc__sphinx-8638",
+      "sphinx-doc__sphinx-9320",
+      "sphinx-doc__sphinx-9461",
+      "sphinx-doc__sphinx-9698",
+      "sympy__sympy-11618",
+      "sympy__sympy-12419",
+      "sympy__sympy-12489",
+      "sympy__sympy-13031",
+      "sympy__sympy-13091",
+      "sympy__sympy-13480",
+      "sympy__sympy-13551",
+      "sympy__sympy-13615",
+      "sympy__sympy-13757",
+      "sympy__sympy-13852",
+      "sympy__sympy-13878",
+      "sympy__sympy-14248",
+      "sympy__sympy-15017",
+      "sympy__sympy-15809",
+      "sympy__sympy-16597",
+      "sympy__sympy-16792",
+      "sympy__sympy-16886",
+      "sympy__sympy-18211",
+      "sympy__sympy-18698",
+      "sympy__sympy-19346",
+      "sympy__sympy-20154",
+      "sympy__sympy-20438",
+      "sympy__sympy-20590",
+      "sympy__sympy-20801",
+      "sympy__sympy-21379",
+      "sympy__sympy-21596",
+      "sympy__sympy-21847",
+      "sympy__sympy-22080",
+      "sympy__sympy-24066",
+      "sympy__sympy-24661"
+    ],
+    "prior_reserved_instance_ids_set_sha256": "a1758311fab453f2508d6faee3d0825539faf19ea5e664d9ff5dfeb957583a1f",
+    "tracked_config_count": 26,
+    "tracked_config_paths_sha256": "503607a729eb120e2e6e7eb8e2118a05493760e9503cce372bbf9c041d5ae22d",
+    "tracked_config_tree_sha256": "1e355b922654105eb695451b0aeb99a1eeafc8a8483890ddbea10e73697c55c1",
+    "working_tree_files_read": false
+  },
+  "identity_only_selection": {
+    "columns_read": [
+      "instance_id",
+      "repo"
+    ],
+    "gold_patches_read": false,
+    "lens_outputs_read": false,
+    "official_outcomes_read": false,
+    "problem_statements_read": false
+  },
+  "kind": "swe_verified_state_interpreter_v3_n60_selection_proof",
+  "schema_version": 1,
+  "selection": {
+    "base_quota_per_repository": 6,
+    "campaign_assignment": "repository lexical order; each repository starts in currently smaller campaign (A wins ties), then alternates ranked tasks",
+    "eligible_common_campaign_instance_count": 345,
+    "eligible_common_campaign_instance_ids_set_sha256": "690414f93355255ab1a320d36809b716a52b7a2ba1d143305edc873625133674",
+    "eligible_repository_count": 10,
+    "eligible_repository_rule": "at least four unused tasks so both campaigns can receive at least two",
+    "remaining_quota_allocation": "unused count descending then repository lexical order",
+    "repository_allocation": [
+      {
+        "campaign_a_count": 3,
+        "campaign_b_count": 3,
+        "repository": "astropy/astropy",
+        "selected_quota": 6,
+        "unused_count": 13
+      },
+      {
+        "campaign_a_count": 4,
+        "campaign_b_count": 3,
+        "repository": "django/django",
+        "selected_quota": 7,
+        "unused_count": 184
+      },
+      {
+        "campaign_a_count": 3,
+        "campaign_b_count": 3,
+        "repository": "matplotlib/matplotlib",
+        "selected_quota": 6,
+        "unused_count": 22
+      },
+      {
+        "campaign_a_count": 3,
+        "campaign_b_count": 3,
+        "repository": "psf/requests",
+        "selected_quota": 6,
+        "unused_count": 6
+      },
+      {
+        "campaign_a_count": 3,
+        "campaign_b_count": 3,
+        "repository": "pydata/xarray",
+        "selected_quota": 6,
+        "unused_count": 11
+      },
+      {
+        "campaign_a_count": 2,
+        "campaign_b_count": 3,
+        "repository": "pylint-dev/pylint",
+        "selected_quota": 5,
+        "unused_count": 5
+      },
+      {
+        "campaign_a_count": 3,
+        "campaign_b_count": 3,
+        "repository": "pytest-dev/pytest",
+        "selected_quota": 6,
+        "unused_count": 8
+      },
+      {
+        "campaign_a_count": 3,
+        "campaign_b_count": 3,
+        "repository": "scikit-learn/scikit-learn",
+        "selected_quota": 6,
+        "unused_count": 22
+      },
+      {
+        "campaign_a_count": 3,
+        "campaign_b_count": 3,
+        "repository": "sphinx-doc/sphinx",
+        "selected_quota": 6,
+        "unused_count": 29
+      },
+      {
+        "campaign_a_count": 3,
+        "campaign_b_count": 3,
+        "repository": "sympy/sympy",
+        "selected_quota": 6,
+        "unused_count": 45
+      }
+    ],
+    "seed_text": "jlens-state-interpreter-v3-development-20260718",
+    "target_instance_count": 60,
+    "unused_instance_count": 346,
+    "unused_instance_ids_set_sha256": "a394e7df516fec0c5e577b3b6b08b2d7ada5616553020964cf022ef805368bbe",
+    "within_repository_order": "ascending SHA256(seed_text + NUL + instance_id), then instance_id"
+  },
+  "status": "frozen_before_v3_development_generation_or_lens_replay"
+}

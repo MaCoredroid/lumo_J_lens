@@ -2,7 +2,11 @@
 set -euo pipefail
 
 ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
-if [[ -f "$ROOT/.env" ]]; then set -a; source "$ROOT/.env"; set +a; fi
+if [[ ${LUMO_V3_CERTIFIED_NO_DOTENV:-0} != 1 && -f "$ROOT/.env" ]]; then
+  set -a
+  source "$ROOT/.env"
+  set +a
+fi
 VLLM_BIN=${VLLM_BIN:-$ROOT/.venv-vllm/bin/vllm}
 VLLM_PY=${VLLM_PY:-$(dirname "$VLLM_BIN")/python}
 MODEL_PATH=${MODEL_PATH:-nvidia/Qwen3.6-27B-NVFP4}
