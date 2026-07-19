@@ -1,8 +1,23 @@
 {
   "schema_version": 1,
   "id": "swe-task-state-interpreter-v3",
-  "status": "predeclared_before_fresh_n60_generation_or_lens_replay",
+  "status": "amended_post_generation_pre_lens_for_materialization_compatibility",
   "decision_scope": "fresh_development_only_reserved_validation_remains_closed",
+  "materialization_amendment": {
+    "generation_source_freeze_git_commit": "71f6153162627864707cc6f0473cb04f75cadcfd",
+    "stage": "post_development_generation_pre_lens_replay",
+    "scope": "v3_adapter_completed_history_prefix_validation_only",
+    "reason": "an independently rendered direct-tool assistant with null reasoning does not preserve the prior synthetic generation suffix even though its raw messages and completed canonical history are exact prefixes",
+    "historical_materializer_changed": false,
+    "chat_template_changed": false,
+    "campaign_or_generation_inputs_changed": false,
+    "cohort_selection_or_membership_changed": false,
+    "development_lens_outputs_read": false,
+    "official_outcomes_read": false,
+    "reserved_validation_data_read": false,
+    "campaign_run_reuse_policy": "reuse_exact_generation_roots_after_fail_closed_v3_only_materialization_amendment",
+    "cohort_manifest_freeze_status_scope": "selection_membership_campaign_and_generation_inputs_only_scientific_protocol_and_analyzer_bindings_refreshed_post_generation_pre_lens"
+  },
   "interpretation_target": "observable ensuing same-request Qwen Code completion action predicted at each numerically stable final-prompt boundary; never hidden prose or chain-of-thought",
   "pins": {
     "historical_v1_analyzer_sha256": "279d0a41742e9feeabd3dbd82b73f609326a4942c983cc2eee7125164ebd0594",
@@ -13,7 +28,7 @@
     "v3_action_protocol_sha256": "0ebd258a2b46beb2a9be3d42cab24680803a2f971cb21e96acecb78e19cd81bf",
     "behavioral_protocol_sha256": "ae96a783a6e6736ec6a12fc8d3a7a50b3896c57cf759aa3becd3aa33e257dfa8",
     "materialized_bundle_checker_sha256": "0b0ddc053669fab6ef6c37ddd26ee523d66a135d7515bc9c6dece10ff979a21c",
-    "v3_materializer_sha256": "702998e411a2b8e1aa2564046a5aa4d5a90536cbf90899f8a50dc584bd6eb364",
+    "v3_materializer_sha256": "fd0244fadf3e6ecefed8296bdc2b9bcfdc901675b051da81ad7867ce5b9ecff2",
     "historical_materializer_sha256": "c63fac2907b887d973920c8fc71adf219affa1d6373a0aeb8ac2fffd59940a4e",
     "replay_pipeline_sha256": "b869a9554efa39b7062a714fa8a117f3d76708bcc29437c7fa06829b00e69ef3",
     "replay_shell_wrapper_sha256": "157a59a1fc580d32b280e9d920490909d87b3d1eefca3399151240151b83fced",

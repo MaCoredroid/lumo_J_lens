@@ -5,7 +5,8 @@ This is a narrow compatibility adapter around the historical behavioral
 materializer.  The checked-in V3 declaration checker authenticates every
 immutable input and every generated-run image binding before the historical
 implementation is allowed to read the runs.  The adapter changes only the V3
-manifest identity, dense checkpoint selection, and image-manifest provenance.
+manifest identity, dense checkpoint selection, image-manifest provenance, and
+a fail-closed compatibility check for independently rendered request prefixes.
 """
 
 from __future__ import annotations
@@ -177,6 +178,28 @@ V3_CACHE_ROOT = ROOT / ".cache/swe_state_interpreter_v3_development"
 V3_PROMPTS_PATH = V3_CACHE_ROOT / "prompts.json"
 V3_SUMMARY_PATH = V3_CACHE_ROOT / "prompts-summary.json"
 V3_RECEIPT_PATH = ROOT / "validation/swe-task-state-v3-development-materialization.json"
+LEGACY_RENDERED_PREFIX_ERROR = "canonical rendered prefix drifted"
+LEGACY_TOKEN_PREFIX_ERROR = "canonical token prefix drifted"
+PREFIX_COMPATIBILITY_POLICY = (
+    "canonical_full_prompt_or_completed_history_prefix_v1"
+)
+GENERATION_SUFFIX_BY_THINKING = {
+    True: "<|im_start|>assistant\n<think>\n",
+    False: "<|im_start|>assistant\n<think>\n\n</think>\n\n",
+}
+EXPECTED_COMPLETED_HISTORY_FALLBACK = {
+    "instance_id": "sympy__sympy-18199",
+    "previous_task_request_index": 18,
+    "current_task_request_index": 19,
+    "previous_global_request_index": 853,
+    "current_global_request_index": 854,
+    "previous_raw_request_sha256": (
+        "1a1817a3eee15a70c9ac4e59cc32730dad2401e45f6d4c7c73a4b5af6de9fbaa"
+    ),
+    "current_raw_request_sha256": (
+        "8cf47fb7175e3fc380aecbd51657e6dbc4c6e492ba49ce0fc1a4f55d9fe6e45d"
+    ),
+}
 
 
 def _required_option_value(argv: Sequence[str], option: str) -> str:
@@ -502,6 +525,380 @@ def _all_probeable_patch() -> Iterator[None]:
         historical.MAX_CHECKPOINTS = original_max_checkpoints
 
 
+def _audit_v3_capture_prefix_chains(
+    tasks: Sequence[Mapping[str, Any]], *, tokenizer: Any
+) -> dict[str, Any]:
+    """Validate each transition against the served full or completed history."""
+
+    transition_count = 0
+    full_rendered_count = 0
+    full_token_count = 0
+    full_pair_count = 0
+    fallbacks: list[dict[str, Any]] = []
+    task_stats: dict[str, dict[str, Any]] = {}
+    for task_index, raw_task in enumerate(tasks):
+        task = historical.mapping(raw_task, f"V3 mapped task {task_index}")
+        instance_id = historical.nonempty_string(
+            task.get("instance_id"), f"V3 mapped task {task_index} instance ID"
+        )
+        captures = [
+            historical.mapping(capture, f"{instance_id} capture {capture_index}")
+            for capture_index, capture in enumerate(
+                historical.sequence(task.get("captures"), f"{instance_id} captures")
+            )
+        ]
+        stats = {
+            "transition_count": max(0, len(captures) - 1),
+            "full_rendered_count": 0,
+            "full_token_count": 0,
+            "full_pair_count": 0,
+            "fallbacks": [],
+        }
+        for previous, current in zip(captures, captures[1:]):
+            transition_count += 1
+            previous_rendered = previous.get("rendered")
+            current_rendered = current.get("rendered")
+            historical.require(
+                isinstance(previous_rendered, str)
+                and bool(previous_rendered)
+                and isinstance(current_rendered, str)
+                and bool(current_rendered),
+                f"{instance_id} V3 prefix audit lacks canonical renderings",
+            )
+            previous_token_ids = list(
+                historical.sequence(
+                    previous.get("token_ids"),
+                    f"{instance_id} previous canonical token IDs",
+                )
+            )
+            current_token_ids = list(
+                historical.sequence(
+                    current.get("token_ids"),
+                    f"{instance_id} current canonical token IDs",
+                )
+            )
+            full_rendered = current_rendered.startswith(previous_rendered)
+            full_tokens = (
+                current_token_ids[: len(previous_token_ids)] == previous_token_ids
+            )
+            full_pair = full_rendered and full_tokens
+            full_rendered_count += int(full_rendered)
+            full_token_count += int(full_tokens)
+            full_pair_count += int(full_pair)
+            stats["full_rendered_count"] += int(full_rendered)
+            stats["full_token_count"] += int(full_tokens)
+            stats["full_pair_count"] += int(full_pair)
+            if full_pair:
+                continue
+
+            previous_request = historical.mapping(
+                previous.get("request"), f"{instance_id} previous request"
+            )
+            template_kwargs = historical.mapping(
+                previous_request.get("chat_template_kwargs"),
+                f"{instance_id} previous template kwargs",
+            )
+            enable_thinking = template_kwargs.get("enable_thinking")
+            historical.require(
+                isinstance(enable_thinking, bool),
+                f"{instance_id} previous request has invalid thinking mode",
+            )
+            generation_suffix = GENERATION_SUFFIX_BY_THINKING[enable_thinking]
+            historical.require(
+                previous_rendered.endswith(generation_suffix),
+                f"{instance_id} previous prompt lacks the pinned generation suffix",
+            )
+            completed_history = previous_rendered[: -len(generation_suffix)]
+            historical.require(
+                bool(completed_history),
+                f"{instance_id} completed history is empty",
+            )
+            completed_token_ids = historical.C1.RENDER.encode_exact(
+                tokenizer, completed_history
+            )
+            previous_completed_token_prefix = (
+                previous_token_ids[: len(completed_token_ids)]
+                == completed_token_ids
+            )
+            completed_rendered_prefix = current_rendered.startswith(completed_history)
+            completed_token_prefix = (
+                current_token_ids[: len(completed_token_ids)] == completed_token_ids
+            )
+            historical.require(
+                previous_completed_token_prefix,
+                f"{instance_id} previous canonical tokens do not preserve completed history",
+            )
+            historical.require(
+                completed_rendered_prefix,
+                f"{instance_id} canonical completed-history rendering drifted",
+            )
+            historical.require(
+                completed_token_prefix,
+                f"{instance_id} canonical completed-history tokens drifted",
+            )
+            current_request = historical.mapping(
+                current.get("request"), f"{instance_id} current request"
+            )
+            previous_messages = list(
+                historical.sequence(
+                    previous_request.get("messages"),
+                    f"{instance_id} previous request messages",
+                )
+            )
+            current_messages = list(
+                historical.sequence(
+                    current_request.get("messages"),
+                    f"{instance_id} current request messages",
+                )
+            )
+            historical.require(
+                current_messages[: len(previous_messages)] == previous_messages,
+                f"{instance_id} V3 fallback raw message prefix drifted",
+            )
+            appended = current_messages[len(previous_messages) :]
+            historical.require(
+                len(appended) == 2,
+                f"{instance_id} V3 fallback is not one assistant/tool exchange",
+            )
+            assistant = historical.mapping(
+                appended[0], f"{instance_id} V3 fallback assistant"
+            )
+            tool_response = historical.mapping(
+                appended[1], f"{instance_id} V3 fallback tool response"
+            )
+            historical.require(
+                set(assistant) == {"role", "content", "tool_calls"}
+                and assistant.get("role") == "assistant"
+                and assistant.get("content") is None
+                and assistant.get("reasoning") is None
+                and assistant.get("reasoning_content") is None,
+                f"{instance_id} V3 fallback assistant is not direct-tool null-reasoning",
+            )
+            tool_calls = [
+                historical.mapping(call, f"{instance_id} V3 fallback tool call")
+                for call in historical.sequence(
+                    assistant.get("tool_calls"),
+                    f"{instance_id} V3 fallback assistant tool calls",
+                )
+            ]
+            historical.require(
+                len(tool_calls) == 1
+                and set(tool_calls[0]) == {"id", "type", "function"}
+                and tool_calls[0].get("type") == "function",
+                f"{instance_id} V3 fallback assistant tool-call shape changed",
+            )
+            tool_function = historical.mapping(
+                tool_calls[0].get("function"),
+                f"{instance_id} V3 fallback tool function",
+            )
+            historical.require(
+                set(tool_function) == {"name", "arguments"}
+                and tool_function.get("name") == "run_shell_command"
+                and isinstance(tool_function.get("arguments"), str)
+                and bool(tool_function.get("arguments")),
+                f"{instance_id} V3 fallback tool function changed",
+            )
+            historical.require(
+                set(tool_response) == {"role", "tool_call_id", "content"}
+                and tool_response.get("role") == "tool"
+                and tool_response.get("tool_call_id") == tool_calls[0].get("id"),
+                f"{instance_id} V3 fallback tool response changed",
+            )
+            previous_local_index = previous.get("local_index")
+            current_local_index = current.get("local_index")
+            previous_global_index = previous.get("global_index")
+            current_global_index = current.get("global_index")
+            for value, label in (
+                (previous_local_index, "previous local request index"),
+                (current_local_index, "current local request index"),
+                (previous_global_index, "previous global request index"),
+                (current_global_index, "current global request index"),
+            ):
+                historical.require(
+                    isinstance(value, int) and not isinstance(value, bool) and value >= 1,
+                    f"{instance_id} {label} is invalid",
+                )
+            fallback = {
+                "instance_id": instance_id,
+                "previous_task_request_index": previous_local_index,
+                "current_task_request_index": current_local_index,
+                "previous_global_request_index": previous_global_index,
+                "current_global_request_index": current_global_index,
+                "full_prompt_rendered_prefix": full_rendered,
+                "full_prompt_token_prefix": full_tokens,
+                "enable_thinking": enable_thinking,
+                "generation_suffix_sha256": historical.sha256_text(generation_suffix),
+                "completed_history_rendered_sha256": historical.sha256_text(
+                    completed_history
+                ),
+                "completed_history_token_ids_sha256": historical.sha256_json(
+                    completed_token_ids
+                ),
+                "completed_history_token_count": len(completed_token_ids),
+                "direct_tool_assistant_with_null_reasoning_verified": True,
+                "previous_raw_request_path": previous.get("path"),
+                "previous_raw_request_sha256": previous.get("sha256"),
+                "current_raw_request_path": current.get("path"),
+                "current_raw_request_sha256": current.get("sha256"),
+            }
+            fallbacks.append(fallback)
+            stats["fallbacks"].append(fallback)
+        task_stats[instance_id] = stats
+
+    expected_fallbacks = (
+        [EXPECTED_COMPLETED_HISTORY_FALLBACK]
+        if EXPECTED_COMPLETED_HISTORY_FALLBACK["instance_id"] in task_stats
+        else []
+    )
+    fallback_identity_keys = tuple(EXPECTED_COMPLETED_HISTORY_FALLBACK)
+    observed_fallbacks = [
+        {key: fallback.get(key) for key in fallback_identity_keys}
+        for fallback in fallbacks
+    ]
+    historical.require(
+        observed_fallbacks == expected_fallbacks,
+        "completed-history fallback identity differs from the frozen V3 exception",
+    )
+
+    return {
+        "policy": PREFIX_COMPATIBILITY_POLICY,
+        "transition_count": transition_count,
+        "full_prompt_rendered_prefix_count": full_rendered_count,
+        "full_prompt_token_prefix_count": full_token_count,
+        "full_prompt_rendered_and_token_prefix_count": full_pair_count,
+        "completed_history_fallback_count": len(fallbacks),
+        "completed_history_fallbacks": fallbacks,
+        "approved_completed_history_fallback_identities": expected_fallbacks,
+        "accepted_prefix_chain_verified": True,
+        "task_stats": task_stats,
+    }
+
+
+@contextmanager
+def _v3_capture_prefix_compatibility_patch() -> Iterator[None]:
+    """Replace two legacy full-prompt assertions with a stricter V3 audit."""
+
+    original_mapper = historical.map_global_captures
+    original_require = historical.require
+
+    def map_with_completed_history_prefix(**kwargs: Any) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+        suppressed = {
+            LEGACY_RENDERED_PREFIX_ERROR: 0,
+            LEGACY_TOKEN_PREFIX_ERROR: 0,
+        }
+
+        def defer_only_legacy_full_prefix(condition: bool, message: str) -> None:
+            if not condition and message in suppressed:
+                suppressed[message] += 1
+                return
+            original_require(condition, message)
+
+        historical.require = defer_only_legacy_full_prefix
+        try:
+            tasks, binding = original_mapper(**kwargs)
+        finally:
+            historical.require = original_require
+
+        audit = _audit_v3_capture_prefix_chains(
+            tasks,
+            tokenizer=kwargs["tokenizer"],
+        )
+        expected_rendered_failures = (
+            audit["transition_count"]
+            - audit["full_prompt_rendered_prefix_count"]
+        )
+        expected_token_failures = (
+            audit["transition_count"] - audit["full_prompt_token_prefix_count"]
+        )
+        original_require(
+            suppressed[LEGACY_RENDERED_PREFIX_ERROR]
+            == expected_rendered_failures,
+            "deferred rendered-prefix assertion count differs from the V3 audit",
+        )
+        original_require(
+            suppressed[LEGACY_TOKEN_PREFIX_ERROR] == expected_token_failures,
+            "deferred token-prefix assertion count differs from the V3 audit",
+        )
+
+        task_stats = historical.mapping(audit.pop("task_stats"), "V3 task prefix statistics")
+        for raw_task in tasks:
+            task = historical.mapping(raw_task, "V3 mapped task")
+            provenance = historical.mapping(
+                task.get("request_count_provenance"),
+                f"{task.get('instance_id')} request-count provenance",
+            )
+            if provenance.get("recovered") is not True:
+                continue
+            proxy = historical.mapping(
+                provenance.get("proxy_capture_binding"),
+                f"{task.get('instance_id')} proxy capture binding",
+            )
+            stats = historical.mapping(
+                task_stats.get(str(task.get("instance_id"))),
+                f"{task.get('instance_id')} V3 prefix statistics",
+            )
+            fallback_rows = [
+                historical.mapping(row, "V3 completed-history fallback")
+                for row in historical.sequence(
+                    stats.get("fallbacks"), "V3 task completed-history fallbacks"
+                )
+            ]
+            proxy["canonical_rendered_prefix_chain_verified"] = (
+                stats.get("full_rendered_count") == stats.get("transition_count")
+            )
+            proxy["canonical_token_prefix_chain_verified"] = (
+                stats.get("full_token_count") == stats.get("transition_count")
+            )
+            proxy["canonical_prefix_compatibility"] = {
+                "policy": PREFIX_COMPATIBILITY_POLICY,
+                "transition_count": stats.get("transition_count"),
+                "full_prompt_rendered_and_token_prefix_count": stats.get(
+                    "full_pair_count"
+                ),
+                "completed_history_fallback_count": len(fallback_rows),
+                "completed_history_fallback_current_task_request_indices": [
+                    row.get("current_task_request_index") for row in fallback_rows
+                ],
+                "completed_history_fallback_current_global_request_indices": [
+                    row.get("current_global_request_index") for row in fallback_rows
+                ],
+                "accepted_prefix_chain_verified": True,
+            }
+
+        binding["request_count_recoveries"] = [
+            {
+                "instance_id": task["instance_id"],
+                **copy.deepcopy(
+                    historical.mapping(
+                        task.get("request_count_provenance"),
+                        "V3 request-count provenance",
+                    )
+                ),
+            }
+            for task in tasks
+            if historical.mapping(
+                task.get("request_count_provenance"),
+                "V3 request-count provenance",
+            ).get("recovered")
+            is True
+        ]
+        audit["legacy_full_prompt_assertions_deferred"] = {
+            "rendered_prefix_failure_count": suppressed[
+                LEGACY_RENDERED_PREFIX_ERROR
+            ],
+            "token_prefix_failure_count": suppressed[LEGACY_TOKEN_PREFIX_ERROR],
+        }
+        binding["v3_prefix_chain_validation"] = audit
+        return tasks, binding
+
+    historical.map_global_captures = map_with_completed_history_prefix
+    try:
+        yield
+    finally:
+        historical.require = original_require
+        historical.map_global_captures = original_mapper
+
+
 @contextmanager
 def _no_clobber_output_patch() -> Iterator[None]:
     """Replace the historical replace-on-write helper for this V3-only call."""
@@ -616,6 +1013,7 @@ def _run_historical_materialization(
     with (
         _v3_manifest_validation_patch(V3_ACTION_PROTOCOL_PATH),
         _all_probeable_patch(),
+        _v3_capture_prefix_compatibility_patch(),
         _image_provenance_patch(image_hash_by_run),
         _no_clobber_output_patch(),
     ):

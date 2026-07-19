@@ -45,11 +45,11 @@
   },
   "pins": {
     "action_protocol_sha256": "0ebd258a2b46beb2a9be3d42cab24680803a2f971cb21e96acecb78e19cd81bf",
-    "analyzer_sha256": "e4eba876c2778e34c6cc56cbec65433be31f2752e1e4f39278a6155c2b2772d2",
+    "analyzer_sha256": "53c7d41688f6c5ab21f7ad029d343af06e9b13c777fd2e5517ff8d5254ad9e6c",
     "chat_template_sha256": "c166a05aaf5ad4b807a7c46497f92180e3df24e64d4b54d27fd26ec61bec38da",
     "development_a_image_registry_sha256": "7faf123a36533c91a344bb9ce1d5d77d22c05d1944a5ef5b4ca13b9932d1c56a",
     "development_b_image_registry_sha256": "9f2e70deb46db24033b1f359331f1a85fcf0a220cb2597e4c3beda964aaec404",
-    "interpreter_protocol_sha256": "ce02cb95a1931ddb913e73c78c69601c5d00ccfd15e39b13e61a2fb634f78f73",
+    "interpreter_protocol_sha256": "9d8b0a7d5c45dc192365429af27c6193de752cc160458eff8e21807d37662b1d",
     "selection_proof_sha256": "7adb31c20ae3b0fe8e0074e921afc0847f11e42d48e36863741cc09f4a86b9bf"
   },
   "selection_proof": {
@@ -67,11 +67,11 @@
   "scientific_artifacts": {
     "interpreter_protocol": {
       "path": "configs/swe_task_state_interpreter_v3.json",
-      "sha256": "ce02cb95a1931ddb913e73c78c69601c5d00ccfd15e39b13e61a2fb634f78f73"
+      "sha256": "9d8b0a7d5c45dc192365429af27c6193de752cc160458eff8e21807d37662b1d"
     },
     "analyzer": {
       "path": "scripts/analyze_swe_task_state_v3.py",
-      "sha256": "e4eba876c2778e34c6cc56cbec65433be31f2752e1e4f39278a6155c2b2772d2"
+      "sha256": "53c7d41688f6c5ab21f7ad029d343af06e9b13c777fd2e5517ff8d5254ad9e6c"
     }
   },
   "cohorts": [

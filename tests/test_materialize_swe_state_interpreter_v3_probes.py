@@ -76,6 +76,96 @@ class InvocationFixture:
 
 
 class V3DenseMaterializerTests(unittest.TestCase):
+    @staticmethod
+    def _prefix_fixture(*, drift_completed_history: bool = False) -> tuple[list[dict[str, Any]], dict[str, Any], Any]:
+        class ByteTokenizer:
+            @staticmethod
+            def encode(text: str, *, add_special_tokens: bool) -> list[int]:
+                if add_special_tokens:
+                    raise AssertionError("V3 prefix audit added special tokens")
+                return list(text.encode("utf-8"))
+
+        base = "<|im_start|>system\ncontract<|im_end|>\n"
+        suffix = MODULE.GENERATION_SUFFIX_BY_THINKING[True]
+        previous_rendered = base + suffix
+        current_base = "corrupt-history" if drift_completed_history else base
+        current_rendered = (
+            current_base
+            + "<|im_start|>assistant\n<tool_call>\n"
+            + '{"name":"run_shell_command","arguments":{"command":"pwd"}}'
+            + "\n</tool_call><|im_end|>\n"
+            + "<|im_start|>user\n<tool_response>\nok\n</tool_response>\n"
+            + "<|im_end|>\n"
+            + suffix
+        )
+        tokenizer = ByteTokenizer()
+        encode = lambda text: tokenizer.encode(text, add_special_tokens=False)
+        request = {
+            "chat_template_kwargs": {"enable_thinking": True},
+            "messages": [{"role": "system", "content": "contract"}],
+        }
+        current_request = {
+            "chat_template_kwargs": {"enable_thinking": True},
+            "messages": [
+                *request["messages"],
+                {
+                    "role": "assistant",
+                    "content": None,
+                    "tool_calls": [
+                        {
+                            "id": "tool-1",
+                            "type": "function",
+                            "function": {
+                                "name": "run_shell_command",
+                                "arguments": '{"command":"pwd"}',
+                            },
+                        }
+                    ],
+                },
+                {
+                    "role": "tool",
+                    "tool_call_id": "tool-1",
+                    "content": [{"type": "text", "text": "ok"}],
+                },
+            ],
+        }
+        provenance = {
+            "recovered": True,
+            "request_count": 2,
+            "proxy_capture_binding": {
+                "canonical_rendered_prefix_chain_verified": True,
+                "canonical_token_prefix_chain_verified": True,
+            },
+        }
+        tasks = [
+            {
+                "instance_id": "sympy__sympy-18199",
+                "request_count_provenance": provenance,
+                "captures": [
+                    {
+                        "local_index": 18,
+                        "global_index": 853,
+                        "path": "proxy_dumps/chat_0853.json",
+                        "sha256": "1a1817a3eee15a70c9ac4e59cc32730dad2401e45f6d4c7c73a4b5af6de9fbaa",
+                        "request": request,
+                        "rendered": previous_rendered,
+                        "token_ids": encode(previous_rendered),
+                    },
+                    {
+                        "local_index": 19,
+                        "global_index": 854,
+                        "path": "proxy_dumps/chat_0854.json",
+                        "sha256": "8cf47fb7175e3fc380aecbd51657e6dbc4c6e492ba49ce0fc1a4f55d9fe6e45d",
+                        "request": current_request,
+                        "rendered": current_rendered,
+                        "token_ids": encode(current_rendered),
+                    },
+                ],
+            }
+        ]
+        binding = {"request_count_recoveries": [{"stale": True}]}
+        return tasks, binding, tokenizer
+
     def test_only_exact_ordered_ab_invocation_and_explicit_cache_outputs_pass(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             fixture = InvocationFixture(Path(temporary))
@@ -317,6 +407,166 @@ class V3DenseMaterializerTests(unittest.TestCase):
                 self.assertEqual(fake.select_probeable_requests(task, max_prompt_tokens=100)["selected_request_indices"], list(range(1, 14)))
         self.assertEqual(fake.MAX_CHECKPOINTS, 8)
         self.assertIs(fake.select_probeable_requests, selector)
+
+    def test_direct_tool_assistant_uses_completed_history_prefix_and_honest_provenance(self) -> None:
+        tasks, binding, tokenizer = self._prefix_fixture()
+        original_require = MODULE.historical.require
+
+        def legacy_mapper(**kwargs: Any) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+            del kwargs
+            MODULE.historical.require(False, MODULE.LEGACY_RENDERED_PREFIX_ERROR)
+            MODULE.historical.require(False, MODULE.LEGACY_TOKEN_PREFIX_ERROR)
+            return tasks, binding
+
+        with mock.patch.object(
+            MODULE.historical, "map_global_captures", legacy_mapper
+        ):
+            with MODULE._v3_capture_prefix_compatibility_patch():
+                mapped, audited = MODULE.historical.map_global_captures(
+                    tokenizer=tokenizer
+                )
+            self.assertIs(MODULE.historical.map_global_captures, legacy_mapper)
+        self.assertIs(MODULE.historical.require, original_require)
+        self.assertIs(mapped, tasks)
+        validation = audited["v3_prefix_chain_validation"]
+        self.assertEqual(validation["completed_history_fallback_count"], 1)
+        self.assertEqual(
+            validation["legacy_full_prompt_assertions_deferred"],
+            {
+                "rendered_prefix_failure_count": 1,
+                "token_prefix_failure_count": 1,
+            },
+        )
+        proxy = tasks[0]["request_count_provenance"]["proxy_capture_binding"]
+        self.assertFalse(proxy["canonical_rendered_prefix_chain_verified"])
+        self.assertFalse(proxy["canonical_token_prefix_chain_verified"])
+        compatibility = proxy["canonical_prefix_compatibility"]
+        self.assertTrue(compatibility["accepted_prefix_chain_verified"])
+        self.assertEqual(
+            compatibility["completed_history_fallback_current_global_request_indices"],
+            [854],
+        )
+        self.assertEqual(
+            audited["request_count_recoveries"][0]["proxy_capture_binding"],
+            proxy,
+        )
+
+    def test_completed_history_prefix_rejects_real_history_drift_and_restores(self) -> None:
+        tasks, binding, tokenizer = self._prefix_fixture(
+            drift_completed_history=True
+        )
+        original_require = MODULE.historical.require
+
+        def legacy_mapper(**kwargs: Any) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+            del kwargs
+            MODULE.historical.require(False, MODULE.LEGACY_RENDERED_PREFIX_ERROR)
+            MODULE.historical.require(False, MODULE.LEGACY_TOKEN_PREFIX_ERROR)
+            return tasks, binding
+
+        with mock.patch.object(
+            MODULE.historical, "map_global_captures", legacy_mapper
+        ):
+            with self.assertRaisesRegex(ValueError, "completed-history rendering"):
+                with MODULE._v3_capture_prefix_compatibility_patch():
+                    MODULE.historical.map_global_captures(tokenizer=tokenizer)
+            self.assertIs(MODULE.historical.map_global_captures, legacy_mapper)
+        self.assertIs(MODULE.historical.require, original_require)
+
+    def test_completed_history_requires_same_token_prefix_in_both_requests(self) -> None:
+        tasks, binding, _tokenizer = self._prefix_fixture()
+        previous = tasks[0]["captures"][0]
+        current = tasks[0]["captures"][1]
+        suffix = MODULE.GENERATION_SUFFIX_BY_THINKING[True]
+        completed_history = previous["rendered"][: -len(suffix)]
+
+        class BoundaryMergingTokenizer:
+            @staticmethod
+            def encode(text: str, *, add_special_tokens: bool) -> list[int]:
+                if add_special_tokens:
+                    raise AssertionError("V3 prefix audit added special tokens")
+                if text == completed_history:
+                    return [7]
+                if text == previous["rendered"]:
+                    return [8, 1]
+                if text == current["rendered"]:
+                    return [7, 2]
+                raise AssertionError("unexpected boundary-tokenizer input")
+
+        tokenizer = BoundaryMergingTokenizer()
+        previous["token_ids"] = tokenizer.encode(
+            previous["rendered"], add_special_tokens=False
+        )
+        current["token_ids"] = tokenizer.encode(
+            current["rendered"], add_special_tokens=False
+        )
+
+        def legacy_mapper(**kwargs: Any) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+            del kwargs
+            MODULE.historical.require(False, MODULE.LEGACY_RENDERED_PREFIX_ERROR)
+            MODULE.historical.require(False, MODULE.LEGACY_TOKEN_PREFIX_ERROR)
+            return tasks, binding
+
+        with (
+            mock.patch.object(
+                MODULE.historical, "map_global_captures", legacy_mapper
+            ),
+            MODULE._v3_capture_prefix_compatibility_patch(),
+            self.assertRaisesRegex(ValueError, "previous canonical tokens"),
+        ):
+            MODULE.historical.map_global_captures(tokenizer=tokenizer)
+
+    def test_deferred_prefix_failure_counts_must_equal_post_audit(self) -> None:
+        tasks, binding, tokenizer = self._prefix_fixture()
+
+        def dishonest_mapper(**kwargs: Any) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+            del kwargs
+            return tasks, binding
+
+        with (
+            mock.patch.object(
+                MODULE.historical, "map_global_captures", dishonest_mapper
+            ),
+            MODULE._v3_capture_prefix_compatibility_patch(),
+            self.assertRaisesRegex(ValueError, "assertion count differs"),
+        ):
+            MODULE.historical.map_global_captures(tokenizer=tokenizer)
+
+    def test_prefix_patch_accepts_zero_fallback_cohort_and_restores(self) -> None:
+        tasks = [
+            {
+                "instance_id": "astropy__astropy-no-fallback",
+                "request_count_provenance": {"recovered": False},
+                "captures": [{"local_index": 1, "global_index": 1}],
+            }
+        ]
+        binding: dict[str, Any] = {"request_count_recoveries": []}
+
+        def exact_mapper(**kwargs: Any) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+            del kwargs
+            return tasks, binding
+
+        with mock.patch.object(
+            MODULE.historical, "map_global_captures", exact_mapper
+        ):
+            with MODULE._v3_capture_prefix_compatibility_patch():
+                mapped, audited = MODULE.historical.map_global_captures(
+                    tokenizer=object()
+                )
+            self.assertIs(MODULE.historical.map_global_captures, exact_mapper)
+        self.assertIs(mapped, tasks)
+        self.assertEqual(
+            audited["v3_prefix_chain_validation"][
+                "completed_history_fallback_count"
+            ],
+            0,
+        )
+
+    def test_legacy_prefix_messages_are_unique_in_pinned_historical_source(self) -> None:
+        payload = (
+            ROOT / "scripts/materialize_swe_behavioral_probes.py"
+        ).read_text(encoding="utf-8")
+        self.assertEqual(payload.count(f'"{MODULE.LEGACY_RENDERED_PREFIX_ERROR}"'), 1)
+        self.assertEqual(payload.count(f'"{MODULE.LEGACY_TOKEN_PREFIX_ERROR}"'), 1)
 
     def test_authenticated_image_hashes_reach_source_summary_prompts_and_hashes(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
@@ -629,6 +879,8 @@ class V3DenseMaterializerTests(unittest.TestCase):
         historical_path = ROOT / "scripts/materialize_swe_behavioral_probes.py"
         before = hashlib.sha256(historical_path.read_bytes()).hexdigest()
         with MODULE._all_probeable_patch():
+            pass
+        with MODULE._v3_capture_prefix_compatibility_patch():
             pass
         after = hashlib.sha256(historical_path.read_bytes()).hexdigest()
         self.assertEqual(after, before)
