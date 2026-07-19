@@ -1,0 +1,182 @@
+{
+  "schema_version": 1,
+  "id": "swe-task-state-interpreter-v1",
+  "status": "frozen_before_dense_n20_lens_score_inspection",
+  "decision_scope": "development_screen_only",
+  "interpretation_target": "observable next Qwen Code action at a SWE task request boundary; never hidden prose or chain-of-thought",
+  "input_pins": {
+    "behavioral_protocol_sha256": "ae96a783a6e6736ec6a12fc8d3a7a50b3896c57cf759aa3becd3aa33e257dfa8",
+    "prompt_bundle_sha256": "c89a8dc95455633d1e25c62c3393c063ead3184e84d33a9a00b55ab390b76c27",
+    "public_report_sha256": null,
+    "model": {
+      "repo_id": "nvidia/Qwen3.6-27B-NVFP4",
+      "revision": "0893e1606ff3d5f97a441f405d5fc541a6bdf404",
+      "config_sha256": "c04a19ba293737ad7be4f6e96d6666cb7e479cbe19ecc0c289fad267135b0338",
+      "index_sha256": "7aa103a2582b7d26631988de33dea19e8a308ee9c239e8e14feb374af30905e2"
+    },
+    "public_lens": {
+      "repo_id": "neuronpedia/jacobian-lens",
+      "revision": "a4114d7752d11eb546e6cf372213d7e75526d3a1",
+      "sha256": "1718c8c52dd8a9dad03738d4d625937c1fbba10be325b872ed446c7290fc11e1",
+      "n_prompts": 1000
+    },
+    "replay_runtime": {
+      "enforce_eager": true,
+      "mtp_enabled": false,
+      "max_model_len": 65536,
+      "max_num_batched_tokens": 4096,
+      "mamba_block_size": 1024,
+      "kv_cache_dtype": "fp8_e4m3",
+      "kv_offloading_size": 8.0,
+      "kv_offloading_backend": "native",
+      "stream_final_only": true
+    }
+  },
+  "scope": {
+    "class_ids_in_order": ["inspect", "edit", "validate", "finalize"],
+    "variants": [
+      "progress_only",
+      "lexical_progress",
+      "history_context",
+      "ordinary_logit",
+      "logit_context",
+      "public_jacobian",
+      "jacobian_context",
+      "hybrid"
+    ]
+  },
+  "feature_contract": {
+    "layers": [24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47],
+    "feature_order": "layer-major_then_class-order",
+    "within_class_reduction": "logmeanexp_over_declared_token_logits",
+    "progress_features": ["task_request_index", "log1p_task_request_index"],
+    "lexical_features": [
+      "log1p_exact_token_occurrence_count_per_class",
+      "normalized_token_recency_per_class",
+      "log1p_exact_string_occurrence_count_per_class",
+      "normalized_string_recency_per_class"
+    ],
+    "history_features": [
+      "log1p_cumulative_prior_action_count_per_class",
+      "previous_action_one_hot_per_class",
+      "log1p_cumulative_unknown_prior_action_count",
+      "previous_action_unknown",
+      "has_edited",
+      "has_validated",
+      "turns_since_edit_or_minus_one",
+      "turns_since_validate_or_minus_one"
+    ],
+    "history_requires_complete_consecutive_probe_bundle": true,
+    "future_trajectory_fields_forbidden": true,
+    "variant_blocks": {
+      "progress_only": ["progress"],
+      "lexical_progress": ["lexical", "progress"],
+      "history_context": ["history", "lexical", "progress"],
+      "ordinary_logit": ["ordinary_logit"],
+      "logit_context": ["ordinary_logit", "history", "lexical", "progress"],
+      "public_jacobian": ["public_jacobian"],
+      "jacobian_context": ["public_jacobian", "history", "lexical", "progress"],
+      "hybrid": ["public_jacobian", "ordinary_logit", "history", "lexical", "progress"]
+    }
+  },
+  "eligibility": {
+    "action_label_status": "available",
+    "require_primary_selection": false,
+    "require_finite_action_scores": true,
+    "numerical_stability": {
+      "final_layer_top1_matches_greedy": true,
+      "final_norm_within_tolerance": true,
+      "final_logits_top_k_prefix_token_ids_match": true,
+      "final_logits_rms_error_maximum_inclusive": 0.02,
+      "final_logits_max_abs_error_maximum_inclusive": 0.125
+    }
+  },
+  "model_contract": {
+    "family": "multinomial_logistic_regression",
+    "penalty": "L2",
+    "solver": "lbfgs",
+    "class_weight": "balanced_from_current_training_split_only",
+    "fit_intercept": true,
+    "scaler_fit": "current_training_split_only",
+    "regularization_C_grid": [0.0001, 0.001, 0.01, 0.1, 1.0, 10.0],
+    "maximum_iterations": 4000
+  },
+  "outer_evaluation": {
+    "algorithm": "leave_one_repository_out",
+    "heldout_labels_used_for_fit_scaling_calibration_or_threshold_selection": false
+  },
+  "inner_model_selection": {
+    "algorithm": "leave_one_repository_out_within_outer_training",
+    "selection_metric": "balanced_accuracy",
+    "tie_break": "smallest_C",
+    "complete_inner_prediction_coverage_required": true,
+    "minimum_valid_inner_folds": 5
+  },
+  "calibration": {
+    "algorithm": "inner_repository_crossfit_temperature_grid",
+    "temperature_grid": [0.5, 0.75, 1.0, 1.5, 2.0, 3.0],
+    "selection_metric": "multiclass_negative_log_likelihood",
+    "tie_break": "closest_to_one_then_smallest",
+    "outer_heldout_labels_used": false
+  },
+  "abstention": {
+    "confidence": "maximum_temperature_scaled_class_probability",
+    "accept_when": "confidence_greater_than_or_equal_to_threshold",
+    "confidence_threshold_grid": [0.0, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95],
+    "sweep_role": "descriptive_fixed_grid",
+    "selection": {
+      "algorithm": "maximum_coverage_meeting_floors",
+      "accepted_accuracy_minimum": 0.8,
+      "balanced_accepted_recall_minimum": 0.35,
+      "coverage_minimum": 0.5,
+      "minimum_accepted_rows_per_class": 2,
+      "floor_weighting": "task_equal_primary",
+      "tie_break": "lowest_threshold",
+      "fallback": "maximum_balanced_accepted_recall_then_accuracy_then_coverage",
+      "outer_heldout_labels_used": false
+    }
+  },
+  "metrics": {
+    "ece_equal_width_bin_count": 10,
+    "probability_metrics": ["multiclass_negative_log_likelihood", "multiclass_brier", "top_label_ece"],
+    "selective_metrics": ["coverage", "accepted_accuracy", "balanced_accepted_recall", "per_class_accepted_coverage"]
+  },
+  "bootstrap": {
+    "algorithm": "hierarchical_repository_then_task_percentile_v1",
+    "samples": 5000,
+    "seed": 73421,
+    "confidence_level": 0.95,
+    "minimum_valid_fraction": 0.95,
+    "row_resampling_forbidden": true,
+    "models_refit_inside_bootstrap": false,
+    "interval_interpretation": "conditional_on_frozen_out_of_repository_predictions_excludes_fit_and_selection_uncertainty",
+    "operational_reliability_proof": false
+  },
+  "reliability_gates": {
+    "support": {
+      "minimum_rows": 500,
+      "minimum_tasks": 20,
+      "minimum_repositories": 11
+    },
+    "require_all_outer_folds_available": true,
+    "require_all_calibration_targets_met": true,
+    "calibration_target_variants": ["hybrid"],
+    "absolute": [
+      {"id": "hybrid_balanced_accuracy", "variant": "hybrid", "metric": "balanced_accuracy", "bound": "point", "operator": "minimum_inclusive", "value": 0.7},
+      {"id": "hybrid_selective_accuracy", "variant": "hybrid", "metric": "task_macro_selective_accuracy", "bound": "point", "operator": "minimum_inclusive", "value": 0.9},
+      {"id": "hybrid_selective_accuracy_lower", "variant": "hybrid", "metric": "task_macro_selective_accuracy", "bound": "bootstrap_lower", "operator": "minimum_inclusive", "value": 0.8},
+      {"id": "hybrid_selective_coverage", "variant": "hybrid", "metric": "task_macro_selected_coverage", "bound": "point", "operator": "minimum_inclusive", "value": 0.5},
+      {"id": "hybrid_selective_coverage_lower", "variant": "hybrid", "metric": "task_macro_selected_coverage", "bound": "bootstrap_lower", "operator": "minimum_inclusive", "value": 0.4},
+      {"id": "hybrid_per_class_coverage", "variant": "hybrid", "metric": "selected_minimum_per_class_accepted_coverage", "bound": "point", "operator": "minimum_inclusive", "value": 0.3},
+      {"id": "hybrid_balanced_selective_recall", "variant": "hybrid", "metric": "selected_balanced_accepted_recall", "bound": "point", "operator": "minimum_inclusive", "value": 0.4},
+      {"id": "hybrid_calibration", "variant": "hybrid", "metric": "top_label_ece", "bound": "bootstrap_upper", "operator": "maximum_inclusive", "value": 0.1}
+    ],
+    "paired": [
+      {"id": "j_selective_value", "candidate": "hybrid", "reference": "logit_context", "metric": "task_macro_selective_accuracy", "bound": "bootstrap_lower", "operator": "minimum_exclusive", "value": 0.0},
+      {"id": "j_balanced_value", "candidate": "hybrid", "reference": "logit_context", "metric": "balanced_accuracy", "bound": "bootstrap_lower", "operator": "minimum_exclusive", "value": 0.0},
+      {"id": "activation_value_over_history", "candidate": "hybrid", "reference": "history_context", "metric": "balanced_accuracy", "bound": "bootstrap_lower", "operator": "minimum_exclusive", "value": 0.0},
+      {"id": "j_nll_value", "candidate": "hybrid", "reference": "logit_context", "metric": "multiclass_negative_log_likelihood", "bound": "bootstrap_upper", "operator": "maximum_exclusive", "value": 0.0},
+      {"id": "j_brier_value", "candidate": "hybrid", "reference": "logit_context", "metric": "multiclass_brier", "bound": "bootstrap_upper", "operator": "maximum_exclusive", "value": 0.0}
+    ]
+  }
+}

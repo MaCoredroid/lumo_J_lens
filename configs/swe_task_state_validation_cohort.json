@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "kind": "swe_verified_behavioral_n20_cohort",
+  "status": "frozen_before_dense_n20_or_validation_lens_score_inspection",
+  "lens_outputs_used_for_selection": false,
+  "official_outcomes_used_for_selection": false,
+  "dataset": {
+    "repo_id": "princeton-nlp/SWE-bench_Verified",
+    "revision": "c104f840cc67f8b6eec6f759ebc8b2693d585d4a"
+  },
+  "selection": {
+    "seed_text": "jlens-state-interpreter-fresh-v1",
+    "candidate_source": "canonical locally cached amd64 SWE-Verified images",
+    "prior_use_git_commit": "bc6f3f35b7a0c6240a3f4c013aa90193c2a20d12",
+    "prior_use_exclusion_roots": [
+      "configs",
+      "docs",
+      "runs",
+      "validation",
+      "README.md",
+      "SPEC.md",
+      "VALIDATION.md"
+    ],
+    "prior_use_exclusion": "exclude every official instance ID occurring in a prior-use root at prior_use_git_commit",
+    "repository_minimum_candidates": 2,
+    "base_quota_per_repository": 2,
+    "remaining_slot_allocation": "candidate count descending, repository name ascending tie break",
+    "within_repository_order": "ascending SHA256(seed_text + NUL + instance_id)",
+    "batch_partition": "within-repository round robin while preserving ten tasks per frozen campaign",
+    "candidate_count_after_exclusion": 68,
+    "candidate_instance_ids_sha256": "f0efa6c5bbbf1420c006a16ccbb64c65e14b5653c63f78323cf439ea0fedf5bb",
+    "repository_count": 8,
+    "eligible_instance_ids_sha256": "f0efa6c5bbbf1420c006a16ccbb64c65e14b5653c63f78323cf439ea0fedf5bb",
+    "selected_task_count": 20,
+    "selection_read_gold_patch": false,
+    "selection_read_problem_difficulty": false
+  },
+  "pins": {
+    "action_protocol_sha256": "bce204d03608e181456bb5c05a041c4bf4d305f48cb4b4e651ba34460d46d493",
+    "chat_template_sha256": "c166a05aaf5ad4b807a7c46497f92180e3df24e64d4b54d27fd26ec61bec38da",
+    "image_registry_sha256": "87b5491b73fc77d8023b9855b6c7410ef78c77d6e0ed70a50c42f186fd289b17"
+  },
+  "action_protocol": {
+    "path": "configs/swe_stage_action_probes.json",
+    "sha256": "bce204d03608e181456bb5c05a041c4bf4d305f48cb4b4e651ba34460d46d493"
+  },
+  "chat_template": {
+    "path": "configs/qwen3-openai-codex.jinja",
+    "sha256": "c166a05aaf5ad4b807a7c46497f92180e3df24e64d4b54d27fd26ec61bec38da"
+  },
+  "cohorts": [
+    {
+      "id": "validation_a",
+      "campaign_path": "configs/swe_task_state_validation_a_campaign.json",
+      "campaign_sha256": "eff5d681db4f1e51a4361e21baa6c3142400fcf68ec8d58b10d7193ea8e91651",
+      "run_label": "swe_task_state_validation_a_20260718",
+      "instance_ids": [
+        "astropy__astropy-14182",
+        "django__django-15128",
+        "django__django-11119",
+        "matplotlib__matplotlib-20859",
+        "pydata__xarray-4075",
+        "pytest-dev__pytest-5631",
+        "scikit-learn__scikit-learn-14087",
+        "sphinx-doc__sphinx-8120",
+        "sphinx-doc__sphinx-9698",
+        "sympy__sympy-13757"
+      ]
+    },
+    {
+      "id": "validation_b",
+      "campaign_path": "configs/swe_task_state_validation_b_campaign.json",
+      "campaign_sha256": "d6596962167ed48e322638ae4a9758975b7a6630204cadc84ea6bead14bda4df",
+      "run_label": "swe_task_state_validation_b_20260718",
+      "instance_ids": [
+        "astropy__astropy-13033",
+        "django__django-11333",
+        "matplotlib__matplotlib-24970",
+        "matplotlib__matplotlib-25122",
+        "pydata__xarray-3151",
+        "pytest-dev__pytest-5840",
+        "scikit-learn__scikit-learn-14053",
+        "sphinx-doc__sphinx-7757",
+        "sympy__sympy-20154",
+        "sympy__sympy-16886"
+      ]
+    }
+  ],
+  "instance_ids": [
+    "astropy__astropy-14182",
+    "django__django-15128",
+    "django__django-11119",
+    "matplotlib__matplotlib-20859",
+    "pydata__xarray-4075",
+    "pytest-dev__pytest-5631",
+    "scikit-learn__scikit-learn-14087",
+    "sphinx-doc__sphinx-8120",
+    "sphinx-doc__sphinx-9698",
+    "sympy__sympy-13757",
+    "astropy__astropy-13033",
+    "django__django-11333",
+    "matplotlib__matplotlib-24970",
+    "matplotlib__matplotlib-25122",
+    "pydata__xarray-3151",
+    "pytest-dev__pytest-5840",
+    "scikit-learn__scikit-learn-14053",
+    "sphinx-doc__sphinx-7757",
+    "sympy__sympy-20154",
+    "sympy__sympy-16886"
+  ]
+}

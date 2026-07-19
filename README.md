@@ -36,6 +36,9 @@ for the eight-stage lifecycle replay and next-step decision,
 for the 20-task behavioral replay and probe-versus-refit decision,
 [docs/JLENS_SWE_CONTEXTUAL_EVIDENCE_2026-07-18.md](docs/JLENS_SWE_CONTEXTUAL_EVIDENCE_2026-07-18.md)
 for the paired contextual-evidence pilot and its guarded, non-COT task cards,
+[docs/JLENS_SWE_TASK_STATE_INTERPRETER_2026-07-18.md](docs/JLENS_SWE_TASK_STATE_INTERPRETER_2026-07-18.md)
+for the dense 698-request task-state readout and its negative reliability
+decision,
 and
 [docs/JLENS_NF4_EXPERIMENT.md](docs/JLENS_NF4_EXPERIMENT.md) for the fresh-fit
 experiment.
@@ -130,6 +133,22 @@ preserves a failed strict adapter status rather than treating it as a crash.
 On the reference RTX 5090, the final verified invocation took 38.60 seconds
 wall time; its measured runner lifecycle was 35.381 seconds, including an
 8.613-second model load.
+
+For a fail-closed task-wide action readout over every probeable request in the
+20-task behavioral corpus, run:
+
+```bash
+scripts/run_swe_task_state_interpreter.sh
+```
+
+The dense development screen retained 639 stable labeled rows from 698
+prefixes. Public J-only balanced accuracy was `0.6680`, versus `0.6717` for
+ordinary logits. Adding J to the ordinary-logit-plus-context model changed
+balanced accuracy by `-0.0036`, conditional 95% interval
+`[-0.0532, +0.0471]`; the reliability gate failed. The lens contains an
+action-phase signal, but it did not add reliable value beyond ordinary logits
+and is not a hidden-COT decoder. The complete result and next-milestone
+exploration are in the task-state report linked above.
 
 ### Native NVFP4/FP8-STE fit
 
