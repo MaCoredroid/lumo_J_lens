@@ -1,0 +1,316 @@
+{
+  "schema_version": 1,
+  "id": "swe-binary-phase-interpreter-v2",
+  "status": "frozen_before_reserved_validation_generation_or_lens_replay",
+  "decision_scope": "development_selected_protocol_then_one_untouched_reserved_validation",
+  "interpretation_target": "forecast the next observable consequential Qwen Code work-cycle phase; never hidden prose or chain-of-thought",
+  "selection_disclosure": {
+    "architecture_selected_after_development_feature_and_model_search": true,
+    "binary_class_collapse_selected_after_development_inspection": true,
+    "development_intervals_correct_for_selection": false,
+    "reserved_cohort_is_first_confirmatory_test": true,
+    "retuning_after_reserved_validation_starts": false
+  },
+  "pins": {
+    "source_task_state_protocol_sha256": "a6441137828866e8aad9dc547fc0fee37706ece390f503a81fdd9e0f53ed409a",
+    "behavioral_protocol_sha256": "ae96a783a6e6736ec6a12fc8d3a7a50b3896c57cf759aa3becd3aa33e257dfa8",
+    "development_prompt_bundle_sha256": "c89a8dc95455633d1e25c62c3393c063ead3184e84d33a9a00b55ab390b76c27",
+    "development_public_report_sha256": "e4e849afe234ad38da85278df24e8606f2daa5a1c7da0772b5dc60786a75444a",
+    "reserved_cohort_sha256": "f0c2adfb562494362f359a60aa37a63f289af9f1b8b833805c07e2173aea6cbd",
+    "reserved_campaign_a_sha256": "eff5d681db4f1e51a4361e21baa6c3142400fcf68ec8d58b10d7193ea8e91651",
+    "reserved_campaign_b_sha256": "d6596962167ed48e322638ae4a9758975b7a6630204cadc84ea6bead14bda4df",
+    "reserved_image_registry_sha256": "87b5491b73fc77d8023b9855b6c7410ef78c77d6e0ed70a50c42f186fd289b17",
+    "cohort_checker_sha256": "9cb4a509ab1faa29d2ff0e64336e3fb283f803812037eaf6644f0d8ee25e9d6b",
+    "reserved_prompts_summary_sha256": null,
+    "model": {
+      "repo_id": "nvidia/Qwen3.6-27B-NVFP4",
+      "revision": "0893e1606ff3d5f97a441f405d5fc541a6bdf404",
+      "config_sha256": "c04a19ba293737ad7be4f6e96d6666cb7e479cbe19ecc0c289fad267135b0338",
+      "index_sha256": "7aa103a2582b7d26631988de33dea19e8a308ee9c239e8e14feb374af30905e2"
+    },
+    "public_lens": {
+      "repo_id": "neuronpedia/jacobian-lens",
+      "revision": "a4114d7752d11eb546e6cf372213d7e75526d3a1",
+      "sha256": "1718c8c52dd8a9dad03738d4d625937c1fbba10be325b872ed446c7290fc11e1",
+      "n_prompts": 1000,
+      "stored_dtype": "float16",
+      "fit_precision": "unpublished"
+    },
+    "replay_runtime": {
+      "target_checkpoint_quantization": "ModelOpt NVFP4 weights with FP8 runtime state",
+      "enforce_eager": true,
+      "mtp_enabled": false,
+      "max_model_len": 65536,
+      "max_num_batched_tokens": 4096,
+      "mamba_block_size": 1024,
+      "kv_cache_dtype": "fp8_e4m3",
+      "kv_offloading_size": 8.0,
+      "kv_offloading_backend": "native",
+      "stream_final_only": true
+    }
+  },
+  "reserved_prompts_summary_contract": {
+    "required_evaluate_input": true,
+    "validator": "scripts/check_swe_task_state_validation_cohort.py::validate_materialized_bundle",
+    "checker_implementation_sha256_is_protocol_pinned": true,
+    "literal_summary_sha256_required_before_evaluate": true,
+    "null_summary_pin_blocks_evaluate": true,
+    "pinning_phase": "after_reserved_materialization_and_before_lens_replay_or_evaluation",
+    "core_protocol_identity_normalizes_only_json_pointer": "/pins/reserved_prompts_summary_sha256",
+    "core_protocol_hash_encoding": "sha256_sorted_compact_ascii_json",
+    "fit_requires_null_summary_pin": true,
+    "evaluation_requires_null_to_literal_sha256_transition": true,
+    "core_protocol_sha256_must_match_across_transition": true,
+    "any_other_protocol_mutation_forbidden": true,
+    "post_materialization_model_refit_forbidden": true,
+    "observed_summary_sha256_recorded_at_evaluation": true,
+    "summary_must_bind_exact_prompt_bundle_sha256": true,
+    "summary_must_bind_cohort_and_campaign_sha256s": true,
+    "summary_must_bind_action_protocol_and_chat_template_sha256s": true,
+    "every_prompt_payload_sha256_must_verify": true,
+    "exact_prompt_ids_global_indices_all_probeable_fields_and_task_order_required": true
+  },
+  "class_contract": {
+    "class_ids_in_order": ["edit", "check_or_finish"],
+    "edit_source_actions": ["edit"],
+    "check_or_finish_source_actions": ["validate", "finalize"],
+    "scan_starts_at_current_request_action": true,
+    "known_inspect_actions_are_skipped": true,
+    "unknown_before_next_milestone": "censor_offline_ground_truth",
+    "no_observed_future_milestone": "censor_offline_ground_truth",
+    "complete_consecutive_request_bundle_required_for_ground_truth": true,
+    "physical_event_id": "task_id + target_request_index + binary_class",
+    "forecast_horizon": "zero or more Qwen Code completions until the labeled consequential action"
+  },
+  "eligibility_contract": {
+    "prediction_requires_current_action_label": false,
+    "future_label_controls_metric_eligibility_only": true,
+    "prediction_emitted_for_every_numerically_stable_feature_complete_boundary": true,
+    "numerical_stability": {
+      "final_layer_top1_matches_greedy": true,
+      "final_norm_within_tolerance": true,
+      "final_logits_top_k_prefix_token_ids_match": true,
+      "final_logits_rms_error_maximum_inclusive": 0.02,
+      "final_logits_max_abs_error_maximum_inclusive": 0.125
+    },
+    "required_report_denominators": [
+      "all_replayed_prompts",
+      "stable_emitted_predictions",
+      "future_label_evaluable_predictions",
+      "accepted_predictions"
+    ],
+    "label_evaluable_fraction_must_not_be_called_inference_coverage": true
+  },
+  "feature_contract": {
+    "source_layers": [24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47],
+    "source_action_classes_in_order": ["inspect", "edit", "validate", "finalize"],
+    "variants": ["j_compact", "l_compact"],
+    "matched_replacement_ablation": true,
+    "feature_width": 154,
+    "ema_alpha": 0.5,
+    "source_score_width": 96,
+    "compact_summary_width_per_state": 40,
+    "compact_summary_per_action_order": [
+      "mean_all_layers",
+      "standard_deviation_all_layers",
+      "minimum_all_layers",
+      "maximum_all_layers",
+      "mean_layers_24_to_29",
+      "mean_layers_30_to_41",
+      "mean_layers_42_to_47",
+      "least_squares_layer_slope",
+      "last_minus_first_layer",
+      "argmax_layer_index_divided_by_23"
+    ],
+    "state_blocks_in_order": [
+      "compact_current",
+      "compact_delta_from_previous_stable_emission",
+      "compact_deviation_from_prior_ema",
+      "causal_history_lexical_progress_context",
+      "log1p_request_gap",
+      "no_previous_stable_emission"
+    ],
+    "context_width": 32,
+    "sequence_state_updates_on_every_stable_emission_even_when_future_label_is_censored": true,
+    "future_trajectory_fields_forbidden_from_features": true
+  },
+  "model_contract": {
+    "family": "ExtraTreesClassifier",
+    "random_seed": 271828,
+    "parameters": {
+      "bootstrap": false,
+      "ccp_alpha": 0.0,
+      "class_weight": null,
+      "criterion": "gini",
+      "max_depth": null,
+      "max_features": 0.5,
+      "max_leaf_nodes": null,
+      "max_samples": null,
+      "min_impurity_decrease": 0.0,
+      "min_samples_leaf": 5,
+      "min_samples_split": 2,
+      "min_weight_fraction_leaf": 0.0,
+      "monotonic_cst": null,
+      "n_estimators": 100,
+      "n_jobs": 8,
+      "oob_score": false,
+      "verbose": 0,
+      "warm_start": false
+    },
+    "scaler": null,
+    "probability_class_order": ["edit", "check_or_finish"],
+    "min_samples_leaf_counts_raw_correlated_prefix_rows": true
+  },
+  "weighting_contract": {
+    "training": "equal_task_then_equal_event_then_equal_prefix_then_binary_class_rebalance",
+    "training_precise_order": [
+      "give each task equal base mass",
+      "within a task give each physical event equal base mass",
+      "within an event give each stable labeled prefix equal base mass",
+      "rebalance the two aggregate class masses to one half each",
+      "renormalize to unit mass"
+    ],
+    "training_after_class_rebalance_is_not_task_equal": true,
+    "evaluation": "equal_task_then_equal_event_then_equal_prefix",
+    "evaluation_class_balance": "balanced_accuracy_is_the_macro_mean_of_class_conditional_recalls",
+    "event_and_label_are_offline_training_and_evaluation_metadata_not_inference_features": true
+  },
+  "outer_evaluation": {
+    "development_algorithm": "leave_one_repository_out",
+    "heldout_repository_labels_used_for_fit": false,
+    "same_rows_features_folds_weights_hyperparameters_and_rng_for_j_and_l": true,
+    "direct_comparison_semantics": "matched replacement ablation, not conditional J added over L"
+  },
+  "calibration_and_abstention": {
+    "temperature": 1.0,
+    "temperature_source": "full-development leave-one-repository-out crossfit",
+    "confidence_threshold": 0.0,
+    "acceptance_rule": "maximum_probability_greater_than_or_equal_to_threshold",
+    "abstention_enabled": false,
+    "inference_coverage_over_stable_emissions": 1.0,
+    "transductive_fixed_coverage_curves_used_for_decision": false
+  },
+  "horizon_reporting": {
+    "mandatory": true,
+    "buckets": [
+      {"id": "h0", "minimum": 0, "maximum": 0},
+      {"id": "h1_2", "minimum": 1, "maximum": 2},
+      {"id": "h3_5", "minimum": 3, "maximum": 5},
+      {"id": "h6_10", "minimum": 6, "maximum": 10},
+      {"id": "h11_plus", "minimum": 11, "maximum": null}
+    ],
+    "role": "mandatory_stratified_diagnostic_not_a_gate_because_reserved_bucket_support_is_unknown",
+    "aggregate_reliability_does_not_imply_uniform_horizon_reliability": true
+  },
+  "bootstrap": {
+    "algorithm": "repository_then_task_cluster_percentile_conditional_on_oof_predictions",
+    "samples": 10000,
+    "seed": 918273,
+    "confidence_level": 0.95,
+    "minimum_valid_fraction": 0.95,
+    "models_refit_inside_bootstrap": false,
+    "row_resampling_forbidden": true,
+    "same_draws_for_j_and_l": true,
+    "complete_task_trajectories_events_and_prefixes_retained_within_each_draw": true,
+    "duplicate_draw_ids_are_namespaced": true,
+    "interval_interpretation": "conditional_on_frozen_predictions_and_excludes_model_fit_and_development_selection_uncertainty"
+  },
+  "serialization_contract": {
+    "format": "single_joblib_dictionary",
+    "single_bundle_contains_both_variants": true,
+    "hash_verified_before_pickle_load": true,
+    "gate_evidence_float_decimal_places": 14,
+    "gate_evidence_hash_encoding": "sorted_compact_ascii_json_after_recursive_decimal_rounding",
+    "published_bundle_sha256_is_an_integrity_pin_not_a_refit_byte_identity_claim": true,
+    "semantic_reproducibility_uses_runtime_analyzer_feature_and_probability_canaries": true,
+    "manifest_records": [
+      "protocol and implementation hashes",
+      "source model lens and data hashes",
+      "ordered class and feature contracts",
+      "full estimator parameters and runtime versions",
+      "ordered training row event label and feature hashes",
+      "training weight hash and mass diagnostics",
+      "feature and probability canaries",
+      "fit-time full and normalized core protocol identities plus the only allowed post-materialization transition",
+      "bundle SHA256"
+    ]
+  },
+  "reliability_gates": {
+    "development": {
+      "support": {
+        "minimum_rows": 620,
+        "minimum_events": 177,
+        "minimum_tasks": 20,
+        "minimum_repositories": 11,
+        "minimum_edit_events": 46,
+        "minimum_check_or_finish_events": 131
+      },
+      "absolute": [
+        {"id": "j_accuracy", "variant": "j_compact", "metric": "accuracy", "bound": "point", "operator": "minimum_inclusive", "value": 0.82},
+        {"id": "j_accuracy_lower", "variant": "j_compact", "metric": "accuracy", "bound": "bootstrap_lower", "operator": "minimum_inclusive", "value": 0.75},
+        {"id": "j_balanced_accuracy", "variant": "j_compact", "metric": "balanced_accuracy", "bound": "point", "operator": "minimum_inclusive", "value": 0.78},
+        {"id": "j_edit_recall", "variant": "j_compact", "metric": "recall_edit", "bound": "point", "operator": "minimum_inclusive", "value": 0.65},
+        {"id": "j_check_recall", "variant": "j_compact", "metric": "recall_check_or_finish", "bound": "point", "operator": "minimum_inclusive", "value": 0.8},
+        {"id": "j_nll", "variant": "j_compact", "metric": "multiclass_negative_log_likelihood", "bound": "point", "operator": "maximum_inclusive", "value": 0.5},
+        {"id": "j_ece", "variant": "j_compact", "metric": "top_label_ece", "bound": "point", "operator": "maximum_inclusive", "value": 0.15}
+      ],
+      "paired": [
+        {"id": "j_accuracy_gain", "candidate": "j_compact", "reference": "l_compact", "metric": "accuracy", "bound": "point", "operator": "minimum_inclusive", "value": 0.02},
+        {"id": "j_accuracy_gain_lower", "candidate": "j_compact", "reference": "l_compact", "metric": "accuracy", "bound": "bootstrap_lower", "operator": "minimum_exclusive", "value": 0.0},
+        {"id": "j_balanced_accuracy_gain", "candidate": "j_compact", "reference": "l_compact", "metric": "balanced_accuracy", "bound": "point", "operator": "minimum_exclusive", "value": 0.0},
+        {"id": "j_nll_gain", "candidate": "j_compact", "reference": "l_compact", "metric": "multiclass_negative_log_likelihood", "bound": "bootstrap_upper", "operator": "maximum_exclusive", "value": 0.0},
+        {"id": "j_brier_gain", "candidate": "j_compact", "reference": "l_compact", "metric": "multiclass_brier", "bound": "bootstrap_upper", "operator": "maximum_exclusive", "value": 0.0}
+      ]
+    },
+    "validation": {
+      "support": {
+        "minimum_inference_rows": 400,
+        "minimum_inference_tasks": 20,
+        "minimum_inference_repositories": 8,
+        "minimum_replay_certification_retention_ppm": 900000,
+        "minimum_rows": 400,
+        "minimum_events": 120,
+        "minimum_tasks": 20,
+        "minimum_repositories": 8,
+        "minimum_edit_events": 30,
+        "minimum_check_or_finish_events": 70,
+        "minimum_edit_tasks": 15,
+        "minimum_check_or_finish_tasks": 15,
+        "minimum_edit_repositories": 6,
+        "minimum_check_or_finish_repositories": 6
+      },
+      "absolute": [
+        {"id": "j_accuracy", "variant": "j_compact", "metric": "accuracy", "bound": "point", "operator": "minimum_inclusive", "value": 0.8},
+        {"id": "j_accuracy_lower", "variant": "j_compact", "metric": "accuracy", "bound": "bootstrap_lower", "operator": "minimum_inclusive", "value": 0.75},
+        {"id": "j_balanced_accuracy", "variant": "j_compact", "metric": "balanced_accuracy", "bound": "point", "operator": "minimum_inclusive", "value": 0.78},
+        {"id": "j_balanced_accuracy_lower", "variant": "j_compact", "metric": "balanced_accuracy", "bound": "bootstrap_lower", "operator": "minimum_inclusive", "value": 0.7},
+        {"id": "j_edit_recall", "variant": "j_compact", "metric": "recall_edit", "bound": "point", "operator": "minimum_inclusive", "value": 0.65},
+        {"id": "j_check_recall", "variant": "j_compact", "metric": "recall_check_or_finish", "bound": "point", "operator": "minimum_inclusive", "value": 0.8},
+        {"id": "j_nll", "variant": "j_compact", "metric": "multiclass_negative_log_likelihood", "bound": "point", "operator": "maximum_inclusive", "value": 0.5},
+        {"id": "j_ece", "variant": "j_compact", "metric": "top_label_ece", "bound": "point", "operator": "maximum_inclusive", "value": 0.15}
+      ],
+      "paired": [
+        {"id": "j_accuracy_gain", "candidate": "j_compact", "reference": "l_compact", "metric": "accuracy", "bound": "point", "operator": "minimum_inclusive", "value": 0.02},
+        {"id": "j_accuracy_gain_lower", "candidate": "j_compact", "reference": "l_compact", "metric": "accuracy", "bound": "bootstrap_lower", "operator": "minimum_exclusive", "value": 0.0},
+        {"id": "j_balanced_accuracy_gain", "candidate": "j_compact", "reference": "l_compact", "metric": "balanced_accuracy", "bound": "point", "operator": "minimum_exclusive", "value": 0.0},
+        {"id": "j_nll_gain", "candidate": "j_compact", "reference": "l_compact", "metric": "multiclass_negative_log_likelihood", "bound": "bootstrap_upper", "operator": "maximum_exclusive", "value": 0.0},
+        {"id": "j_brier_gain", "candidate": "j_compact", "reference": "l_compact", "metric": "multiclass_brier", "bound": "bootstrap_upper", "operator": "maximum_exclusive", "value": 0.0}
+      ]
+    }
+  },
+  "decision_mapping": {
+    "all_validation_gates_pass": "replicated_J_specific_next_phase_interpreter_on_the_reserved_cohort",
+    "absolute_pass_paired_fail": "generic_activation_interpreter_only_no_J_specific_claim",
+    "paired_pass_absolute_fail": "J_specific_signal_but_not_operationally_reliable",
+    "support_or_integrity_fail": "inconclusive_no_retuning_or_rerun_on_the_reserved_cohort",
+    "any_failure": "do_not_pool_development_and_validation_to_rescue_the_claim"
+  },
+  "scientific_limits": [
+    "The output is a supervised binary behavioral forecast, not decoded hidden English reasoning.",
+    "Future-derived censoring limits accuracy claims to label-ascertained emissions.",
+    "The target spans variable horizons and aggregate metrics do not establish uniform horizon performance.",
+    "The matched ordinary-logit branch is a replacement control, not a conditional add-J ablation.",
+    "The public lens artifact stores FP16 matrices but its fit-time precision is unpublished.",
+    "The public lens is applied to residuals from the pinned NVFP4/FP8 target checkpoint; it is not a native NVFP4 refit."
+  ]
+}

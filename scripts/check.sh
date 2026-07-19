@@ -38,6 +38,7 @@ mapfile -t python_sources < <(
   sha256sum --check validation/jlens-nvfp4-ste-evidence-2026-07-17.sha256
   sha256sum --check validation/jlens-swe-qwen-code-evidence-2026-07-17.sha256
   sha256sum --check validation/jlens-nf4-evidence.sha256
+  sha256sum --check validation/swe-binary-phase-v2-development.sha256
 )
 
 if [[ -x "$ROOT/node_modules/.bin/qwen" ]]; then

@@ -482,6 +482,47 @@ The compact publication intentionally omits the 86,989,478-byte prompt bundle
 and three approximately 274 MB full lens reports; their hashes bind identity
 but do not make their content independently available.
 
+## Binary Phase Interpreter Development Gate
+
+Date: 2026-07-18
+
+The corrected v2 analyzer forecasts the next consequential work-cycle phase,
+`edit` versus `check_or_finish`, from current/delta/EMA summaries of fixed
+layers 24-47 plus identical causal context. It emits at every stable boundary;
+future actions determine only whether offline evaluation truth is available.
+The development run replayed 698 prefixes, emitted 650 stable predictions, and
+scored 620 label-ascertained rows representing 177 events, 20 tasks, and 11
+repositories.
+
+| Claim | Result | Evidence |
+|---|---|---|
+| Absolute public-J phase signal | `0.8451` accuracy, `0.8178` balanced accuracy | [`development report`](validation/swe-binary-phase-v2-development.json) |
+| Matched ordinary-logit control | `0.8235` accuracy, `0.7950` balanced accuracy | [`development report`](validation/swe-binary-phase-v2-development.json) |
+| J-specific accuracy gain | `+0.0216`, paired 95% interval `[-0.0127, +0.0552]`; FAIL | [`development report`](validation/swe-binary-phase-v2-development.json) |
+| J-specific NLL/Brier gains | Point estimates favor J, but both interval upper bounds exceed zero; FAIL | [`development report`](validation/swe-binary-phase-v2-development.json) |
+| Frozen development decision | 15/18 gates pass; overall `false`; no operational reliability claim | [`protocol`](configs/swe_binary_phase_interpreter_v2.json) |
+| Reserved validation | NOT STARTED; both ten-task run roots remain absent | [`cohort`](configs/swe_task_state_validation_cohort.json) |
+| Serialized artifact integrity | Bundle, exact runtime/analyzer/cohort-checker pins, training identities/features, and tolerant probability canary verified after reload | [`manifest`](artifacts/swe-binary-phase-v2.manifest.json) |
+
+An earlier exploratory evaluator excluded stable boundaries whose current
+action label was unavailable from its causal sequence state. The operational
+fix retains those emissions and updates delta/EMA state before later
+predictions. That correction reduced the apparent J-specific gain. The frozen
+stop rule therefore applies before reserved generation. The result supports a
+generic activation phase signal on development data, not a replicated
+J-lens-specific interpreter and not hidden chain-of-thought decoding. Full
+method, denominators, horizon decay, commands, and limitations are in
+[`docs/JLENS_SWE_BINARY_PHASE_V2_2026-07-18.md`](docs/JLENS_SWE_BINARY_PHASE_V2_2026-07-18.md).
+
+Reserved admission is additionally fail-closed on provenance. The fitted
+bundle binds a null summary pin and a core protocol hash. A future passing
+protocol may append only the literal checker-validated prompt-summary SHA
+after materialization and before replay; the core hash must remain identical,
+and model refitting after that transition is forbidden. The published joblib
+SHA identifies the exact reviewed pickle. Fresh refits are compared by frozen
+model/feature/probability canaries rather than requiring byte-identical pickle
+serialization.
+
 ## Publication-Certified Run
 
 Date: 2026-07-15 (America/Los_Angeles)

@@ -39,6 +39,9 @@ for the paired contextual-evidence pilot and its guarded, non-COT task cards,
 [docs/JLENS_SWE_TASK_STATE_INTERPRETER_2026-07-18.md](docs/JLENS_SWE_TASK_STATE_INTERPRETER_2026-07-18.md)
 for the dense 698-request task-state readout and its negative reliability
 decision,
+[docs/JLENS_SWE_BINARY_PHASE_V2_2026-07-18.md](docs/JLENS_SWE_BINARY_PHASE_V2_2026-07-18.md)
+for the corrected edit-versus-check/finish phase readout, serialized model, and
+failed J-specific development gate,
 and
 [docs/JLENS_NF4_EXPERIMENT.md](docs/JLENS_NF4_EXPERIMENT.md) for the fresh-fit
 experiment.
@@ -149,6 +152,19 @@ balanced accuracy by `-0.0036`, conditional 95% interval
 action-phase signal, but it did not add reliable value beyond ordinary logits
 and is not a hidden-COT decoder. The complete result and next-milestone
 exploration are in the task-state report linked above.
+
+The follow-up binary phase model uses the layer-resolved current, delta, and
+EMA-deviation patterns to predict `edit` versus `check_or_finish`. Its corrected
+operational extraction emits at 650 stable boundaries and has truth for 620.
+Repository-held-out public-J accuracy/balanced accuracy is `0.8451/0.8178`,
+versus `0.8235/0.7950` for the exactly matched ordinary-logit branch. The
+`+0.0216` J accuracy difference has 95% interval
+`[-0.0127, +0.0552]`; paired NLL and Brier intervals also cross zero. The
+absolute phase signal is strong, but the frozen J-specific development screen
+fails. Trajectories for the untouched reserved 20-task cohort were therefore
+not generated. Reserved evaluation also requires a checker-validated prompt
+summary and permits only a provenance-only null-to-literal-SHA protocol
+transition, with the frozen core protocol and model unchanged.
 
 ### Native NVFP4/FP8-STE fit
 
@@ -514,6 +530,8 @@ audits can be reproduced.
 - `scripts/run_jlens_nvfp4.sh`: CUDA environment and offline lens launcher
 - `scripts/run_jlens_nvfp4.py`: vLLM residual adapter and all-layer readout
 - `scripts/quick_swe_jlens.py`: one-load replay of selected Qwen Code completions
+- `scripts/analyze_swe_binary_phase_v2.py`: frozen fit/evaluate CLI for the matched binary phase readout
+- `artifacts/swe-binary-phase-v2.manifest.json`: hash-bound model, environment, training, and canary contract
 - `scripts/run_nvfp4_ste_fit.py`: pinned, resumable native NVFP4/FP8-STE fitter
 - `scripts/export_nvfp4_ste_lens.py`: validated upstream-compatible lens exporter
 - `scripts/capture_nvfp4_fit_prompt.py`: isolated compiled capture/proof orchestration
