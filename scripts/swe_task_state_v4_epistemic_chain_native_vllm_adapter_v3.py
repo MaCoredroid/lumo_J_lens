@@ -2174,8 +2174,7 @@ def decode_output_ids_with_exact_parity(
 def _valid_harmony_final_recipient(value: Any) -> bool:
     return value is None or (
         isinstance(value, str)
-        and re.fullmatch(r"<\|constrain\|>[A-Za-z0-9_.:-]{1,128}", value)
-        is not None
+        and re.fullmatch(r"<\|constrain\|>[A-Za-z0-9_.:-]{1,128}", value) is not None
     )
 
 
@@ -2779,8 +2778,7 @@ def _execute_authorized_production(
     ]
     _require(
         all(
-            len(body["submitted_prompt_token_ids"])
-            + max_output_tokens
+            len(body["submitted_prompt_token_ids"]) + max_output_tokens
             <= int(generation["max_model_len"])
             for body in request_bodies
         ),
@@ -2958,6 +2956,7 @@ def _execute_authorized_production(
                 params=params,
                 request_body=request_body,
                 generation=generation,
+                max_output_tokens=max_output_tokens,
             )
             == sampling,
             f"sampling parameters {position} changed during engine execution",

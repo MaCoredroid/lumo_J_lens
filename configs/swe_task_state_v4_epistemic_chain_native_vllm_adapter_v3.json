@@ -24,7 +24,7 @@
   },
   "implementation": {
     "source_path": "scripts/swe_task_state_v4_epistemic_chain_native_vllm_adapter_v3.py",
-    "source_sha256": "033252d0388ca1661eb136004b2978f63bc8f40a31c506cd93bb0d0f5a43fd50",
+    "source_sha256": "77125141e77c84a86bd7acda40aeb50e9b2b938962bc195537162a0cc501923e",
     "production_entrypoint": "execute_production_native_batch",
     "backend_ownership": "module_owned_imports_tokenizer_engine_and_session_no_injected_backend",
     "test_helper_kind": "swe_task_state_v4_epistemic_chain_native_vllm_non_gate_test_record_v3"
