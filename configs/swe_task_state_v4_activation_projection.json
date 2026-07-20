@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "id": "swe-task-state-v4-label-independent-activation-countsketch",
+  "status": "development_only_reserved_validation_closed",
+  "input": {
+    "kind": "swe_task_state_v4_label_independent_public_j_state_capture",
+    "schema_version": 1,
+    "capture_config_sha256": "5a378ca0fe8ef5a26ff6ff124f697aaa796c39bab020ad1b34d739da2554c65d",
+    "sources": [
+      "raw_residual",
+      "public_j_state"
+    ],
+    "layers": [
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47
+    ],
+    "hidden_size": 5120,
+    "dtype": "little-endian-float32"
+  },
+  "pooling": {
+    "kind": "arithmetic_mean_state_within_inclusive_layer_band",
+    "bands": [
+      {
+        "id": "early",
+        "first_layer": 24,
+        "last_layer": 29
+      },
+      {
+        "id": "middle",
+        "first_layer": 30,
+        "last_layer": 41
+      },
+      {
+        "id": "late",
+        "first_layer": 42,
+        "last_layer": 47
+      }
+    ],
+    "normalization_before_pooling": "none",
+    "preserve_pre_vocabulary_state_scale": true
+  },
+  "projection": {
+    "kind": "countsketch",
+    "width": 256,
+    "mapping": "bucket=uint64_be(sha256(seed + NUL + hidden_index)[0:8]) mod width; sign=+1 iff digest[8] bit0 else -1",
+    "scale": "sqrt(width / hidden_size)",
+    "accumulation_dtype": "float64",
+    "output_dtype": "little-endian-float32",
+    "seeds": [
+      "swe-task-state-v4-activation-countsketch-primary-0",
+      "swe-task-state-v4-activation-countsketch-sensitivity-1",
+      "swe-task-state-v4-activation-countsketch-sensitivity-2",
+      "swe-task-state-v4-activation-countsketch-sensitivity-3"
+    ],
+    "primary_seed_index": 0,
+    "sensitivity_seed_indices": [
+      1,
+      2,
+      3
+    ],
+    "decoder_fold": "for width 64, sum buckets with index mod 64 and divide by 2"
+  },
+  "band_statistics": [
+    "pooled_state_rms",
+    "mean_layer_state_rms",
+    "first_to_last_layer_delta_rms"
+  ],
+  "authentication": {
+    "require_input_manifest_sha256": true,
+    "require_capture_status_passed": true,
+    "require_all_boundary_capture_valid": true,
+    "require_shard_sha256_and_reload": true,
+    "forbidden_path_fragments": [
+      "reserved",
+      "validation"
+    ],
+    "no_clobber": true
+  },
+  "downstream_feature_boundary": {
+    "primary_feature_array": "sketches",
+    "diagnostic_feature_array": "band_statistics",
+    "authentication_or_join_only_arrays": [
+      "source_id_sha256",
+      "token_ids_sha256",
+      "boundary_index"
+    ],
+    "primary_current_feature": "selected seed and source, 256-to-64 folded, band-major flatten",
+    "authentication_fields_as_features_forbidden": true,
+    "semantic_ids_as_features_forbidden": true,
+    "base_report_access_forbidden": true
+  },
+  "claim_scope": {
+    "private_chain_of_thought_reconstructed": false,
+    "cot_like_observable_event_decoding_established": false,
+    "emotion_decoding_established": false,
+    "causal_interpretation_established": false,
+    "incremental_value_over_visible_or_word_probe_baselines_established": false
+  }
+}

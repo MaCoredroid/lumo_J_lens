@@ -1,0 +1,235 @@
+{
+  "schema_version": 1,
+  "id": "visible-novel-epistemic-action-chain-v1",
+  "status": "prospective_development_annotation_protocol_reserved_validation_closed",
+  "target_name": "visible_novel_epistemic_action_chain_v1",
+  "packet_materialization_scope": {
+    "artifact_status": "packet_materialization_passed_target_pass_annotation_not_run",
+    "artifact_kind": "blinded_annotation_packets_only",
+    "development_data_only": true,
+    "reserved_validation_closed": true,
+    "reserved_validation_accessed": false,
+    "annotation_not_run_for_target_pass": true,
+    "target_pass_annotation_records_in_artifact": false
+  },
+  "annotation_codebook_contract": {
+    "path": "configs/swe_task_state_v4_epistemic_chain_codebook.json",
+    "sha256": "0575f3ffeccf10fe737877ce47374f21ece96197fcb64f0d61bf514b5e9e75f9",
+    "size_bytes": 10264,
+    "schema_version": 1,
+    "kind": "swe_task_state_v4_epistemic_chain_annotation_codebook",
+    "annotator_prompt_or_model_identity_sha256": "9f6d63af6ff655edc1dfd1315b1a31c6fe7dc23d254122981c4a7b54d1f083e6"
+  },
+  "temporal_contract": {
+    "feature_boundary": "h_t_final_prompt_token_immediately_before_assistant_completion_t",
+    "gold_completion": "assistant_completion_t_only",
+    "later_tool_results_or_completion_t_plus_1_forbidden": true,
+    "official_outcomes_forbidden": true,
+    "private_reasoning_ground_truth_claimed": false
+  },
+  "source_contract": {
+    "development_prompt_bundle": {
+      "path": ".cache/swe_state_interpreter_v3_development/prompts.json",
+      "sha256": "17f664b3029220458ff62b8e80a90ec5e796f0372217f02b727d6589df38d3d0",
+      "size_bytes": 803705234,
+      "row_count": 1708
+    },
+    "label_free_alignment_index": {
+      "path": ".cache/swe_task_state_v4_raw_capture/n60-final/alignment-index-v4.json",
+      "sha256": "c0d9e4bd6ad8f6962cf58776441ec4ef042eebbbae8a9959b4149e605c9ae38e",
+      "size_bytes": 567392,
+      "stable_row_count": 1606
+    },
+    "assistant_text_semantics": "reasoning_content_or_reasoning_once_then_content",
+    "assistant_tool_arguments_excluded": true,
+    "tool_results_excluded": true,
+    "materialized_completion_required": true,
+    "frozen_unknown_exclusions": [
+      {
+        "source_id_sha256": "a496d5afee65b937424edd85f1e95db436ba1692a81ac46c644f8c9f5fc0c436",
+        "current_rendered_prefix_sha256": "15b3f25f29d8226f473ebe89f4b2d077da5c775c796f1372db157b27eb010b8a",
+        "following_source_id_sha256": "c336deb3c4cef156e8c45ef1f811aebba61a42706dd6a8c95e787c53613e1f8b",
+        "following_rendered_prefix_sha256": "b304e3f45953f81d1f0cee1ca974cd07b53d8d8ee585811665abe411f89bba20",
+        "following_raw_request_sha256": "8cf47fb7175e3fc380aecbd51657e6dbc4c6e492ba49ce0fc1a4f55d9fe6e45d",
+        "materialized_completion_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "current_prefix_char_count": 78648,
+        "following_prefix_char_count": 79907,
+        "common_prefix_char_count": 78642,
+        "dropped_current_suffix_sha256": "a15be88304e589c6852fe518f0ec05f7b2ecf92fcf826a210f3ed76f71d66ada",
+        "following_extension_sha256": "6d050648a92765ee06bef0d09991591fb671fcf903a5bc0883a5b165a0e50541",
+        "unknown_reason": "frozen_nonprefix_empty_assistant_rendering"
+      }
+    ]
+  },
+  "chain_definition": {
+    "positive_requires_all_slots": [
+      "evidence_observation_E",
+      "epistemic_conclusion_H",
+      "next_action_A",
+      "belief_edge_E_to_H",
+      "motivation_edge_H_to_A"
+    ],
+    "order": "E_before_H_before_A",
+    "maximum_intervening_prose_clauses_between_H_and_A": 2,
+    "evidence_observation_E": "explicit concrete observation from code, tool or test output already available in completion t, specification or contract, or execution environment",
+    "epistemic_conclusion_H": "explicit conclusion about cause, behavior, constraint, or repair implication that is distinct from E",
+    "next_action_A": "explicit stated inspection, edit, or validation action motivated by H",
+    "belief_edges": [
+      "supports",
+      "refutes",
+      "narrows"
+    ],
+    "motivation_edge": "motivates",
+    "earliest_qualifying_chain_only": true,
+    "implicit_or_inferred_mental_state_forbidden": true
+  },
+  "prefix_novelty": {
+    "primary_requires": "H_is_not_explicitly_present_or_semantically_entailed_anywhere_in_complete_visible_prefix_h_t",
+    "statuses": [
+      "novel",
+      "prefix_exposed",
+      "ambiguous"
+    ],
+    "prefix_exposed_excluded_from_primary": true,
+    "ambiguous_is_unknown_never_negative": true,
+    "copy_or_restatement_is_not_novel": true,
+    "novelty_annotation_is_separate_from_completion_chain_annotation": true
+  },
+  "ontology": {
+    "evidence_kind": [
+      "code",
+      "tool_or_test",
+      "spec_contract",
+      "environment"
+    ],
+    "hypothesis_domain": [
+      "source_logic",
+      "interface_contract",
+      "data_type_shape",
+      "environment_dependency",
+      "tooling_path",
+      "test_fixture",
+      "other"
+    ],
+    "action_intent": [
+      "inspect",
+      "edit",
+      "validate"
+    ],
+    "exact_signature": "evidence_kind>belief_edge>hypothesis_domain>motivates>action_intent"
+  },
+  "annotation_record": {
+    "required_fields": [
+      "source_id_sha256",
+      "materialized_completion_sha256",
+      "annotation_status",
+      "unknown_reason",
+      "has_chain",
+      "evidence_span",
+      "hypothesis_span",
+      "action_span",
+      "evidence_kind",
+      "belief_edge",
+      "hypothesis_domain",
+      "action_intent",
+      "novelty_status",
+      "exact_signature",
+      "annotator_id_sha256",
+      "annotator_prompt_or_model_identity_sha256",
+      "codebook_sha256"
+    ],
+    "annotation_statuses": [
+      "available",
+      "unknown"
+    ],
+    "unknown_reasons": [
+      "frozen_nonprefix_empty_assistant_rendering",
+      "completion_semantics_ambiguous",
+      "span_or_slot_adjudication_unresolved"
+    ],
+    "span_format": "utf8_character_start_end_and_exact_text_sha256",
+    "no_chain_spans_and_slots_are_null": true,
+    "unknown_record_chain_fields_are_null": true,
+    "unknown_rows_never_coerced_to_no": true,
+    "labels_physically_separate_from_activation_features": true
+  },
+  "annotation_procedure": {
+    "completion_pass": "two_independent_annotators_blind_to_activations_predictions_outcomes_and_other_annotator",
+    "prefix_novelty_pass": "separate_two_annotator_pass_after_completion_chain_slots_are_locked",
+    "adjudication": "third_blind_adjudicator_for_every_disagreement",
+    "regex_or_lexical_mining_may_prioritize_review_but_cannot_define_gold_or_negatives": true,
+    "all_materialized_stable_rows_must_receive_a_label_or_explicit_unknown_reason": true,
+    "codebook_examples_frozen_before_annotation": true,
+    "annotator_prompt_or_model_identity_hash_bound": true
+  },
+  "support_and_agreement_gate_before_fitting": {
+    "minimum_novel_positive_chains": 100,
+    "minimum_novel_positive_chains_per_repository": 5,
+    "minimum_each_belief_edge": 40,
+    "minimum_repositories_per_belief_edge": 8,
+    "minimum_exact_graph_agreement": 0.75,
+    "minimum_kappa": 0.7,
+    "fallback_if_edge_support_fails": "collapse_refutes_and_narrows_to_revises_only_if_declared_before_any_model_fit",
+    "failure_action": "do_not_fit_high_cardinality_signature_decoder"
+  },
+  "controls": {
+    "hard_negative_matching": [
+      "same_action_intent",
+      "same_repository",
+      "same_request_index_bin",
+      "similar_completion_length",
+      "broad_rationale_regex_hit_but_no_E_H_A_relation"
+    ],
+    "prefix_exposed_copy_or_restatement_control": true,
+    "full_visible_prefix_semantic_text_baseline": true,
+    "strongest_sequence_logit_j_baseline": true,
+    "strictly_nested_sequence_logit_j_plus_activation_models": true,
+    "prior_visible_chain_label_t_minus_1": true,
+    "within_repository_task_label_permutation_null": true,
+    "first_turn_exclusion_sensitivity": true,
+    "action_matched_reporting": true,
+    "projection_seed_sensitivity": [
+      0,
+      1,
+      2,
+      3
+    ]
+  },
+  "evaluation": {
+    "outer_split": "leave_one_repository_out",
+    "primary_metric": "exact_full_signature_match_with_abstention",
+    "secondary_metrics": [
+      "has_chain_nll",
+      "per_slot_nll",
+      "per_slot_macro_f1",
+      "coverage",
+      "selective_exact_match"
+    ],
+    "weights": "equal_repository_then_equal_task_then_equal_available_row",
+    "uncertainty": "repository_then_task_full_trajectory_cluster_bootstrap_with_model_refit",
+    "untouched_confirmation_required_for_reliability": true
+  },
+  "renderer": {
+    "template": "{evidence_kind} evidence {belief_edge_verb} a {hypothesis_domain} conclusion; that conclusion motivates {action_intent_gerund}.",
+    "example": "Tool or test evidence supports a source-logic conclusion; that conclusion motivates editing.",
+    "free_form_completion_reconstruction": false,
+    "private_chain_of_thought_wording_forbidden": true
+  },
+  "affective_scope": {
+    "emotion_label_included": false,
+    "subjective_confidence_doubt_or_stress_inferred": false,
+    "objective_behavioral_and_pressure_sensitivity_require_separate_randomized_protocol": true
+  },
+  "claim_scope": {
+    "target_definition_frozen": true,
+    "target_is_future_trace_visible_proposition_chain": true,
+    "target_is_not_private_chain_of_thought": true,
+    "semantic_sentence_or_chain_decoding_established_before_gate_and_evaluation": false,
+    "cot_or_cot_alike_decoding_established": false,
+    "private_chain_of_thought_decoding_established": false,
+    "affect_or_emotion_decoding_established": false,
+    "hidden_understanding_intent_or_causality_established": false,
+    "emotion_confidence_doubt_or_stress_decoded": false,
+    "operational_reliability_established": false
+  }
+}

@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "id": "swe-task-state-v4-hidden-future-identifier-surface-ranking",
+  "status": "development_only_reserved_validation_closed",
+  "inputs": {
+    "development_prompts": {
+      "path": ".cache/swe_state_interpreter_v3_development/prompts.json",
+      "sha256": "17f664b3029220458ff62b8e80a90ec5e796f0372217f02b727d6589df38d3d0",
+      "size_bytes": 803705234
+    },
+    "development_public_report": {
+      "path": ".cache/swe_state_interpreter_v3_development/replay/public-report.json",
+      "sha256": "7c943132163749f69bd35e4fa2e52bcfee2318fe349fa77603324a37ffaabe46",
+      "size_bytes": 1241239850
+    },
+    "label_free_alignment_index": {
+      "path": ".cache/swe_task_state_v4_raw_capture/n60-final/alignment-index-v4.json",
+      "sha256": "c0d9e4bd6ad8f6962cf58776441ec4ef042eebbbae8a9959b4149e605c9ae38e",
+      "size_bytes": 567392
+    },
+    "v3_protocol": {
+      "path": "configs/swe_task_state_interpreter_v3.json",
+      "sha256": "9d8b0a7d5c45dc192365429af27c6193de752cc160458eff8e21807d37662b1d",
+      "size_bytes": 26800
+    },
+    "v3_action_protocol": {
+      "path": "configs/swe_task_state_v3_action_probes.json",
+      "sha256": "0ebd258a2b46beb2a9be3d42cab24680803a2f971cb21e96acecb78e19cd81bf",
+      "size_bytes": 6364
+    }
+  },
+  "code_dependencies": [
+    {
+      "role": "frozen_v3_streaming_analyzer",
+      "path": "scripts/analyze_swe_task_state_v3.py",
+      "sha256": "53c7d41688f6c5ab21f7ad029d343af06e9b13c777fd2e5517ff8d5254ad9e6c",
+      "size_bytes": 215115
+    },
+    {
+      "role": "v4_streaming_extractor",
+      "path": "scripts/swe_task_state_v4_extract.py",
+      "sha256": "43d22531de0cb04d94bf65e5a6ac8897b340c9c34fb2213ff12bfaa662efed10",
+      "size_bytes": 16528
+    },
+    {
+      "role": "v4_visible_baseline_authentication_helpers",
+      "path": "scripts/swe_task_state_v4_visible_baselines.py",
+      "sha256": "eedf004886ab570fc6ec4fe4f70634fa0f185c8356f74bb19cbb23bf70b20600",
+      "size_bytes": 37782
+    },
+    {
+      "role": "future_target_materializer",
+      "path": "scripts/materialize_swe_behavioral_probes.py",
+      "sha256": "c63fac2907b887d973920c8fc71adf219affa1d6373a0aeb8ac2fffd59940a4e",
+      "size_bytes": 121628
+    }
+  ],
+  "source_contract": {
+    "all_boundary_count": 1708,
+    "stable_boundary_count": 1606,
+    "future_hidden_boundary_count_before_stability_filter": 61,
+    "eligible_target_boundary_instances_before_stability_filter": 77,
+    "analysis_role": "future_agent_hidden_available",
+    "target_kind": "identifier",
+    "future_support_contract": "intersection_of_agent_generated_patch_mutation_completion_and_terminal_summary_v1",
+    "benchmark_gold_used": false,
+    "lens_output_used_to_derive_targets": false,
+    "target_and_retained_foils_absent_from_complete_visible_prefix": true,
+    "retained_foil_scope": "same_task_same_identifier_kind_generated_patch_removed_or_context_identifier",
+    "completion_at_or_after_current_boundary_as_feature_forbidden": true
+  },
+  "scoring": {
+    "methods_in_order": [
+      "ordinary_logit",
+      "public_jacobian"
+    ],
+    "layers_in_order": [
+      24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35,
+      36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47
+    ],
+    "position": "final_visible_prefix_token_immediately_before_ensuing_completion",
+    "token_form_reduction": "logmeanexp_of_raw_vocabulary_scores_within_layer",
+    "layer_reduction": "arithmetic_mean_across_all_24_fixed_layers",
+    "candidate_probability": "softmax_over_target_and_all_retained_hidden_foil_identifier_surface_scores",
+    "candidate_tie_break": "lexical_candidate_id",
+    "vocabulary_size": 248320,
+    "open_vocabulary_rank_utility": "mean_over_layers_of_log(vocabulary_size/best_target_form_rank)/log(vocabulary_size)",
+    "open_vocabulary_top_k": [
+      10,
+      100,
+      1000,
+      10000
+    ]
+  },
+  "estimand": {
+    "weighting": "equal_repository_then_equal_task_then_equal_target_then_equal_boundary",
+    "candidate_metrics": [
+      "top1_accuracy",
+      "mean_reciprocal_rank",
+      "negative_log_likelihood",
+      "multiclass_brier"
+    ],
+    "open_vocabulary_metrics": [
+      "rank_utility",
+      "top_k_layer_fraction"
+    ],
+    "paired_reference": "ordinary_logit",
+    "paired_candidate": "public_jacobian"
+  },
+  "uncertainty": {
+    "status": "development_descriptive_no_refit_needed_for_fixed_readouts",
+    "algorithm": "paired_repository_then_task_cluster_bootstrap_keep_complete_target_trajectories",
+    "draw_count": 5000,
+    "seed": 20260720,
+    "confidence_level": 0.95,
+    "multiplicity_adjusted": false
+  },
+  "support_gate": {
+    "minimum_tasks": 10,
+    "minimum_repositories": 6,
+    "origin": "preexisting_future_identifier_control_support_gate",
+    "passing_support_does_not_establish_semantic_recovery": true
+  },
+  "renderer": {
+    "identifier_ranking_template": "At request {request_index}, the {method_label} fixed-vocabulary readout ranks `{candidate_text}` highest among the supplied future-derived identifier surface forms.",
+    "grouping": "repository_then_task_then_future_target_id_in_increasing_request_order",
+    "true_target_text_never_selects_or_changes_rendered_ranking": true,
+    "candidate_set_is_future_derived_and_not_available_to_an_online_open_ended_decoder": true,
+    "proposition_relation_supplied_not_decoded": true,
+    "rendered_sentence_is_fixed_wrapper_not_decoded_language": true,
+    "open_ended_sentence_generation": false
+  },
+  "forbidden_inputs": [
+    "official_outcome",
+    "benchmark_gold_patch_or_test",
+    "completion_text_as_feature",
+    "completion_at_or_after_current_boundary_as_feature",
+    "target_identity_as_numeric_feature",
+    "target_or_foil_source_kind_as_numeric_feature",
+    "repository_or_task_identity_as_numeric_feature",
+    "private_reasoning",
+    "emotion_label"
+  ],
+  "claim_scope": {
+    "target_and_retained_foil_identifier_surface_forms_absent_from_visible_prefix": true,
+    "fixed_future_derived_identifier_candidate_ranking_evaluated": true,
+    "proposition_relation_supplied_not_decoded": true,
+    "open_ended_concept_generation_established": false,
+    "sentence_level_semantic_reconstruction_established": false,
+    "semantic_concept_chain_decoded": false,
+    "cot_or_cot_like_decoded": false,
+    "private_chain_of_thought_reconstructed": false,
+    "hidden_reasoning_or_understanding_established": false,
+    "emotion_confidence_doubt_or_stress_decoded": false,
+    "causal_interpretation_established": false,
+    "operational_reliability_established": false
+  },
+  "mandatory_limitations": [
+    "The independently materialized target identifier surface form and every retained foil identifier surface form are absent from the complete JSONL-visible prefix at the scored boundary, but the fixed candidate set is derived retrospectively from the completed future agent trajectory.",
+    "This is a fixed-vocabulary multiple-choice identifier-surface ranking audit, not concept decoding, proposition decoding, open-ended sentence generation, COT or COT-like decoding, private chain-of-thought recovery, hidden reasoning, intent, or understanding.",
+    "Any proposition relation or semantic framing is supplied by the frozen future-support contract and fixed renderer; the readout only ranks supplied identifier token forms and decodes neither a proposition nor a semantic concept chain.",
+    "No emotion, felt confidence, doubt, or stress label is fitted or inferred.",
+    "Public-J is a deterministic transformation of the same residual state; comparison with ordinary logit measures representation, not access to additional hidden information.",
+    "Development-only point estimates and unadjusted clustered intervals are not untouched confirmation or operational reliability evidence."
+  ]
+}

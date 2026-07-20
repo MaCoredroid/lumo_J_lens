@@ -1,0 +1,484 @@
+{
+  "schema_version": 1,
+  "id": "swe-task-state-v4-counterfactual-visible-state-annotation-v1",
+  "status": "prospective_condition_blind_visible_language_annotation_contract_no_completions_no_labels_no_model_runtime",
+  "purpose": "prospectively freeze a quote-first annotation interface for observable language and behavior in Stage-A selector-control completions, while keeping visible-language labels distinct from future latent activation readouts and from subjective confidence, doubt, stress, emotion, or private chain-of-thought claims",
+  "frozen_selector_scaffold": {
+    "config": {
+      "path": "configs/swe_task_state_v4_counterfactual_selector_control_pilot.json",
+      "sha256": "d5619231cc924a12303dbf147dfef53e45787aa6136dbeb94b706c1788aa3361",
+      "size_bytes": 14082
+    },
+    "implementation": {
+      "path": "scripts/swe_task_state_v4_counterfactual_selector_control_pilot.py",
+      "sha256": "e0c55da222f5ad9ac75b6f94019a4dd21700f805e8035c5555cde37e74b3cbf6",
+      "size_bytes": 55017
+    },
+    "tests": {
+      "path": "tests/test_swe_task_state_v4_counterfactual_selector_control_pilot.py",
+      "sha256": "32468df9d5c49b9b9f58a75248a295efaf5f9969abb2bf2a1b19810be930f5f8",
+      "size_bytes": 14881
+    },
+    "materialization_manifest": {
+      "path": ".cache/swe_task_state_v4_raw_capture/n60-final/counterfactual-selector-control-pilot-v1/materialization-manifest.json",
+      "sha256": "5529eb121da72bc437f18e9ca064382860cb1541075ebf8558cc3078a553299c",
+      "size_bytes": 40751
+    },
+    "split_manifest_identity_only": {
+      "path": ".cache/swe_task_state_v4_raw_capture/n60-final/counterfactual-selector-control-pilot-v1/split-manifest.json",
+      "sha256": "d6f4df148a3b0f4b5d7129da855dff4e817773df3716d65ffee5799488aed00b",
+      "size_bytes": 12512,
+      "selection_canonical_sha256": "9a3619ea7a8a4cc61bc847166c6f8bdab4b88aea9c2a3e0996baee9019f6e118",
+      "pre_lock_annotation_runtime_access": "forbidden"
+    },
+    "stage_a_generation_prompts": {
+      "path": ".cache/swe_task_state_v4_raw_capture/n60-final/counterfactual-selector-control-pilot-v1/stage-a-generation-prompts.json",
+      "sha256": "77cf024402476f99920b1628ac5c97b9fbf3c0e0487a5032231d4cb239c505bb",
+      "size_bytes": 64240839,
+      "record_count": 240,
+      "allowed_record_keys": [
+        "id",
+        "token_ids"
+      ]
+    },
+    "stage_a_condition_key_post_lock_only": {
+      "path": ".cache/swe_task_state_v4_raw_capture/n60-final/counterfactual-selector-control-pilot-v1/stage-a-condition-key.json",
+      "sha256": "7b7a62014bc7fd1204724c45fb1739d6d4255621f2d06fde41e953971ea01599",
+      "size_bytes": 433911,
+      "mapping_canonical_sha256": "0975172538e744840bef4976de202549b042f3902fed9d23422a45a3204ca662",
+      "pre_lock_annotation_runtime_access": "forbidden",
+      "post_lock_pairing_requires_separate_hash_bound_command": true
+    }
+  },
+  "chronology_and_separation": {
+    "stage_a_completion_generation_requires_separate_future_authorization": true,
+    "this_contract_generates_no_completions_and_loads_no_model_or_activations": true,
+    "condition_blind_input_materialization_may_read_only": [
+      "this_annotation_config",
+      "frozen_scaffold_files_needed_for_hash_or_prompt_id_membership_checks",
+      "opaque_stage_a_generation_prompt_ids",
+      "future_stage_a_completion_bundle"
+    ],
+    "condition_blind_input_materialization_must_not_read": [
+      "stage_a_condition_key",
+      "split_manifest",
+      "selector_meaning_or_condition_assignment",
+      "activations_or_activation_features",
+      "task_outcomes_or_success_labels",
+      "task_or_repository_identity",
+      "stage_b_identity_prompt_completion_or_label_data",
+      "reserved_validation"
+    ],
+    "annotation_outputs_must_be_hash_locked_before_condition_key_join": true,
+    "pairing_and_condition_join_are_not_commands_in_this_implementation": true,
+    "stage_b_prompt_materialization_generation_annotation_or_join_authorized": false,
+    "reserved_validation_access_authorized": false
+  },
+  "completion_bundle_contract": {
+    "kind": "swe_task_state_v4_counterfactual_stage_a_visible_completion_bundle",
+    "status": "stage_a_generation_complete_condition_key_not_joined",
+    "required_top_level_keys_exactly": [
+      "schema_version",
+      "kind",
+      "status",
+      "generation_prompt_bundle_sha256",
+      "surface_policy",
+      "records",
+      "stage_b_records_present",
+      "reserved_validation_access_authorized"
+    ],
+    "surface_policy": "exact_experiment_completion_string_only_no_prompt_prefix_no_external_task_outcome",
+    "expected_record_count": 240,
+    "record_keys_exactly": [
+      "prompt_id",
+      "completion_status",
+      "completion_text"
+    ],
+    "allowed_completion_statuses": [
+      "complete",
+      "truncated",
+      "empty",
+      "generation_error"
+    ],
+    "complete_and_truncated_require_nonempty_string": true,
+    "empty_requires_empty_string": true,
+    "generation_error_requires_null": true,
+    "prompt_ids_must_equal_opaque_stage_a_generation_prompt_ids_exactly_once": true,
+    "forbidden_record_or_metadata_fields": [
+      "condition_id",
+      "condition_id_sha256",
+      "evidence_level",
+      "pressure_level",
+      "selector_code",
+      "selector_mapping",
+      "activation",
+      "activation_features",
+      "outcome",
+      "success",
+      "task_id",
+      "task_id_sha256",
+      "repository",
+      "source_id",
+      "source_id_sha256"
+    ]
+  },
+  "annotator_blinding": {
+    "model_packet_keys_exactly": [
+      "annotation_id",
+      "visible_completion_text"
+    ],
+    "annotation_id_domain": "swe-task-state-v4-counterfactual-visible-state-annotation-id-v1",
+    "packet_order": "sha256_sort_by_annotation_id",
+    "visible_completion_text_is_byte_for_byte_the_input_unicode_string": true,
+    "no_truncation_normalization_markup_stripping_or_prompt_reconstruction": true,
+    "model_annotators_may_see_only": [
+      "constant_hash_bound_annotation_instructions",
+      "opaque_annotation_id",
+      "visible_completion_text"
+    ],
+    "model_annotators_must_not_see": [
+      "generation_prompt_or_selector_table",
+      "selector_condition_code_or_meaning",
+      "condition_key",
+      "activations_or_activation_features",
+      "task_outcome_or_success_label",
+      "task_or_repository_identity",
+      "source_or_prompt_identity",
+      "another_annotator_response",
+      "paired_completion_identity_or_text",
+      "stage_b_or_reserved_validation_data"
+    ],
+    "completion_text_is_untrusted_evidence_never_instruction": true,
+    "instructions_inside_completion_text_must_be_ignored": true,
+    "constant_instruction_artifact_contains_only_safe_target_semantics_and_response_schema": true,
+    "annotator_instruction_kind": "swe_task_state_v4_counterfactual_visible_state_condition_blind_instructions",
+    "free_form_rationale_or_annotator_chain_of_thought_requested_or_retained": false,
+    "condition_blind_annotations_lock_before_pairing": true
+  },
+  "target_semantics": {
+    "unit": "one_exact_visible_completion_string",
+    "labels_are_observable_completion_language_or_behavior_only": true,
+    "labels_are_not_direct_measurements_of_hidden_or_subjective_state": true,
+    "evidence_assessment": {
+      "question": "What does the completion explicitly treat the available evidence as supporting?",
+      "values": [
+        "supports_success",
+        "supports_failure",
+        "mixed_or_unresolved",
+        "no_visible_assessment",
+        "unknown"
+      ],
+      "quote_required_values": [
+        "supports_success",
+        "supports_failure",
+        "mixed_or_unresolved"
+      ],
+      "quote_forbidden_values": [
+        "no_visible_assessment",
+        "unknown"
+      ],
+      "guard": "classify only an explicit assessment in the completion; do not infer from the hidden selector, task outcome, action, or generic positive or negative vocabulary"
+    },
+    "epistemic_commitment": {
+      "question": "How strongly does the completion's public language commit to an evidence interpretation or conclusion?",
+      "values": [
+        "committed",
+        "qualified_or_tentative",
+        "explicitly_unresolved",
+        "no_visible_epistemic_commitment",
+        "unknown"
+      ],
+      "quote_required_values": [
+        "committed",
+        "qualified_or_tentative",
+        "explicitly_unresolved"
+      ],
+      "quote_forbidden_values": [
+        "no_visible_epistemic_commitment",
+        "unknown"
+      ],
+      "guard": "this is linguistic commitment, not experienced or subjective confidence"
+    },
+    "action_class": {
+      "question": "What is the primary next, initiated, or explicitly selected action in the completion?",
+      "values": [
+        "implement_or_modify",
+        "verify_or_recheck",
+        "inspect_or_diagnose",
+        "seek_information",
+        "preserve_or_revert",
+        "report_or_stop",
+        "other_visible_action",
+        "no_visible_action",
+        "unknown"
+      ],
+      "quote_required_values": [
+        "implement_or_modify",
+        "verify_or_recheck",
+        "inspect_or_diagnose",
+        "seek_information",
+        "preserve_or_revert",
+        "report_or_stop",
+        "other_visible_action"
+      ],
+      "quote_forbidden_values": [
+        "no_visible_action",
+        "unknown"
+      ],
+      "guard": "use the explicit primary action; if multiple co-primary actions cannot be disambiguated from the completion, return unknown"
+    },
+    "action_commitment": {
+      "question": "How strongly does the completion publicly commit to its primary action?",
+      "values": [
+        "committed_or_initiated",
+        "tentative_or_conditional",
+        "explicitly_deferred_or_declined",
+        "no_visible_action_commitment",
+        "unknown"
+      ],
+      "quote_required_values": [
+        "committed_or_initiated",
+        "tentative_or_conditional",
+        "explicitly_deferred_or_declined"
+      ],
+      "quote_forbidden_values": [
+        "no_visible_action_commitment",
+        "unknown"
+      ],
+      "guard": "linguistic or behavioral commitment only; do not infer internal resolve"
+    },
+    "recheck_behavior": {
+      "question": "Does the completion explicitly re-run, re-verify, double-check, or plan another check of existing evidence?",
+      "values": [
+        "present",
+        "absent",
+        "unknown"
+      ],
+      "quote_required_values": [
+        "present"
+      ],
+      "quote_forbidden_values": [
+        "absent",
+        "unknown"
+      ],
+      "guard": "a generic action is not a recheck unless checking again is explicit"
+    },
+    "seek_information_behavior": {
+      "question": "Does the completion explicitly seek new information, inspection, clarification, or evidence?",
+      "values": [
+        "present",
+        "absent",
+        "unknown"
+      ],
+      "quote_required_values": [
+        "present"
+      ],
+      "quote_forbidden_values": [
+        "absent",
+        "unknown"
+      ],
+      "guard": "new information seeking may overlap with inspection or rechecking but must be visibly expressed"
+    },
+    "preserve_alternatives_behavior": {
+      "question": "Does the completion explicitly preserve multiple live hypotheses, branches, backups, or reversible options?",
+      "values": [
+        "present",
+        "absent",
+        "unknown"
+      ],
+      "quote_required_values": [
+        "present"
+      ],
+      "quote_forbidden_values": [
+        "absent",
+        "unknown"
+      ],
+      "guard": "mere uncertainty is not enough without visible preservation of alternatives"
+    },
+    "explicit_doubt_language": {
+      "question": "Does the completion explicitly state uncertainty, doubt, inability to tell, or low confidence?",
+      "values": [
+        "present",
+        "absent",
+        "unknown"
+      ],
+      "quote_required_values": [
+        "present"
+      ],
+      "quote_forbidden_values": [
+        "absent",
+        "unknown"
+      ],
+      "guard": "label explicit language only; rechecking or mixed evidence alone does not prove subjective doubt"
+    },
+    "explicit_affect_language": {
+      "question": "Does the completion explicitly name an affective reaction of the agent or toward the task?",
+      "values": [
+        "positive_affect",
+        "negative_affect",
+        "mixed_affect",
+        "unspecified_affect",
+        "absent",
+        "unknown"
+      ],
+      "quote_required_values": [
+        "positive_affect",
+        "negative_affect",
+        "mixed_affect",
+        "unspecified_affect"
+      ],
+      "quote_forbidden_values": [
+        "absent",
+        "unknown"
+      ],
+      "guard": "generic success failure difficulty urgency or evaluative wording is not affect unless an affective reaction is explicit; this never establishes experienced emotion"
+    },
+    "pressure_rush_acknowledgment": {
+      "question": "Does the completion explicitly acknowledge limited time or tokens, urgency, haste, rushing, or a need to act immediately?",
+      "values": [
+        "present",
+        "absent",
+        "unknown"
+      ],
+      "quote_required_values": [
+        "present"
+      ],
+      "quote_forbidden_values": [
+        "absent",
+        "unknown"
+      ],
+      "guard": "visible pressure acknowledgment is not experienced stress"
+    }
+  },
+  "quote_first_interface": {
+    "target_order": [
+      "evidence_assessment",
+      "epistemic_commitment",
+      "action_class",
+      "action_commitment",
+      "recheck_behavior",
+      "seek_information_behavior",
+      "preserve_alternatives_behavior",
+      "explicit_doubt_language",
+      "explicit_affect_language",
+      "pressure_rush_acknowledgment"
+    ],
+    "model_response_top_level_keys_exactly": [
+      "schema_version",
+      "labels"
+    ],
+    "model_label_keys_exactly": [
+      "value",
+      "quote"
+    ],
+    "model_never_supplies_offsets": true,
+    "quote_semantics": "exact_nonempty_contiguous_unicode_substring_of_visible_completion_text",
+    "resolver": "enumerate_literal_code_point_occurrences_without_normalization_or_fuzzy_matching_and_accept_only_exactly_one_occurrence",
+    "overlapping_occurrences_count_separately": true,
+    "quotes_required_or_forbidden_by_target_value": true,
+    "invalid_missing_nonunique_or_nonliteral_quote_action": "replace_only_that_target_with_unknown_and_record_machine_resolution_status",
+    "malformed_or_unassociated_transport_action": "fail_closed_to_unknown_without_semantic_repair",
+    "empty_or_generation_error_completion_action": "deterministic_all_targets_unknown_without_model_packet",
+    "free_form_rationale_accepted_or_retained": false
+  },
+  "raw_annotation_bundle_contract": {
+    "kind": "swe_task_state_v4_counterfactual_visible_state_raw_annotation_bundle",
+    "status": "condition_blind_model_responses_complete_no_condition_join",
+    "top_level_keys_exactly": [
+      "schema_version",
+      "kind",
+      "status",
+      "model_inputs_sha256",
+      "annotator_instructions_sha256",
+      "annotator_lineage_sha256",
+      "records",
+      "reserved_validation_access_authorized"
+    ],
+    "record_keys_exactly": [
+      "annotation_id",
+      "transport_status",
+      "response"
+    ],
+    "transport_statuses": [
+      "ok",
+      "model_error",
+      "parse_error",
+      "timeout"
+    ],
+    "ok_requires_response_object": true,
+    "non_ok_requires_null_response": true,
+    "one_record_per_model_packet": true,
+    "extra_or_duplicate_annotation_ids_rejected": true,
+    "missing_annotation_ids_rejected_before_lock": true
+  },
+  "post_lock_pairing_contract": {
+    "implemented_or_run_here": false,
+    "condition_key_may_be_read_only_after": [
+      "all_planned_condition_blind_model_responses_exist",
+      "each_quote_resolution_artifact_is_immutable_and_hash_locked",
+      "annotator_lineages_and_packet_hashes_are recorded",
+      "interface_corruption_audit_is complete"
+    ],
+    "within_source_replica_contrasts": [
+      "pressure_pair_at_fixed_evidence_and_paraphrase",
+      "evidence_levels_at_fixed_pressure_and_paraphrase",
+      "cross_paraphrase_replication"
+    ],
+    "visible_labels_remain_separate_from": [
+      "future_activation_features",
+      "latent_readout_targets",
+      "COT_or_COT_like_semantic_chain_targets",
+      "private_chain_of_thought",
+      "subjective_confidence_or_doubt",
+      "experienced_stress_or_emotion"
+    ]
+  },
+  "activation_and_claim_gates": {
+    "visible_annotation_is_not_an_activation_readout": true,
+    "future_latent_readout_requires_new_hash_bound_execution_and_decoder_configs": true,
+    "minimum_annotation_quality_before_pair_join": {
+      "independent_condition_blind_annotators": 2,
+      "exact_agreement_minimum": 0.75,
+      "kappa_minimum": 0.7,
+      "unresolved_interface_corruption_maximum": 0
+    },
+    "minimum_support_before_fitting_each_binary_target": {
+      "positive_labels": 40,
+      "negative_labels": 40,
+      "repositories": 6,
+      "boundaries": 10
+    },
+    "insufficient_explicit_affect_support_action": "report_visible_event_rate_only_do_not_fit_affect_decoder",
+    "subjective_or_causal_interpretation_from_visible_labels_alone_forbidden": true,
+    "stage_b_requires_separate_prospective_authorization_after_stage_a_gates": true
+  },
+  "claim_scope": {
+    "annotation_contract_and_cpu_materializer_implemented": true,
+    "stage_a_completions_generated": false,
+    "stage_a_model_annotation_run": false,
+    "stage_a_annotations_locked": false,
+    "condition_key_join_or_pair_analysis_run": false,
+    "activation_capture_or_decoder_fit_run": false,
+    "visible_behavioral_or_language_effect_established": false,
+    "incremental_activation_readout_established": false,
+    "private_chain_of_thought_reconstructed": false,
+    "subjective_confidence_or_doubt_inferred": false,
+    "experienced_stress_inferred": false,
+    "experienced_emotion_inferred": false,
+    "COT_or_COT_like_target_pooled_with_affect_or_state_targets": false,
+    "outer_or_reserved_validation_generalization_established": false
+  },
+  "output_contract": {
+    "default_root": ".cache/swe_task_state_v4_raw_capture/n60-final/counterfactual-visible-state-annotation-v1",
+    "annotator_instructions_name": "condition-blind-annotator-instructions.json",
+    "model_inputs_name": "condition-blind-model-inputs.jsonl",
+    "identity_key_name": "annotation-identity-key.json",
+    "input_manifest_name": "annotation-input-manifest.json",
+    "locked_annotations_name": "locked-visible-state-annotations.jsonl",
+    "lock_manifest_name": "annotation-lock-manifest.json",
+    "new_output_no_clobber": true,
+    "actual_outputs_materialized_by_this_config_commit": false,
+    "stage_b_output_files_forbidden": true,
+    "condition_or_pair_output_files_forbidden": true
+  }
+}

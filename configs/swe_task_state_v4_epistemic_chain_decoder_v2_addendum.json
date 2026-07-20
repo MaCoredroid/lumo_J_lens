@@ -1,0 +1,335 @@
+{
+  "schema_version": 1,
+  "kind": "swe_task_state_v4_epistemic_chain_decoder_v2_addendum",
+  "id": "swe-task-state-v4-visible-semantic-chain-decoder-v2-addendum",
+  "status": "prospective_development_addendum_frozen_before_v2_control_or_real_pilot_outcomes_target_annotations_or_model_fit",
+  "scope": {
+    "development_data_only": true,
+    "reserved_validation_closed": true,
+    "reserved_validation_accessed": false,
+    "v2_control_outcomes_available_when_frozen": false,
+    "v2_real_pilot_outcomes_available_when_frozen": false,
+    "v2_target_annotations_available_when_frozen": false,
+    "v2_target_results_observed_when_frozen": false,
+    "model_fit_performed_under_this_addendum_when_frozen": false,
+    "target_annotation_run_authorized_when_frozen": false
+  },
+  "frozen_lineage": {
+    "base_decoder_config": {
+      "path": "configs/swe_task_state_v4_epistemic_chain_decoder.json",
+      "sha256": "2c9a4c16a36ef96c9db32e231aa337947a099f21bb791b2411c261f631d087a1"
+    },
+    "base_decoder_script": {
+      "path": "scripts/swe_task_state_v4_epistemic_chain_decoder.py",
+      "sha256": "970fa58e1ffb6d65c3d6a025cbaf8437aa0b93ee18305f946a3b6af7bb80b619"
+    },
+    "v2_annotation_codebook": {
+      "path": "configs/swe_task_state_v4_epistemic_chain_codebook_v2.json",
+      "sha256": "2105a50c7bc13a064ca75c4a69aad631869fbbb2c17c94970eeaa92722aff85c"
+    },
+    "v1_pilot_failure_report": {
+      "path": ".cache/swe_task_state_v4_raw_capture/n60-final/epistemic-chain-quality-audit-v5-final-report.json",
+      "sha256": "d7488092850a19af43f5efa7f7d2c4e38abec02fba45e0b8548c902907d80be6"
+    },
+    "v1_outputs_are_historical_non_gold_and_must_not_be_reinterpreted": true,
+    "v2_codebook_is_the_only_semantic_label_codebook_for_new_v2_rows": true
+  },
+  "composition_contract": {
+    "operator": "logical_conjunction_of_authenticated_base_decoder_and_this_addendum",
+    "base_config_and_script_bytes_must_remain_exact": true,
+    "base_decoder_source_or_config_mutation_authorized": false,
+    "addendum_is_not_a_json_patch_and_contains_no_replacement_model_values": true,
+    "base_split_weighting_feature_model_hyperparameter_calibration_inference_uncertainty_metric_and_claim_gates_remain_active": true,
+    "base_requirements_are_floors_and_may_not_be_weakened": true,
+    "explicit_additive_strengthenings_only": [
+      "v2_quote_first_semantic_annotation_evidence",
+      "family_diverse_pre_target_control_and_real_pilot_gate",
+      "marker_present_and_marker_absent_stratified_nested_diagnostics",
+      "marker_free_semantic_claim_gate",
+      "additional_claim_prohibitions"
+    ],
+    "v2_annotation_successor_rule": {
+      "base_v1_codebook_binding_retained_as_historical_lineage_only": true,
+      "new_v2_target_rows_must_use_only_the_bound_v2_codebook": true,
+      "mixing_v1_and_v2_labels_in_one_fit_or_report_forbidden": true,
+      "v2_quotes_must_be_deterministically_projected_to_the_existing_base_span_and_slot_target_schema": true,
+      "all_base_annotation_independence_adjudication_support_and_agreement_requirements_remain_floors": true
+    },
+    "unchanged_base_sections_canonical_sha256": {
+      "path_guard": "f6919ccc780bafa77c10f4cd63d392cf26ef4e1bbfce9e87d7bb5f7efc89fa8b",
+      "annotation_evidence_contract": "643688a55f4628f1a48f33566265b3d67e94ac94289618d0e7d575079f6e51a1",
+      "ontology": "a03791212066055277c6d27435f5242bdd8de0099387fcfff34b2f1f5af9adfd",
+      "target_projection": "f42716d5dbfa17137cfa6787288a72d9fcfd28893c1cd0918ced8eb4db51efb2",
+      "support_and_agreement_gate": "b8363e8c4ac58be4e251f44416846d39eabe7b3e30e643af7bfa87f2e03c1e45",
+      "full_prefix_semantic_baseline": "44d7973fa65bb311ea8980dd8e2c626b601e675bd2cb1e96f568f1e80fbb6ec0",
+      "frozen_proposition_embedding_model": "86d5eb0552f9c949d7d9b6906ed60d8634dbb00df6a1f6ba64140c3c24ad9ad2",
+      "proposition_content_lane": "eee5169e2e0fe4694e7ebfebfa9fa159593e78cd0e5c2ac20c5b9c3deec1e21b",
+      "causal_prior_chain_control": "589f35a304160fbc06d9061544d3d98cb2fb4061aad1635d94ea255fc9acb832",
+      "numeric_feature_blocks": "498e46c8b6502ad5e68ff00ee2f8c06053db6c7e38141dd1152a13b4a217ad10",
+      "variants": "95936db66a49e9a60386c494c359d4666debc0c2f056415e0ad7a15362fd1a95",
+      "nested_comparisons": "0b967bbf8bd6b66fdbd809d66ff86f8877a8a5bd77bd1e96c646658a74d4518e",
+      "split_and_weighting": "66430e74ba3bba700b35be885441af34dce7ece586966d652d39d0b799dc3a30",
+      "model": "dcba958015635de0c11131366b738cf99d7939434a0d656f8d1c1737bf0535ea",
+      "nested_calibration_and_abstention": "3319d4cecb68eab428faff143f8b1703d68269185a1ae81ddd892ad8777e9b28",
+      "metrics": "e3bebd65094ba29f1001a2af84a40c15b8fcf2a8f230f3682841dada7ccc3db6",
+      "full_refit_uncertainty": "b348f18dfc538de88f1f21362eb49660c495121d5c9062adbee7e1895704016f",
+      "controls_and_sensitivities": "018b0cdf5c3a3ce5585e1f81564f98a81e258a6ed6fd929c0d830d2c10a1c064",
+      "renderer": "4327ef9289f7409122f52f008d31016f24d5dd86097d238981d0bd315ffc3300",
+      "claim_scope": "b37576db4210ff20299d4e3fa68f6b7a5152d9b65128b7f3052bd056fc957487",
+      "mandatory_limitations": "d07e42d2764fcfdf27b9dc21e489169861426163853b6fa74e7d73b9a9b0b228"
+    }
+  },
+  "semantic_target_contract": {
+    "target": "visible_future_semantic_epistemic_action_chain_E_to_H_to_A",
+    "semantic_marker_free_target": true,
+    "positive_requires_visible_meaning_of_E_to_support_refute_or_narrow_distinct_H_and_visible_meaning_of_H_to_motivate_specific_A": true,
+    "named_relation_or_action_link_word_required": false,
+    "marker_absence_does_not_make_a_semantic_positive_negative_or_unknown": true,
+    "marker_presence_does_not_make_a_semantic_negative_positive": true,
+    "lexical_marker_decoys_must_remain_negative": true,
+    "target_is_visible_future_cot_like_structure_not_private_internal_chain_of_thought": true,
+    "coarse_slots_alone_are_not_sentence_or_concept_content_recovery": true,
+    "proposition_content_evidence_remains_required_for_any_sentence_or_cot_like_content_claim": true
+  },
+  "quote_first_annotation_contract": {
+    "model_emits_literal_E_H_A_quotes_and_never_numeric_offsets": true,
+    "literal_unicode_matching_without_normalization_fuzzing_or_repair": true,
+    "all_literal_occurrences_enumerated": true,
+    "materialize_offsets_only_for_exactly_one_nonoverlapping_E_before_H_before_A_tuple": true,
+    "raw_semantic_decision_preserved_separately_from_materialization": true,
+    "materialization_statuses": {
+      "resolved_chain": "valid_semantic_chain_and_exactly_one_valid_ordered_quote_tuple_projects_to_available_has_chain_true",
+      "not_applicable_no_chain": "valid_model_no_chain_projects_to_available_has_chain_false_without_spans",
+      "deterministic_no_chain_empty_visible_prose": "empty_visible_prose_projects_to_available_has_chain_false_without_model_generation",
+      "not_applicable_semantic_unknown": "valid_semantic_abstention_projects_to_semantic_unknown",
+      "interface_unknown": "invalid_output_or_zero_or_multiple_valid_ordered_quote_tuples_projects_to_interface_unknown"
+    },
+    "interface_unknown_reasons": [
+      "invalid_structured_output",
+      "invalid_semantic_proposal_interface",
+      "missing_exact_quote",
+      "no_valid_ordered_quote_tuple",
+      "ambiguous_ordered_quote_tuple"
+    ],
+    "semantic_unknown_and_interface_unknown_reported_separately": true,
+    "any_unknown_never_coerced_to_no_chain": true,
+    "unresolved_or_ambiguous_quote_tuple_never_repaired_or_used_as_gold": true
+  },
+  "family_diverse_readiness_gate": {
+    "status_when_frozen": "not_run_no_passing_receipts",
+    "target_annotation_run_forbidden_until_gate_passes": true,
+    "any_decoder_model_fit_forbidden_until_gate_passes": true,
+    "gate_receipt_must_be_locked_before_target_packet_selection_or_generation": true,
+    "decision_roles": [
+      "independent_a",
+      "independent_b",
+      "adjudicator"
+    ],
+    "model_family_identity": {
+      "all_three_base_model_lineages_must_be_pairwise_distinct": true,
+      "different_checkpoint_size_revision_quantization_or_alias_within_one_base_lineage_is_not_family_diversity": true,
+      "quality_auditor_or_codex_review_is_not_a_substitute_for_a_passing_decision_role": true
+    },
+    "sealed_control_counts": {
+      "completion": 32,
+      "novelty": 8,
+      "adjudication": 12
+    },
+    "role_control_requirements": {
+      "independent_a": {
+        "completion": 32,
+        "novelty": 8
+      },
+      "independent_b": {
+        "completion": 32,
+        "novelty": 8
+      },
+      "adjudicator": {
+        "adjudication": 12
+      }
+    },
+    "sealed_control_protocol": {
+      "teaching_examples_forbidden_as_acceptance_controls": true,
+      "model_inputs_and_expectations_physically_separate": true,
+      "expectations_joined_only_after_every_role_output_is_locked": true,
+      "exact_production_codebook_prompt_schema_model_and_generation_path_required": true,
+      "both_primaries_must_independently_pass_every_assigned_control": true,
+      "adjudicator_must_pass_every_assigned_control_including_candidate_1_candidate_2_and_neither_correct_cases": true,
+      "unambiguous_category_accuracy": 1.0,
+      "unambiguous_positive_exact_graph_accuracy": 1.0,
+      "unique_ordered_tuple_materialization_accuracy": 1.0,
+      "ambiguous_tuple_rejection_accuracy": 1.0,
+      "lexical_marker_pair_invariance": 1.0,
+      "invalid_structured_output_rate": 0.0,
+      "passing_controls_establishes_annotation_interface_readiness_only": true
+    },
+    "real_development_pilot": {
+      "row_count_minimum_inclusive": 32,
+      "row_count_maximum_inclusive": 64,
+      "rows_are_real_authenticated_development_packets_not_teaching_or_control_rows": true,
+      "packet_ids_and_selection_locked_before_any_pilot_annotation": true,
+      "repository_task_and_trajectory_coverage_report_required": true,
+      "same_exact_production_fingerprint_as_controls_and_future_target_run_required": true,
+      "primaries_remain_independent_and_blind_until_both_lanes_are_locked": true,
+      "adjudicator_blindly_resolves_every_primary_disagreement": true,
+      "completion_has_chain_cohen_kappa_must_be_defined_finite_and_non_degenerate": true,
+      "minimum_completion_has_chain_cohen_kappa": 0.7,
+      "minimum_completion_exact_graph_agreement": 0.75,
+      "both_available_binary_classes_required_in_each_primary_and_jointly_available_rows": true,
+      "minimum_available_chain_positive_rows_per_primary": 4,
+      "minimum_adjudicated_available_chain_positive_rows": 4,
+      "novelty_cohen_kappa_must_be_defined_finite_and_non_degenerate": true,
+      "minimum_novelty_cohen_kappa": 0.7,
+      "minimum_novelty_exact_agreement": 0.75,
+      "novel_and_prefix_exposed_classes_required_in_each_novelty_lane_and_jointly_available_rows": true,
+      "minimum_adjudicated_novel_positive_rows": 2,
+      "minimum_adjudicated_prefix_exposed_positive_rows": 2,
+      "unknown_rate_denominator": "all_selected_rows_for_completion_and_all_locked_positive_rows_for_novelty",
+      "unknown_rate_numerator": "semantic_unknown_plus_interface_unknown",
+      "maximum_each_primary_completion_unknown_rate": 0.1,
+      "maximum_adjudicated_final_completion_unknown_rate": 0.1,
+      "maximum_each_novelty_lane_unknown_rate": 0.1,
+      "unknowns_never_removed_from_rate_denominators_or_coerced_to_a_class": true,
+      "pilot_passing_establishes_roster_and_interface_adequacy_only": true
+    },
+    "pass_is_conjunction_of": [
+      "three_pairwise_distinct_base_model_lineages_authenticated",
+      "independent_a_completion_and_novelty_controls_passed",
+      "independent_b_completion_and_novelty_controls_passed",
+      "adjudicator_controls_passed",
+      "real_development_pilot_row_count_and_blinding_passed",
+      "real_development_pilot_defined_completion_and_novelty_kappa_agreement_positive_and_unknown_rate_gates_passed"
+    ],
+    "failed_or_missing_component_action": "keep_target_annotation_and_all_decoder_fits_forbidden"
+  },
+  "gate_invalidation_contract": {
+    "fingerprint_must_bind": [
+      "v2_codebook_file_sha256",
+      "all_system_user_and_adjudication_prompt_bytes",
+      "structured_output_schema_and_quote_materializer_bytes",
+      "chat_template_and_template_kwargs",
+      "each_role_base_model_lineage_repo_revision_snapshot_quantization_and_dtype",
+      "each_role_generation_and_output_extraction_settings",
+      "sealed_control_input_and_expectation_hashes",
+      "real_pilot_selection_hash"
+    ],
+    "any_codebook_change_resets_controls_and_real_pilot_gate": true,
+    "any_prompt_or_schema_change_resets_controls_and_real_pilot_gate": true,
+    "any_role_model_family_checkpoint_revision_quantization_or_dtype_change_resets_controls_and_real_pilot_gate": true,
+    "any_generation_or_output_extraction_change_resets_controls_and_real_pilot_gate": true,
+    "any_control_content_or_expectation_change_resets_controls_gate": true,
+    "stale_or_partial_receipts_may_not_authorize_target_run": true
+  },
+  "lexical_marker_diagnostics": {
+    "relation_marker_present": "exact_boolean_observation_on_an_adjudicated_resolved_positive_selected_E_H_quote_pair",
+    "action_marker_present": "exact_boolean_observation_on_an_adjudicated_resolved_positive_selected_H_A_quote_pair",
+    "diagnostic_only_never_semantic_target_or_gold": true,
+    "never_a_numeric_feature_training_label_calibration_label_or_selection_criterion": true,
+    "false_means_literal_marker_absent_inside_selected_quotes_not_semantic_relation_absent": true,
+    "no_chain_semantic_unknown_interface_unknown_and_unresolved_rows_are_not_applicable_never_marker_absent": true,
+    "marker_flags_locked_with_final_adjudicated_graph_before_predictions_are_opened": true
+  },
+  "marker_stratified_nested_comparisons": {
+    "purpose": "test_whether_any_incremental_semantic_signal_survives_without_explicit_relation_or_action_link_words",
+    "model_fits_predictions_splits_weights_and_hyperparameters": "unchanged_base_out_of_fold_pipeline",
+    "candidate_reference_pairs": [
+      {
+        "candidate": "strong_visible_reference_plus_raw_activation_current",
+        "reference": "strong_visible_reference",
+        "candidate_only_component": "raw_activation_current"
+      },
+      {
+        "candidate": "strong_visible_reference_plus_public_j_activation_current",
+        "reference": "strong_visible_reference",
+        "candidate_only_component": "public_j_activation_current"
+      }
+    ],
+    "eligible_rows": "the_inherited_metric_eligible_resolved_positive_rows_with_both_final_marker_flags_available",
+    "exact_strata": [
+      {
+        "id": "relation_marker_absent",
+        "predicate": "relation_marker_present==false"
+      },
+      {
+        "id": "relation_marker_present",
+        "predicate": "relation_marker_present==true"
+      },
+      {
+        "id": "action_marker_absent",
+        "predicate": "action_marker_present==false"
+      },
+      {
+        "id": "action_marker_present",
+        "predicate": "action_marker_present==true"
+      },
+      {
+        "id": "joint_relation_absent_action_absent",
+        "predicate": "relation_marker_present==false_and_action_marker_present==false"
+      },
+      {
+        "id": "joint_relation_absent_action_present",
+        "predicate": "relation_marker_present==false_and_action_marker_present==true"
+      },
+      {
+        "id": "joint_relation_present_action_absent",
+        "predicate": "relation_marker_present==true_and_action_marker_present==false"
+      },
+      {
+        "id": "joint_relation_present_action_present",
+        "predicate": "relation_marker_present==true_and_action_marker_present==true"
+      }
+    ],
+    "required_predictive_metrics_when_defined": [
+      "factorized_full_signature_nll",
+      "true_H_cosine",
+      "training_only_retrieved_H_to_true_H_cosine"
+    ],
+    "same_exact_rows_folds_weights_targets_predictions_and_paired_refit_draws_within_each_candidate_reference_stratum": true,
+    "report_per_stratum_rows_tasks_repositories_marker_counts_point_metrics_paired_deltas_and_intervals": true,
+    "minimum_estimable_stratum_support": {
+      "rows": 20,
+      "tasks": 10,
+      "repositories": 5
+    },
+    "insufficient_support_status": "not_estimated_insufficient_stratum_support",
+    "insufficient_or_unknown_rows_may_not_be_dropped_pooled_reassigned_or_called_marker_absent": true,
+    "stratified_inferential_family": {
+      "candidate_count": 2,
+      "required_metric_count": 3,
+      "stratum_count": 8,
+      "family_size": 48,
+      "draw_count": 1000,
+      "interval_level": 0.95,
+      "multiplicity_method": "bonferroni_equal_tailed_percentile",
+      "adjusted_lower_quantile": 0.0005208333333333333,
+      "adjusted_upper_quantile": 0.9994791666666667
+    },
+    "marker_free_semantic_claim_requires": [
+      "one_same_predeclared_candidate_passes_every_inherited_overall_predictive_claim_gate",
+      "joint_relation_absent_action_absent_stratum_is_estimable",
+      "the_same_candidate_has_strictly_positive_point_improvement_for_all_three_required_metrics_in_the_joint_absent_stratum",
+      "the_same_candidate_has_strictly_positive_multiplicity_adjusted_paired_interval_lower_bounds_for_all_three_required_metrics_in_the_joint_absent_stratum",
+      "all_inherited_absolute_semantic_quality_floors_and_content_proposition_requirements_pass"
+    ],
+    "marker_present_performance_alone_never_supports_a_marker_free_semantic_claim": true
+  },
+  "content_proposition_lane_inheritance": {
+    "mode": "exact_unchanged_inheritance",
+    "base_section": "proposition_content_lane",
+    "canonical_sha256": "eee5169e2e0fe4694e7ebfebfa9fa159593e78cd0e5c2ac20c5b9c3deec1e21b",
+    "target_regressor_retrieval_abstention_metrics_quality_floors_and_claim_gate_unchanged": true,
+    "quote_first_materialized_exact_H_and_optional_E_A_spans_feed_the_existing_target_sidecar_contract_only_after_readiness_gate": true,
+    "lexical_marker_flags_never_enter_proposition_embeddings_or_features": true
+  },
+  "claim_boundary": {
+    "visible_future_semantic_cot_like_chain_is_the_only_new_target": true,
+    "private_or_hidden_chain_of_thought_recovery_claim_forbidden": true,
+    "literal_heldout_sentence_reconstruction_claim_forbidden": true,
+    "emotion_affect_confidence_doubt_stress_or_subjective_state_claim_forbidden": true,
+    "causal_understanding_intent_or_conscious_experience_claim_forbidden": true,
+    "operational_reliability_claim_forbidden_without_separate_untouched_confirmation": true,
+    "development_controls_or_pilot_success_is_not_decoder_success": true,
+    "annotation_completion_or_model_evaluation_without_nested_predictive_gate_success_is_not_decoder_success": true,
+    "visible_lexical_marker_detection_is_not_semantic_chain_decoding": true
+  }
+}

@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "protocol_id": "swe-task-state-v4-reasoning-trace-v1",
+  "status": "design_only_transport_unconfirmed",
+  "claim_scope": {
+    "kind": "observable_activation_and_trajectory_proxy",
+    "private_chain_of_thought_reconstructed": false,
+    "subjective_emotion_inferred": false,
+    "task_specific_intent_inferred": false,
+    "task_text_used_as_readout_feature": false,
+    "current_or_future_action_label_used": false,
+    "task_outcome_used": false,
+    "rationale_generation": "deterministic_template_from_emitted_numeric_fields"
+  },
+  "causal_cutoff": "final_prompt_boundary_before_current_action",
+  "action_classes_in_order": [
+    "inspect",
+    "edit",
+    "check_or_finish"
+  ],
+  "phase_mapping": {
+    "inspect": "information_gathering",
+    "edit": "implementation",
+    "check_or_finish": "verification_or_completion"
+  },
+  "trace_events": [
+    "phase_observation",
+    "phase_continuation",
+    "inspection_to_implementation",
+    "implementation_to_verification_or_completion",
+    "reconsideration_or_rework_like",
+    "phase_transition",
+    "uncertain_transition",
+    "recovery_like"
+  ],
+  "prediction_input_allowlist": [
+    "row_id",
+    "task_id",
+    "task_request_index",
+    "forecast_probabilities_q",
+    "decision_probabilities_d",
+    "accepted"
+  ],
+  "prediction_consistency_fields": [
+    "forecast_top_class",
+    "forecast_top_confidence",
+    "predicted_class",
+    "decision_confidence_from_q"
+  ],
+  "optional_diagnostic_allowlist": [
+    "sequence_logit_probabilities",
+    "sequence_j_probabilities"
+  ],
+  "forbidden_inference_fields": [
+    "source_action_class_id",
+    "label",
+    "label_status",
+    "metric_evaluable",
+    "auxiliary_diagnostics",
+    "reasoning",
+    "reasoning_content",
+    "current_completion",
+    "current_tool_result",
+    "current_usage",
+    "finish_reason",
+    "official_outcome",
+    "later_actions",
+    "task_text"
+  ],
+  "proxy_formulas": {
+    "decision_confidence": "q[argmax(d)]",
+    "forecast_doubt": "1-decision_confidence",
+    "diffuse_uncertainty": "entropy(q)/log(3)",
+    "ambivalence": "1-(q_top1-q_top2)/(q_top1+q_top2)",
+    "forecast_volatility": "JSD(q_t,q_previous)/log(2)",
+    "source_disagreement": "JSD(p_sequence_logit,p_sequence_j)/log(2)",
+    "activation_load_raw": "mean(diffuse_uncertainty,forecast_volatility,source_disagreement,ordinary_activation_innovation,public_jacobian_activation_innovation)",
+    "activation_load_percentile": "training_ECDF(activation_load_raw)"
+  },
+  "thresholds": {
+    "uncertainty_band_edges": [
+      0.3333333333333333,
+      0.6666666666666666
+    ],
+    "trend_minimum_absolute_delta": 0.05,
+    "high_friction_percentile_inclusive": 0.75,
+    "recovery_low_percentile_inclusive": 0.4,
+    "recovery_confidence_rise_minimum": 0.15
+  },
+  "authenticated_design_artifact": {
+    "path": ".cache/swe_state_interpreter_v4_design/v3-n60-geometric-a020-shared-action-contract-closed.json",
+    "sha256": "e1436a9c7fe763a4fab6ae505af17395a4290faefd0734b230d22127bff0cf8c",
+    "artifact_id": "swe-task-state-interpreter-v4-v3-n60-design-screen-v2",
+    "primary_procedure": "j_forecast_geometric_pool_logit_policy",
+    "source_diagnostic_procedures": {
+      "sequence_logit_probabilities": "sequence_logit",
+      "sequence_j_probabilities": "sequence_j"
+    },
+    "accepted_and_calibration_identity": "authenticated_by_exact_whole_artifact_sha256",
+    "activation_innovation_and_training_ecdf": "unavailable_until_a_separate_hash_authenticated_causal_training_artifact_exists"
+  },
+  "unfitted_behavioral_heads": {
+    "hesitation_like_probability": {
+      "target": "at_least_two_consecutive_future_noncommitment_boundaries",
+      "status": "unavailable_unfitted_causal_head"
+    },
+    "trajectory_continuation_probability": {
+      "target": "at_least_two_further_known_boundaries_before_explicit_finalize_with_censoring",
+      "status": "unavailable_unfitted_censoring_aware_head"
+    },
+    "recovery_within_2_probability": {
+      "target": "return_to_accepted_low_load_action_regime_within_two_boundaries",
+      "status": "unavailable_unfitted_causal_head"
+    }
+  },
+  "evidence_status": {
+    "forecast_calibration": "development_design_only",
+    "fresh_transport_confirmation": false,
+    "operational_reliability_claim": false,
+    "row_level_reliability_intervals": "unavailable_no_fresh_transport_confirmatory_bootstrap",
+    "reserved_validation_opened": false
+  }
+}

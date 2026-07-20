@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "id": "swe-task-state-v4-randomized-evidence-pressure-counterfactual-v1",
+  "status": "prospective_development_protocol_reserved_validation_closed_not_executed",
+  "purpose": "separate observable COT-like structure, objective confidence and doubt proxies, pressure sensitivity, and explicit affect language without claiming subjective emotion or private chain-of-thought",
+  "sources": {
+    "development_prompt_bundle": {
+      "path": ".cache/swe_state_interpreter_v3_development/prompts.json",
+      "sha256": "17f664b3029220458ff62b8e80a90ec5e796f0372217f02b727d6589df38d3d0",
+      "size_bytes": 803705234,
+      "task_count": 60,
+      "repository_count": 10
+    },
+    "label_free_alignment_index": {
+      "path": ".cache/swe_task_state_v4_raw_capture/n60-final/alignment-index-v4.json",
+      "sha256": "c0d9e4bd6ad8f6962cf58776441ec4ef042eebbbae8a9959b4149e605c9ae38e",
+      "size_bytes": 567392,
+      "stable_row_count": 1606
+    },
+    "raw_capture_protocol": {
+      "path": "configs/swe_task_state_v4_raw_capture.json",
+      "sha256": "5a378ca0fe8ef5a26ff6ff124f697aaa796c39bab020ad1b34d739da2554c65d"
+    },
+    "raw_capture_implementation": {
+      "path": "scripts/run_swe_task_state_v4_raw_capture.py",
+      "sha256": "f1a9c0ab9e34b853fa35edad650f2de6f1317f77cb97855b2959117dbc2e2485"
+    }
+  },
+  "boundary_selection": {
+    "features_allowed": [
+      "repository",
+      "task_identity_for_grouping_only",
+      "request_index",
+      "stable_feature_eligible"
+    ],
+    "labels_outcomes_completion_text_and_activation_values_forbidden": true,
+    "stable_boundaries_per_task": 2,
+    "algorithm": "nearest_stable_boundary_to_one_third_and_two_thirds_of_each_complete_task_request_sequence_ties_to_lower_request",
+    "first_and_last_request_excluded_when_at_least_four_stable_internal_boundaries_exist": true,
+    "expected_base_boundary_count": 120,
+    "selection_manifest_frozen_before_any_counterfactual_generation": true
+  },
+  "factorial_design": {
+    "evidence_factor": {
+      "levels": [
+        "clear_success",
+        "clear_failure",
+        "contradictory_ambiguous"
+      ],
+      "delivery": "role_valid_matched_synthetic_diagnostic_tool_call_and_tool_result_inserted_immediately_before_final_assistant_generation_boundary",
+      "task_or_solution_specific_facts_forbidden": true,
+      "templates_semantically_matched_except_assigned_evidence": true
+    },
+    "pressure_factor": {
+      "levels": [
+        "neutral",
+        "fixed_time_or_token_pressure"
+      ],
+      "delivery": "matched_user_instruction_after_diagnostic_result_and_before_assistant_generation_boundary",
+      "pressure_claim": "assigned_cue_only_not_experienced_stress"
+    },
+    "paraphrase_replicas_per_cell": 2,
+    "cells_per_boundary": 12,
+    "expected_prompt_count": 1440,
+    "assignment": {
+      "seed": 20260720,
+      "condition_order_randomized_within_boundary": true,
+      "opaque_condition_ids_in_capture_artifacts": true,
+      "one_shared_assignment_manifest_for_all_readouts": true
+    }
+  },
+  "prompt_matching": {
+    "tokenizer_and_chat_template_pinned_to_raw_capture_protocol": true,
+    "tool_name_and_argument_structure_identical_across_evidence_levels": true,
+    "tool_result_token_count_exactly_matched_with_pad_tokens_that_carry_no_condition_semantics": true,
+    "pressure_instruction_token_count_exactly_matched_within_paraphrase_replica": true,
+    "all_nonmanipulated_prefix_tokens_identical_within_boundary_replica": true,
+    "rendered_prompt_and_token_ids_hash_bound": true,
+    "condition_text_never_used_as_decoder_feature_except_declared_visible_control": true
+  },
+  "capture_and_generation": {
+    "model_lens_and_layers": "exact_raw_capture_protocol",
+    "capture_position": "final_prompt_token_before_counterfactual_completion",
+    "raw_residual_and_public_j_state_capture_required": true,
+    "completion_generation": "one_pinned_deterministic_generation_per_counterfactual_prompt",
+    "activation_capture_must_precede_completion_label_extraction": true,
+    "task_state_never_shared_across_counterfactual_conditions": true
+  },
+  "externally_observable_targets": {
+    "cot_like_visible_structure": {
+      "definition": "visible_novel_epistemic_action_chain_v1",
+      "protocol_path": "configs/swe_task_state_v4_epistemic_chain_annotation.json",
+      "private_cot_claim": false
+    },
+    "objective_action_appropriateness": {
+      "clear_success": "advance_or_validate_without_unnecessary_reinspection",
+      "clear_failure": "rework_or_targeted_inspection_before_commitment",
+      "contradictory_ambiguous": "seek_information_recheck_or_explicitly_preserve_alternatives",
+      "blinded_external_scoring_required": true
+    },
+    "objective_confidence_proxy": {
+      "components": [
+        "action_appropriateness",
+        "paraphrase_stability",
+        "calibration_of_explicit_certainty_language_against_action_appropriateness"
+      ],
+      "experienced_self_confidence_claim": false
+    },
+    "doubt_like_behavior": {
+      "positive_behaviors": [
+        "recheck",
+        "seek_more_information",
+        "state_multiple_live_alternatives"
+      ],
+      "felt_doubt_claim": false
+    },
+    "pressure_sensitivity": {
+      "definition": "paired_change_in_activation_and_observable_behavior_under_randomly_assigned_pressure_cue",
+      "experienced_stress_claim": false
+    },
+    "explicit_affect_language": {
+      "definition": "completion_explicitly_uses_affective_or_stress_language_about_the_task_or_agent",
+      "experienced_emotion_claim": false
+    },
+    "manipulation_checks": [
+      "assigned_evidence_level_decodable",
+      "assigned_pressure_cue_decodable"
+    ]
+  },
+  "estimands": {
+    "causal_condition_effects": "within_boundary_paired_factorial_contrasts_on_activations_and_observable_targets",
+    "state_readout": "incremental_prediction_of_observable_targets_beyond_exact_visible_condition_prefix_history_and_sequence_logit_j",
+    "interaction": "evidence_by_pressure_interaction",
+    "paraphrase_robustness": "within_condition_between_replica_agreement",
+    "outer_generalization": "leave_one_repository_out"
+  },
+  "statistics": {
+    "weights": "equal_repository_then_equal_task_then_equal_selected_boundary_then_equal_condition_replica",
+    "paired_uncertainty": "repository_then_task_then_boundary_cluster_bootstrap_keep_complete_12_condition_block",
+    "decoder_uncertainty": "full_model_refit_inside_each_cluster_draw",
+    "multiplicity_family": [
+      "three_primary_evidence_contrasts",
+      "pressure_main_effect",
+      "evidence_by_pressure_interaction"
+    ],
+    "familywise_control": "max_absolute_statistic",
+    "untouched_task_cohort_required_for_confirmation": true
+  },
+  "separation_and_leakage_guards": {
+    "assignment_condition_and_completion_labels_physically_absent_from_activation_feature_bundle": true,
+    "visible_control_receives_exact_manipulation_text": true,
+    "activation_candidate_never_receives_condition_id_as_numeric_feature": true,
+    "heldout_repository_conditions_never_used_for_fit_or_standardization": true,
+    "no_outcome_or_benchmark_gold_access": true,
+    "reserved_validation_access_authorized": false
+  },
+  "claim_scope": {
+    "randomized_assigned_condition_effect_may_be_causal_after_execution": true,
+    "private_chain_of_thought_reconstructed": false,
+    "subjective_confidence_or_doubt_inferred": false,
+    "experienced_stress_inferred": false,
+    "experienced_emotion_inferred": false,
+    "observable_COT_like_structure_objective_behavior_pressure_sensitivity_and_affect_language_are_separate_targets": true,
+    "current_protocol_alone_establishes_any_result": false
+  }
+}

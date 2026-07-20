@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "id": "swe-task-state-v4-label-independent-public-j-state-capture",
+  "status": "development_only_reserved_validation_closed",
+  "model": {
+    "repo_id": "nvidia/Qwen3.6-27B-NVFP4",
+    "revision": "0893e1606ff3d5f97a441f405d5fc541a6bdf404",
+    "hidden_size": 5120,
+    "layer_count": 64
+  },
+  "lens": {
+    "kind": "public",
+    "sha256": "1718c8c52dd8a9dad03738d4d625937c1fbba10be325b872ed446c7290fc11e1",
+    "transport": "float32(h_l) @ float32(J_l).T"
+  },
+  "capture": {
+    "layers": [
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47
+    ],
+    "position": "causal_prefix_tail_only",
+    "positions_argument": [-1],
+    "stream_final_only_required": true,
+    "raw_tensor": "post_block_residual_before_final_norm",
+    "transported_tensor": "public_j_state_before_bfloat16_final_norm_or_vocabulary_projection",
+    "storage_dtype": "little_endian_float32",
+    "shard_format": "safetensors"
+  },
+  "authentication": {
+    "require_exact_source_bundle_sha256": true,
+    "require_exact_reference_report_sha256": true,
+    "require_reference_residual_manifest_equality_by_ordered_source_id": true,
+    "require_all_64_layer_residual_manifest": true,
+    "require_shard_reload_and_hash_verification": true,
+    "forbidden_path_fragments": [
+      "reserved",
+      "validation"
+    ]
+  },
+  "feature_independence": {
+    "forward_inputs": [
+      "prompt_token_ids"
+    ],
+    "forbidden_feature_inputs": [
+      "prompt_text",
+      "metadata",
+      "target_token_id",
+      "score_token_ids",
+      "generated_token_id",
+      "generated_text",
+      "current_or_future_action_label",
+      "current_or_future_concept_label",
+      "task_outcome",
+      "emotion_label",
+      "private_reasoning"
+    ],
+    "source_ids_are_sha256_pseudonyms": true,
+    "manifest_contains_prompt_tokens_or_text": false
+  },
+  "downstream_feature_boundary": {
+    "allowed_tensor_features": [
+      "raw_residual",
+      "public_j_state"
+    ],
+    "allowed_causal_transforms": [
+      "fixed_label_independent_projection",
+      "current_state",
+      "delta_from_immediately_previous_same_task_state",
+      "deviation_from_prior_same_task_ema"
+    ],
+    "authentication_or_grouping_only": [
+      "source_id_sha256",
+      "token_ids_sha256",
+      "token_count",
+      "token_position",
+      "paths",
+      "hashes",
+      "fidelity_fields",
+      "base_report",
+      "reference_report"
+    ],
+    "semantic_ids_as_features_forbidden": true,
+    "base_report_fields_as_features_forbidden": true
+  },
+  "claim_scope": {
+    "private_chain_of_thought_reconstructed": false,
+    "cot_like_observable_event_decoding_established": false,
+    "emotion_decoding_established": false,
+    "confidence_or_calibration_established": false,
+    "causal_interpretation_established": false,
+    "incremental_value_over_raw_residual_or_word_probe_baselines_established": false
+  }
+}

@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "id": "swe-task-state-v4-epistemic-chain-v2-failure-audit-v1",
+  "kind": "swe_task_state_v4_epistemic_chain_post_lock_failure_audit",
+  "status": "frozen_post_lock_development_forensics_v2_gate_failed",
+  "scope": {
+    "development_controls_only": true,
+    "expectations_opened_only_after_dual_lock": true,
+    "reserved_validation_closed": true,
+    "reserved_validation_accessed": false,
+    "real_trajectory_target_annotations_present": false,
+    "decoder_fit_authorized": false
+  },
+  "immutable_run": {
+    "output_directory": ".cache/swe_task_state_v4_raw_capture/n60-final/epistemic-chain-v2-controls-real-v1",
+    "final_gate_receipt": {
+      "path": ".cache/swe_task_state_v4_raw_capture/n60-final/epistemic-chain-v2-controls-real-v1/final-gate-receipt.json",
+      "sha256": "39e58b001a3f40bc79f6ab34bba8d2f049700d7c3b8ac6492c148da71013ddd1",
+      "status": "failed_visible_semantic_annotation_interface_readiness_controls"
+    },
+    "dual_lock_receipt": {
+      "path": ".cache/swe_task_state_v4_raw_capture/n60-final/epistemic-chain-v2-controls-real-v1/dual-lock-receipt.json",
+      "sha256": "493ca84c1a0f942a8fc14e3ec7eff361aeadf655f2c7899d9a089812418b736e"
+    },
+    "roles": {
+      "independent_a": {
+        "model_family": "qwen3_6",
+        "manifest_path": ".cache/swe_task_state_v4_raw_capture/n60-final/epistemic-chain-v2-controls-real-v1/independent-a-manifest.json",
+        "manifest_sha256": "c11db1b1033012b71a2b3eed0002a6c15c6122d429d9f259640178055839b14b",
+        "records_path": ".cache/swe_task_state_v4_raw_capture/n60-final/epistemic-chain-v2-controls-real-v1/independent-a-manifest.jsonl",
+        "records_sha256": "a157ce3957824849a5fc731733a683eaecc9e87d872079c6b7621b2ab679d85d"
+      },
+      "independent_b": {
+        "model_family": "gpt_oss",
+        "manifest_path": ".cache/swe_task_state_v4_raw_capture/n60-final/epistemic-chain-v2-controls-real-v1/independent-b-manifest.json",
+        "manifest_sha256": "a0232c1e9c0b67c2c577bd1de8d08b02a641e2a3338304dafa41fb72aed93671",
+        "records_path": ".cache/swe_task_state_v4_raw_capture/n60-final/epistemic-chain-v2-controls-real-v1/independent-b-manifest.jsonl",
+        "records_sha256": "666efba14e98d8cd7088c2fe038db4136c3f1941e44f67414d0e022da3e9af6d"
+      },
+      "adjudicator": {
+        "model_family": "mistral_small_3_1",
+        "manifest_path": ".cache/swe_task_state_v4_raw_capture/n60-final/epistemic-chain-v2-controls-real-v1/adjudicator-manifest.json",
+        "manifest_sha256": "bcf24b9a93bfed78978a487329b9e828541cd9ecac90f214aa9be5f8c5578ae4",
+        "records_path": ".cache/swe_task_state_v4_raw_capture/n60-final/epistemic-chain-v2-controls-real-v1/adjudicator-manifest.jsonl",
+        "records_sha256": "1de6587424643001d0bcafee79a69df20bc43b24e94d72a92d65cc8dad839f6d"
+      }
+    },
+    "reports": {
+      "independent_a": {
+        "path": ".cache/swe_task_state_v4_raw_capture/n60-final/epistemic-chain-v2-controls-real-v1/score-a-report.json",
+        "sha256": "d984be86b1568f697943d495057daa7a667245a3646811621b1336ff8f2de54e"
+      },
+      "independent_b": {
+        "path": ".cache/swe_task_state_v4_raw_capture/n60-final/epistemic-chain-v2-controls-real-v1/score-b-report.json",
+        "sha256": "028aff4dc1e2b39ed008b98fafab4f893a4b554b0f466d718b5064711239c141"
+      }
+    }
+  },
+  "corrected_counts": {
+    "independent_a": {
+      "completion_invalid": 22,
+      "completion_total": 32,
+      "novelty_invalid": 8,
+      "novelty_total": 8,
+      "own_invalid_total": 30,
+      "own_record_total": 40,
+      "completion_category_correct": 29,
+      "completion_exact_record_correct_observed": 5,
+      "completion_exact_record_correct_after_read_only_branch_sentinel_replay": 23,
+      "novelty_decision_correct": 6
+    },
+    "independent_b": {
+      "completion_invalid": 10,
+      "completion_total": 32,
+      "novelty_invalid": 0,
+      "novelty_total": 8,
+      "own_invalid_total": 10,
+      "own_record_total": 40,
+      "completion_category_correct": 25,
+      "completion_exact_record_correct_observed": 4,
+      "completion_exact_record_correct_after_read_only_branch_sentinel_replay": 12,
+      "novelty_decision_correct": 6
+    },
+    "adjudicator": {
+      "invalid": 12,
+      "total": 12,
+      "length_capped_inside_first_free_string": 10,
+      "stop_terminated_semantically_invalid": 2,
+      "adjudication_exact_correct": 0
+    },
+    "lane_report_accounting_note": "score_A_invalid_34_equals_A_completion_invalid_22_plus_shared_J_12_and_score_B_invalid_22_equals_B_completion_invalid_10_plus_shared_J_12_while_novelty_invalidity_is_not_counted"
+  },
+  "root_causes": [
+    {
+      "id": "flat_schema_stricter_post_generation_validator",
+      "evidence": "the_guided_schema_allowed_every_decision_to_pair_with_either_unknown_reason_and_all_sentinel_or_chain_fields_while_the_post_generation_validator_enforced_decision_conditional_rules",
+      "classification": "interface_design_failure"
+    },
+    {
+      "id": "unrestricted_free_string_quote_generation",
+      "evidence": "ten_of_twelve_mistral_adjudications_repeated_unrelated_text_inside_evidence_quote_until_max_output_tokens_768",
+      "classification": "adjudication_interface_and_runtime_compatibility_failure"
+    },
+    {
+      "id": "exact_record_conflates_capabilities",
+      "evidence": "tuple_resolution_semantic_slots_marker_flags_and_quote_boundary_conventions_are_scored_as_one_all_field_equality_event",
+      "classification": "scoring_diagnostic_failure"
+    },
+    {
+      "id": "genuine_semantic_errors_remain",
+      "evidence": "both_primary_models_accepted_unrelated_actions_E_H_restatements_or_unsupported_contradictions_and_each_missed_two_novelty_controls",
+      "classification": "model_semantic_error"
+    }
+  ],
+  "prospective_v3_requirements": {
+    "preserve_v2_run_immutable": true,
+    "new_v3_bytes_nonces_model_inputs_expectations_and_receipts_required": true,
+    "decision_specific_one_of_schemas": true,
+    "unknown_reasons_and_non_chain_sentinels_materialized_deterministically": true,
+    "unicode_preserving_nonoverlapping_candidate_units_with_opaque_ids": true,
+    "model_generated_quote_strings_forbidden": true,
+    "adjudication_output_is_candidate_1_candidate_2_or_neither_only": true,
+    "neither_repair_uses_only_bounded_candidate_ids_and_finite_ontology_enums": true,
+    "marker_flags_computed_deterministically_from_canonical_units": true,
+    "schema_category_tuple_ontology_marker_and_canonical_record_gates_reported_separately": true,
+    "novelty_validity_included_in_invalid_output_gate": true,
+    "task_shaped_per_family_preflight_before_sealing": true,
+    "real_trajectory_selection_annotation_and_decoder_fit_forbidden_until_v3_gate_passes": true
+  },
+  "claim_boundary": {
+    "visible_semantic_annotation_interface_ready": false,
+    "visible_future_semantic_chain_decoding_established": false,
+    "latent_cot_like_concept_trajectory_established": false,
+    "private_or_verbatim_cot_recovery_established": false,
+    "emotion_affect_confidence_doubt_or_stress_recovery_established": false,
+    "causal_interpretation_established": false,
+    "untouched_operational_reliability_established": false
+  }
+}

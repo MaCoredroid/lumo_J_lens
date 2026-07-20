@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "id": "swe-task-state-v4-observable-nested-fixed-oof-repository-inference",
+  "status": "development_only_reserved_validation_closed",
+  "path_guard": {
+    "forbidden_path_fragments": [
+      "reserved",
+      "validation"
+    ]
+  },
+  "inputs": {
+    "decoder_report": {
+      "path": ".cache/swe_task_state_v4_raw_capture/n60-final/observable-rationale-marker-v2f.json",
+      "sha256": "5b7a9f5f152548f7d63d45ee41b2a1b9b338525e085af23d6bdcc3b9fc15c11c"
+    },
+    "alignment_index": {
+      "path": ".cache/swe_task_state_v4_raw_capture/n60-final/alignment-index-v4.json",
+      "sha256": "c0d9e4bd6ad8f6962cf58776441ec4ef042eebbbae8a9959b4149e605c9ae38e"
+    },
+    "observable_label_sidecar": {
+      "path": ".cache/swe_task_state_v4_raw_capture/n60-final/observable-events-v4.json",
+      "sha256": "3e54d3510fea892059369b2f7cbac93381504fcc22a2732bb8fca5252a42cf18"
+    }
+  },
+  "target": "observable_rationale_language_marker",
+  "reference": "sequence_logit_j",
+  "comparisons": [
+    {
+      "candidate": "sequence_logit_j_plus_raw_activation_current",
+      "reference": "sequence_logit_j"
+    },
+    {
+      "candidate": "sequence_logit_j_plus_public_j_activation_current",
+      "reference": "sequence_logit_j"
+    }
+  ],
+  "metrics": [
+    "negative_log_likelihood",
+    "multiclass_brier"
+  ],
+  "repository_inference": {
+    "repository_count": 10,
+    "within_repository_weighting": "equal_task_then_equal_available_row_within_task",
+    "estimand": "unweighted_mean_of_ten_heldout_repository_paired_deltas",
+    "student_t_interval": {
+      "confidence_level": 0.95,
+      "degrees_of_freedom": 9,
+      "assumption": "repository_deltas_are_iid"
+    },
+    "exact_sign_flip": {
+      "sign_values": [
+        -1,
+        1
+      ],
+      "assignment_count": 1024,
+      "statistic": "absolute_unweighted_mean_repository_delta",
+      "alternative": "two_sided",
+      "observed_assignment_included": true,
+      "plus_one_correction": false
+    }
+  },
+  "multiple_testing": {
+    "method": "holm_step_down",
+    "family_size": 4,
+    "family_order": [
+      "sequence_logit_j_plus_raw_activation_current__vs__sequence_logit_j::negative_log_likelihood",
+      "sequence_logit_j_plus_raw_activation_current__vs__sequence_logit_j::multiclass_brier",
+      "sequence_logit_j_plus_public_j_activation_current__vs__sequence_logit_j::negative_log_likelihood",
+      "sequence_logit_j_plus_public_j_activation_current__vs__sequence_logit_j::multiclass_brier"
+    ]
+  },
+  "interpretation": {
+    "scope": "exploratory_development_fixed_oof_repository_cluster_inference_only",
+    "configured_after_point_results_were_observed": true,
+    "nested_variants_added_after_initial_oof_results_were_observed": true,
+    "comparisons_preregistered": false,
+    "post_hoc_exploratory_only": true,
+    "fixed_oof_predictions": true,
+    "model_refit_uncertainty_included": false,
+    "model_or_feature_selection_uncertainty_included": false,
+    "repository_iid_assumption_required_for_student_t_interval": true,
+    "repository_sign_symmetry_required_for_exact_sign_flip_test": true,
+    "untouched_confirmation_set_evaluated": false,
+    "transport_or_confirmation_claim_allowed": false
+  },
+  "claim_scope": {
+    "private_chain_of_thought_reconstructed": false,
+    "cot_or_cot_like_decoding_established": false,
+    "semantic_sentence_or_chain_decoding_established": false,
+    "hidden_thought_understanding_or_intent_established": false,
+    "emotion_decoding_established": false,
+    "causal_interpretation_established": false,
+    "incremental_value_confirmed": false,
+    "operational_reliability_established": false
+  },
+  "mandatory_limitations": [
+    "The target is a frozen surface-language marker in the ensuing visible completion and only an observable process-trace proxy; it is not private chain-of-thought, hidden reasoning, understanding, intent, or emotion.",
+    "The intervals and tests use saved fixed out-of-fold predictions selected after point results were observed; they omit model-refit and model-or-feature-selection uncertainty.",
+    "The Student-t intervals assume ten repository deltas are iid, and the exact sign-flip tests assume repository-level sign symmetry.",
+    "Holm adjustment covers only the frozen family of two nested candidates by two decomposable loss metrics and does not make this analysis confirmatory or transportable."
+  ]
+}

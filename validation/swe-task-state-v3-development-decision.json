@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "kind": "swe_task_state_interpreter_v3_development_stop_decision",
+  "status": "failed_closed_before_model_refit_bootstrap",
+  "decision_date": "2026-07-19",
+  "scope": "fresh_development_only_not_reserved_validation",
+  "bindings": {
+    "source_and_data_freeze_git_commit": "c0643484c094863bae6d8026015ba9a719d37c4a",
+    "materialization_receipt_sha256": "3f7d6dbecb3157badc7e0db09444c8b77bd6f51c8941604b3a5bf81bf30e7812",
+    "prompt_bundle_sha256": "17f664b3029220458ff62b8e80a90ec5e796f0372217f02b727d6589df38d3d0",
+    "prompt_summary_sha256": "b70b3751e9cb5a896bc264d2214b425cc7a690ff8026c6c972d3a21cbd22d44d",
+    "public_report_sha256": "7c943132163749f69bd35e4fa2e52bcfee2318fe349fa77603324a37ffaabe46",
+    "replay_merge_manifest_sha256": "302437210d582081e4c343cadb30afecf9e7e0bfb18a8d7b12fdb10c3d782e6f",
+    "development_diagnostic_sha256": "b14016f09a67dfb9ad60f583fff27ba8fac075d97ac6b206b3423c88d6e48ae4",
+    "analyzer_sha256": "53c7d41688f6c5ab21f7ad029d343af06e9b13c777fd2e5517ff8d5254ad9e6c",
+    "protocol_sha256": "9d8b0a7d5c45dc192365429af27c6193de752cc160458eff8e21807d37662b1d"
+  },
+  "support": {
+    "replayed_prompts": 1708,
+    "stable_feature_complete_predictions": 1606,
+    "known_action_metric_rows": 1570,
+    "unknown_action_predictions": 36,
+    "tasks": 60,
+    "repositories": 10,
+    "all_predeclared_support_gates_passed": true
+  },
+  "primary_branch": "history_j",
+  "failed_point_gates": [
+    {
+      "id": "balanced_accuracy",
+      "observed": 0.7016810911584139,
+      "operator": "minimum_inclusive",
+      "threshold": 0.75
+    },
+    {
+      "id": "edit_recall",
+      "observed": 0.5110350720476823,
+      "operator": "minimum_inclusive",
+      "threshold": 0.65
+    },
+    {
+      "id": "accepted_accuracy",
+      "observed": 0.80738161594329,
+      "operator": "minimum_inclusive",
+      "threshold": 0.85
+    }
+  ],
+  "matched_point_differences": {
+    "history_j_minus_history_logit": {
+      "accuracy": -0.007261366091990684,
+      "balanced_accuracy": -0.04274479829253419,
+      "multiclass_negative_log_likelihood": 0.0006832146609599965,
+      "multiclass_brier": 0.002393619896152388
+    },
+    "history_logit_j_minus_history_logit": {
+      "accuracy": 0.009169210379985526,
+      "balanced_accuracy": -0.02066428039781243,
+      "multiclass_negative_log_likelihood": -0.01784831261932518,
+      "multiclass_brier": -0.013465913213250247
+    }
+  },
+  "decision": {
+    "full_1000_draw_model_refit_bootstrap_run": false,
+    "reason": "bootstrap intervals cannot change failed deterministic point gates",
+    "model_fit_allowed": false,
+    "reserved_validation_allowed": false,
+    "reserved_validation_accessed": false,
+    "v3_development_cohort_may_be_used_for_v4_design_only": true,
+    "fresh_disjoint_nonreserved_development_confirmation_required_for_v4": true
+  }
+}

@@ -1,0 +1,227 @@
+{
+  "schema_version": 1,
+  "id": "swe-task-state-v4-transport-power-screen-v1",
+  "status": "design_only_nonconfirmatory_transport_power",
+  "bindings": {
+    "contract_closed_design_artifact": {
+      "canonical_path": ".cache/swe_state_interpreter_v4_design/v3-n60-geometric-a020-shared-action-contract-closed.json",
+      "sha256": "e1436a9c7fe763a4fab6ae505af17395a4290faefd0734b230d22127bff0cf8c",
+      "required_status": "completed_design_screen_not_confirmatory",
+      "required_reserved_validation_accessed": false,
+      "required_reserved_validation_allowed": false
+    },
+    "source_feasibility_artifact": {
+      "canonical_path": ".cache/swe_state_interpreter_v4_design/swe-task-state-v4-source-feasibility.json",
+      "sha256": "e7b2f6a0fecbc7c4ff10e41463ff0c83898a5a59b070856ac820279b4652be89",
+      "required_id": "swe-task-state-v4-source-feasibility-result-v1",
+      "required_status": "completed_design_source_feasibility_not_selection",
+      "config_path": "configs/swe_task_state_v4_source_feasibility.json",
+      "config_sha256": "165f8c5d179c24855e8edfec30d22c078706b3703969f655af9a062de725afb8",
+      "analyzer_path": "scripts/analyze_swe_task_state_v4_source_feasibility.py",
+      "analyzer_sha256": "c9235bf6a96888338ecd7b3bc692c1c5b26c1c63b192486e9807240bf541a1c2"
+    },
+    "paired_power_implementation": {
+      "analyzer_path": "scripts/analyze_swe_task_state_v4_power.py",
+      "analyzer_sha256": "0a21926c03578490b4423fa07d54ff7120babaee1e007689ad7b161d3c2191d7",
+      "config_path": "configs/swe_task_state_v4_power_screen.json",
+      "config_sha256": "d696ca7edd58be17abd29cc4908322d4741a54fee2d90c89a7e05dcf61fa6574"
+    }
+  },
+  "repository_order": [
+    "astropy/astropy",
+    "django/django",
+    "matplotlib/matplotlib",
+    "mwaskom/seaborn",
+    "pallets/flask",
+    "psf/requests",
+    "pydata/xarray",
+    "pylint-dev/pylint",
+    "pytest-dev/pytest",
+    "scikit-learn/scikit-learn",
+    "sphinx-doc/sphinx",
+    "sympy/sympy"
+  ],
+  "known_source_repositories": [
+    "astropy/astropy",
+    "django/django",
+    "matplotlib/matplotlib",
+    "psf/requests",
+    "pydata/xarray",
+    "pylint-dev/pylint",
+    "pytest-dev/pytest",
+    "scikit-learn/scikit-learn",
+    "sphinx-doc/sphinx",
+    "sympy/sympy"
+  ],
+  "unseen_transport_repositories": [
+    "mwaskom/seaborn",
+    "pallets/flask"
+  ],
+  "official_source_supply": {
+    "astropy/astropy": 73,
+    "django/django": 619,
+    "matplotlib/matplotlib": 150,
+    "mwaskom/seaborn": 20,
+    "pallets/flask": 10,
+    "psf/requests": 36,
+    "pydata/xarray": 88,
+    "pylint-dev/pylint": 47,
+    "pytest-dev/pytest": 100,
+    "scikit-learn/scikit-learn": 197,
+    "sphinx-doc/sphinx": 143,
+    "sympy/sympy": 311
+  },
+  "two_stage_allocation": {
+    "transport_pilot": {
+      "mwaskom/seaborn": 10,
+      "pallets/flask": 5
+    },
+    "fresh_confirmation": {
+      "astropy/astropy": 20,
+      "django/django": 20,
+      "matplotlib/matplotlib": 20,
+      "mwaskom/seaborn": 20,
+      "pallets/flask": 10,
+      "psf/requests": 20,
+      "pydata/xarray": 20,
+      "pylint-dev/pylint": 20,
+      "pytest-dev/pytest": 20,
+      "scikit-learn/scikit-learn": 20,
+      "sphinx-doc/sphinx": 20,
+      "sympy/sympy": 20
+    },
+    "pilot_task_count": 15,
+    "confirmation_cap_per_repository": 20,
+    "confirmation_allocation_rule": "min_cap_and_official_complement_availability_before_pilot",
+    "confirmation_task_count": 230,
+    "combined_task_count": 245,
+    "pilot_outcomes_may_not_enter_confirmation": true,
+    "confirmation_must_remain_untouched_until_pilot_gate_and_power_rescreen": true,
+    "qualified_shortfall": {
+      "mwaskom/seaborn": 10,
+      "pallets/flask": 5
+    }
+  },
+  "loss_contract": {
+    "difference_direction": "candidate_minus_reference",
+    "task_profile": "equal_mean_of_known_rows_within_whole_task",
+    "point_estimand": "equal_repository_then_equal_task_then_equal_known_row",
+    "nll_gate": "bootstrap_upper_strictly_less_than_zero",
+    "brier_gate": "bootstrap_upper_strictly_less_than_zero",
+    "joint_gate": "nll_gate_and_brier_gate"
+  },
+  "transport_scenarios": {
+    "primary_order": [
+      "django_domain_proxy",
+      "exchangeable_repository_task_proxy",
+      "neutral_zero_effect",
+      "empirical_marginal_p90_adverse"
+    ],
+    "primary_unseen_repository_coupling": "one_repository_level_latent_profile_per_outer_cohort_perfectly_shared_by_flask_and_seaborn",
+    "django_domain_proxy": "one_whole_django_task_profile_per_outer_cohort",
+    "exchangeable_repository_task_proxy": "one_known_repository_uniform_then_one_whole_task_uniform_per_outer_cohort",
+    "neutral_zero_effect": {
+      "nll_difference": 0.0,
+      "brier_difference": 0.0
+    },
+    "empirical_marginal_p90_adverse": {
+      "quantile": 0.9,
+      "method": "linear",
+      "same_fixed_profile_for_both_unseen_repositories": true
+    },
+    "independent_sensitivity_order": [
+      "django_domain_proxy_independent_unseen_repositories",
+      "exchangeable_repository_task_proxy_independent_unseen_repositories"
+    ],
+    "independent_sensitivity_coupling": "one_independent_repository_level_latent_profile_for_each_unseen_repository_per_outer_cohort",
+    "novel_task_counts_do_not_reduce_repository_level_latent_transport_uncertainty": true
+  },
+  "resampling_contract": {
+    "numpy_version": "2.5.1",
+    "scipy_version": "1.18.0",
+    "bit_generator": "PCG64",
+    "seed_sequence_entropy": 20260729,
+    "child_streams_in_order": [
+      "known_task_sampling_and_gamma",
+      "repository_gamma",
+      "django_proxy_perfect_coupling",
+      "exchangeable_proxy_perfect_coupling",
+      "django_proxy_independent_sensitivity",
+      "exchangeable_proxy_independent_sensitivity"
+    ],
+    "child_stream_derivation": "numpy_SeedSequence_spawn_once_six_children_in_order",
+    "outer_cohorts": 10000,
+    "outer_batch_size": 10,
+    "inner_bootstrap_draws": 1000,
+    "task_weight_distribution": "Gamma_shape_1_scale_1_normalized_within_repository",
+    "repository_weight_distribution": "Gamma_shape_1_scale_1_normalized_across_twelve_repositories",
+    "upper_quantile": 0.975,
+    "quantile_method": "linear",
+    "same_known_task_and_repository_weight_draws_across_scenarios": true
+  },
+  "monte_carlo_decision": {
+    "minimum_acceptable_joint_power": 0.8,
+    "familywise_alpha": 0.05,
+    "declared_primary_scenario_count": 4,
+    "one_sided_alpha_per_scenario": 0.0125,
+    "lower_bound": "exact_clopper_pearson_beta_ppf",
+    "scipy_beta_parameters": "beta_ppf(alpha,passes,cohorts-passes+1)",
+    "go_requires_every_primary_scenario_lower_bound_at_or_above_threshold": true
+  },
+  "structural_p90_contract": {
+    "known_ten_repository_point": {
+      "multiclass_negative_log_likelihood": -0.006178540156555733,
+      "multiclass_brier": -0.0021992920266340173
+    },
+    "empirical_marginal_p90_profile": {
+      "multiclass_negative_log_likelihood": 0.0022797267620328285,
+      "multiclass_brier": 0.003122176862007263
+    },
+    "infinite_task_equal_twelve_repository_point": {
+      "multiclass_negative_log_likelihood": -0.00476882900345764,
+      "multiclass_brier": -0.0013123805451938037
+    },
+    "recovered_repository_gamma_upper_0_975": {
+      "multiclass_negative_log_likelihood": -0.00194661,
+      "multiclass_brier": 0.00005254
+    },
+    "strict_brier_gate_passes": false,
+    "more_within_repository_tasks_can_repair": false
+  },
+  "decision_rule": {
+    "overall_decision": "NO_GO",
+    "fail_closed_labels_in_order": [
+      "NO_GO_RETAINED_TRANSPORT_ENVELOPE",
+      "NO_GO_QUALIFIED_SOURCE_SHORTFALL"
+    ],
+    "fresh_cohort_selection_or_generation_authorized": false,
+    "pilot_authorized": false,
+    "confirmation_authorized": false
+  },
+  "output_contract": {
+    "dedicated_root": ".cache/swe_state_interpreter_v4_design",
+    "default_filename": "swe-task-state-v4-transport-power-screen.json",
+    "direct_child_json_only": true,
+    "new_output_no_clobber": true,
+    "aggregate_only_no_raw_task_ids": true,
+    "forbidden_casefolded_path_tokens": [
+      "reserved",
+      "validation"
+    ]
+  },
+  "data_policy": {
+    "input_scope": "exact_contract_closed_design_and_aggregate_source_feasibility_only",
+    "task_text_prompt_completion_patch_or_trajectory_fields_consumed": false,
+    "raw_task_ids_emitted": false,
+    "selection_performed": false,
+    "selection_authorized": false,
+    "generation_performed": false,
+    "generation_authorized": false,
+    "reserved_membership_accessed": false,
+    "reserved_validation_accessed": false,
+    "reserved_validation_allowed": false,
+    "confirmatory_interpretation": false,
+    "operational_reliability_claim": false,
+    "independent_v4_development_result": false
+  }
+}

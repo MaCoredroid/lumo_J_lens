@@ -1,0 +1,74 @@
+{
+  "bindings": {
+    "codebook": {
+      "canonical_sha256": "abf0854b166f5db473c2b2db1dc2a2faac41ffa7ffee928438dec005ef2cbcca",
+      "path": "configs/swe_task_state_v4_epistemic_chain_codebook_v2.json",
+      "sha256": "2105a50c7bc13a064ca75c4a69aad631869fbbb2c17c94970eeaa92722aff85c",
+      "size_bytes": 16012
+    },
+    "decoder_v2_addendum": {
+      "canonical_sha256": "c959a5c9d2098903791d73501979777873657814047fc0d3f91a683491f93e7c",
+      "path": "configs/swe_task_state_v4_epistemic_chain_decoder_v2_addendum.json",
+      "sha256": "d0ce668fd966f7185db8e8ce263d42b8857f42ff01bba9571961403f12bc7f85"
+    },
+    "implementations": {
+      "control_builder_v2": {
+        "path": "scripts/swe_task_state_v4_epistemic_chain_controls_v2.py",
+        "sha256": "12e5443940c5d3c7d502aadd6f3820e943b50d91d6414773cbca9f71d3c985a1"
+      },
+      "control_executor_v2": {
+        "path": "scripts/swe_task_state_v4_epistemic_chain_control_executor_v2.py",
+        "sha256": "2db21711b6660df0696339cb49e7e1bc826197566db462a8504dfda92eb13e9e"
+      },
+      "quote_runner_v2": {
+        "path": "scripts/swe_task_state_v4_epistemic_chain_annotation_runner_v2.py",
+        "sha256": "9e8ca934776279e3fa0ebcf01dc4e5c600559187552d5d7b034a7cd4634ae288"
+      }
+    },
+    "runtime_config": {
+      "canonical_sha256": "35a2f7e9ecbc0aac198e762cc22828c5dfd47f9108c037cf5a792d44018b21aa",
+      "path": "configs/swe_task_state_v4_epistemic_chain_annotation_runner_v2.json",
+      "sha256": "a22604d78938917972dc23c517c942fb9022e867e17ce0b5a060189dd0dd1b4d"
+    },
+    "sealed_model_inputs": {
+      "path": "artifacts/epistemic-chain-controls-v2-model-inputs-manifest.json",
+      "records": {
+        "count": 52,
+        "path": "artifacts/epistemic-chain-controls-v2-model-inputs.jsonl",
+        "sha256": "924fda8c96e536643bfb48a06d1e66ec9c628352385ec9480d450b16a7ff14e1"
+      },
+      "sha256": "8809a980cae95cfc029c49be5a05ac6aeab4222ba68c44439f0141f705f9528e"
+    }
+  },
+  "execution_contract": {
+    "adjudicator_input_passes": [
+      "adjudication"
+    ],
+    "combined_output_records_per_primary": 52,
+    "expectations_inaccessible_during_generation": true,
+    "only_sealed_control_manifest_kind": "swe_task_state_v4_epistemic_chain_control_model_input_manifest_v2",
+    "primary_input_passes": [
+      "completion",
+      "novelty"
+    ],
+    "resume_requires_authenticated_complete_role_manifest": true,
+    "role_record_counts": {
+      "adjudicator": 12,
+      "independent_a": 40,
+      "independent_b": 40
+    },
+    "separate_process_per_role": true,
+    "target_packets_forbidden": true
+  },
+  "kind": "swe_task_state_v4_epistemic_chain_control_executor_v2",
+  "schema_version": 1,
+  "scope": {
+    "affect_emotion_confidence_doubt_or_stress_targeted": false,
+    "development_controls_only": true,
+    "private_chain_of_thought_ground_truth_claimed": false,
+    "reserved_validation_accessed": false,
+    "reserved_validation_closed": true,
+    "target_annotations_present": false
+  },
+  "status": "prospectively_frozen_for_sealed_control_generation"
+}

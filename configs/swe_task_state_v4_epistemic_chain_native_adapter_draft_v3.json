@@ -1,0 +1,217 @@
+{
+  "schema_version": 1,
+  "kind": "swe_task_state_v4_epistemic_chain_native_adapter_draft_v3",
+  "id": "swe-task-state-v4-epistemic-chain-native-exact-token-adapter-draft-v3",
+  "status": "source_only_draft_not_sealed_not_gate_ready",
+  "scope": {
+    "development_controls_only": true,
+    "reserved_validation_closed": true,
+    "reserved_validation_accessed": false,
+    "model_or_gpu_execution_performed": false,
+    "artifacts_or_receipts_emitted": false
+  },
+  "observed_read_only_preflight": {
+    "provenance": "parent_reported_read_only_preflight_2026-07-20",
+    "evidence_receipt_sha256": null,
+    "authenticated_runtime_identity": false,
+    "authorizes_execution": false,
+    "gpu": {
+      "model": "NVIDIA GeForce RTX 5090",
+      "memory_total_gib": 32.0,
+      "memory_free_gib_approx": 31.6
+    },
+    "packages": {
+      "vllm": "0.23.0",
+      "torch": "2.11.0+cu130",
+      "transformers": "5.12.1",
+      "openai-harmony": "0.0.8",
+      "xgrammar": "0.2.2"
+    },
+    "all_three_exact_snapshot_revisions_present": true,
+    "used_by_source_only_plan_identity": false
+  },
+  "authorization": {
+    "production_execution_authorized": false,
+    "gate_eligible_execution_authorized": false,
+    "model_or_gpu_access_authorized": false,
+    "artifact_output_authorized": false,
+    "production_receipt_emission_authorized": false
+  },
+  "implementation": {
+    "source_only_contract_scaffold": {
+      "path": "scripts/swe_task_state_v4_epistemic_chain_native_adapter_draft_v3.py",
+      "hash_frozen": false,
+      "sha256": null
+    },
+    "production_native_adapter_present": false,
+    "production_native_adapter_path": null,
+    "production_native_adapter_sha256": null,
+    "production_runtime_present": false,
+    "production_runtime_path": null,
+    "production_runtime_sha256": null,
+    "production_receipt_emitter_present": false,
+    "production_receipt_emitter_path": null,
+    "production_receipt_emitter_sha256": null
+  },
+  "authentication_contract": {
+    "independent_expected_draft_config_sha256_required": true,
+    "draft_config_bytes_authenticated_before_request_access": true,
+    "bound_v2_config_path_and_sha256_required": true,
+    "historical_roles_full_object_equality_to_bound_v2_required": true,
+    "historical_generation_full_object_equality_to_bound_v2_required": true,
+    "independent_expected_native_request_sha256_required": true,
+    "authenticated_generation_context_required": true,
+    "exact_native_request_reconstruction_required": true,
+    "independent_expected_observation_sha256_required": true,
+    "independent_expected_cpu_record_sha256_required": true
+  },
+  "frozen_historical_inputs": {
+    "v2_runtime_config": {
+      "path": "configs/swe_task_state_v4_epistemic_chain_annotation_runner_v2.json",
+      "sha256": "a22604d78938917972dc23c517c942fb9022e867e17ce0b5a060189dd0dd1b4d",
+      "use": "historical_role_roster_and_engine_settings_only"
+    },
+    "v3_bounded_id_runner": {
+      "path": "scripts/swe_task_state_v4_epistemic_chain_annotation_runner_v3.py",
+      "sha256": "c35af19c9f3f1e38208ba7f23467c386ebff2e5fb6572582f9a620f51f394aeb",
+      "native_request_kind": "swe_task_state_v4_native_generation_request_v3"
+    }
+  },
+  "historical_v2_roles": {
+    "independent_a": {
+      "execution_mode": "local_model",
+      "base_model_lineage": "qwen3.6",
+      "repo_id": "nvidia/Qwen3.6-27B-NVFP4",
+      "revision": "0893e1606ff3d5f97a441f405d5fc541a6bdf404",
+      "snapshot_tree_sha256": "9e81d31df546344ad68696c3cfd6cadce4ad6d3952710a3dc2021c1c2d42414d",
+      "snapshot_file_count": 17,
+      "snapshot_size_bytes": 21941623844,
+      "quantization": "modelopt_fp4",
+      "dtype": "bfloat16",
+      "seed": 17011,
+      "chat_template_kwargs": {
+        "enable_thinking": false
+      },
+      "output_extraction": "direct_structured_text",
+      "vllm_engine_kwargs": {
+        "attention_backend": "TRITON_ATTN",
+        "gdn_prefill_backend": "triton",
+        "mamba_cache_mode": "align",
+        "mamba_block_size": 1024,
+        "mamba_ssm_cache_dtype": "float32",
+        "enable_flashinfer_autotune": false
+      }
+    },
+    "independent_b": {
+      "execution_mode": "local_model",
+      "base_model_lineage": "gpt-oss",
+      "repo_id": "openai/gpt-oss-20b",
+      "revision": "6cee5e81ee83917806bbde320786a8fb61efebee",
+      "snapshot_tree_sha256": "60b907629e6da0ac8239a1103c366894c97bd7054f899c4e6e1f6833c84bad18",
+      "snapshot_file_count": 16,
+      "snapshot_size_bytes": 13789278132,
+      "quantization": "mxfp4",
+      "dtype": "bfloat16",
+      "seed": 29027,
+      "chat_template_kwargs": {
+        "reasoning_effort": "low"
+      },
+      "output_extraction": "openai_harmony_final_channel",
+      "vllm_engine_kwargs": {}
+    },
+    "adjudicator": {
+      "execution_mode": "local_model",
+      "base_model_lineage": "mistral-small-3.1",
+      "repo_id": "RedHatAI/Mistral-Small-3.1-24B-Instruct-2503-quantized.w4a16",
+      "revision": "72add9a622385f641297a6feef5837a06300eecb",
+      "snapshot_tree_sha256": "16bed3903625052c1d2871a8135254acbe731169082f76d910b4b1ddfdf04241",
+      "snapshot_file_count": 17,
+      "snapshot_size_bytes": 15057754757,
+      "quantization": "compressed-tensors",
+      "dtype": "bfloat16",
+      "seed": 53047,
+      "chat_template_kwargs": {},
+      "output_extraction": "direct_structured_text",
+      "vllm_engine_kwargs": {
+        "tokenizer_mode": "mistral",
+        "enforce_eager": true
+      }
+    }
+  },
+  "historical_v2_generation": {
+    "engine": "vllm_offline_structured_outputs",
+    "temperature": 0,
+    "top_p": 1.0,
+    "max_output_tokens": 768,
+    "max_model_len": 90112,
+    "max_num_seqs": 8,
+    "max_num_batched_tokens": 8192,
+    "gpu_memory_utilization": 0.9,
+    "no_input_truncation": true,
+    "vllm_use_flashinfer_sampler": "0",
+    "vllm_enable_v1_multiprocessing": "0",
+    "vllm_disabled_kernels": [
+      "FlashInferFP8ScaledMMLinearKernel",
+      "FlashInferCutlassNvFp4LinearKernel",
+      "FlashInferTrtllmNvFp4LinearKernel",
+      "FlashInferCudnnNvFp4LinearKernel"
+    ],
+    "structured_outputs_config": {
+      "backend": "xgrammar",
+      "disable_any_whitespace": true
+    },
+    "cuda_home_override": null,
+    "prompt_token_accounting": "vllm_request_output.prompt_token_ids"
+  },
+  "future_exact_token_contract": {
+    "accepted_request_type": "NativeGenerationRequest",
+    "accepted_request_kind": "swe_task_state_v4_native_generation_request_v3",
+    "token_prompt_api": "vllm.inputs.TokensPrompt",
+    "token_prompt_field": "prompt_token_ids",
+    "request_token_ids_passed_directly": true,
+    "decode_before_submission_forbidden": true,
+    "chat_template_rerender_forbidden": true,
+    "retokenization_forbidden": true,
+    "string_round_trip_forbidden": true,
+    "input_truncation_forbidden": true,
+    "engine_prompt_token_ids_exact_equality_required": true,
+    "output_token_ids_required": true,
+    "output_text_matches_authenticated_token_decode_required_for_real": true,
+    "source_only_output_text_token_decode_parity_verified": false,
+    "finish_reason_required": "stop",
+    "sampling_seed_source": "native_request.seed",
+    "response_schema_source": "native_request.response_schema",
+    "structured_output_backend_required": "xgrammar",
+    "gpt_oss_extraction": {
+      "mode": "openai_harmony_final_channel",
+      "parser_package": "openai-harmony",
+      "strict": true,
+      "exactly_one_final_channel_required": true
+    }
+  },
+  "non_gate_cpu_route": {
+    "api": "execute_scripted_cpu_non_gate",
+    "record_kind": "swe_task_state_v4_epistemic_chain_scripted_cpu_non_gate_record_v3",
+    "actual_model_execution": false,
+    "gate_eligible": false,
+    "production_receipt": false
+  },
+  "claim_scope": {
+    "native_adapter_implemented": false,
+    "actual_model_execution_established": false,
+    "gate_readiness_established": false,
+    "annotation_interface_readiness_established": false,
+    "output_text_token_decode_parity_established": false,
+    "private_chain_of_thought_recovery_established": false,
+    "latent_cot_like_trajectory_recovery_established": false,
+    "emotion_affect_confidence_doubt_or_stress_recovery_established": false,
+    "reserved_validation_generalization_established": false
+  },
+  "blockers": [
+    "A separately reviewed production adapter source with a frozen SHA-256 is absent.",
+    "A separately reviewed runtime binding and environment receipt are absent.",
+    "Authenticated tokenizer reconstruction of output text from exact output token IDs is absent.",
+    "Exact native-token smoke tests on each frozen model family have not run.",
+    "No model, GPU, artifact, sealed-control, or gate execution is authorized by this draft."
+  ]
+}

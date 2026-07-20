@@ -1,0 +1,274 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/swe-task-state-v4-counterfactual-stage-a-capture-manifest-v1.schema.json",
+  "title": "SWE task-state V4 selector-control Stage-A authenticated capture manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kind",
+    "status",
+    "runtime_config_sha256",
+    "capture_prompt_bundle",
+    "implementation",
+    "model",
+    "lens",
+    "runtime",
+    "execution_order",
+    "boundaries",
+    "aggregate",
+    "claim_scope",
+    "reserved_validation_access_authorized"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "kind": {"const": "swe_task_state_v4_counterfactual_stage_a_authenticated_capture"},
+    "status": {"const": "passed_authenticated_target_model_capture"},
+    "runtime_config_sha256": {"$ref": "#/$defs/sha256"},
+    "capture_prompt_bundle": {"$ref": "#/$defs/prompt_binding"},
+    "implementation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reference_runner", "capture_runner", "shell_wrapper"],
+      "properties": {
+        "reference_runner": {"$ref": "#/$defs/file_binding"},
+        "capture_runner": {"$ref": "#/$defs/file_binding"},
+        "shell_wrapper": {"$ref": "#/$defs/file_binding"}
+      }
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repo_id",
+        "revision",
+        "snapshot_tree_sha256_before",
+        "snapshot_tree_sha256_after",
+        "snapshot_file_count",
+        "snapshot_size_bytes",
+        "checkpoint_validated_before_model_load",
+        "checkpoint_validated_after_capture"
+      ],
+      "properties": {
+        "repo_id": {"const": "nvidia/Qwen3.6-27B-NVFP4"},
+        "revision": {"const": "0893e1606ff3d5f97a441f405d5fc541a6bdf404"},
+        "snapshot_tree_sha256_before": {"$ref": "#/$defs/sha256"},
+        "snapshot_tree_sha256_after": {"$ref": "#/$defs/sha256"},
+        "snapshot_file_count": {"const": 17},
+        "snapshot_size_bytes": {"const": 21941623844},
+        "checkpoint_validated_before_model_load": {"const": true},
+        "checkpoint_validated_after_capture": {"const": true}
+      }
+    },
+    "lens": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repo_id", "revision", "filename", "sha256", "size_bytes"],
+      "properties": {
+        "repo_id": {"const": "neuronpedia/jacobian-lens"},
+        "revision": {"const": "a4114d7752d11eb546e6cf372213d7e75526d3a1"},
+        "filename": {"const": "qwen3.6-27b/jlens/Salesforce-wikitext/Qwen3.6-27B_jacobian_lens_n1000.pt"},
+        "sha256": {"const": "1718c8c52dd8a9dad03738d4d625937c1fbba10be325b872ed446c7290fc11e1"},
+        "size_bytes": {"const": 3303032772}
+      }
+    },
+    "runtime": {"$ref": "#/$defs/runtime_record"},
+    "execution_order": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reference_completed_before_capture",
+        "reference_report",
+        "reference_and_capture_residual_manifests_equal",
+        "condition_key_read",
+        "split_manifest_read",
+        "stage_b_read",
+        "semantic_answers_read",
+        "join_conditions_read"
+      ],
+      "properties": {
+        "reference_completed_before_capture": {"const": true},
+        "reference_report": {"$ref": "#/$defs/file_binding"},
+        "reference_and_capture_residual_manifests_equal": {"const": true},
+        "condition_key_read": {"const": false},
+        "split_manifest_read": {"const": false},
+        "stage_b_read": {"const": false},
+        "semantic_answers_read": {"const": false},
+        "join_conditions_read": {"const": false}
+      }
+    },
+    "boundaries": {
+      "type": "array",
+      "minItems": 500,
+      "maxItems": 500,
+      "items": {"$ref": "#/$defs/boundary"}
+    },
+    "aggregate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "boundary_count",
+        "all_capture_valid",
+        "all_shards_reload_verified",
+        "all_forward_canaries_passed",
+        "boundary_contract_sha256",
+        "shard_set_sha256"
+      ],
+      "properties": {
+        "boundary_count": {"const": 500},
+        "all_capture_valid": {"const": true},
+        "all_shards_reload_verified": {"const": true},
+        "all_forward_canaries_passed": {"const": true},
+        "boundary_contract_sha256": {"$ref": "#/$defs/sha256"},
+        "shard_set_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "claim_scope": {"$ref": "#/$defs/false_claims"},
+    "reserved_validation_access_authorized": {"const": false}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "file_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "size_bytes"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "size_bytes": {"type": "integer", "minimum": 1}
+      }
+    },
+    "prompt_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "size_bytes", "record_count", "row_contract_sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "size_bytes": {"type": "integer", "minimum": 1},
+        "record_count": {"const": 500},
+        "row_contract_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "runtime_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["environment", "parameters", "gpu", "started_at", "completed_at"],
+      "properties": {
+        "environment": {"type": "object"},
+        "parameters": {"type": "object"},
+        "gpu": {"type": "object"},
+        "started_at": {"type": "string", "format": "date-time"},
+        "completed_at": {"type": "string", "format": "date-time"}
+      }
+    },
+    "residual_manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sha256", "tensor_count", "logical_bytes", "token_position"],
+      "properties": {
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "tensor_count": {"const": 64},
+        "logical_bytes": {"const": 1310720},
+        "token_position": {"type": "integer", "minimum": 0}
+      }
+    },
+    "shard": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256",
+        "size_bytes",
+        "tensor_keys",
+        "shape",
+        "dtype",
+        "raw_residual_logical_sha256",
+        "public_j_state_logical_sha256",
+        "reload_verified"
+      ],
+      "properties": {
+        "path": {"type": "string", "pattern": "^shards/boundary-[0-9]{6}\\.safetensors$"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "size_bytes": {"type": "integer", "minimum": 983040},
+        "tensor_keys": {"const": ["public_j_state", "raw_residual"]},
+        "shape": {"const": [24, 5120]},
+        "dtype": {"const": "little-endian-float32"},
+        "raw_residual_logical_sha256": {"$ref": "#/$defs/sha256"},
+        "public_j_state_logical_sha256": {"$ref": "#/$defs/sha256"},
+        "reload_verified": {"const": true}
+      }
+    },
+    "boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "index",
+        "prompt_id",
+        "prompt_token_ids_sha256",
+        "prompt_token_count",
+        "token_position",
+        "reference_residual_manifest",
+        "capture_residual_manifest",
+        "reference_residual_manifest_equal",
+        "shard",
+        "forward_canary",
+        "capture_valid"
+      ],
+      "properties": {
+        "index": {"type": "integer", "minimum": 0, "maximum": 499},
+        "prompt_id": {"$ref": "#/$defs/sha256"},
+        "prompt_token_ids_sha256": {"$ref": "#/$defs/sha256"},
+        "prompt_token_count": {"type": "integer", "minimum": 1, "maximum": 49151},
+        "token_position": {"type": "integer", "minimum": 0, "maximum": 49150},
+        "reference_residual_manifest": {"$ref": "#/$defs/residual_manifest"},
+        "capture_residual_manifest": {"$ref": "#/$defs/residual_manifest"},
+        "reference_residual_manifest_equal": {"const": true},
+        "shard": {"$ref": "#/$defs/shard"},
+        "forward_canary": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "generated_token_id",
+            "final_model_top1_matches_greedy",
+            "final_norm_reconstruction_within_tolerance",
+            "final_logits_reconstruction_within_tolerance"
+          ],
+          "properties": {
+            "generated_token_id": {"type": "integer", "minimum": 0, "maximum": 248319},
+            "final_model_top1_matches_greedy": {"const": true},
+            "final_norm_reconstruction_within_tolerance": {"const": true},
+            "final_logits_reconstruction_within_tolerance": {"const": true}
+          }
+        },
+        "capture_valid": {"const": true}
+      }
+    },
+    "false_claims": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "private_chain_of_thought_reconstructed",
+        "cot_or_cot_like_decoding_established",
+        "subjective_confidence_inferred",
+        "subjective_doubt_inferred",
+        "experienced_stress_inferred",
+        "experienced_emotion_inferred",
+        "causal_affect_or_state_effect_established",
+        "incremental_activation_readout_established",
+        "outer_or_reserved_validation_generalization_established"
+      ],
+      "properties": {
+        "private_chain_of_thought_reconstructed": {"const": false},
+        "cot_or_cot_like_decoding_established": {"const": false},
+        "subjective_confidence_inferred": {"const": false},
+        "subjective_doubt_inferred": {"const": false},
+        "experienced_stress_inferred": {"const": false},
+        "experienced_emotion_inferred": {"const": false},
+        "causal_affect_or_state_effect_established": {"const": false},
+        "incremental_activation_readout_established": {"const": false},
+        "outer_or_reserved_validation_generalization_established": {"const": false}
+      }
+    }
+  }
+}

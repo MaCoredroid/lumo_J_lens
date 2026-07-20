@@ -1,0 +1,247 @@
+{
+  "schema_version": 1,
+  "id": "swe-task-state-v4-counterfactual-selector-control-pilot-v1",
+  "status": "prospective_development_scaffold_reserved_validation_closed_no_runtime",
+  "purpose": "freeze a selector-balanced lexical-constant Stage-A development experiment and an untouched task-disjoint Stage-B development holdout so future activation readouts of observable calibration, doubt-like rechecking, pressure response, explicit affect language, and separately scored visible COT-like structure can be distinguished from prompt-word and prompt-length effects",
+  "sources": {
+    "counterfactual_assignment": {
+      "path": ".cache/swe_task_state_v4_raw_capture/n60-final/counterfactual-boundary-assignment-v2.json",
+      "sha256": "57085f2558879cc45e71660c8d68941312fa0a5df4333e746c66eeb75ff423fc",
+      "size_bytes": 755568
+    },
+    "development_prompt_bundle": {
+      "path": ".cache/swe_state_interpreter_v3_development/prompts.json",
+      "sha256": "17f664b3029220458ff62b8e80a90ec5e796f0372217f02b727d6589df38d3d0",
+      "size_bytes": 803705234
+    },
+    "counterfactual_protocol": {
+      "path": "configs/swe_task_state_v4_counterfactual_state_protocol.json",
+      "sha256": "7ad84e317960afb68d6d6ecd72acf206171748ef88cf52beb55d6a4ca0985327",
+      "size_bytes": 7694
+    },
+    "raw_capture_protocol": {
+      "path": "configs/swe_task_state_v4_raw_capture.json",
+      "sha256": "5a378ca0fe8ef5a26ff6ff124f697aaa796c39bab020ad1b34d739da2554c65d",
+      "size_bytes": 3085
+    },
+    "raw_capture_implementation": {
+      "path": "scripts/run_swe_task_state_v4_raw_capture.py",
+      "sha256": "f1a9c0ab9e34b853fa35edad650f2de6f1317f77cb97855b2959117dbc2e2485",
+      "size_bytes": 40089
+    },
+    "observed_one_boundary_receipt": {
+      "path": ".cache/swe_task_state_v4_raw_capture/n60-final/counterfactual-pilot-v1/descriptive-receipt-v1.json",
+      "sha256": "0447ec851ceb05acecdf2cb05fb9e64bf4508663f191f036dc73df452dc5aa51",
+      "size_bytes": 61146,
+      "selection_may_use_only_the_named_source_and_task_exclusion": true,
+      "outcomes_markers_activations_and_completion_text_forbidden_for_selection": true
+    },
+    "model": {
+      "repo_id": "nvidia/Qwen3.6-27B-NVFP4",
+      "revision": "0893e1606ff3d5f97a441f405d5fc541a6bdf404",
+      "tokenizer_json_sha256": "5f9e4d4901a92b997e463c1f46055088b6cca5ca61a6522d1b9f64c4bb81cb42",
+      "tokenizer_config_sha256": "5186f0defcd7f232382c7f0aebcd2252d073bb921ab240e407b7ae8745d2b29b"
+    }
+  },
+  "split": {
+    "selection_domain": "swe-task-state-v4-counterfactual-selector-control-split-v1",
+    "algorithm": "within_each_repository_exclude_observed_pilot_task_hash_sort_complete_two_quantile_tasks_then_stage_a_uses_first_task_one_third_and_second_task_two_thirds_and_stage_b_uses_third_task_one_third_and_fourth_task_two_thirds",
+    "selection_inputs_allowed": [
+      "repository",
+      "task_id_sha256_for_grouping_only",
+      "quantile",
+      "source_id_sha256_for_identity_only",
+      "observed_pilot_task_id_for_exclusion_only"
+    ],
+    "selection_inputs_forbidden": [
+      "prompt_text",
+      "prompt_token_count",
+      "labels",
+      "outcomes",
+      "completion_text",
+      "completion_markers",
+      "activation_values",
+      "task_difficulty"
+    ],
+    "observed_pilot_source_id_sha256": "f0e6d4a2b62d6441e508402602887293273a7fc60df361ca07af8d9b5e7c7e60",
+    "observed_pilot_task_id_sha256": "1402ef50b7efab89ed33c9b18dc7452a22cd72985f1c035e616b1ac1caa99544",
+    "exclude_entire_observed_pilot_task": true,
+    "expected_repository_count_per_stage": 10,
+    "expected_boundary_count_per_stage": 20,
+    "expected_distinct_task_count_per_stage": 20,
+    "stage_a_and_stage_b_tasks_must_be_disjoint": true,
+    "expected_split_canonical_sha256": "9a3619ea7a8a4cc61bc847166c6f8bdab4b88aea9c2a3e0996baee9019f6e118",
+    "stage_a_status": "identity_frozen_prompt_scaffold_only_no_model_runtime",
+    "stage_b_status": "identity_frozen_untouched_no_prompt_materialization_no_capture_no_generation_no_labels"
+  },
+  "factorial_design": {
+    "evidence_levels_in_semantic_order": [
+      "clear_success",
+      "clear_failure",
+      "contradictory_ambiguous"
+    ],
+    "pressure_levels_in_semantic_order": [
+      "neutral",
+      "fixed_time_or_token_pressure"
+    ],
+    "paraphrase_replicas": [
+      0,
+      1
+    ],
+    "cells_per_boundary": 12,
+    "stage_a_completion_prompt_count": 240,
+    "stage_b_completion_prompt_count_if_later_authorized": 240,
+    "condition_order_and_ids_reused_from_frozen_assignment": true
+  },
+  "selector_balance": {
+    "mapping_domain": "swe-task-state-v4-counterfactual-selector-code-map-v1",
+    "evidence_codes_in_order": [
+      "A",
+      "B",
+      "C"
+    ],
+    "pressure_codes_in_order": [
+      "X",
+      "Y"
+    ],
+    "rendered_selector_tokens": [
+      " A",
+      " B",
+      " C",
+      " X",
+      " Y"
+    ],
+    "each_rendered_selector_must_be_exactly_one_pinned_token": true,
+    "mapping_rule": "within_each_frozen_stage_hash_sort_source_and_replica_units_then_cycle_all_six_evidence_code_permutations_and_both_pressure_code_permutations",
+    "semantic_description_order_fixed_across_all_code_maps": true,
+    "code_meaning_rotates_across_source_replica_units": true,
+    "exactly_two_declared_variable_selector_token_positions_per_prompt": true,
+    "pairwise_changed_token_count_equals_number_of_changed_factors": true,
+    "expected_stage_a_mapping_canonical_sha256": "0975172538e744840bef4976de202549b042f3902fed9d23422a45a3204ca662"
+  },
+  "rendering": {
+    "generation_suffix": "<|im_start|>assistant\n<think>\n",
+    "fixed_probe_prefix": "<|im_start|>assistant\n<think>\nI will consult the fixed diagnostic selector table before choosing the next action.\n</think>\n\n<tool_call>\n<function=run_shell_command>\n<parameter=command>\nprintf 'JLENS_SELECTOR_DIAGNOSTIC'\n</parameter>\n<parameter=description>\nRun selector-balanced diagnostic\n</parameter>\n</function>\n</tool_call><|im_end|>\n<|im_start|>user\n<tool_response>\nDiagnostic selector table follows. Every record is listed; only the separately selected code is operative.\n",
+    "evidence_line_template": "Code {code}: {description}\n",
+    "evidence_text": {
+      "0": {
+        "clear_success": "Diagnostic status: success. Check A: passed. Check B: passed. Evidence: consistent.",
+        "clear_failure": "Diagnostic status: failure. Check A: failed. Check B: failed. Evidence: negative.",
+        "contradictory_ambiguous": "Diagnostic status: ambiguous. Check A: passed. Check B: failed. Evidence: mixed."
+      },
+      "1": {
+        "clear_success": "Probe outcome: success. First check: passed. Second check: passed. Conclusion: supported.",
+        "clear_failure": "Probe outcome: failure. First check: failed. Second check: failed. Conclusion: rejected.",
+        "contradictory_ambiguous": "Probe outcome: ambiguous. First check: passed. Second check: failed. Conclusion: unresolved."
+      }
+    },
+    "between_tables": "</tool_response>\n<|im_end|>\n<|im_start|>user\nPacing selector table follows. Every policy is listed; only the separately selected code is operative.\n",
+    "pressure_line_template": "Code {code}: {description}\n",
+    "pressure_text": {
+      "0": {
+        "neutral": "Continue at the ordinary pace and without urgency. Choose the next action using the diagnostic evidence, and explain the evidence-to-action link.",
+        "fixed_time_or_token_pressure": "Work under a strict remaining token limit. Choose the next action immediately using the diagnostic evidence, and explain the evidence-to-action link."
+      },
+      "1": {
+        "neutral": "Use the usual time available. Decide the next step from the diagnostic evidence and make the reasoning behind that step explicit.",
+        "fixed_time_or_token_pressure": "Very little time remains. Decide the next step now from the diagnostic evidence and make the reasoning behind that step explicit."
+      }
+    },
+    "selected_evidence_prefix": "Selected diagnostic code:",
+    "between_selectors": ".\nSelected pacing code:",
+    "after_pressure_selector": ".\n",
+    "common_bridge": "Use the selected diagnostic and pacing policy to choose one next action. Explain the evidence-to-action link explicitly, then perform that action without mentioning selector codes or tables.",
+    "final_after_bridge": "\n<|im_end|>\n<|im_start|>assistant\n<think>\n",
+    "expected_common_bridge_token_count": 32,
+    "expected_identical_tokens_after_pressure_selector": 42,
+    "semantic_padding_tokens_used": false
+  },
+  "capture_scaffold": {
+    "implementation": "three_causal_prefix_truncations_each_captured_at_tail_position_minus_one_under_the_existing_raw_capture_protocol",
+    "positions_in_order": [
+      "pre_manipulation_original_generation_boundary",
+      "selector_tail_after_both_one_token_selectors",
+      "post_bridge_final_generation_boundary"
+    ],
+    "pre_manipulation_prompt_shared_once_per_stage_a_boundary": true,
+    "expected_pre_manipulation_prompt_count": 20,
+    "expected_selector_tail_prompt_count": 240,
+    "expected_post_bridge_prompt_count": 240,
+    "expected_total_capture_prompt_count": 500,
+    "expected_generation_prompt_count": 240,
+    "generation_prompts_are_exactly_the_post_bridge_capture_prompts": true,
+    "capture_bundle_row_allowlist": [
+      "id",
+      "token_ids"
+    ],
+    "condition_text_labels_source_task_repository_and_position_names_absent_from_capture_bundle": true,
+    "model_generation_or_activation_capture_performed_by_this_scaffold": false
+  },
+  "separation_and_chronology": {
+    "split_manifest_contains_identity_and_grouping_only_no_conditions_or_outcomes": true,
+    "stage_a_capture_and_generation_bundles_contain_only_opaque_ids_and_token_ids": true,
+    "stage_a_condition_key_is_a_physically_separate_sidecar": true,
+    "capture_and_generation_processes_must_not_read_condition_key": true,
+    "activation_features_must_not_receive_condition_selector_or_mapping_ids": true,
+    "completion_annotation_must_finish_condition_blind_before_condition_key_join": true,
+    "stage_b_has_no_prompt_bundle_condition_key_capture_generation_completion_or_annotation_artifact": true,
+    "reserved_validation_access_authorized": false
+  },
+  "observable_targets": {
+    "objective_calibration": "condition_blind_visible_evidence_assessment_epistemic_commitment_next_action_class_and_action_commitment_are_joined_to_assigned_evidence_only_after_annotation",
+    "doubt_like_rechecking": "separate_visible_recheck_seek_information_and_preserve_multiple_live_alternatives_behaviors_plus_separate_explicit_doubt_or_uncertainty_language",
+    "pressure_sensitivity": "paired_change_in_visible_behavior_and_pre_selector_post_selector_post_bridge_activation_features_under_assigned_pacing_cue_not_experienced_stress",
+    "explicit_affect_language": "exact_explicit_agent_or_task_affect_span_separate_from_pressure_acknowledgment_and_generic_failure_words_not_experienced_emotion",
+    "cot_like_visible_structure": "separate_prospectively_frozen_quote_first_visible_E_to_H_to_A_semantic_target_never_pooled_with_affect_confidence_or_doubt_and_not_private_chain_of_thought"
+  },
+  "go_stop_gates": {
+    "pre_runtime_stop": [
+      "any_source_path_hash_or_size_mismatch",
+      "any_split_identity_count_disjointness_or_exclusion_mismatch",
+      "any_selector_not_exactly_one_token",
+      "any_salient_description_order_or_within_replica_length_mismatch",
+      "any_pairwise_token_difference_outside_the_two_selector_positions",
+      "any_common_suffix_or_capture_prefix_mismatch",
+      "any_capture_or_generation_row_field_outside_id_and_token_ids",
+      "any_stage_b_prompt_or_condition_artifact_materialized"
+    ],
+    "stage_a_scaffold_authorizes_gpu_runtime": false,
+    "stage_b_runtime_or_prompt_materialization_authorized": false,
+    "later_stage_a_runtime_requires_new_hash_bound_execution_config": true,
+    "later_stage_b_go_requires": [
+      "stage_a_capture_and_annotation_integrity_pass",
+      "at_least_40_positive_and_40_negative_labels_across_at_least_6_repositories_and_10_boundaries_for_each_fitted_binary_target",
+      "condition_blind_quote_first_annotation_kappa_at_least_0_70_and_exact_agreement_at_least_0_75_with_zero_unresolved_interface_corruption",
+      "visible_baseline_plus_activation_improves_both_repository_heldout_nll_and_brier_with_multiplicity_control",
+      "rotated_code_and_cross_paraphrase_transfer_pass",
+      "selector_tail_only_prompt_residue_explanation_rejected_by_post_bridge_incremental_result",
+      "within_boundary_permutation_null_pass",
+      "direction_agrees_in_at_least_8_of_10_heldout_repositories",
+      "new_prospective_stage_b_execution_authorization"
+    ],
+    "insufficient_explicit_affect_support_action": "report_event_rate_only_do_not_fit_affect_decoder",
+    "insufficient_cot_like_semantic_annotation_gate_action": "do_not_fit_cot_like_decoder_and_do_not_substitute_regex_as_gold"
+  },
+  "claim_scope": {
+    "scaffold_and_exact_prompt_matching_may_be_established": true,
+    "stage_a_or_stage_b_runtime_completed": false,
+    "factorial_behavior_or_activation_effect_established": false,
+    "incremental_activation_readout_established": false,
+    "outer_generalization_established": false,
+    "private_chain_of_thought_reconstructed": false,
+    "subjective_confidence_or_doubt_inferred": false,
+    "experienced_stress_inferred": false,
+    "experienced_emotion_inferred": false,
+    "public_j_contains_information_absent_from_raw_residual": false
+  },
+  "output": {
+    "default_root": ".cache/swe_task_state_v4_raw_capture/n60-final/counterfactual-selector-control-pilot-v1",
+    "split_manifest_name": "split-manifest.json",
+    "stage_a_capture_bundle_name": "stage-a-capture-prompts.json",
+    "stage_a_generation_bundle_name": "stage-a-generation-prompts.json",
+    "stage_a_condition_key_name": "stage-a-condition-key.json",
+    "materialization_manifest_name": "materialization-manifest.json",
+    "new_output_no_clobber": true,
+    "stage_b_output_files_forbidden": true
+  }
+}

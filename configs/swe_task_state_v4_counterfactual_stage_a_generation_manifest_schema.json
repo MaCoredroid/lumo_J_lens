@@ -1,0 +1,209 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/swe-task-state-v4-counterfactual-stage-a-generation-manifest-v1.schema.json",
+  "title": "SWE task-state V4 selector-control Stage-A authenticated generation manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kind",
+    "status",
+    "runtime_config_sha256",
+    "generation_prompt_bundle",
+    "authenticated_capture_manifest",
+    "surface_completion_bundle",
+    "model",
+    "runtime",
+    "sampling",
+    "execution_order",
+    "records",
+    "aggregate",
+    "claim_scope",
+    "reserved_validation_access_authorized"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "kind": {"const": "swe_task_state_v4_counterfactual_stage_a_authenticated_generation"},
+    "status": {"const": "passed_generation_after_authenticated_capture"},
+    "runtime_config_sha256": {"$ref": "#/$defs/sha256"},
+    "generation_prompt_bundle": {"$ref": "#/$defs/prompt_binding"},
+    "authenticated_capture_manifest": {"$ref": "#/$defs/file_binding"},
+    "surface_completion_bundle": {"$ref": "#/$defs/file_binding"},
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repo_id",
+        "revision",
+        "snapshot_tree_sha256_before",
+        "snapshot_tree_sha256_after",
+        "checkpoint_validated_before_generation",
+        "checkpoint_validated_after_generation"
+      ],
+      "properties": {
+        "repo_id": {"const": "nvidia/Qwen3.6-27B-NVFP4"},
+        "revision": {"const": "0893e1606ff3d5f97a441f405d5fc541a6bdf404"},
+        "snapshot_tree_sha256_before": {"$ref": "#/$defs/sha256"},
+        "snapshot_tree_sha256_after": {"$ref": "#/$defs/sha256"},
+        "checkpoint_validated_before_generation": {"const": true},
+        "checkpoint_validated_after_generation": {"const": true}
+      }
+    },
+    "runtime": {"type": "object"},
+    "sampling": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "max_new_tokens",
+        "temperature",
+        "top_p",
+        "seed",
+        "skip_special_tokens",
+        "spaces_between_special_tokens",
+        "no_input_truncation"
+      ],
+      "properties": {
+        "max_new_tokens": {"const": 256},
+        "temperature": {"const": 0},
+        "top_p": {"const": 1},
+        "seed": {"const": 0},
+        "skip_special_tokens": {"const": true},
+        "spaces_between_special_tokens": {"const": true},
+        "no_input_truncation": {"const": true}
+      }
+    },
+    "execution_order": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "capture_verified_before_model_load",
+        "capture_shards_rehashed_before_generation",
+        "condition_key_read",
+        "split_manifest_read",
+        "stage_b_read",
+        "semantic_answers_read",
+        "join_conditions_read",
+        "completion_annotation_run"
+      ],
+      "properties": {
+        "capture_verified_before_model_load": {"const": true},
+        "capture_shards_rehashed_before_generation": {"const": true},
+        "condition_key_read": {"const": false},
+        "split_manifest_read": {"const": false},
+        "stage_b_read": {"const": false},
+        "semantic_answers_read": {"const": false},
+        "join_conditions_read": {"const": false},
+        "completion_annotation_run": {"const": false}
+      }
+    },
+    "records": {
+      "type": "array",
+      "minItems": 240,
+      "maxItems": 240,
+      "items": {"$ref": "#/$defs/generation_record"}
+    },
+    "aggregate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["record_count", "generation_error_count", "record_contract_sha256"],
+      "properties": {
+        "record_count": {"const": 240},
+        "generation_error_count": {"const": 0},
+        "record_contract_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "claim_scope": {"$ref": "#/$defs/false_claims"},
+    "reserved_validation_access_authorized": {"const": false}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "file_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "size_bytes"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "size_bytes": {"type": "integer", "minimum": 1}
+      }
+    },
+    "prompt_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "size_bytes", "record_count", "row_contract_sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "size_bytes": {"type": "integer", "minimum": 1},
+        "record_count": {"const": 240},
+        "row_contract_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "generation_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "index",
+        "prompt_id",
+        "prompt_token_ids_sha256",
+        "prompt_token_count",
+        "generated_token_ids",
+        "generated_token_ids_sha256",
+        "generated_token_count",
+        "completion_text",
+        "completion_text_sha256",
+        "completion_status",
+        "finish_reason",
+        "stop_reason",
+        "vllm_prompt_tokens_equal_input",
+        "completion_text_equals_pinned_tokenizer_visible_decode"
+      ],
+      "properties": {
+        "index": {"type": "integer", "minimum": 0, "maximum": 239},
+        "prompt_id": {"$ref": "#/$defs/sha256"},
+        "prompt_token_ids_sha256": {"$ref": "#/$defs/sha256"},
+        "prompt_token_count": {"type": "integer", "minimum": 1, "maximum": 48896},
+        "generated_token_ids": {
+          "type": "array",
+          "maxItems": 256,
+          "items": {"type": "integer", "minimum": 0, "maximum": 248319}
+        },
+        "generated_token_ids_sha256": {"$ref": "#/$defs/sha256"},
+        "generated_token_count": {"type": "integer", "minimum": 0, "maximum": 256},
+        "completion_text": {"type": "string"},
+        "completion_text_sha256": {"$ref": "#/$defs/sha256"},
+        "completion_status": {"enum": ["complete", "truncated", "empty"]},
+        "finish_reason": {"enum": ["stop", "length"]},
+        "stop_reason": {},
+        "vllm_prompt_tokens_equal_input": {"const": true},
+        "completion_text_equals_pinned_tokenizer_visible_decode": {"const": true}
+      }
+    },
+    "false_claims": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "private_chain_of_thought_reconstructed",
+        "cot_or_cot_like_decoding_established",
+        "subjective_confidence_inferred",
+        "subjective_doubt_inferred",
+        "experienced_stress_inferred",
+        "experienced_emotion_inferred",
+        "causal_affect_or_state_effect_established",
+        "incremental_activation_readout_established",
+        "outer_or_reserved_validation_generalization_established"
+      ],
+      "properties": {
+        "private_chain_of_thought_reconstructed": {"const": false},
+        "cot_or_cot_like_decoding_established": {"const": false},
+        "subjective_confidence_inferred": {"const": false},
+        "subjective_doubt_inferred": {"const": false},
+        "experienced_stress_inferred": {"const": false},
+        "experienced_emotion_inferred": {"const": false},
+        "causal_affect_or_state_effect_established": {"const": false},
+        "incremental_activation_readout_established": {"const": false},
+        "outer_or_reserved_validation_generalization_established": {"const": false}
+      }
+    }
+  }
+}

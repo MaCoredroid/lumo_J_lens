@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "id": "swe-task-state-v4-cot-claim-ladder-v1",
+  "kind": "swe_task_state_v4_cot_claim_ladder",
+  "status": "prospective_development_goal_contract_frozen_before_cot_specific_evidence",
+  "scope": {
+    "development_data_only": true,
+    "reserved_validation_closed": true,
+    "reserved_validation_accessed": false,
+    "created_after_user_made_cot_or_cot_like_a_first_class_goal": true,
+    "emotion_affect_confidence_doubt_and_stress_remain_a_separate_goal_lane": true
+  },
+  "goal_contract": {
+    "cot_or_cot_like_reasoning_is_a_first_class_target": true,
+    "cot_or_cot_like_reasoning_is_not_redefined_as_emotion_or_affect": true,
+    "sentence_or_concept_chains_are_required_instead_of_isolated_words": true,
+    "private_or_verbatim_cot_is_in_scope_as_an_aspirational_target": true,
+    "private_or_verbatim_cot_may_not_be_claimed_without_separately_withheld_ground_truth": true,
+    "cot_like_latent_concept_trajectory_is_in_scope_as_a_distinct_operational_target": true
+  },
+  "definitions": {
+    "visible_future_semantic_chain": "an_exact_visible_future_E_to_H_to_A_chain_in_which_evidence_supports_refutes_or_narrows_a_distinct_hypothesis_and_that_hypothesis_motivates_a_specific_action",
+    "observer_model_forecast": "a_replay_models_state_predicts_a_later_visible_chain_from_the_exact_visible_prefix",
+    "same_model_latent_cot_like_state": "the_generating_models_causally_prior_internal_state_contains_incremental_proposition_or_chain_information_about_its_own_later_visible_reasoning",
+    "latent_cot_like_concept_trajectory": "a_time_ordered_same_model_sequence_of_causally_prior_internal_states_that_incrementally_expresses_distinct_E_H_and_A_concepts_before_their_visible_surface_realization",
+    "private_or_verbatim_cot": "a_separately_recorded_withheld_internal_scratchpad_or_reasoning_channel_from_the_same_instrumented_model_not_visible_to_the_lens_inputs",
+    "affective_or_subjective_state": "emotion_affect_confidence_doubt_stress_pressure_or_related_state_which_is_not_a_semantic_reasoning_chain"
+  },
+  "current_evidence_boundary": {
+    "current_raw_capture_states": "teacher_forced_replay_states_at_the_exact_visible_prefix_tail",
+    "current_replay_model": "nvidia_Qwen3_6_27B_NVFP4",
+    "current_replay_state_count": 1708,
+    "current_stable_feature_row_count": 1606,
+    "current_replay_states_are_original_codex_agent_internal_states": false,
+    "current_replay_states_can_establish_original_agent_private_cot": false,
+    "current_replay_states_can_at_most_support_observer_model_forecast_after_all_predictive_gates": true,
+    "current_visible_marker_development_result_is_sentence_or_concept_chain_recovery": false,
+    "failed_v2_semantic_control_is_cot_evidence": false
+  },
+  "claims_ladder": [
+    {
+      "level": 0,
+      "claim": "surface_or_visible_proxy_only",
+      "required_evidence": [
+        "authenticated_visible_target",
+        "no_private_or_latent_language"
+      ]
+    },
+    {
+      "level": 1,
+      "claim": "observer_model_forecasts_visible_future_semantic_chain",
+      "required_evidence": [
+        "passing_three_family_semantic_annotation_interface",
+        "two_blind_annotations_and_adjudication_on_real_development_trajectories",
+        "target_packet_selection_annotation_split_and_label_locks_frozen_blind_to_activations_lens_scores_outcomes_and_decoder_performance",
+        "task_and_repository_heldout_predictions",
+        "strict_incremental_improvement_over_exact_full_visible_prefix_semantic_baseline",
+        "marker_free_joint_stratum_improvement",
+        "proposition_content_quality_floor_and_training_only_retrieval_gate",
+        "full_refit_clustered_uncertainty_and_multiplicity_control"
+      ],
+      "does_not_establish": [
+        "same_model_internal_reasoning",
+        "latent_cot_like_trajectory",
+        "private_or_verbatim_cot"
+      ]
+    },
+    {
+      "level": 2,
+      "claim": "same_model_latent_cot_like_concept_trajectory",
+      "required_evidence": [
+        "same_model_produces_the_completion_and_the_measured_internal_states",
+        "online_activation_capture_in_the_exact_autoregressive_generation_run_or_an_explicit_replay_only_claim_with_authenticated_exact_token_prefix_runtime_cache_position_state_and_logit_parity",
+        "capture_at_three_or_more_predeclared_causally_ordered_boundaries",
+        "each_boundary_feature_excludes_all_future_visible_tokens_tool_results_and_labels",
+        "target_packet_selection_annotation_split_and_label_locks_frozen_blind_to_activations_lens_scores_outcomes_and_decoder_performance",
+        "separate_E_H_and_A_proposition_targets_not_only_coarse_slots_or_words",
+        "predeclared_temporal_order_or_anticipation_lead_time_gate_for_E_then_H_then_A",
+        "strict_incremental_improvement_over_the_same_boundarys_complete_visible_prefix_baseline",
+        "task_and_repository_heldout_generalization",
+        "marker_free_and_prefix_absent_target_strata",
+        "matched_norm_random_direction_orthogonal_direction_layer_and_time_shuffle_controls",
+        "predeclared_activation_intervention_changes_the_later_semantic_target_in_the_predicted_direction",
+        "paired_intervention_and_sham_runs_have_identical_prefix_generated_token_history_through_intervention_sampler_seed_runtime_and_cache_with_the_activation_delta_as_the_sole_difference",
+        "replication_on_a_second_untouched_same_model_generation_cohort"
+      ],
+      "does_not_establish": [
+        "literal_private_scratchpad_reconstruction",
+        "conscious_experience",
+        "transfer_to_a_different_agent_model"
+      ]
+    },
+    {
+      "level": 3,
+      "claim": "private_or_verbatim_cot_recovery_for_a_named_instrumented_model",
+      "required_evidence": [
+        "same_instrumented_model_and_exact_generation_run_for_activations_and_private_ground_truth",
+        "private_scratchpad_or_reasoning_channel_recorded_physically_separately_and_hash_bound",
+        "private_ground_truth_withheld_until_predictions_and_abstentions_are_locked",
+        "private_ground_truth_absent_from_all_visible_prefixes_features_prompts_and_candidate_pools",
+        "task_and_repository_heldout_semantic_and_proposition_content_accuracy",
+        "training_only_open_set_retrieval_or_generation_not_future_supplied_closed_set_only",
+        "exact_copy_leakage_canaries_and_randomized_private_target_controls",
+        "untouched_confirmation_cohort",
+        "claim_limited_to_the_exact_named_model_runtime_task_distribution_and_reasoning_channel"
+      ],
+      "does_not_establish": [
+        "private_cot_of_codex_or_any_other_uninstrumented_agent",
+        "faithfulness_of_the_private_scratchpad_to_causal_computation",
+        "conscious_experience"
+      ]
+    }
+  ],
+  "same_model_stage_a_boundary": {
+    "prospective_stage_a_runtime_config_path": "configs/swe_task_state_v4_counterfactual_stage_a_runtime.json",
+    "prospective_stage_a_runtime_config_sha256": "e4ee185167732363e3e048b9b2ea7cbe85acb2f15e09692cec53ae87186cdb64",
+    "prompt_tail_capture_can_contribute_to_level_1_or_same_model_single_state_evidence_only": true,
+    "single_prompt_tail_capture_is_a_temporal_trajectory": false,
+    "three_or_more_causal_boundaries_remain_required_for_level_2": true,
+    "generation_or_capture_executed_when_this_contract_was_frozen": false
+  },
+  "claim_state": {
+    "observer_model_visible_semantic_chain_forecast_established": false,
+    "same_model_latent_cot_like_state_established": false,
+    "latent_cot_like_concept_trajectory_established": false,
+    "private_or_verbatim_cot_recovery_established": false,
+    "emotion_affect_confidence_doubt_or_stress_recovery_established": false,
+    "causal_interpretation_established": false,
+    "untouched_operational_reliability_established": false
+  },
+  "failure_actions": {
+    "semantic_annotation_interface_failure": "do_not_select_or_annotate_real_semantic_target_packets_and_do_not_fit_a_semantic_decoder",
+    "same_model_requirement_failure": "limit_language_to_observer_model_forecast",
+    "temporal_or_intervention_gate_failure": "do_not_use_latent_cot_like_trajectory_language",
+    "private_ground_truth_absent": "do_not_use_private_or_verbatim_cot_recovery_language",
+    "affect_lane_result": "never_substitute_affect_evidence_for_cot_or_cot_like_evidence"
+  }
+}

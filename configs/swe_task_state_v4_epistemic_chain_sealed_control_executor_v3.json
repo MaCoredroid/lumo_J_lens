@@ -1,0 +1,153 @@
+{
+  "schema_version": 1,
+  "interface_version": 3,
+  "kind": "swe_task_state_v4_epistemic_chain_sealed_control_executor_v3",
+  "status": "prospective_development_control_protocol_execution_unauthorized_not_run",
+  "scope": {
+    "development_controls_only": true,
+    "reserved_validation_closed": true,
+    "reserved_validation_accessed": false,
+    "visible_semantic_cot_like_structure_targeted": true,
+    "private_or_verbatim_chain_of_thought_recovery_claimed": false,
+    "affect_emotion_confidence_doubt_or_stress_targeted": false,
+    "model_or_gpu_execution_performed_by_this_configuration": false,
+    "sealed_control_run_claimed": false
+  },
+  "authorization": {
+    "execution_authorized": false,
+    "model_access_authorized": false,
+    "gpu_access_authorized": false,
+    "artifact_output_authorized": false,
+    "gate_evidence_authorized": false,
+    "future_enablement_requires_external_exact_hashes": true,
+    "future_enablement_requires_separately_frozen_outer_launch_authorization": true,
+    "future_enablement_requires_separately_frozen_adapter_launch_bindings": true
+  },
+  "adapter_interface": {
+    "config_path": "configs/swe_task_state_v4_epistemic_chain_native_vllm_adapter_v3.json",
+    "source_path": "scripts/swe_task_state_v4_epistemic_chain_native_vllm_adapter_v3.py",
+    "entrypoint": "execute_production_native_batch",
+    "config_sha256_supplied_externally_per_launch": true,
+    "source_sha256_supplied_externally_per_launch": true,
+    "launch_binding_path_and_sha256_supplied_externally_per_batch": true,
+    "caller_supplied_backend_forbidden": true,
+    "non_gate_test_records_forbidden_as_generation_evidence": true
+  },
+  "input_contracts": {
+    "control": {
+      "builder_path": "scripts/swe_task_state_v4_epistemic_chain_control_inputs_draft_v3.py",
+      "builder_sha256": "770457bd760fd81f50966203d3284e7dd697d661c0cab2fe472bb6b99aa92553",
+      "config_path": "configs/swe_task_state_v4_epistemic_chain_control_inputs_draft_v3.json",
+      "config_sha256": "97811c475349370c395f340b9a18d798f974f702e797ebf4606d06c21ebff4e4",
+      "expected_manifest_sha256": "cb2080a895cb219c8995e3944a0c86b5a0239e96fbde24086244a79de3049567",
+      "authoritative_regeneration_required_at_every_generation_stage": true
+    },
+    "fixture": {
+      "builder_path": "scripts/swe_task_state_v4_epistemic_chain_adjudication_fixture_corpus_inputs_draft_v3.py",
+      "builder_sha256": "2984da9e9af8c358370a7719d7dacd5957063bebe39e9322904d37a6f6bcb5c8",
+      "config_path": "configs/swe_task_state_v4_epistemic_chain_adjudication_fixture_corpus_inputs_draft_v3.json",
+      "config_sha256": "54edd4d68c08e0faea7f2d04d59f7cd32fdbed8c46865abe63e33165a0598ee5",
+      "expected_manifest_sha256": "81338adf399e0835fc5030f79228f019dc3505893cc550a5957a1ac1346aef9e",
+      "authoritative_regeneration_required_at_every_generation_stage": true
+    }
+  },
+  "key_contracts": {
+    "fixture_generation_key": {
+      "config_path": "configs/swe_task_state_v4_epistemic_chain_adjudication_fixture_corpus_key_draft_v3.json",
+      "config_sha256": "d676af22f287e882400d3f356b49b921af3464b6b353477d6a04dedfb71e09cf",
+      "materializer_path": "scripts/swe_task_state_v4_epistemic_chain_adjudication_fixture_corpus_key_draft_v3.py",
+      "materializer_sha256": "9febe2a281acd2f20223db5dec5dd842365752df581ed522b2a628bc6e5f2172",
+      "earliest_read_stage": "run_adjudicator",
+      "dual_primary_lock_required_before_read": true,
+      "suite_nonce_precommit_required_before_read": true,
+      "single_read_and_single_materialization_required": true
+    },
+    "control_scoring_key": {
+      "config_path": "configs/swe_task_state_v4_epistemic_chain_control_key_draft_v3.json",
+      "config_sha256": "806da55baf4f39f18f7835d061f8729e2a55b8968a80abcb719960c699ac8250",
+      "materializer_path": "scripts/swe_task_state_v4_epistemic_chain_control_key_draft_v3.py",
+      "materializer_sha256": "9ffe5e56ec2f20a78877d7018726a235e48a708a97dba0aaae023b10b868de27",
+      "generation_executor_read_forbidden": true,
+      "separate_scorer_reads_after_final_lock": true
+    }
+  },
+  "stages": [
+    {"name": "freeze_helper", "rank": 0},
+    {"name": "precommit_nonce", "rank": 1},
+    {"name": "run_primary", "rank": 2},
+    {"name": "lock_primaries", "rank": 3},
+    {"name": "run_adjudicator", "rank": 4},
+    {"name": "lock_all", "rank": 5}
+  ],
+  "role_contracts": {
+    "independent_a": {
+      "adapter_role": "independent_a",
+      "model_lineage": "qwen3.6",
+      "ordered_control_results": 40,
+      "native_model_results": 39,
+      "deterministic_host_bypasses": 1
+    },
+    "independent_b": {
+      "adapter_role": "independent_b",
+      "model_lineage": "gpt-oss",
+      "ordered_control_results": 40,
+      "native_model_results": 39,
+      "deterministic_host_bypasses": 1
+    },
+    "adjudicator": {
+      "adapter_role": "adjudicator",
+      "model_lineage": "mistral-small-3.1",
+      "ordered_control_results": 40,
+      "native_model_results": 39,
+      "deterministic_host_bypasses": 1,
+      "ordered_fixture_results": 12,
+      "native_fixture_results": 12
+    }
+  },
+  "host_bypass_contract": {
+    "sole_control_id": "C32",
+    "exact_visible_text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "execution_path": "deterministic_host_bypass",
+    "result": {"decision": "no_chain"},
+    "native_evidence": null
+  },
+  "fixture_seed_schedule": [
+    {"case_id": "F01", "verdict_seed": 1001, "repair_seed": 2001},
+    {"case_id": "F02", "verdict_seed": 1002, "repair_seed": 2002},
+    {"case_id": "F03", "verdict_seed": 1003, "repair_seed": 2003},
+    {"case_id": "F04", "verdict_seed": 1004, "repair_seed": 2004},
+    {"case_id": "F05", "verdict_seed": 1005, "repair_seed": 2005},
+    {"case_id": "F06", "verdict_seed": 1006, "repair_seed": 2006},
+    {"case_id": "F07", "verdict_seed": 1007, "repair_seed": 2007},
+    {"case_id": "F08", "verdict_seed": 1008, "repair_seed": 2008},
+    {"case_id": "F09", "verdict_seed": 1009, "repair_seed": 2009},
+    {"case_id": "F10", "verdict_seed": 1010, "repair_seed": 2010},
+    {"case_id": "F11", "verdict_seed": 1011, "repair_seed": 2011},
+    {"case_id": "F12", "verdict_seed": 1012, "repair_seed": 2012}
+  ],
+  "nonce_contract": {
+    "one_random_32_byte_suite_nonce": true,
+    "public_nonce_is_sha256_only": true,
+    "case_nonce_derivation_domain": "v3-fixture-corpus-case-nonce-citrine",
+    "precommit_before_any_fixture_key_read": true,
+    "single_use_consumption_marker_required": true,
+    "retry_or_replacement_forbidden": true,
+    "all_case_nonces_derived_from_suite_nonce": true
+  },
+  "filesystem_contract": {
+    "generation_root_and_key_root_must_be_disjoint": true,
+    "symlinks_for_protocol_artifacts_forbidden": true,
+    "outputs_created_exclusively": true,
+    "read_trace_hash_chained_and_closed_by_final_lock": true,
+    "external_hash_required_for_every_cross_command_input": true,
+    "primary_locks_are_distinct": true,
+    "dual_primary_lock_required": true,
+    "final_all_outputs_lock_required": true
+  },
+  "public_bundle_contract": {
+    "envelope_fields": ["manifest", "manifest_sha256"],
+    "separate_read_trace_envelope_fields": ["trace", "trace_sha256"],
+    "scoring_keys_absent": true,
+    "scorer_authenticates_public_chronology_before_reading_keys": true
+  }
+}

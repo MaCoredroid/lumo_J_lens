@@ -1,0 +1,197 @@
+{
+  "schema_version": 1,
+  "kind": "swe_task_state_v4_epistemic_chain_annotation_codebook",
+  "id": "visible-novel-epistemic-action-chain-codebook-v1",
+  "status": "frozen_pre_annotation_synthetic_examples_only",
+  "scope": {
+    "target": "visible_novel_epistemic_action_chain_v1",
+    "examples_are_synthetic": true,
+    "development_annotation_only": true,
+    "reserved_validation_closed": true,
+    "private_chain_of_thought_ground_truth_claimed": false,
+    "affect_or_emotion_targeted": false
+  },
+  "annotator_prompt_contract": {
+    "payload": "Apply this exact codebook to one blinded packet for the named annotation_pass. Use only packet-visible text; do not infer private reasoning, inspect excluded tool arguments or results, or use activations, predictions, outcomes, repository or task identity, or another annotator's labels. Return exactly one record conforming to annotation_record.",
+    "prompt_or_model_identity_sha256": "9f6d63af6ff655edc1dfd1315b1a31c6fe7dc23d254122981c4a7b54d1f083e6"
+  },
+  "chain_rule": {
+    "positive_requires": [
+      "explicit_evidence_observation_E",
+      "explicit_epistemic_conclusion_H_distinct_from_E",
+      "explicit_next_action_A",
+      "explicit_supports_refutes_or_narrows_edge_E_to_H",
+      "explicit_motivates_edge_H_to_A"
+    ],
+    "order": "E_before_H_before_A",
+    "maximum_intervening_prose_clauses_between_H_and_A": 2,
+    "earliest_qualifying_chain_only": true,
+    "earliest_chain_instruction": "If more than one chain qualifies, annotate only the first complete E-to-H-to-A chain in character order and ignore every later qualifying chain.",
+    "implicit_relation_is_not_positive": true,
+    "tool_arguments_and_tool_results_are_not_annotator_visible_evidence": true
+  },
+  "span_boundaries": {
+    "coordinate_system": "unicode_code_point_index_into_exact_materialized_assistant_text",
+    "start": "inclusive",
+    "end": "exclusive",
+    "span_must_be_nonempty": true,
+    "text_sha256": "sha256_of_exact_utf8_substring_from_start_through_end_exclusive",
+    "selection": "shortest_complete_explicit_clause_that_fills_the_slot_without_dropping_its_propositional_content",
+    "reasoning_content_join": "when both are present, reasoning is followed by exactly one template-authenticated newline and then content",
+    "assistant_tool_call_blocks_excluded": true,
+    "tool_result_blocks_excluded": true,
+    "positive_span_order": "evidence.end_lte_hypothesis.start_and_hypothesis.end_lte_action.start"
+  },
+  "positive_examples": [
+    {
+      "id": "synthetic-positive-supports",
+      "assistant_text": "The focused test returned status 500. That result supports the source-logic conclusion that the error branch is active. Therefore, I will inspect the error branch.",
+      "has_chain": true,
+      "evidence_span_text": "The focused test returned status 500.",
+      "hypothesis_span_text": "That result supports the source-logic conclusion that the error branch is active.",
+      "action_span_text": "Therefore, I will inspect the error branch.",
+      "evidence_kind": "tool_or_test",
+      "belief_edge": "supports",
+      "hypothesis_domain": "source_logic",
+      "action_intent": "inspect",
+      "exact_signature": "tool_or_test>supports>source_logic>motivates>inspect"
+    },
+    {
+      "id": "synthetic-positive-refutes",
+      "assistant_text": "The type checker reports no error for the call. This refutes the interface-contract conclusion that the call is ill-typed. Therefore, I will inspect the runtime path instead.",
+      "has_chain": true,
+      "evidence_span_text": "The type checker reports no error for the call.",
+      "hypothesis_span_text": "This refutes the interface-contract conclusion that the call is ill-typed.",
+      "action_span_text": "Therefore, I will inspect the runtime path instead.",
+      "evidence_kind": "tool_or_test",
+      "belief_edge": "refutes",
+      "hypothesis_domain": "interface_contract",
+      "action_intent": "inspect",
+      "exact_signature": "tool_or_test>refutes>interface_contract>motivates>inspect"
+    },
+    {
+      "id": "synthetic-positive-narrows",
+      "assistant_text": "The focused test fails only when the fixture omits a key. That observation narrows the cause to the test fixture. Therefore, I will edit the fixture setup.",
+      "has_chain": true,
+      "evidence_span_text": "The focused test fails only when the fixture omits a key.",
+      "hypothesis_span_text": "That observation narrows the cause to the test fixture.",
+      "action_span_text": "Therefore, I will edit the fixture setup.",
+      "evidence_kind": "tool_or_test",
+      "belief_edge": "narrows",
+      "hypothesis_domain": "test_fixture",
+      "action_intent": "edit",
+      "exact_signature": "tool_or_test>narrows>test_fixture>motivates>edit"
+    }
+  ],
+  "negative_examples": [
+    {
+      "id": "synthetic-negative-missing-E",
+      "assistant_text": "This supports the source-logic conclusion that the error branch is active. I will inspect the error branch.",
+      "has_chain": false,
+      "reason": "missing_explicit_evidence_observation_E"
+    },
+    {
+      "id": "synthetic-negative-missing-H",
+      "assistant_text": "The focused test returned status 500. I will inspect the error branch.",
+      "has_chain": false,
+      "reason": "missing_explicit_epistemic_conclusion_H"
+    },
+    {
+      "id": "synthetic-negative-missing-A",
+      "assistant_text": "The focused test returned status 500. That result supports the source-logic conclusion that the error branch is active.",
+      "has_chain": false,
+      "reason": "missing_explicit_next_action_A"
+    },
+    {
+      "id": "synthetic-negative-wrong-order",
+      "assistant_text": "I will inspect the error branch. The focused test returned status 500. That result supports the source-logic conclusion that the error branch is active.",
+      "has_chain": false,
+      "reason": "violates_E_before_H_before_A"
+    },
+    {
+      "id": "synthetic-negative-H-A-distance",
+      "assistant_text": "The focused test returned status 500. That result supports the source-logic conclusion that the error branch is active. The branch is small. The helper is local. The test is focused. Therefore, I will edit the error branch.",
+      "has_chain": false,
+      "reason": "three_intervening_prose_clauses_exceed_maximum_two"
+    },
+    {
+      "id": "synthetic-negative-implicit-relation",
+      "assistant_text": "The parser rejected the sample. The input format is incompatible with the parser. Therefore, I will inspect the format adapter.",
+      "has_chain": false,
+      "reason": "E_to_H_relation_is_only_implicit"
+    },
+    {
+      "id": "synthetic-negative-tool-arguments-only",
+      "assistant_text": "",
+      "excluded_rendered_tool_call": "<tool_call>{\"command\":\"the focused test returned status 500\"}</tool_call>",
+      "has_chain": false,
+      "reason": "tool_arguments_are_excluded_and_cannot_supply_E_H_or_A"
+    }
+  ],
+  "novelty_rule": {
+    "comparison_target": "locked_completion_pass_hypothesis_span_H_against_the_complete_tool_redacted_visible_prefix_h_t",
+    "novel": "H is neither explicitly present nor semantically entailed anywhere in the complete visible prefix.",
+    "prefix_exposed": "H is present verbatim or is semantically entailed by the complete visible prefix.",
+    "ambiguous": "The prefix may suggest H, but entailment versus mere compatibility cannot be resolved under the frozen codebook.",
+    "ambiguous_is_unknown_never_negative": true,
+    "copy_or_restatement_is_not_novel": true
+  },
+  "novelty_examples": [
+    {
+      "id": "synthetic-novelty-novel",
+      "visible_prefix": "The focused test is ready to run.",
+      "locked_hypothesis_text": "The failure is isolated to fixture construction.",
+      "novelty_status": "novel",
+      "reason": "prefix_neither_states_nor_entails_H"
+    },
+    {
+      "id": "synthetic-novelty-prefix-exposed-exact",
+      "visible_prefix": "The failure is isolated to fixture construction.",
+      "locked_hypothesis_text": "The failure is isolated to fixture construction.",
+      "novelty_status": "prefix_exposed",
+      "reason": "exact_H_already_visible"
+    },
+    {
+      "id": "synthetic-novelty-prefix-exposed-entailed",
+      "visible_prefix": "Only fixture construction can explain the failure.",
+      "locked_hypothesis_text": "The failure is isolated to fixture construction.",
+      "novelty_status": "prefix_exposed",
+      "reason": "visible_prefix_semantically_entails_H"
+    },
+    {
+      "id": "synthetic-novelty-ambiguous",
+      "visible_prefix": "Fixture construction may be relevant to the failure.",
+      "locked_hypothesis_text": "The failure is isolated to fixture construction.",
+      "novelty_status": "ambiguous",
+      "reason": "prefix_is_compatible_with_H_but_entailment_is_uncertain"
+    }
+  ],
+  "unknown_reasons": [
+    {
+      "value": "frozen_nonprefix_empty_assistant_rendering",
+      "use_when": "The exact pre-boundary rendering is the single frozen non-prefix empty-completion exception."
+    },
+    {
+      "value": "completion_semantics_ambiguous",
+      "use_when": "The authenticated assistant prose cannot be assigned available chain semantics without guessing."
+    },
+    {
+      "value": "span_or_slot_adjudication_unresolved",
+      "use_when": "Blind adjudication cannot resolve a required span, slot, edge, order, or novelty decision."
+    }
+  ],
+  "unknown_record_rule": {
+    "annotation_status": "unknown",
+    "unknown_reason_required_from_registry": true,
+    "has_chain": null,
+    "all_chain_spans_slots_novelty_and_signature": null,
+    "unknown_is_never_coerced_to_no_chain": true
+  },
+  "earliest_chain_example": {
+    "assistant_text": "The unit test reports a missing key. This supports the test-fixture conclusion that setup omitted the key. Therefore, I will edit setup. The integration test then times out. This narrows the tooling-path conclusion to the retry wrapper. Therefore, I will inspect the wrapper.",
+    "selected_evidence_span_text": "The unit test reports a missing key.",
+    "selected_hypothesis_span_text": "This supports the test-fixture conclusion that setup omitted the key.",
+    "selected_action_span_text": "Therefore, I will edit setup.",
+    "later_chain_ignored": true
+  }
+}

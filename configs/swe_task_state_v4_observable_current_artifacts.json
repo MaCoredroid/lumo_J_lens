@@ -1,0 +1,157 @@
+{
+  "schema_version": 1,
+  "id": "swe-task-state-v4-observable-current-artifact-index",
+  "status": "development_only_artifact_routing",
+  "status_scope": "artifact_authentication_and_current_routing_only_not_a_scientific_gate",
+  "path_guard": {
+    "forbidden_path_fragments": [
+      "reserved",
+      "validation"
+    ]
+  },
+  "current": {
+    "feature_bundle": {
+      "manifest": {
+        "path": ".cache/swe_task_state_v4_raw_capture/n60-final/observable-feature-bundle-v2f.json",
+        "sha256": "11fc77bf058103ccf070085b05bf9f469c5ab22c2dc816826425c9141504aa7e",
+        "size_bytes": 11806
+      },
+      "data": {
+        "path": ".cache/swe_task_state_v4_raw_capture/n60-final/observable-feature-bundle-v2f.npz",
+        "sha256": "36a2bb8e948e41ccaabed8332124396a075a46e55d81de6cfa96824d101cfe72",
+        "size_bytes": 26835369
+      }
+    },
+    "decoder_report": {
+      "path": ".cache/swe_task_state_v4_raw_capture/n60-final/observable-rationale-marker-v2f.json",
+      "sha256": "5b7a9f5f152548f7d63d45ee41b2a1b9b338525e085af23d6bdcc3b9fc15c11c",
+      "size_bytes": 3186531
+    },
+    "nested_inference": {
+      "path": ".cache/swe_task_state_v4_raw_capture/n60-final/observable-rationale-marker-nested-inference-v2.json",
+      "sha256": "f65377faf4c9cc50ab537073501913e6cb42fa9792268b67e3d03beb6067432d",
+      "size_bytes": 29536
+    }
+  },
+  "historical_superseded": [
+    {
+      "artifact_id": "observable_feature_bundle_v2",
+      "kind": "feature_bundle",
+      "status": "historical_superseded",
+      "superseded_by": "current.feature_bundle",
+      "manifest": {
+        "path": ".cache/swe_task_state_v4_raw_capture/n60-final/observable-feature-bundle-v2.json",
+        "sha256": "b9ca3fb7fd2af7d686c77067683730a585d71bae9d990b8f2736bc2135953477",
+        "size_bytes": 11803
+      },
+      "data": {
+        "path": ".cache/swe_task_state_v4_raw_capture/n60-final/observable-feature-bundle-v2.npz",
+        "sha256": "36a2bb8e948e41ccaabed8332124396a075a46e55d81de6cfa96824d101cfe72",
+        "size_bytes": 26835369
+      }
+    },
+    {
+      "artifact_id": "observable_feature_bundle_v2b",
+      "kind": "feature_bundle",
+      "status": "historical_superseded",
+      "superseded_by": "current.feature_bundle",
+      "manifest": {
+        "path": ".cache/swe_task_state_v4_raw_capture/n60-final/observable-feature-bundle-v2b.json",
+        "sha256": "be24c18f8cdf065b398f7b99668715ed5a43b4f08bbd704a94dcdd2543d8402f",
+        "size_bytes": 11804
+      },
+      "data": {
+        "path": ".cache/swe_task_state_v4_raw_capture/n60-final/observable-feature-bundle-v2b.npz",
+        "sha256": "36a2bb8e948e41ccaabed8332124396a075a46e55d81de6cfa96824d101cfe72",
+        "size_bytes": 26835369
+      }
+    },
+    {
+      "artifact_id": "observable_feature_bundle_v2c",
+      "kind": "feature_bundle",
+      "status": "historical_superseded",
+      "superseded_by": "current.feature_bundle",
+      "manifest": {
+        "path": ".cache/swe_task_state_v4_raw_capture/n60-final/observable-feature-bundle-v2c.json",
+        "sha256": "791700a285c239e5587013e25085a423fec63e5faa48c15aea3161e6d75c7cdc",
+        "size_bytes": 11804
+      },
+      "data": {
+        "path": ".cache/swe_task_state_v4_raw_capture/n60-final/observable-feature-bundle-v2c.npz",
+        "sha256": "36a2bb8e948e41ccaabed8332124396a075a46e55d81de6cfa96824d101cfe72",
+        "size_bytes": 26835369
+      }
+    },
+    {
+      "artifact_id": "observable_feature_bundle_v2d",
+      "kind": "feature_bundle",
+      "status": "historical_superseded",
+      "superseded_by": "current.feature_bundle",
+      "manifest": {
+        "path": ".cache/swe_task_state_v4_raw_capture/n60-final/observable-feature-bundle-v2d.json",
+        "sha256": "b2298672eb26f09a1d26f83f13719ab1a74bb899f48392b81571226278ac7746",
+        "size_bytes": 11804
+      },
+      "data": {
+        "path": ".cache/swe_task_state_v4_raw_capture/n60-final/observable-feature-bundle-v2d.npz",
+        "sha256": "36a2bb8e948e41ccaabed8332124396a075a46e55d81de6cfa96824d101cfe72",
+        "size_bytes": 26835369
+      }
+    },
+    {
+      "artifact_id": "observable_feature_bundle_v2e",
+      "kind": "feature_bundle",
+      "status": "historical_superseded",
+      "superseded_by": "current.feature_bundle",
+      "manifest": {
+        "path": ".cache/swe_task_state_v4_raw_capture/n60-final/observable-feature-bundle-v2e.json",
+        "sha256": "5be2bcf2c921f9994c64eea1a28ed05a6aaf88a75224cce888924c7d5dbd77e7",
+        "size_bytes": 11804
+      },
+      "data": {
+        "path": ".cache/swe_task_state_v4_raw_capture/n60-final/observable-feature-bundle-v2e.npz",
+        "sha256": "36a2bb8e948e41ccaabed8332124396a075a46e55d81de6cfa96824d101cfe72",
+        "size_bytes": 26835369
+      }
+    },
+    {
+      "artifact_id": "observable_rationale_marker_report_v2",
+      "kind": "decoder_report",
+      "status": "historical_superseded",
+      "superseded_by": "current.decoder_report",
+      "artifact": {
+        "path": ".cache/swe_task_state_v4_raw_capture/n60-final/observable-rationale-marker-v2.json",
+        "sha256": "98b852def0956f86d108b71b75778ea7d2ff9c9e01d28ecffc3554562f26ea52",
+        "size_bytes": 3179612
+      }
+    },
+    {
+      "artifact_id": "observable_rationale_marker_report_v2e",
+      "kind": "decoder_report",
+      "status": "historical_superseded",
+      "superseded_by": "current.decoder_report",
+      "artifact": {
+        "path": ".cache/swe_task_state_v4_raw_capture/n60-final/observable-rationale-marker-v2e.json",
+        "sha256": "b0c3f20a1897ca66653249a6e7fd250fb469995529a80cddfc4084deef62ca98",
+        "size_bytes": 3179612
+      }
+    },
+    {
+      "artifact_id": "observable_rationale_marker_nested_inference_v1",
+      "kind": "nested_inference",
+      "status": "historical_superseded",
+      "superseded_by": "current.nested_inference",
+      "artifact": {
+        "path": ".cache/swe_task_state_v4_raw_capture/n60-final/observable-rationale-marker-nested-inference-v1.json",
+        "sha256": "93c40de85b01d6a283c9f3ab608f5fa0eeb120a60c091f2e0dd67ce64a9ba541",
+        "size_bytes": 29218
+      }
+    }
+  ],
+  "routing_policy": {
+    "current_consumers_must_use_only_current_records": true,
+    "historical_records_are_not_current_fallbacks": true,
+    "historical_artifacts_deleted": false,
+    "reserved_validation_access_authorized": false
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "kind": "swe_task_state_v4_epistemic_chain_semantic_codebook_proposal",
+  "id": "visible-propositional-epistemic-action-chain-semantic-v2-proposal",
+  "status": "prospectively_versioned_draft_not_used_for_v5_outputs_or_any_target_annotation",
+  "lineage": {
+    "frozen_v1_codebook_path": "configs/swe_task_state_v4_epistemic_chain_codebook.json",
+    "frozen_v1_codebook_sha256": "0575f3ffeccf10fe737877ce47374f21ece96197fcb64f0d61bf514b5e9e75f9",
+    "reason_for_new_version": "v1 can collapse the intended sentence_or_concept_chain target toward explicit discourse markers such as supports_refutes_narrows"
+  },
+  "scope": {
+    "development_data_only": true,
+    "reserved_validation_closed": true,
+    "reserved_validation_accessed": false,
+    "target_is_visible_future_prose_only": true,
+    "private_chain_of_thought_ground_truth_claimed": false,
+    "affect_or_emotion_targeted": false
+  },
+  "semantic_target": {
+    "name": "visible_semantic_epistemic_action_chain_v2",
+    "positive_requires": [
+      "an_explicit_visible_evidence_proposition_E",
+      "an_explicit_visible_epistemic_conclusion_or_working_belief_H_distinct_from_E",
+      "an_explicit_visible_next_action_A",
+      "the_meaning_of_E_supports_refutes_or_narrows_H_without_requiring_a_named_relation_word",
+      "the_meaning_of_H_motivates_A_without_requiring_a_therefore_or_because_marker",
+      "E_precedes_H_and_H_precedes_A"
+    ],
+    "lexical_cue_required": false,
+    "semantic_relation_must_be_recoverable_from_visible_propositions_without_private_reasoning_or_outside_facts": true,
+    "mere_adjacency_or_topic_similarity_is_not_a_relation": true,
+    "relation_label": [
+      "supports",
+      "refutes",
+      "narrows"
+    ],
+    "separate_observation": "relation_marker_present",
+    "relation_marker_present_is_not_part_of_the_positive_label": true
+  },
+  "two_stage_interface": {
+    "stage_1_model_output": {
+      "decision": [
+        "chain",
+        "no_chain",
+        "unknown"
+      ],
+      "evidence_quote": "exact_visible_substring_or_empty_sentinel",
+      "hypothesis_quote": "exact_visible_substring_or_empty_sentinel",
+      "action_quote": "exact_visible_substring_or_empty_sentinel",
+      "evidence_to_hypothesis_relation": [
+        "supports",
+        "refutes",
+        "narrows",
+        "none"
+      ],
+      "hypothesis_motivates_action": "boolean_or_null",
+      "relation_marker_present": "boolean_or_null",
+      "action_marker_present": "boolean_or_null"
+    },
+    "stage_2_deterministic_materialization": {
+      "numeric_offsets_generated_by_model": false,
+      "exact_quote_must_occur_once": true,
+      "offsets_computed_from_unique_exact_quotes": true,
+      "normalization_or_fuzzy_matching_forbidden": true,
+      "duplicate_or_missing_quote_routes_to_explicit_interface_unknown": true,
+      "raw_semantic_decision_preserved_separately_from_materialization_status": true
+    },
+    "empty_visible_completion": {
+      "default_chain_decision": "no_chain",
+      "reason": "no_visible_E_H_or_A_can_exist",
+      "any_authenticated_exception_must_be_named_as_a_separate_packet_kind_not_left_to_model_discretion": true
+    }
+  },
+  "prospective_semantic_controls": [
+    {
+      "id": "semantic-support-no-marker",
+      "assistant_text": "A 500 response occurs here only when the error branch is active. This run returned 500. The error branch is active. I will inspect that branch.",
+      "expected": "chain",
+      "relation": "supports",
+      "relation_marker_present": false
+    },
+    {
+      "id": "semantic-support-with-marker-paraphrase",
+      "assistant_text": "A 500 response occurs here only when the error branch is active. This run returned 500. This supports the conclusion that the error branch is active. Therefore, I will inspect that branch.",
+      "expected": "chain",
+      "relation": "supports",
+      "relation_marker_present": true
+    },
+    {
+      "id": "semantic-refute-no-marker",
+      "assistant_text": "An ill-typed call would produce a checker error. The checker reports no error. The call is not ill-typed. I will inspect the runtime path.",
+      "expected": "chain",
+      "relation": "refutes",
+      "relation_marker_present": false
+    },
+    {
+      "id": "semantic-narrow-no-marker",
+      "assistant_text": "Only fixture construction can omit this key, and the key is absent. Fixture construction is the remaining cause. I will edit the fixture setup.",
+      "expected": "chain",
+      "relation": "narrows",
+      "relation_marker_present": false
+    },
+    {
+      "id": "semantic-coreference-no-marker",
+      "assistant_text": "The retry succeeds after the cache is cleared. That behavior occurs only for stale cache state. It is stale. I will invalidate the cache before retrying.",
+      "expected": "chain",
+      "relation": "narrows",
+      "relation_marker_present": false
+    },
+    {
+      "id": "negative-lexical-support-decoy",
+      "assistant_text": "The documentation supports Python 3.12. I will inspect the unrelated timeout.",
+      "expected": "no_chain",
+      "reason": "support_word_without_E_to_H_to_A_chain"
+    },
+    {
+      "id": "negative-adjacent-propositions",
+      "assistant_text": "The test returned 500. The parser has three branches. I will inspect the cache.",
+      "expected": "no_chain",
+      "reason": "mere_adjacency_without_recoverable_E_to_H_or_H_to_A_relation"
+    },
+    {
+      "id": "negative-missing-hypothesis",
+      "assistant_text": "The test returned 500. I will inspect the error branch.",
+      "expected": "no_chain",
+      "reason": "missing_H"
+    },
+    {
+      "id": "negative-hypothesis-action-only",
+      "assistant_text": "The error branch is active. I will inspect that branch.",
+      "expected": "no_chain",
+      "reason": "missing_E"
+    },
+    {
+      "id": "negative-affect-only",
+      "assistant_text": "I am frustrated by the failure, so I will take a break.",
+      "expected": "no_chain",
+      "reason": "affect_is_not_an_epistemic_H"
+    },
+    {
+      "id": "negative-empty-visible-prose",
+      "assistant_text": "",
+      "expected": "no_chain",
+      "reason": "no_visible_E_H_or_A"
+    }
+  ],
+  "acceptance_gates_before_target_annotation": {
+    "each_independent_annotator_category_accuracy": 1.0,
+    "each_independent_annotator_positive_exact_quote_resolution": 1.0,
+    "lexical_marker_minimal_pair_invariance": 1.0,
+    "invalid_output_rate": 0.0,
+    "non_gold_real_development_disagreements_require_human_review": true,
+    "no_reserved_validation_access": true
+  },
+  "claim_limit": "Passing these controls would establish annotation-interface readiness on development controls only, not latent or private chain-of-thought decoding."
+}

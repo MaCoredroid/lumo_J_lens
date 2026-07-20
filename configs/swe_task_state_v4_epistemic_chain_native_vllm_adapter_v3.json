@@ -1,0 +1,306 @@
+{
+  "schema_version": 1,
+  "kind": "swe_task_state_v4_epistemic_chain_native_vllm_adapter_v3",
+  "id": "swe-task-state-v4-epistemic-chain-native-vllm-exact-token-adapter-v3",
+  "status": "production_source_implemented_execution_unauthorized_no_runtime_evidence",
+  "scope": {
+    "development_controls_only": true,
+    "reserved_validation_closed": true,
+    "reserved_validation_accessed": false,
+    "model_or_gpu_execution_performed": false,
+    "runtime_artifacts_emitted": false,
+    "source_implementation_is_not_execution_evidence": true
+  },
+  "authorization": {
+    "execution_authorized": false,
+    "model_access_authorized": false,
+    "gpu_access_authorized": false,
+    "output_authorized": false,
+    "production_receipt_authorized": false,
+    "gate_eligible_execution_authorized": false,
+    "authorized_launch_binding_path": null,
+    "authorized_launch_binding_sha256": null,
+    "future_enablement_requires_separately_frozen_launch_binding": true
+  },
+  "implementation": {
+    "source_path": "scripts/swe_task_state_v4_epistemic_chain_native_vllm_adapter_v3.py",
+    "source_sha256": "033252d0388ca1661eb136004b2978f63bc8f40a31c506cd93bb0d0f5a43fd50",
+    "production_entrypoint": "execute_production_native_batch",
+    "backend_ownership": "module_owned_imports_tokenizer_engine_and_session_no_injected_backend",
+    "test_helper_kind": "swe_task_state_v4_epistemic_chain_native_vllm_non_gate_test_record_v3"
+  },
+  "frozen_inputs": {
+    "source_only_draft_config": {
+      "path": "configs/swe_task_state_v4_epistemic_chain_native_adapter_draft_v3.json",
+      "sha256": "156244aa7508306b0791f913ce52461cdde79526e50a03873801a6e38d6d5eeb"
+    },
+    "source_only_draft_implementation": {
+      "path": "scripts/swe_task_state_v4_epistemic_chain_native_adapter_draft_v3.py",
+      "sha256": "50868a75d5c1dcd1181db4e655f61d7614007a15d60ad6fc7715fb11fbfc8d97"
+    },
+    "bounded_v3_runner": {
+      "path": "scripts/swe_task_state_v4_epistemic_chain_annotation_runner_v3.py",
+      "sha256": "c35af19c9f3f1e38208ba7f23467c386ebff2e5fb6572582f9a620f51f394aeb"
+    },
+    "historical_v2_runtime_config": {
+      "path": "configs/swe_task_state_v4_epistemic_chain_annotation_runner_v2.json",
+      "sha256": "a22604d78938917972dc23c517c942fb9022e867e17ce0b5a060189dd0dd1b4d"
+    }
+  },
+  "package_contract": {
+    "interpreter": {
+      "implementation": "cpython",
+      "version": "3.12.13",
+      "executable": "/home/mark/lumo_J_lens/.venv-vllm/bin/python"
+    },
+    "platform": "Linux-7.0.0-27-generic-x86_64-with-glibc2.43",
+    "distributions": {
+      "vllm": "0.23.0",
+      "torch": "2.11.0+cu130",
+      "transformers": "5.12.1",
+      "openai-harmony": "0.0.8",
+      "xgrammar": "0.2.2"
+    },
+    "distribution_identity_algorithm": "sha256_canonical_json_name_version_metadata_sha256_record_sha256",
+    "launch_binding_must_supply_package_bundle_sha256": true,
+    "runtime_import_verification": {
+      "root_specs_verified_before_import": true,
+      "security_module_files_verified_after_import": true,
+      "module_file_must_be_under_distribution_root": true,
+      "record_sha256_and_size_required": true
+    }
+  },
+  "environment_contract": {
+    "exact_values": {
+      "HF_HOME": "/home/mark/.cache/huggingface",
+      "HF_HUB_OFFLINE": "1",
+      "TRANSFORMERS_OFFLINE": "1",
+      "TOKENIZERS_PARALLELISM": "false",
+      "VLLM_USE_FLASHINFER_SAMPLER": "0",
+      "VLLM_ENABLE_V1_MULTIPROCESSING": "0",
+      "VLLM_DISABLED_KERNELS": "FlashInferFP8ScaledMMLinearKernel,FlashInferCutlassNvFp4LinearKernel,FlashInferTrtllmNvFp4LinearKernel,FlashInferCudnnNvFp4LinearKernel",
+      "CUDA_VISIBLE_DEVICES": "0",
+      "PYTHONHASHSEED": "0"
+    },
+    "must_be_absent": [
+      "CUDA_HOME"
+    ],
+    "mutation_before_authentication_forbidden": true,
+    "launch_binding_must_supply_environment_identity_sha256": true
+  },
+  "gpu_contract": {
+    "expected_visible_device_count": 1,
+    "expected_device_index": 0,
+    "expected_device_name": "NVIDIA GeForce RTX 5090",
+    "identity_fields": [
+      "torch_cuda_version",
+      "cudnn_version",
+      "visible_device_count",
+      "device_index",
+      "device_name",
+      "compute_capability",
+      "total_memory_bytes"
+    ],
+    "launch_binding_must_supply_gpu_identity_sha256": true,
+    "gpu_query_forbidden_before_authorization": true
+  },
+  "roles": {
+    "independent_a": {
+      "execution_mode": "local_model",
+      "base_model_lineage": "qwen3.6",
+      "repo_id": "nvidia/Qwen3.6-27B-NVFP4",
+      "revision": "0893e1606ff3d5f97a441f405d5fc541a6bdf404",
+      "snapshot_relative_to_hf_home": "hub/models--nvidia--Qwen3.6-27B-NVFP4/snapshots/0893e1606ff3d5f97a441f405d5fc541a6bdf404",
+      "snapshot_tree_sha256": "9e81d31df546344ad68696c3cfd6cadce4ad6d3952710a3dc2021c1c2d42414d",
+      "snapshot_file_count": 17,
+      "snapshot_size_bytes": 21941623844,
+      "quantization": "modelopt_fp4",
+      "dtype": "bfloat16",
+      "seed": 17011,
+      "chat_template_kwargs": {
+        "enable_thinking": false
+      },
+      "output_extraction": "direct_structured_text",
+      "vllm_engine_kwargs": {
+        "attention_backend": "TRITON_ATTN",
+        "gdn_prefill_backend": "triton",
+        "mamba_cache_mode": "align",
+        "mamba_block_size": 1024,
+        "mamba_ssm_cache_dtype": "float32",
+        "enable_flashinfer_autotune": false
+      },
+      "tokenizer_mode": "auto",
+      "tokenizer_class": "transformers.models.qwen2.tokenization_qwen2.Qwen2Tokenizer",
+      "vocab_size": 248077,
+      "vocab_identity_sha256": "420ab4b96193b4325156f56cd7c3876a8a0d46f515fe4f711a7a6bf5553bf8fa"
+    },
+    "independent_b": {
+      "execution_mode": "local_model",
+      "base_model_lineage": "gpt-oss",
+      "repo_id": "openai/gpt-oss-20b",
+      "revision": "6cee5e81ee83917806bbde320786a8fb61efebee",
+      "snapshot_relative_to_hf_home": "hub/models--openai--gpt-oss-20b/snapshots/6cee5e81ee83917806bbde320786a8fb61efebee",
+      "snapshot_tree_sha256": "60b907629e6da0ac8239a1103c366894c97bd7054f899c4e6e1f6833c84bad18",
+      "snapshot_file_count": 16,
+      "snapshot_size_bytes": 13789278132,
+      "quantization": "mxfp4",
+      "dtype": "bfloat16",
+      "seed": 29027,
+      "chat_template_kwargs": {
+        "reasoning_effort": "low"
+      },
+      "output_extraction": "openai_harmony_final_channel",
+      "vllm_engine_kwargs": {},
+      "tokenizer_mode": "auto",
+      "tokenizer_class": "transformers.tokenization_utils_tokenizers.TokenizersBackend",
+      "vocab_size": 200019,
+      "vocab_identity_sha256": "c473d7dea3722ad7fe8f6abf41274a326ee1ad25d1aba9034a36a9c663145d0e",
+      "harmony": {
+        "encoding": "HARMONY_GPT_OSS",
+        "strict": true,
+        "assistant_role": true,
+        "exactly_one_final_channel": true,
+        "unknown_channels_forbidden": true,
+        "analysis_excluded": true,
+        "max_output_tokens": 2048
+      }
+    },
+    "adjudicator": {
+      "execution_mode": "local_model",
+      "base_model_lineage": "mistral-small-3.1",
+      "repo_id": "RedHatAI/Mistral-Small-3.1-24B-Instruct-2503-quantized.w4a16",
+      "revision": "72add9a622385f641297a6feef5837a06300eecb",
+      "snapshot_relative_to_hf_home": "hub/models--RedHatAI--Mistral-Small-3.1-24B-Instruct-2503-quantized.w4a16/snapshots/72add9a622385f641297a6feef5837a06300eecb",
+      "snapshot_tree_sha256": "16bed3903625052c1d2871a8135254acbe731169082f76d910b4b1ddfdf04241",
+      "snapshot_file_count": 17,
+      "snapshot_size_bytes": 15057754757,
+      "quantization": "compressed-tensors",
+      "dtype": "bfloat16",
+      "seed": 53047,
+      "chat_template_kwargs": {},
+      "output_extraction": "direct_structured_text",
+      "vllm_engine_kwargs": {
+        "tokenizer_mode": "mistral",
+        "enforce_eager": true
+      },
+      "tokenizer_mode": "mistral",
+      "tokenizer_class": "transformers.tokenization_mistral_common.MistralCommonBackend",
+      "vocab_size": 130044,
+      "vocab_identity_sha256": "02f7bdb5b17ed8abcfb48ea188eac98a07d766c9e215c675baf357fbdee44786"
+    }
+  },
+  "generation": {
+    "engine": "vllm_offline_structured_outputs",
+    "temperature": 0,
+    "top_p": 1.0,
+    "max_output_tokens": 768,
+    "max_model_len": 90112,
+    "max_num_seqs": 8,
+    "max_num_batched_tokens": 8192,
+    "gpu_memory_utilization": 0.9,
+    "no_input_truncation": true,
+    "vllm_use_flashinfer_sampler": "0",
+    "vllm_enable_v1_multiprocessing": "0",
+    "vllm_disabled_kernels": [
+      "FlashInferFP8ScaledMMLinearKernel",
+      "FlashInferCutlassNvFp4LinearKernel",
+      "FlashInferTrtllmNvFp4LinearKernel",
+      "FlashInferCudnnNvFp4LinearKernel"
+    ],
+    "cuda_home_override": null,
+    "prompt_token_accounting": "vllm_request_output.prompt_token_ids",
+    "enable_chunked_prefill": true,
+    "enable_prefix_caching": true,
+    "language_model_only": true,
+    "limit_mm_per_prompt": {
+      "image": 0,
+      "video": 0
+    },
+    "async_scheduling": false,
+    "structured_outputs_config": {
+      "backend": "xgrammar",
+      "disable_any_whitespace": true
+    },
+    "per_request_structured_outputs": {
+      "type": "StructuredOutputsParams",
+      "json_from_native_request": true,
+      "disable_any_whitespace": true
+    },
+    "per_request_sampling_seed_source": "native_generation_request.seed_bound_in_launch_request_batch",
+    "prompt_input": {
+      "type": "vllm.inputs.TokensPrompt",
+      "only_field": "prompt_token_ids",
+      "decode_before_submission": false,
+      "render_before_submission": false,
+      "retokenize_before_submission": false,
+      "truncate_prompt_tokens": null
+    },
+    "output_decode": {
+      "skip_special_tokens": true,
+      "clean_up_tokenization_spaces": false,
+      "candidate_text_exact_parity_required": true
+    }
+  },
+  "snapshot_contract": {
+    "root_source": "environment.HF_HOME",
+    "algorithm": "sha256_canonical_json_sorted_relative_path_size_sha256_entries",
+    "resolved_regular_files_only": true,
+    "tree_hash_file_count_and_total_size_all_required": true,
+    "verify_before_and_after_generation": true,
+    "network_forbidden": true
+  },
+  "tokenizer_contract": {
+    "loader": "transformers.AutoTokenizer.from_pretrained",
+    "local_files_only": true,
+    "trust_remote_code": false,
+    "vocab_identity_algorithm": "sha256_canonical_json_get_vocab_mapping",
+    "class_is_fully_qualified_type_name": true,
+    "vocab_size_and_hash_must_match_role": true,
+    "runner_authenticated_context_required": true,
+    "native_apply_chat_template_tokenize_true_required": true
+  },
+  "launch_binding_contract": {
+    "kind": "swe_task_state_v4_epistemic_chain_native_vllm_launch_authorization_v3",
+    "external_expected_file_sha256_required": true,
+    "launch_binds_adapter_config_sha256_required": true,
+    "execution_authorized_true_required": true,
+    "adapter_config_source_runner_and_draft_hashes_required": true,
+    "role_model_snapshot_tokenizer_package_runtime_environment_gpu_hashes_required": true,
+    "request_batch_hash_required": true,
+    "nonce_sha256_required": true,
+    "self_hash_without_external_expected_hash_is_not_authorization": true
+  },
+  "receipt_contract": {
+    "preflight_kind": "swe_task_state_v4_epistemic_chain_native_vllm_preflight_receipt_v3",
+    "runtime_kind": "swe_task_state_v4_epistemic_chain_native_vllm_runtime_receipt_v3",
+    "all_identity_objects_and_external_hash_bindings_required": true,
+    "prompt_ids_output_ids_finish_reason_schema_sampling_and_decode_parity_required": true,
+    "in_memory_builder_only_no_file_writer": true
+  },
+  "non_gate_test_route": {
+    "record_kind": "swe_task_state_v4_epistemic_chain_native_vllm_non_gate_test_record_v3",
+    "actual_model_execution": false,
+    "gate_eligible": false,
+    "production_receipt": false,
+    "may_not_be_promoted_or_rebound": true
+  },
+  "claim_scope": {
+    "actual_model_execution_established": false,
+    "gate_eligible_execution_established": false,
+    "sealed_control_evidence_established": false,
+    "output_token_text_parity_observed_on_real_models": false,
+    "annotation_interface_readiness_established": false,
+    "private_chain_of_thought_recovery_established": false,
+    "latent_cot_like_trajectory_recovery_established": false,
+    "emotion_affect_confidence_doubt_or_stress_recovery_established": false,
+    "reserved_validation_generalization_established": false
+  },
+  "remaining_enablement_blockers": [
+    "Current execution, model, GPU, output, receipt, and gate authorization flags are false.",
+    "A separately audited launch-binding path and independently frozen out-of-band SHA-256 have not been supplied.",
+    "The frozen implementation source SHA-256 must remain unchanged through final independent review.",
+    "A launch binding must authenticate exact package, runtime, environment, GPU, snapshot, tokenizer, request-batch, config, source, and runner hashes.",
+    "Exact-token native smoke execution on Qwen, GPT-OSS, and Mistral has not run.",
+    "No model, GPU, output, receipt, control, or gate run is evidence from this source-only implementation turn."
+  ]
+}

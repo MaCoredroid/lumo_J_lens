@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/swe-task-state-v4-counterfactual-stage-a-visible-completion-bundle-v1.schema.json",
+  "title": "SWE task-state V4 selector-control Stage-A condition-blind visible completion bundle",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kind",
+    "status",
+    "generation_prompt_bundle_sha256",
+    "surface_policy",
+    "records",
+    "stage_b_records_present",
+    "reserved_validation_access_authorized"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "kind": {"const": "swe_task_state_v4_counterfactual_stage_a_visible_completion_bundle"},
+    "status": {"const": "stage_a_generation_complete_condition_key_not_joined"},
+    "generation_prompt_bundle_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "surface_policy": {"const": "exact_experiment_completion_string_only_no_prompt_prefix_no_external_task_outcome"},
+    "records": {
+      "type": "array",
+      "minItems": 240,
+      "maxItems": 240,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["prompt_id", "completion_status", "completion_text"],
+        "properties": {
+          "prompt_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "completion_status": {"enum": ["complete", "truncated", "empty", "generation_error"]},
+          "completion_text": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "stage_b_records_present": {"const": false},
+    "reserved_validation_access_authorized": {"const": false}
+  }
+}

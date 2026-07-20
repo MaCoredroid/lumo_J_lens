@@ -1,0 +1,404 @@
+{
+  "schema_version": 1,
+  "id": "swe-task-state-v4-counterfactual-selector-control-stage-a-runtime-v1",
+  "status": "prospective_stage_a_execution_contract_cpu_preflight_only_no_model_runtime",
+  "purpose": "freeze the exact Stage-A-only target-model reference, raw/public-J activation capture, and condition-blind completion-generation execution lineage for the selector-balanced affect/state development pilot; this artifact and its implementation authorize CPU preflight and later CPU artifact verification only",
+  "chronology": {
+    "steps_in_order": [
+      "cpu_preflight_lock",
+      "future_separately_authorized_target_model_reference_forward",
+      "future_separately_authorized_authenticated_activation_capture",
+      "cpu_capture_artifact_verification",
+      "future_separately_authorized_completion_generation",
+      "cpu_generation_and_surface_bundle_verification",
+      "later_separate_condition_blind_visible_state_annotation"
+    ],
+    "reference_must_finish_before_capture": true,
+    "capture_must_verify_before_generation_model_load": true,
+    "completion_bundle_must_hash_lock_before_annotation": true,
+    "annotation_must_hash_lock_before_any_condition_key_join": true,
+    "gpu_execution_authorized_by_this_artifact": false,
+    "stage_b_materialization_or_runtime_authorized": false,
+    "condition_join_or_effect_analysis_authorized": false
+  },
+  "frozen_inputs": {
+    "selector_scaffold_config": {
+      "path": "configs/swe_task_state_v4_counterfactual_selector_control_pilot.json",
+      "sha256": "d5619231cc924a12303dbf147dfef53e45787aa6136dbeb94b706c1788aa3361",
+      "size_bytes": 14082,
+      "access": "hash_only_no_semantic_parse"
+    },
+    "selector_scaffold_implementation": {
+      "path": "scripts/swe_task_state_v4_counterfactual_selector_control_pilot.py",
+      "sha256": "e0c55da222f5ad9ac75b6f94019a4dd21700f805e8035c5555cde37e74b3cbf6",
+      "size_bytes": 55017,
+      "access": "hash_only"
+    },
+    "materialization_manifest": {
+      "path": ".cache/swe_task_state_v4_raw_capture/n60-final/counterfactual-selector-control-pilot-v1/materialization-manifest.json",
+      "sha256": "5529eb121da72bc437f18e9ca064382860cb1541075ebf8558cc3078a553299c",
+      "size_bytes": 40751,
+      "access": "hash_only_do_not_parse_or_follow_references"
+    },
+    "stage_a_capture_prompts": {
+      "path": ".cache/swe_task_state_v4_raw_capture/n60-final/counterfactual-selector-control-pilot-v1/stage-a-capture-prompts.json",
+      "sha256": "6ff1dff4131685666bbdd215bafba0eb848f17e1851be33a7fc385921b77fed4",
+      "size_bytes": 133645188,
+      "record_count": 500,
+      "allowed_row_keys": [
+        "id",
+        "token_ids"
+      ],
+      "ordered_id_list_sha256": "f7b6495b4ee1f783f8bd49be8ec5330f85bc89d4b348f83d5836599f01816924",
+      "row_contract_sha256": "add71a9f6f919a396a2ff61d2734866024bbaaf513b66b76c5a19d96f1bb90e1",
+      "minimum_token_count": 13097,
+      "maximum_token_count": 47413
+    },
+    "stage_a_generation_prompts": {
+      "path": ".cache/swe_task_state_v4_raw_capture/n60-final/counterfactual-selector-control-pilot-v1/stage-a-generation-prompts.json",
+      "sha256": "77cf024402476f99920b1628ac5c97b9fbf3c0e0487a5032231d4cb239c505bb",
+      "size_bytes": 64240839,
+      "record_count": 240,
+      "allowed_row_keys": [
+        "id",
+        "token_ids"
+      ],
+      "ordered_id_list_sha256": "b66d6e6e88b35d8ab3cb17a89f503d3939a14a805bd1d806a8a684e9d776b1b9",
+      "row_contract_sha256": "14a63b6e96368bd86fb57442df6a9d33202bd6e2277cc7b5af239f663fb53734",
+      "minimum_token_count": 13397,
+      "maximum_token_count": 47413,
+      "every_row_must_equal_one_capture_row_by_id_and_tokens": true
+    },
+    "capture_prompt_rows_not_used_for_generation": 260,
+    "raw_capture_protocol": {
+      "path": "configs/swe_task_state_v4_raw_capture.json",
+      "sha256": "5a378ca0fe8ef5a26ff6ff124f697aaa796c39bab020ad1b34d739da2554c65d",
+      "size_bytes": 3085,
+      "access": "hash_only"
+    },
+    "reference_runner": {
+      "path": "scripts/run_jlens_nvfp4.py",
+      "sha256": "18697bd8adc1159b7228390c526b9c418e87c25c64e7fa5d121d9f95906f7ee5",
+      "size_bytes": 52319,
+      "access": "future_gpu_execution_only_after_separate_authorization"
+    },
+    "capture_runner": {
+      "path": "scripts/run_swe_task_state_v4_raw_capture.py",
+      "sha256": "f1a9c0ab9e34b853fa35edad650f2de6f1317f77cb97855b2959117dbc2e2485",
+      "size_bytes": 40089,
+      "access": "future_gpu_execution_only_after_separate_authorization"
+    },
+    "runtime_shell_wrapper": {
+      "path": "scripts/run_jlens_nvfp4.sh",
+      "sha256": "89763dc20b09394e52f2296654b58408de40c902cb5dddc0a109026964eb2331",
+      "size_bytes": 1743,
+      "access": "future_gpu_execution_only_after_separate_authorization"
+    },
+    "runtime_requirements": {
+      "path": "requirements-vllm.txt",
+      "sha256": "12301a0435d6540e22ef68484c57dc16778e4216f5eb58aea3762970cbe08d3e",
+      "size_bytes": 13,
+      "access": "hash_only"
+    }
+  },
+  "downstream_visible_annotation_contract_reference_only": {
+    "id": "swe-task-state-v4-counterfactual-visible-state-annotation-v1",
+    "sha256": "cc10c7e73c3e431263e5e5738677faa05e81b3230ddfbeb85b7bf0450ba759e9",
+    "size_bytes": 18773,
+    "runtime_must_not_read_this_artifact": true,
+    "surface_bundle_schema_is_duplicated_and_hash_frozen_below": true
+  },
+  "model": {
+    "repo_id": "nvidia/Qwen3.6-27B-NVFP4",
+    "revision": "0893e1606ff3d5f97a441f405d5fc541a6bdf404",
+    "local_snapshot_cache_relative_path": "models--nvidia--Qwen3.6-27B-NVFP4/snapshots/0893e1606ff3d5f97a441f405d5fc541a6bdf404",
+    "snapshot_tree_sha256": "9e81d31df546344ad68696c3cfd6cadce4ad6d3952710a3dc2021c1c2d42414d",
+    "snapshot_file_count": 17,
+    "snapshot_size_bytes": 21941623844,
+    "config_sha256": "c04a19ba293737ad7be4f6e96d6666cb7e479cbe19ecc0c289fad267135b0338",
+    "model_index_sha256": "7aa103a2582b7d26631988de33dea19e8a308ee9c239e8e14feb374af30905e2",
+    "tokenizer_json_sha256": "5f9e4d4901a92b997e463c1f46055088b6cca5ca61a6522d1b9f64c4bb81cb42",
+    "tokenizer_config_sha256": "5186f0defcd7f232382c7f0aebcd2252d073bb921ab240e407b7ae8745d2b29b",
+    "generation_config_sha256": "e70c136c1b78ddc1fb0905bac8e733a4dc448d4f852a5dd75143fffc70be550e",
+    "quantization": "modelopt_fp4",
+    "dtype": "bfloat16",
+    "hidden_size": 5120,
+    "layer_count": 64,
+    "vocabulary_size": 248320,
+    "maximum_position_embeddings": 262144,
+    "local_files_only": true,
+    "trust_remote_code": true,
+    "snapshot_inventory_must_match_before_and_after_each_gpu_phase": true,
+    "checkpoint_shards_must_rehash_before_and_after_each_gpu_phase": true
+  },
+  "public_j_lens": {
+    "repo_id": "neuronpedia/jacobian-lens",
+    "revision": "a4114d7752d11eb546e6cf372213d7e75526d3a1",
+    "filename": "qwen3.6-27b/jlens/Salesforce-wikitext/Qwen3.6-27B_jacobian_lens_n1000.pt",
+    "sha256": "1718c8c52dd8a9dad03738d4d625937c1fbba10be325b872ed446c7290fc11e1",
+    "size_bytes": 3303032772,
+    "fit_time_model_precision": "unpublished",
+    "fit_time_quantization": "unpublished",
+    "use_scope": "public_j_transport_only_never_evidence_for_private_state_by_itself"
+  },
+  "tokenization": {
+    "input_representation": "pretokenized_exact_integer_ids",
+    "retokenization_or_text_reconstruction_for_forward": false,
+    "add_special_tokens": false,
+    "input_truncation": false,
+    "prompt_tokens_must_echo_exactly_from_vllm": true,
+    "token_id_minimum": 0,
+    "token_id_maximum": 248319,
+    "opaque_id_format": "lowercase_sha256_hex",
+    "opaque_id_must_never_be_decoded_or_joined_to_code_map": true,
+    "prompt_bundle_record_field_allowlist": [
+      "id",
+      "token_ids"
+    ]
+  },
+  "runtime": {
+    "max_model_len": 49152,
+    "max_num_batched_tokens": 4096,
+    "max_num_seqs": 1,
+    "gpu_memory_utilization": 0.78,
+    "enforce_eager": true,
+    "enable_chunked_prefill": true,
+    "enable_prefix_caching": true,
+    "language_model_only": true,
+    "gdn_prefill_backend": "triton",
+    "mamba_block_size": 1024,
+    "mamba_cache_mode": "align",
+    "mamba_ssm_cache_dtype": "float32",
+    "kv_cache_dtype": "fp8_e4m3",
+    "attention_backend": "TRITON_ATTN",
+    "limit_mm_per_prompt": {
+      "image": 0,
+      "video": 0
+    },
+    "enable_flashinfer_autotune": false,
+    "async_scheduling": false,
+    "seed": 0,
+    "input_truncation": false
+  },
+  "capture": {
+    "reference_and_capture_prompt_bundle": "stage_a_capture_prompts",
+    "prompt_count": 500,
+    "layers": [
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47
+    ],
+    "positions_argument": [
+      -1
+    ],
+    "position_semantics": "each_already_truncated_causal_prefix_tail_only",
+    "stream_final_only": true,
+    "reference_sampling": {
+      "max_new_tokens": 1,
+      "temperature": 0,
+      "top_p": 1,
+      "seed": 0
+    },
+    "top_k_fidelity_canary": 10,
+    "score_token_ids": [],
+    "raw_tensor": "post_block_residual_before_final_norm",
+    "transported_tensor": "public_j_state_before_bfloat16_final_norm_or_vocabulary_projection",
+    "tensor_keys": [
+      "public_j_state",
+      "raw_residual"
+    ],
+    "tensor_shape_per_boundary": [
+      24,
+      5120
+    ],
+    "tensor_storage_dtype": "little_endian_float32",
+    "logical_bytes_per_tensor_per_boundary": 491520,
+    "shard_format": "safetensors",
+    "one_shard_per_boundary": true,
+    "expected_shard_count": 500,
+    "require_safetensors_reload_exact_equality": true,
+    "require_all_64_layer_residual_manifest_per_boundary": true,
+    "require_reference_capture_residual_manifest_exact_equality": true,
+    "require_final_model_top1_greedy_parity": true,
+    "require_final_norm_reconstruction_within_tolerance": true,
+    "require_final_logits_reconstruction_within_tolerance": true
+  },
+  "generation": {
+    "prompt_bundle": "stage_a_generation_prompts",
+    "prompt_count": 240,
+    "requires_authenticated_capture_manifest_and_all_shards_cpu_verified": true,
+    "sampling": {
+      "max_new_tokens": 256,
+      "temperature": 0,
+      "top_p": 1,
+      "seed": 0,
+      "skip_special_tokens": true,
+      "spaces_between_special_tokens": true
+    },
+    "input_truncation": false,
+    "prompt_tokens_must_echo_exactly": true,
+    "surface_completion_text": "exact_vllm_completion_text_required_to_equal_pinned_tokenizer_decode_of_generated_ids_with_skip_special_tokens_true_and_cleanup_false",
+    "surface_bundle_must_match_visible_annotation_contract_exactly": true,
+    "generation_errors_allowed_in_passed_generation_manifest": false,
+    "completion_annotation_or_label_extraction_in_runtime": false
+  },
+  "environment": {
+    "python_executable_repo_relative": ".venv-vllm/bin/python",
+    "python_version": "3.12.13",
+    "packages": {
+      "huggingface-hub": "1.21.0",
+      "ijson": "3.5.0",
+      "numpy": "2.3.5",
+      "safetensors": "0.8.0",
+      "torch": "2.11.0+cu130",
+      "transformers": "5.12.1",
+      "vllm": "0.23.0"
+    },
+    "cuda_toolkit_repo_relative": ".venv-vllm/lib/python3.12/site-packages/nvidia/cu13",
+    "nvcc_sha256": "02afd6a20bd29fae33bf278fa847a4e9711db25afec4a1bf648be81a3b210af0",
+    "nvcc_size_bytes": 33994064,
+    "gpu": {
+      "name": "NVIDIA GeForce RTX 5090",
+      "compute_capability": "12.0",
+      "memory_total_mib": "32607",
+      "driver_version": "595.71.05"
+    },
+    "required_environment": {
+      "CUDA_HOME": ".venv-vllm/lib/python3.12/site-packages/nvidia/cu13",
+      "VLLM_ENABLE_V1_MULTIPROCESSING": "0",
+      "VLLM_USE_FLASHINFER_SAMPLER": "0",
+      "VLLM_DISABLED_KERNELS": "FlashInferFP8ScaledMMLinearKernel,FlashInferCutlassNvFp4LinearKernel,FlashInferTrtllmNvFp4LinearKernel,FlashInferCudnnNvFp4LinearKernel",
+      "VLLM_NO_USAGE_STATS": "1",
+      "TOKENIZERS_PARALLELISM": "false",
+      "PYTORCH_CUDA_ALLOC_CONF": "expandable_segments:True"
+    }
+  },
+  "output_contracts": {
+    "capture_manifest_schema": {
+      "path": "configs/swe_task_state_v4_counterfactual_stage_a_capture_manifest_schema.json",
+      "sha256": "c0fa5fe7f46b7e22235e5d8840ca6a7f04c2bad77e517a9e58434cbc0562a006",
+      "size_bytes": 10247,
+      "schema_id": "https://local.invalid/swe-task-state-v4-counterfactual-stage-a-capture-manifest-v1.schema.json"
+    },
+    "generation_manifest_schema": {
+      "path": "configs/swe_task_state_v4_counterfactual_stage_a_generation_manifest_schema.json",
+      "sha256": "793da2c9f7d793deda2440fec49cd6cce04fb3c6799b93e7c46ba84caf939092",
+      "size_bytes": 7695,
+      "schema_id": "https://local.invalid/swe-task-state-v4-counterfactual-stage-a-generation-manifest-v1.schema.json"
+    },
+    "visible_completion_bundle_schema": {
+      "path": "configs/swe_task_state_v4_counterfactual_stage_a_completion_bundle_schema.json",
+      "sha256": "db7c518280936e337f0f9bc1c4c815dedcc047e56958162da0cd887dff71ad7b",
+      "size_bytes": 1621,
+      "schema_id": "https://local.invalid/swe-task-state-v4-counterfactual-stage-a-visible-completion-bundle-v1.schema.json"
+    },
+    "prospective_instance_hash_policy": "each_completed_output_is_atomically_written_then_sha256_locked_and_cross_bound_by_the_next_phase; no prospective fake instance hash is permitted"
+  },
+  "postrun_authentication": {
+    "capture_verifier_requires": [
+      "exact_runtime_config_hash",
+      "exact_500_row_capture_prompt_binding_and_order",
+      "exact_model_snapshot_tree_before_and_after",
+      "exact_checkpoint_integrity_before_and_after",
+      "exact_reference_and_capture_residual_manifest_equality_for_every_boundary",
+      "500_present_rehashed_safetensors_shards",
+      "both_expected_float32_24_by_5120_tensors_in_every_shard",
+      "finite_tensor_values_and_exact_logical_tensor_hashes",
+      "forward_top1_final_norm_and_final_logits_canaries_for_every_boundary"
+    ],
+    "generation_verifier_requires": [
+      "capture_manifest_and_all_500_shards_verified_before_generation_lineage_is_accepted",
+      "exact_240_row_generation_prompt_binding_and_order",
+      "exact_model_snapshot_tree_before_and_after",
+      "exact_prompt_token_echo_for_every_request",
+      "generated_token_ids_and_hashes_for_every_request",
+      "pinned_tokenizer_visible_decode_exactly_equals_surface_completion_text",
+      "surface_completion_bundle_hash_and_record_equality"
+    ],
+    "schema_only_capture_or_generation_bundle_must_fail": true,
+    "cryptographic_hardware_attestation_provided": false,
+    "lineage_scope": "artifact_and_execution_lineage_with_target_snapshot_checkpoint_canaries_and_tensor_or_token_replay_not_tee_attestation"
+  },
+  "forbidden_access": {
+    "runtime_input_allowlist": [
+      "this_runtime_config",
+      "frozen_files_marked_hash_only",
+      "stage_a_capture_prompts",
+      "stage_a_generation_prompts",
+      "pinned_target_model_snapshot",
+      "pinned_public_j_lens",
+      "future_reference_capture_and_generation_outputs_under_the_declared_output_root"
+    ],
+    "runtime_must_never_read": [
+      "split_manifest",
+      "stage_a_condition_key",
+      "selector_code_map_or_join_conditions",
+      "stage_b_identities_prompts_completions_activations_or_labels",
+      "reserved_validation_paths_membership_or_data",
+      "semantic_annotation_answers_expectations_or_gold_labels",
+      "task_outcomes_or_success_labels",
+      "visible_state_annotations_or_another_annotator_response"
+    ],
+    "forbidden_path_fragments_checked_before_filesystem_access": [
+      "reserved",
+      "validation",
+      "split-manifest",
+      "condition-key",
+      "stage-b",
+      "semantic-answer",
+      "expectation"
+    ],
+    "condition_key_split_or_stage_b_presence_elsewhere_in_scaffold_directory_does_not_authorize_access": true,
+    "prompt_ids_are_authentication_only_not_features": true,
+    "no_condition_or_code_map_join_in_this_runtime": true
+  },
+  "claim_scope": {
+    "cpu_preflight_contract_implemented": true,
+    "stage_a_reference_run_completed": false,
+    "stage_a_activation_capture_completed": false,
+    "stage_a_completion_generation_completed": false,
+    "stage_a_visible_annotation_completed": false,
+    "condition_key_join_or_effect_analysis_completed": false,
+    "private_chain_of_thought_reconstructed": false,
+    "cot_or_cot_like_decoding_established": false,
+    "subjective_confidence_inferred": false,
+    "subjective_doubt_inferred": false,
+    "experienced_stress_inferred": false,
+    "experienced_emotion_inferred": false,
+    "causal_affect_or_state_effect_established": false,
+    "incremental_activation_readout_established": false,
+    "outer_or_reserved_validation_generalization_established": false
+  },
+  "output": {
+    "default_root": ".cache/swe_task_state_v4_raw_capture/n60-final/counterfactual-selector-control-pilot-v1/stage-a-runtime-v1",
+    "preflight_receipt_name": "preflight-receipt.json",
+    "reference_report_name": "reference-report.json",
+    "capture_runtime_directory_name": "capture-runtime",
+    "capture_manifest_name": "stage-a-capture-manifest.json",
+    "generation_manifest_name": "stage-a-generation-manifest.json",
+    "visible_completion_bundle_name": "stage-a-visible-completions.json",
+    "new_output_no_clobber": true,
+    "stage_b_output_files_forbidden": true
+  }
+}

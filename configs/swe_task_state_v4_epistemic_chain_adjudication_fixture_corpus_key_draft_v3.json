@@ -1,0 +1,207 @@
+{
+  "schema_version": 1,
+  "interface_version": 3,
+  "kind": "swe_task_state_v4_epistemic_chain_adjudication_fixture_corpus_key_draft_v3",
+  "status": "prospective_draft_not_sealed_not_run",
+  "scope": {
+    "development_controls_only": true,
+    "reserved_validation_closed": true,
+    "reserved_validation_accessed": false,
+    "visible_semantic_cot_like_structure_targeted": true,
+    "private_chain_of_thought_recovery_established": false,
+    "verbatim_private_chain_of_thought_recovery_established": false,
+    "affect_emotion_confidence_doubt_or_stress_targeted": false,
+    "actual_model_execution_claimed": false
+  },
+  "external_input_authentication": {
+    "whole_manifest_sha256_required_before_key_config_read": true,
+    "self_reported_manifest_sha256_is_not_a_trust_root": true,
+    "input_module_import_forbidden": true,
+    "input_module_read_forbidden": true,
+    "input_config_read_forbidden": true,
+    "bound_input_manifest_sha256": "81338adf399e0835fc5030f79228f019dc3505893cc550a5957a1ac1346aef9e"
+  },
+  "nonce_contract": {
+    "single_externally_precommitted_suite_nonce_required": true,
+    "per_case_nonce_input_accepted": false,
+    "case_nonce_derivation_domain": "v3-fixture-corpus-case-nonce-citrine",
+    "nonce_retry_after_semantic_key_access_forbidden": true,
+    "imbalance_invalidates_entire_suite": true,
+    "fixture_route_verifies_precommit_chronology": false,
+    "future_sealed_outer_executor_must_establish_chronology": true,
+    "receipt_contents_authenticated_here": false,
+    "receipt_contents_and_issuance_authentication_responsibility": "future_sealed_outer_executor",
+    "single_use_nonce_or_receipt_enforced_here": false,
+    "single_use_nonce_or_receipt_responsibility": "future_sealed_outer_executor",
+    "repeated_materialization_prevention_enforced_here": false,
+    "repeated_materialization_prevention_responsibility": "future_sealed_outer_executor"
+  },
+  "generation_seed_schedule": {
+    "kind": "exact_per_case_verdict_and_repair_seed_schedule_v3",
+    "derivation": "frozen_explicit_values_not_caller_authoritative",
+    "cases": [
+      {"case_id": "F01", "verdict_seed": 1001, "repair_seed": 2001},
+      {"case_id": "F02", "verdict_seed": 1002, "repair_seed": 2002},
+      {"case_id": "F03", "verdict_seed": 1003, "repair_seed": 2003},
+      {"case_id": "F04", "verdict_seed": 1004, "repair_seed": 2004},
+      {"case_id": "F05", "verdict_seed": 1005, "repair_seed": 2005},
+      {"case_id": "F06", "verdict_seed": 1006, "repair_seed": 2006},
+      {"case_id": "F07", "verdict_seed": 1007, "repair_seed": 2007},
+      {"case_id": "F08", "verdict_seed": 1008, "repair_seed": 2008},
+      {"case_id": "F09", "verdict_seed": 1009, "repair_seed": 2009},
+      {"case_id": "F10", "verdict_seed": 1010, "repair_seed": 2010},
+      {"case_id": "F11", "verdict_seed": 1011, "repair_seed": 2011},
+      {"case_id": "F12", "verdict_seed": 1012, "repair_seed": 2012}
+    ]
+  },
+  "packet_regeneration_contract": {
+    "key_materializer_rebuilds_packet_ids_from_raw_identity": false,
+    "exact_external_input_manifest_and_record_hashes_bound": true,
+    "production_packet_and_catalog_validation_performed": true,
+    "authoritative_packet_regeneration_responsibility": "future_sealed_outer_executor"
+  },
+  "counts": {
+    "completion": 9,
+    "novelty": 3,
+    "total": 12,
+    "direct": 8,
+    "neither": 4,
+    "repair_decision": 4,
+    "completion_chain_detail_repair": 3,
+    "intended_candidate_1": 4,
+    "intended_candidate_2": 4,
+    "intended_neither": 4
+  },
+  "bindings": {
+    "key_materializer": {
+      "path": "scripts/swe_task_state_v4_epistemic_chain_adjudication_fixture_corpus_key_draft_v3.py",
+      "sha256": "9febe2a281acd2f20223db5dec5dd842365752df581ed522b2a628bc6e5f2172"
+    },
+    "input_builder_declaration": {
+      "path": "scripts/swe_task_state_v4_epistemic_chain_adjudication_fixture_corpus_inputs_draft_v3.py",
+      "sha256": "2984da9e9af8c358370a7719d7dacd5957063bebe39e9322904d37a6f6bcb5c8"
+    },
+    "fixture_config": {
+      "path": "configs/swe_task_state_v4_epistemic_chain_adjudication_fixture_v3.json",
+      "sha256": "558c2d4dc5285a2ed74ec33c502ae8989645d831d7b868604349ef5689b04bd4"
+    },
+    "fixture_protocol": {
+      "path": "scripts/swe_task_state_v4_epistemic_chain_adjudication_fixture_v3.py",
+      "sha256": "fa4b5ef6d836ae1145ee7e6a626a47f1c647eb60f8c95ae5f7e6ba12edca48a9"
+    },
+    "candidate_catalog_config": {
+      "path": "configs/swe_task_state_v4_epistemic_chain_candidate_catalog_v3.json",
+      "sha256": "c9f2598985d2f3eab27e923bd2aa35049ed2f478a311181354349a4cc88ba15e"
+    },
+    "candidate_catalog_builder": {
+      "path": "scripts/swe_task_state_v4_epistemic_chain_candidate_catalog_v3.py",
+      "sha256": "0d38bdcb0ec3aae1197375aaf34ceeb16f470df9dd855dc00c698b82e1ee2176"
+    },
+    "runner_v3": {
+      "path": "scripts/swe_task_state_v4_epistemic_chain_annotation_runner_v3.py",
+      "sha256": "c35af19c9f3f1e38208ba7f23467c386ebff2e5fb6572582f9a620f51f394aeb"
+    },
+    "codebook_v2": {
+      "path": "configs/swe_task_state_v4_epistemic_chain_codebook_v2.json",
+      "sha256": "2105a50c7bc13a064ca75c4a69aad631869fbbb2c17c94970eeaa92722aff85c"
+    }
+  },
+  "cases": [
+    {
+      "case_id": "F01",
+      "annotation_pass": "completion_chain",
+      "route_requirement": "direct",
+      "semantic_projection": {"decision": "chain", "unit_ordinals": {"evidence": 0, "hypothesis": 1, "action": 2}, "ontology": {"evidence_kind": "tool_or_test", "belief_edge": "supports", "hypothesis_domain": "source_logic", "action_intent": "inspect"}},
+      "repair_decision": null,
+      "diagnostic": "explicit_branch_update"
+    },
+    {
+      "case_id": "F02",
+      "annotation_pass": "completion_chain",
+      "route_requirement": "direct",
+      "semantic_projection": {"decision": "chain", "unit_ordinals": {"evidence": 0, "hypothesis": 2, "action": 3}, "ontology": {"evidence_kind": "tool_or_test", "belief_edge": "supports", "hypothesis_domain": "other", "action_intent": "validate"}},
+      "repair_decision": null,
+      "diagnostic": "first_of_two_identical_evidence_occurrences"
+    },
+    {
+      "case_id": "F03",
+      "annotation_pass": "completion_chain",
+      "route_requirement": "direct",
+      "semantic_projection": {"decision": "no_chain"},
+      "repair_decision": null,
+      "diagnostic": "quoted_tutorial_is_not_current_reasoning"
+    },
+    {
+      "case_id": "F04",
+      "annotation_pass": "completion_chain",
+      "route_requirement": "direct",
+      "semantic_projection": {"decision": "chain", "unit_ordinals": {"evidence": 0, "hypothesis": 1, "action": 2}, "ontology": {"evidence_kind": "tool_or_test", "belief_edge": "supports", "hypothesis_domain": "data_type_shape", "action_intent": "edit"}},
+      "repair_decision": null,
+      "diagnostic": "unicode_shape_and_action"
+    },
+    {
+      "case_id": "F05",
+      "annotation_pass": "completion_chain",
+      "route_requirement": "direct",
+      "semantic_projection": {"decision": "chain", "unit_ordinals": {"evidence": 0, "hypothesis": 1, "action": 2}, "ontology": {"evidence_kind": "tool_or_test", "belief_edge": "narrows", "hypothesis_domain": "data_type_shape", "action_intent": "inspect"}},
+      "repair_decision": null,
+      "diagnostic": "colon_fence_unicode_unit"
+    },
+    {
+      "case_id": "F06",
+      "annotation_pass": "completion_chain",
+      "route_requirement": "direct",
+      "semantic_projection": {"decision": "no_chain"},
+      "repair_decision": null,
+      "diagnostic": "unrelated_action_invalidates_chain"
+    },
+    {
+      "case_id": "F07",
+      "annotation_pass": "prefix_novelty",
+      "route_requirement": "direct",
+      "semantic_projection": {"decision": "novel"},
+      "repair_decision": null,
+      "diagnostic": "hypothesis_absent_from_prefix"
+    },
+    {
+      "case_id": "F08",
+      "annotation_pass": "prefix_novelty",
+      "route_requirement": "direct",
+      "semantic_projection": {"decision": "prefix_exposed"},
+      "repair_decision": null,
+      "diagnostic": "prefix_semantically_entails_hypothesis"
+    },
+    {
+      "case_id": "F09",
+      "annotation_pass": "completion_chain",
+      "route_requirement": "neither",
+      "semantic_projection": {"decision": "chain", "unit_ordinals": {"evidence": 0, "hypothesis": 1, "action": 2}, "ontology": {"evidence_kind": "tool_or_test", "belief_edge": "narrows", "hypothesis_domain": "source_logic", "action_intent": "inspect"}},
+      "repair_decision": "chain",
+      "diagnostic": "completion_neither_chain_repair"
+    },
+    {
+      "case_id": "F10",
+      "annotation_pass": "completion_chain",
+      "route_requirement": "neither",
+      "semantic_projection": {"decision": "chain", "unit_ordinals": {"evidence": 0, "hypothesis": 2, "action": 3}, "ontology": {"evidence_kind": "tool_or_test", "belief_edge": "supports", "hypothesis_domain": "source_logic", "action_intent": "edit"}},
+      "repair_decision": "chain",
+      "diagnostic": "unicode_first_occurrence_chain_repair"
+    },
+    {
+      "case_id": "F11",
+      "annotation_pass": "completion_chain",
+      "route_requirement": "neither",
+      "semantic_projection": {"decision": "chain", "unit_ordinals": {"evidence": 0, "hypothesis": 1, "action": 2}, "ontology": {"evidence_kind": "spec_contract", "belief_edge": "refutes", "hypothesis_domain": "interface_contract", "action_intent": "validate"}},
+      "repair_decision": "chain",
+      "diagnostic": "contract_refutation_chain_repair"
+    },
+    {
+      "case_id": "F12",
+      "annotation_pass": "prefix_novelty",
+      "route_requirement": "neither",
+      "semantic_projection": {"decision": "ambiguous"},
+      "repair_decision": "ambiguous",
+      "diagnostic": "novelty_ambiguity_repair"
+    }
+  ]
+}

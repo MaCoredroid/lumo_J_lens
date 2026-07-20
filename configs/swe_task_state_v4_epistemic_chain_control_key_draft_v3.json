@@ -1,0 +1,227 @@
+{
+  "schema_version": 1,
+  "interface_version": 3,
+  "kind": "swe_task_state_v4_epistemic_chain_control_key_draft_v3",
+  "status": "prospective_draft_not_sealed_not_run",
+  "scope": {
+    "development_controls_only": true,
+    "reserved_validation_closed": true,
+    "reserved_validation_accessed": false,
+    "visible_semantic_evidence_hypothesis_action_only": true,
+    "cot_recovery_claimed": false,
+    "cot_like_recovery_claimed": false,
+    "private_cot_recovery_claimed": false,
+    "affect_emotion_confidence_doubt_or_stress_claimed": false,
+    "model_run_performed": false
+  },
+  "external_input_authentication": {
+    "independently_supplied_manifest_sha256_required": true,
+    "self_reported_manifest_sha256_is_not_a_trust_root": true,
+    "input_module_import_forbidden": true,
+    "input_config_read_forbidden": true,
+    "materialization_before_external_hash_authentication_forbidden": true
+  },
+  "counts": {
+    "completion": 32,
+    "completion_chain": 18,
+    "completion_no_chain": 13,
+    "completion_unknown": 1,
+    "novelty": 8,
+    "novelty_novel": 2,
+    "novelty_prefix_exposed": 4,
+    "novelty_ambiguous": 2,
+    "total": 40
+  },
+  "bindings": {
+    "key_materializer": {
+      "path": "scripts/swe_task_state_v4_epistemic_chain_control_key_draft_v3.py",
+      "sha256": "9ffe5e56ec2f20a78877d7018726a235e48a708a97dba0aaae023b10b868de27"
+    },
+    "candidate_catalog_config": {
+      "path": "configs/swe_task_state_v4_epistemic_chain_candidate_catalog_v3.json",
+      "sha256": "c9f2598985d2f3eab27e923bd2aa35049ed2f478a311181354349a4cc88ba15e"
+    },
+    "candidate_catalog_builder": {
+      "path": "scripts/swe_task_state_v4_epistemic_chain_candidate_catalog_v3.py",
+      "sha256": "0d38bdcb0ec3aae1197375aaf34ceeb16f470df9dd855dc00c698b82e1ee2176"
+    },
+    "runner_v3": {
+      "path": "scripts/swe_task_state_v4_epistemic_chain_annotation_runner_v3.py",
+      "sha256": "c35af19c9f3f1e38208ba7f23467c386ebff2e5fb6572582f9a620f51f394aeb"
+    },
+    "codebook_v2": {
+      "path": "configs/swe_task_state_v4_epistemic_chain_codebook_v2.json",
+      "sha256": "2105a50c7bc13a064ca75c4a69aad631869fbbb2c17c94970eeaa92722aff85c"
+    }
+  },
+  "completion_gold": [
+    {
+      "id": "C01",
+      "gold_category": "chain",
+      "gold_unit_ordinals": {"evidence": 0, "hypothesis": 1, "action": 2},
+      "gold_ontology": {"evidence_kind": "tool_or_test", "belief_edge": "supports", "hypothesis_domain": "source_logic", "action_intent": "inspect"},
+      "gold_markers": {"relation_marker_present": true, "action_marker_present": true},
+      "diagnostic": "explicit_redirect_branch_update"
+    },
+    {
+      "id": "C02",
+      "gold_category": "chain",
+      "gold_unit_ordinals": {"evidence": 0, "hypothesis": 1, "action": 2},
+      "gold_ontology": {"evidence_kind": "tool_or_test", "belief_edge": "supports", "hypothesis_domain": "source_logic", "action_intent": "inspect"},
+      "gold_markers": {"relation_marker_present": false, "action_marker_present": false},
+      "diagnostic": "semicolon_hypothesis_preserved"
+    },
+    {
+      "id": "C03",
+      "gold_category": "chain",
+      "gold_unit_ordinals": {"evidence": 0, "hypothesis": 1, "action": 2},
+      "gold_ontology": {"evidence_kind": "code", "belief_edge": "supports", "hypothesis_domain": "data_type_shape", "action_intent": "edit"},
+      "gold_markers": {"relation_marker_present": false, "action_marker_present": false},
+      "diagnostic": "marker_free_shape_update"
+    },
+    {
+      "id": "C04",
+      "gold_category": "chain",
+      "gold_unit_ordinals": {"evidence": 0, "hypothesis": 1, "action": 2},
+      "gold_ontology": {"evidence_kind": "spec_contract", "belief_edge": "refutes", "hypothesis_domain": "interface_contract", "action_intent": "validate"},
+      "gold_markers": {"relation_marker_present": true, "action_marker_present": true},
+      "diagnostic": "contract_refutation"
+    },
+    {
+      "id": "C05",
+      "gold_category": "chain",
+      "gold_unit_ordinals": {"evidence": 0, "hypothesis": 1, "action": 2},
+      "gold_ontology": {"evidence_kind": "environment", "belief_edge": "supports", "hypothesis_domain": "environment_dependency", "action_intent": "inspect"},
+      "gold_markers": {"relation_marker_present": false, "action_marker_present": false},
+      "diagnostic": "marker_free_runtime_dependency"
+    },
+    {
+      "id": "C06",
+      "gold_category": "chain",
+      "gold_unit_ordinals": {"evidence": 0, "hypothesis": 1, "action": 2},
+      "gold_ontology": {"evidence_kind": "tool_or_test", "belief_edge": "narrows", "hypothesis_domain": "tooling_path", "action_intent": "edit"},
+      "gold_markers": {"relation_marker_present": true, "action_marker_present": true},
+      "diagnostic": "hook_wrapper_localization"
+    },
+    {
+      "id": "C07",
+      "gold_category": "chain",
+      "gold_unit_ordinals": {"evidence": 0, "hypothesis": 1, "action": 2},
+      "gold_ontology": {"evidence_kind": "code", "belief_edge": "supports", "hypothesis_domain": "test_fixture", "action_intent": "validate"},
+      "gold_markers": {"relation_marker_present": true, "action_marker_present": false},
+      "diagnostic": "fixture_construction_update"
+    },
+    {
+      "id": "C08",
+      "gold_category": "chain",
+      "gold_unit_ordinals": {"evidence": 0, "hypothesis": 1, "action": 2},
+      "gold_ontology": {"evidence_kind": "spec_contract", "belief_edge": "supports", "hypothesis_domain": "other", "action_intent": "inspect"},
+      "gold_markers": {"relation_marker_present": false, "action_marker_present": false},
+      "diagnostic": "release_process_constraint"
+    },
+    {
+      "id": "C09",
+      "gold_category": "chain",
+      "gold_unit_ordinals": {"evidence": 0, "hypothesis": 1, "action": 2},
+      "gold_ontology": {"evidence_kind": "environment", "belief_edge": "refutes", "hypothesis_domain": "tooling_path", "action_intent": "validate"},
+      "gold_markers": {"relation_marker_present": true, "action_marker_present": true},
+      "diagnostic": "runner_resolution_refutation"
+    },
+    {
+      "id": "C10",
+      "gold_category": "chain",
+      "gold_unit_ordinals": {"evidence": 0, "hypothesis": 1, "action": 2},
+      "gold_ontology": {"evidence_kind": "tool_or_test", "belief_edge": "supports", "hypothesis_domain": "data_type_shape", "action_intent": "edit"},
+      "gold_markers": {"relation_marker_present": true, "action_marker_present": false},
+      "diagnostic": "colon_fence_unicode_unit"
+    },
+    {
+      "id": "C11",
+      "gold_category": "chain",
+      "gold_unit_ordinals": {"evidence": 0, "hypothesis": 1, "action": 2},
+      "gold_ontology": {"evidence_kind": "code", "belief_edge": "refutes", "hypothesis_domain": "source_logic", "action_intent": "inspect"},
+      "gold_markers": {"relation_marker_present": true, "action_marker_present": false},
+      "diagnostic": "unreachable_flush_refutation"
+    },
+    {
+      "id": "C12",
+      "gold_category": "chain",
+      "gold_unit_ordinals": {"evidence": 0, "hypothesis": 1, "action": 2},
+      "gold_ontology": {"evidence_kind": "spec_contract", "belief_edge": "narrows", "hypothesis_domain": "interface_contract", "action_intent": "edit"},
+      "gold_markers": {"relation_marker_present": false, "action_marker_present": false},
+      "diagnostic": "scalar_contract_localization"
+    },
+    {
+      "id": "C13",
+      "gold_category": "chain",
+      "gold_unit_ordinals": {"evidence": 0, "hypothesis": 1, "action": 2},
+      "gold_ontology": {"evidence_kind": "environment", "belief_edge": "narrows", "hypothesis_domain": "environment_dependency", "action_intent": "validate"},
+      "gold_markers": {"relation_marker_present": true, "action_marker_present": true},
+      "diagnostic": "alpine_dependency_localization"
+    },
+    {
+      "id": "C14",
+      "gold_category": "chain",
+      "gold_unit_ordinals": {"evidence": 0, "hypothesis": 1, "action": 2},
+      "gold_ontology": {"evidence_kind": "tool_or_test", "belief_edge": "supports", "hypothesis_domain": "test_fixture", "action_intent": "inspect"},
+      "gold_markers": {"relation_marker_present": true, "action_marker_present": false},
+      "diagnostic": "fixture_timezone_update"
+    },
+    {
+      "id": "C15",
+      "gold_category": "chain",
+      "gold_unit_ordinals": {"evidence": 0, "hypothesis": 1, "action": 2},
+      "gold_ontology": {"evidence_kind": "code", "belief_edge": "supports", "hypothesis_domain": "source_logic", "action_intent": "edit"},
+      "gold_markers": {"relation_marker_present": false, "action_marker_present": true},
+      "diagnostic": "instruction_like_text_is_data"
+    },
+    {
+      "id": "C16",
+      "gold_category": "chain",
+      "gold_unit_ordinals": {"evidence": 0, "hypothesis": 1, "action": 2},
+      "gold_ontology": {"evidence_kind": "spec_contract", "belief_edge": "refutes", "hypothesis_domain": "data_type_shape", "action_intent": "validate"},
+      "gold_markers": {"relation_marker_present": true, "action_marker_present": true},
+      "diagnostic": "earliest_of_two_complete_chains"
+    },
+    {
+      "id": "C17",
+      "gold_category": "chain",
+      "gold_unit_ordinals": {"evidence": 0, "hypothesis": 1, "action": 2},
+      "gold_ontology": {"evidence_kind": "tool_or_test", "belief_edge": "supports", "hypothesis_domain": "other", "action_intent": "validate"},
+      "gold_markers": {"relation_marker_present": true, "action_marker_present": true},
+      "diagnostic": "first_evidence_occurrence_before_late_repeat"
+    },
+    {
+      "id": "C18",
+      "gold_category": "chain",
+      "gold_unit_ordinals": {"evidence": 0, "hypothesis": 2, "action": 3},
+      "gold_ontology": {"evidence_kind": "tool_or_test", "belief_edge": "supports", "hypothesis_domain": "source_logic", "action_intent": "inspect"},
+      "gold_markers": {"relation_marker_present": true, "action_marker_present": true},
+      "diagnostic": "first_of_two_pre_hypothesis_evidence_occurrences"
+    },
+    {"id": "C19", "gold_category": "no_chain", "diagnostic": "unrelated_action"},
+    {"id": "C20", "gold_category": "no_chain", "diagnostic": "missing_visible_evidence"},
+    {"id": "C21", "gold_category": "no_chain", "diagnostic": "missing_distinct_hypothesis"},
+    {"id": "C22", "gold_category": "no_chain", "diagnostic": "missing_next_action"},
+    {"id": "C23", "gold_category": "no_chain", "diagnostic": "action_precedes_evidence_and_hypothesis"},
+    {"id": "C24", "gold_category": "no_chain", "diagnostic": "unrelated_adjacency"},
+    {"id": "C25", "gold_category": "no_chain", "diagnostic": "lexical_marker_decoy"},
+    {"id": "C26", "gold_category": "no_chain", "diagnostic": "instruction_payload_without_chain"},
+    {"id": "C27", "gold_category": "no_chain", "diagnostic": "hypothesis_restates_evidence"},
+    {"id": "C28", "gold_category": "no_chain", "diagnostic": "evidence_contradicts_hypothesis"},
+    {"id": "C29", "gold_category": "no_chain", "diagnostic": "generic_non_specific_action_only_defect"},
+    {"id": "C30", "gold_category": "no_chain", "diagnostic": "tutorial_quotation_not_current_reasoning"},
+    {"id": "C31", "gold_category": "unknown", "diagnostic": "completion_semantics_ambiguous"},
+    {"id": "C32", "gold_category": "no_chain", "diagnostic": "deterministic_empty_visible_text", "host_bypass_required": true}
+  ],
+  "novelty_gold": [
+    {"id": "V01", "gold_category": "novel", "diagnostic": "prefix_does_not_state_or_entail_hypothesis"},
+    {"id": "V02", "gold_category": "novel", "diagnostic": "prefix_does_not_state_or_entail_hypothesis"},
+    {"id": "V03", "gold_category": "prefix_exposed", "diagnostic": "exact_hypothesis_visible"},
+    {"id": "V04", "gold_category": "prefix_exposed", "diagnostic": "exact_hypothesis_visible"},
+    {"id": "V05", "gold_category": "prefix_exposed", "diagnostic": "prefix_semantically_entails_hypothesis"},
+    {"id": "V06", "gold_category": "prefix_exposed", "diagnostic": "prefix_semantically_entails_hypothesis"},
+    {"id": "V07", "gold_category": "ambiguous", "diagnostic": "compatible_but_not_entailed"},
+    {"id": "V08", "gold_category": "ambiguous", "diagnostic": "possible_source_not_entailed_cause"}
+  ]
+}

@@ -1,0 +1,198 @@
+{
+  "schema_version": 1,
+  "id": "swe-task-state-interpreter-v4-v3-n60-design-screen-v2",
+  "status": "design_only_not_confirmatory_not_frozen",
+  "decision_scope": "authenticated_v3_n60_development_evidence_only_reserved_validation_closed",
+  "prior_design_result": {
+    "path": ".cache/swe_state_interpreter_v4_design/v3-n60-sequence-b2-design.json",
+    "sha256": "8ec24b65b71b831e5206af353857766a58fbc0a343acee6f6ab7071cccb3489e",
+    "status": "completed_design_screen_not_confirmatory",
+    "confirmatory_interpretation_forbidden": true,
+    "all_design_support_point_and_selection_checks_passed": false,
+    "point_failures": [
+      {
+        "metric": "balanced_accuracy",
+        "observed": 0.7491604610268023,
+        "operator": ">=",
+        "threshold": 0.75
+      },
+      {
+        "metric": "selected_accepted_accuracy",
+        "observed": 0.8421313478421713,
+        "operator": ">=",
+        "threshold": 0.85
+      }
+    ]
+  },
+  "design_data": {
+    "role": "architecture_and_protocol_design_only",
+    "independent_v4_development_evidence": false,
+    "fresh_disjoint_nonreserved_confirmation_required": true,
+    "v3_development_stop_decision_path": "validation/swe-task-state-v3-development-decision.json",
+    "v3_development_stop_decision_sha256": "2eccd406f7963aef83b764b0bd4d94d93d18e6c16c7fc7ecc24d7686e872711d",
+    "v3_analyzer_sha256": "53c7d41688f6c5ab21f7ad029d343af06e9b13c777fd2e5517ff8d5254ad9e6c",
+    "v3_protocol_sha256": "9d8b0a7d5c45dc192365429af27c6193de752cc160458eff8e21807d37662b1d",
+    "v3_prompt_bundle_sha256": "17f664b3029220458ff62b8e80a90ec5e796f0372217f02b727d6589df38d3d0",
+    "v3_prompt_summary_sha256": "b70b3751e9cb5a896bc264d2214b425cc7a690ff8026c6c972d3a21cbd22d44d",
+    "v3_public_report_sha256": "7c943132163749f69bd35e4fa2e52bcfee2318fe349fa77603324a37ffaabe46",
+    "v3_replay_merge_manifest_sha256": "302437210d582081e4c343cadb30afecf9e7e0bfb18a8d7b12fdb10c3d782e6f",
+    "v3_materialization_receipt_sha256": "3f7d6dbecb3157badc7e0db09444c8b77bd6f51c8941604b3a5bf81bf30e7812"
+  },
+  "target_contract": {
+    "classes_in_order": [
+      "inspect",
+      "edit",
+      "check_or_finish"
+    ],
+    "temporal_alignment": "ensuing_same_request_completion_observable_action_from_final_prompt_boundary",
+    "unknown_action": "prediction_emitted_but_excluded_from_fit_selection_and_metrics",
+    "later_request_actions_used_for_target_or_features": false
+  },
+  "feature_contract": {
+    "variants_in_order": [
+      "history_only",
+      "sequence_j",
+      "sequence_logit",
+      "sequence_logit_j"
+    ],
+    "variant_widths": {
+      "history_only": 14,
+      "sequence_j": 136,
+      "sequence_logit": 136,
+      "sequence_logit_j": 256
+    },
+    "raw_sensor_width": 96,
+    "compact_width": 40,
+    "ema_alpha": 0.5,
+    "difference_order": "subtract_raw_96_wide_vectors_then_compact_each_result",
+    "unknown_stable_rows_update_sensor_state": true,
+    "unstable_rows_update_sensor_state": false
+  },
+  "model_source": {
+    "algorithm": "inherit_exact_normalized_v3_multiseed_extratrees_contract",
+    "same_hyperparameters_weights_folds_and_seed_order_for_all_base_variants": true
+  },
+  "evaluator_contract": {
+    "forecast_pool": {
+      "candidate": "fixed_geometric_log_opinion_pool",
+      "reference": "sequence_logit_raw_probability",
+      "candidate_logit_weight": 0.8,
+      "candidate_logit_j_weight": 0.2,
+      "selection": "none_fixed_before_fresh_development_selection",
+      "normalization": "log_space_then_exact_row_normalization",
+      "shared_action_source": "sequence_logit"
+    },
+    "decision": {
+      "edit_offset_grid": [
+        -0.5,
+        -0.375,
+        -0.25,
+        -0.125,
+        0.0,
+        0.125,
+        0.25,
+        0.375,
+        0.5,
+        0.625,
+        0.75
+      ],
+      "check_or_finish_offset_grid": [
+        -0.5,
+        -0.375,
+        -0.25,
+        -0.125,
+        0.0,
+        0.125,
+        0.25,
+        0.375,
+        0.5,
+        0.625,
+        0.75
+      ],
+      "recall_floors": {
+        "inspect": 0.75,
+        "edit": 0.65,
+        "check_or_finish": 0.75
+      },
+      "balanced_accuracy_minimum": 0.75
+    },
+    "calibration": {
+      "temperature_grid": [
+        0.5,
+        0.75,
+        1.0,
+        1.25,
+        1.5,
+        2.0,
+        3.0,
+        4.0
+      ]
+    },
+    "abstention": {
+      "threshold_grid": [
+        0.0,
+        0.25,
+        0.3,
+        0.35,
+        0.4,
+        0.45,
+        0.5,
+        0.55,
+        0.6,
+        0.65,
+        0.7,
+        0.75,
+        0.8,
+        0.85,
+        0.9,
+        0.95
+      ],
+      "accepted_accuracy_minimum": 0.86,
+      "coverage_minimum": 0.7,
+      "minimum_accepted_rows_per_true_class": 2
+    },
+    "metrics": {
+      "ece_bins": 10
+    }
+  },
+  "procedures": {
+    "primary": "j_forecast_geometric_pool_logit_policy",
+    "reference": "sequence_logit",
+    "proper_scores_use": "temperature_calibrated_forecast_q",
+    "decision_metrics_use": "argmax_raw_offset_decision_d",
+    "decision_confidence": "forecast_q_at_argmax_decision_d"
+  },
+  "point_screen_thresholds": {
+    "known_action_fraction_minimum": 0.95,
+    "balanced_accuracy_minimum": 0.75,
+    "recall_inspect_minimum": 0.75,
+    "recall_edit_minimum": 0.65,
+    "recall_check_or_finish_minimum": 0.75,
+    "selected_accepted_accuracy_minimum": 0.85,
+    "selected_coverage_minimum": 0.7,
+    "multiclass_negative_log_likelihood_maximum": 0.6
+  },
+  "support_screen_thresholds": {
+    "stable_prediction_rows_minimum": 1500,
+    "known_action_rows_minimum": 1425,
+    "prediction_tasks_minimum": 55,
+    "prediction_repositories_minimum": 9,
+    "known_action_tasks_minimum": 55,
+    "known_action_repositories_minimum": 9,
+    "hierarchical_known_action_fraction_minimum": 0.95,
+    "known_inspect_tasks_minimum": 10,
+    "known_edit_tasks_minimum": 10,
+    "known_check_or_finish_tasks_minimum": 10,
+    "known_inspect_repositories_minimum": 6,
+    "known_edit_repositories_minimum": 6,
+    "known_check_or_finish_repositories_minimum": 6,
+    "numerical_stability_fraction_minimum": 0.9,
+    "stable_feature_complete_prediction_fraction_minimum": 0.9
+  },
+  "output_contract": {
+    "dedicated_root": ".cache/swe_state_interpreter_v4_design",
+    "new_outputs_no_clobber": true,
+    "validation_or_reserved_output_paths_forbidden": true
+  },
+  "reserved_validation_policy": "forbidden_and_not_opened_by_any_design_screen_result"
+}

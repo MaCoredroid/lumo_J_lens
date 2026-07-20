@@ -1,0 +1,232 @@
+{
+  "schema_version": 1,
+  "kind": "swe_task_state_v4_epistemic_chain_annotation_runner",
+  "id": "visible-novel-epistemic-action-chain-local-three-model-runtime-v5",
+  "status": "development_annotation_runtime_with_prospective_blind_quality_audit_cutlass_fallback_v5",
+  "scope": {
+    "development_data_only": true,
+    "reserved_validation_closed": true,
+    "reserved_validation_accessed": false,
+    "private_chain_of_thought_ground_truth_claimed": false,
+    "affect_or_emotion_targeted": false
+  },
+  "inputs": {
+    "annotation_config": {
+      "path": "configs/swe_task_state_v4_epistemic_chain_annotation.json",
+      "sha256": "4c7e985a349f36e8700922dd40652bb8c94e9939aa102fdf931288808f64166d"
+    },
+    "annotation_codebook": {
+      "path": "configs/swe_task_state_v4_epistemic_chain_codebook.json",
+      "sha256": "0575f3ffeccf10fe737877ce47374f21ece96197fcb64f0d61bf514b5e9e75f9"
+    },
+    "completion_packet_manifest": {
+      "path": ".cache/swe_task_state_v4_raw_capture/n60-final/epistemic-chain-completion-packets-v3.json",
+      "sha256": "85859bfcf32fcaca9103cce34a0f1f4a85461d788987039f2b7098154e47c9d2"
+    }
+  },
+  "roles": {
+    "independent_a": {
+      "repo_id": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a",
+      "snapshot_tree_sha256": "f7a0aba897e16a8ad42d7e4016c2ed5b62dd1b6e79d83bb8b6e59ec6e93369a1",
+      "quantization": null,
+      "dtype": "bfloat16",
+      "seed": 17011
+    },
+    "independent_b": {
+      "repo_id": "Qwen/Qwen3.5-4B",
+      "revision": "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a",
+      "snapshot_tree_sha256": "ee66506eb7537d16b2404cd4e7fe97699fb738efcc067c189274850ecc12786f",
+      "quantization": null,
+      "dtype": "bfloat16",
+      "seed": 29027
+    },
+    "adjudicator": {
+      "repo_id": "nvidia/Qwen3.6-27B-NVFP4",
+      "revision": "0893e1606ff3d5f97a441f405d5fc541a6bdf404",
+      "snapshot_tree_sha256": "9e81d31df546344ad68696c3cfd6cadce4ad6d3952710a3dc2021c1c2d42414d",
+      "quantization": "modelopt_fp4",
+      "dtype": "bfloat16",
+      "seed": 53047
+    },
+    "quality_audit": {
+      "repo_id": "nvidia/Qwen3.6-27B-NVFP4",
+      "revision": "0893e1606ff3d5f97a441f405d5fc541a6bdf404",
+      "snapshot_tree_sha256": "9e81d31df546344ad68696c3cfd6cadce4ad6d3952710a3dc2021c1c2d42414d",
+      "quantization": "modelopt_fp4",
+      "dtype": "bfloat16",
+      "seed": 61001
+    }
+  },
+  "prompt_contract": {
+    "model_visible_packet_fields": {
+      "completion_chain": [
+        "materialized_assistant_text.text"
+      ],
+      "prefix_novelty": [
+        "authenticated_prefix.annotator_text",
+        "locked_hypothesis.text"
+      ],
+      "adjudicator_addition": [
+        "candidate_1.semantic_record",
+        "candidate_2.semantic_record"
+      ]
+    },
+    "forbidden_model_visible_sources": [
+      "activation",
+      "activations",
+      "prediction",
+      "predictions",
+      "outcome",
+      "outcomes",
+      "repository",
+      "repo_name",
+      "task_id",
+      "request_index",
+      "global_request_index",
+      "resolved",
+      "passed",
+      "failed_official"
+    ],
+    "full_frozen_codebook_in_every_prompt": true,
+    "assistant_text_treated_as_untrusted_data": true,
+    "completion_nonchain_sentinel_contract": {
+      "offsets": 0,
+      "span_text": "",
+      "ontology_slot": "none",
+      "unknown_is_not_cautious_no_chain": true
+    }
+  },
+  "generation": {
+    "engine": "vllm_offline_structured_outputs",
+    "temperature": 0,
+    "top_p": 1.0,
+    "max_output_tokens": 768,
+    "max_model_len": 131072,
+    "max_num_seqs": 8,
+    "max_num_batched_tokens": 8192,
+    "gpu_memory_utilization": 0.9,
+    "no_input_truncation": true,
+    "vllm_disabled_kernels": [
+      "FlashInferFP8ScaledMMLinearKernel",
+      "FlashInferCutlassNvFp4LinearKernel",
+      "FlashInferTrtllmNvFp4LinearKernel",
+      "FlashInferCudnnNvFp4LinearKernel"
+    ],
+    "cuda_home_override": null
+  },
+  "independence_and_adjudication": {
+    "independent_lanes_never_see_other_annotations": true,
+    "distinct_model_revisions_required": true,
+    "adjudicator_runs_on_every_semantic_disagreement": true,
+    "adjudicator_candidate_order_hash_randomized": true,
+    "unresolved_adjudication_becomes_explicit_unknown": true,
+    "large_job_requires_explicit_allow_full_run": true,
+    "quality_audit_blind_to_all_other_annotations": true,
+    "quality_audit_not_gold": true,
+    "quality_audit_cannot_resolve_independent_lane_agreement": true
+  },
+  "quality_audit": {
+    "status": "prospectively_declared_before_quality_audit_generation",
+    "role": "quality_audit",
+    "real_packet_ids": [
+      "d79cafaebcdf5f9cd750ee005bfa023243547ed42c9b5efe3e8a30c951f64ee9",
+      "d73ea9b8c8d0aa98f32e45a40149156cfe269507c468a4604dc90550bcf7235b",
+      "fa5b6d022f80ba4e0711eed930e3d867b405bbe3aa43fb1c421fb89d2ae19037",
+      "251fcc32d677b4988a9214c55f232c9995edf2cd86610105de0dc7be27250a34",
+      "0c8543c07f614169c02f247f1b1e261714a80cdb0b3b153b666305d8e4dbaef9"
+    ],
+    "synthetic_fixtures": {
+      "source": "all_frozen_codebook_positive_and_negative_examples",
+      "positive_count": 3,
+      "negative_count": 7,
+      "expected_labels_physically_separate_from_model_input": true
+    },
+    "non_gold_reference": {
+      "source": "independent_codex_heuristic_enriched_pilot",
+      "positive_packet_ids": [
+        "d79cafaebcdf5f9cd750ee005bfa023243547ed42c9b5efe3e8a30c951f64ee9",
+        "d73ea9b8c8d0aa98f32e45a40149156cfe269507c468a4604dc90550bcf7235b"
+      ],
+      "negative_packet_ids": [
+        "fa5b6d022f80ba4e0711eed930e3d867b405bbe3aa43fb1c421fb89d2ae19037",
+        "251fcc32d677b4988a9214c55f232c9995edf2cd86610105de0dc7be27250a34",
+        "0c8543c07f614169c02f247f1b1e261714a80cdb0b3b153b666305d8e4dbaef9"
+      ],
+      "is_gold": false,
+      "may_not_train_or_adjudicate": true
+    },
+    "comparison_after_audit_output_lock_only": true,
+    "failure_if_synthetic_controls_invalid_or_wrong": true,
+    "roster_unsuitable_if_quality_audit_finds_enriched_positive_missed_by_both_independent_lanes": true
+  },
+  "pilot_amendment": {
+    "quality_audit_runtime_predecessor_config_canonical_sha256": "eab910ac1522a7864cf57cd453c511125471b5e1aabeed9ce5902637de5de285",
+    "failed_quality_audit_runtime_attempts": [
+      {
+        "path": ".cache/swe_task_state_v4_raw_capture/n60-final/epistemic-chain-local-quality-audit-v4-attempt-1-failure.json",
+        "sha256": "d4d0207b977883458fb533830b7ebf39254b9cd00d474aae570f910cceae3b63",
+        "model_outputs_generated": 0
+      },
+      {
+        "path": ".cache/swe_task_state_v4_raw_capture/n60-final/epistemic-chain-local-quality-audit-v4-attempt-2-failure.json",
+        "sha256": "2f08ad9e246ed8465ca6c479ff27b6834bbf63e2dcc33df351ab19ca51cb5c71",
+        "model_outputs_generated": 0
+      }
+    ],
+    "quality_audit_runtime_amendment": {
+      "status": "prospectively_frozen_before_attempt_3_generation",
+      "failure_scope": "runtime_initialization_only_no_model_outputs",
+      "required_vllm_disabled_kernels": [
+        "FlashInferFP8ScaledMMLinearKernel",
+        "FlashInferCutlassNvFp4LinearKernel",
+        "FlashInferTrtllmNvFp4LinearKernel",
+        "FlashInferCudnnNvFp4LinearKernel"
+      ],
+      "selection_source": "exact_existing_known_good_nvfp4_wrapper_contract",
+      "known_good_wrapper_paths": [
+        "scripts/run_swe_task_state_v4_raw_capture.sh",
+        "scripts/run_jlens_nvfp4.sh",
+        "scripts/serve_qwen36_27b_nvfp4_mtp.sh"
+      ],
+      "cuda_home_override": null,
+      "retry_limit": 1,
+      "annotation_prompt_model_seed_and_packet_selection_unchanged": true
+    },
+    "quality_audit_predecessor_config_canonical_sha256": "3e47b13d0331d7630bc18f7a8897483e0b7e952a596c7a474686ec73d7e6d962",
+    "locked_real_pilot_final_manifest": {
+      "path": ".cache/swe_task_state_v4_raw_capture/n60-final/epistemic-chain-local-pilot-v3-final-v2.json",
+      "sha256": "c9eab81e97c15077b8856025377e080bc8dac90a527013e8fde61f2aba4d6d70"
+    },
+    "locked_real_pilot_independent_a_sha256": "0e0701789c162671d4128224b1c24cdbf716e66339015a81186e706a3926c7e8",
+    "locked_real_pilot_independent_b_sha256": "83bd35cba9565f48b9d5a2012b434e343050bcf73f80770e7486ba8437bba3fe",
+    "locked_real_pilot_result": "five_of_five_no_chain_agreement_with_degenerate_kappa_and_no_adjudication_required",
+    "locked_real_pilot_does_not_establish_annotator_adequacy": true,
+    "immediate_predecessor_config_canonical_sha256": "f2868f1caa7b86b51a3a83923257732f6b19fe95e6c93215eda52c4be932bfd0",
+    "predecessor_config_canonical_sha256": "a8fe1e0f3002519dae31bf3c7c20241215a9a2f6f11bbd60aaacb19830e7777e",
+    "failed_interface_pilot_manifest": {
+      "path": ".cache/swe_task_state_v4_raw_capture/n60-final/epistemic-chain-local-pilot-v1-independent-b.json",
+      "sha256": "018989786fe60d869595633841cd3211d7d8242249bdabfbb159c2b6a2763e31"
+    },
+    "failed_interface_pilot_records_sha256": "41518954278118d97fe7cc41519677bcea5b92b3551fff852091ce1b1f9af213",
+    "failure": "all_five_structured_unknown_outputs_used_unstated_zero_and_nonnull_slot_sentinels_and_were_fail_closed",
+    "amendment": "state_exact_negative_one_empty_none_sentinels_and_distinguish_unknown_from_cautious_no_chain",
+    "failed_pilot_is_not_gold": true,
+    "failed_pilot_over_abstention_retained_as_feasibility_signal": true,
+    "second_failed_interface_pilot_manifest": {
+      "path": ".cache/swe_task_state_v4_raw_capture/n60-final/epistemic-chain-local-pilot-v2-independent-b.json",
+      "sha256": "9ecc948575f384a43375ee0820437ba1d295044b36dd6f1ab4da0762a538311f"
+    },
+    "second_failed_interface_pilot_records_sha256": "0c46cd39c1d86081d8385da0fad99e759bb963c99bcadb86b840b805d723d5c3",
+    "second_failure": "all_five_no_chain_outputs_stalled_after_a_negative_integer_sign_until_the_structured_output_token_cap",
+    "second_amendment": "use_zero_empty_offset_sentinels_while_positive_spans_still_require_strict_start_less_than_end",
+    "second_failed_pilot_is_not_gold": true
+  },
+  "claim_scope": {
+    "annotation_is_not_lens_decoding": true,
+    "target_is_visible_future_semantic_chain": true,
+    "target_is_not_private_chain_of_thought": true,
+    "semantic_decoding_established": false,
+    "affect_decoding_established": false
+  }
+}

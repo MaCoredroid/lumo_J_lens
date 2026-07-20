@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "id": "swe-task-state-v4-source-feasibility-v1",
+  "status": "design_only_identity_source_feasibility_not_selection",
+  "identity_projection": {
+    "columns_in_order": [
+      "instance_id",
+      "repo"
+    ],
+    "unique_instance_ids_required": true,
+    "verified_repository_must_match_full_test": true,
+    "task_payload_columns_must_not_be_read": true
+  },
+  "hash_contract": {
+    "algorithm": "sha256",
+    "file_hash_input": "exact_file_bytes",
+    "identity_set_hash_input": "compact_ascii_canonical_json_of_lexically_sorted_unique_instance_ids",
+    "canonical_json": "sort_keys_true_separators_comma_colon_ensure_ascii_true_allow_nan_false"
+  },
+  "sources": {
+    "full_test": {
+      "dataset_repo_id": "princeton-nlp/SWE-bench",
+      "revision": "e48e2bd1e9fecd5bbd641e9414ac59da9f2e69f6",
+      "split": "test",
+      "file_logical_path": "data/test-00000-of-00001.parquet",
+      "file_format": "parquet",
+      "file_sha256": "db4f70ef735b3162c74801ddcdf8d7bae8d704193788c6d844f898c20b571cbb",
+      "instance_count": 2294,
+      "instance_ids_set_sha256": "8348567d58d34d7749213678ac7b3e08cc21c14839262839db45c8c8f4aa4369",
+      "repository_counts": {
+        "astropy/astropy": 95,
+        "django/django": 850,
+        "matplotlib/matplotlib": 184,
+        "mwaskom/seaborn": 22,
+        "pallets/flask": 11,
+        "psf/requests": 44,
+        "pydata/xarray": 110,
+        "pylint-dev/pylint": 57,
+        "pytest-dev/pytest": 119,
+        "scikit-learn/scikit-learn": 229,
+        "sphinx-doc/sphinx": 187,
+        "sympy/sympy": 386
+      }
+    },
+    "verified": {
+      "dataset_repo_id": "princeton-nlp/SWE-bench_Verified",
+      "revision": "c104f840cc67f8b6eec6f759ebc8b2693d585d4a",
+      "split": "test",
+      "file_logical_path": "data/test-00000-of-00001.parquet",
+      "file_format": "parquet",
+      "file_sha256": "a45b1fe4e2f0c8390b2b2938ac83e92ed5979000856808f3679c07812e9e6dcd",
+      "file_size_bytes": 2096679,
+      "instance_count": 500,
+      "instance_ids_set_sha256": "33e18be7a9bd9f674790b63ed4d0b3fb17c176994802e3062b7d5a430a4e7d16",
+      "repository_counts": {
+        "astropy/astropy": 22,
+        "django/django": 231,
+        "matplotlib/matplotlib": 34,
+        "mwaskom/seaborn": 2,
+        "pallets/flask": 1,
+        "psf/requests": 8,
+        "pydata/xarray": 22,
+        "pylint-dev/pylint": 10,
+        "pytest-dev/pytest": 19,
+        "scikit-learn/scikit-learn": 32,
+        "sphinx-doc/sphinx": 44,
+        "sympy/sympy": 75
+      }
+    }
+  },
+  "derivation": {
+    "operation": "full_test_identity_set_minus_verified_identity_set",
+    "verified_exact_subset_of_full_test_required": true,
+    "complement_instance_count": 1794,
+    "complement_instance_ids_set_sha256": "953b83337651cfa8e68f812f30e3ba1394a8a08e1f66980680832a1d6bd02861",
+    "complement_repository_counts": {
+      "astropy/astropy": 73,
+      "django/django": 619,
+      "matplotlib/matplotlib": 150,
+      "mwaskom/seaborn": 20,
+      "pallets/flask": 10,
+      "psf/requests": 36,
+      "pydata/xarray": 88,
+      "pylint-dev/pylint": 47,
+      "pytest-dev/pytest": 100,
+      "scikit-learn/scikit-learn": 197,
+      "sphinx-doc/sphinx": 143,
+      "sympy/sympy": 311
+    }
+  },
+  "output_contract": {
+    "dedicated_root": ".cache/swe_state_interpreter_v4_design",
+    "default_filename": "swe-task-state-v4-source-feasibility.json",
+    "new_output_no_clobber": true,
+    "aggregate_only_no_instance_ids": true,
+    "forbidden_casefolded_path_tokens": [
+      "reserved",
+      "validation"
+    ]
+  },
+  "data_policy": {
+    "identity_columns_read": [
+      "instance_id",
+      "repo"
+    ],
+    "selection_performed": false,
+    "selection_authorized": false,
+    "generation_performed": false,
+    "generation_authorized": false,
+    "task_payload_fields_read": false,
+    "reserved_membership_accessed": false,
+    "reserved_validation_data_accessed": false,
+    "reserved_validation_allowed": false,
+    "confirmatory_interpretation": false,
+    "operational_reliability_claim": false,
+    "independent_v4_development_result": false,
+    "power_analysis_performed": false
+  }
+}

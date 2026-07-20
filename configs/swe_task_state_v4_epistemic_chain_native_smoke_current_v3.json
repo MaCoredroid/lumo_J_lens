@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "interface_version": 3,
+  "kind": "swe_task_state_v4_epistemic_chain_native_smoke_current_v3",
+  "status": "three_role_native_exact_token_smoke_complete_not_sealed_control_evidence",
+  "scope": {
+    "development_controls_only": true,
+    "reserved_validation_accessed": false,
+    "one_finite_schema_request_per_role": true,
+    "semantic_control_suite_executed": false,
+    "sentence_or_chain_decoder_executed": false,
+    "affect_protocol_executed": false
+  },
+  "bindings": {
+    "adapter_config": {
+      "path": "configs/swe_task_state_v4_epistemic_chain_native_vllm_adapter_v3.json",
+      "sha256": "3a9555d8be4eba0737c943ac6023a123b6e65647503abfcb1c8ab043be629cdf"
+    },
+    "adapter_source": {
+      "path": "scripts/swe_task_state_v4_epistemic_chain_native_vllm_adapter_v3.py",
+      "sha256": "ef2edf3e1e0c4a163106a1015bc1a96ee46a73ae2bcde71d4f3919cc368bea02"
+    },
+    "smoke_harness": {
+      "path": "scripts/swe_task_state_v4_epistemic_chain_native_smoke_v3.py",
+      "sha256": "ddf0dfa53c31f9a3ce1f28e3581bf7174309e12931e5c3a2fe01a38578c21345"
+    },
+    "artifact_root": ".cache/swe_task_state_v4_raw_capture/n60-final/native-smoke-v3-final-20260720"
+  },
+  "roles": {
+    "independent_a": {
+      "model_lineage": "qwen3.6",
+      "freeze_manifest_file_sha256": "cd37f747804174d6b3c3a8fa1b846d23e270845bce46ec7a6e951d926d7daaab",
+      "launch_authorization_file_sha256": "89fe4f8af30a57fef25a33bd702c2ca9368f61761a4b034e6de5d8af9e725ed5",
+      "request_specs_file_sha256": "f15e1c3a3ddbc2d30e57b2134b4c53d9f55f82ae0df86e621f93e2d22c17d951",
+      "smoke_receipt_file_sha256": "ca56a76bc5c7701b88c4b42704110ed81663c9f299a04e1607a1b1f6b0b1e575",
+      "smoke_receipt_sha256": "305080b1e8220584c7184e08aed1cc7dcff41a24141093bf03add426e1384e34",
+      "native_request_sha256": "cbe4bc9da607ea353a16cac2313bd4e7dde240847c102d65af6c41d8f0a3b1fd",
+      "native_result_sha256": "777246a0575536723636fe630785eaf657c2c4927a3cfa4d715bb067c213b561",
+      "preflight_receipt_sha256": "d714a77cdb368513e0e05325b4030e815a13130b555fddcc82f4a612214018e3",
+      "runtime_receipt_sha256": "9ccf1d3356a42f1e4eb17fecfa22db860344580a3c7689f9f0c62808333ff3fe",
+      "prompt_token_count": 43,
+      "output_token_count": 9,
+      "harmony_final_recipient": null,
+      "finite_output": {
+        "verdict": "ok"
+      }
+    },
+    "independent_b": {
+      "model_lineage": "gpt-oss",
+      "freeze_manifest_file_sha256": "3126190bf786d0f80a2a44f5472bce0718a9623b63b66c952bdb96d50da33f9b",
+      "launch_authorization_file_sha256": "196f97564b7691c5a07d0a531979773ac994c785108882f1779fd1af8627c107",
+      "request_specs_file_sha256": "559a6b3206d2f3257a71c5a5ff9637d59625c4c872dae0c8946e09497a152724",
+      "smoke_receipt_file_sha256": "bd9d80e4ee839a50bfea1d74a8aa602dafedb0c457df84d755d08d5fa3340818",
+      "smoke_receipt_sha256": "7341ba64bd550cfa524615eda25ab49559ba7f5972a6eee223b0d28d2e649959",
+      "native_request_sha256": "5b0f61e96393ed7d62042985c64eea776a0ab992ddf52c2e0ba211845366810c",
+      "native_result_sha256": "8489c0e0b09cc4f5dc722354462eb05396cd24bf2f354d9288a3f81611e566fa",
+      "preflight_receipt_sha256": "538e52ed3e1116d865814232717f1ce37852c8859e37477df71a680a92c1a32e",
+      "runtime_receipt_sha256": "19ea0d96da50ef83029aa13ff017b42194e3efaf538a7449ebaf477506d003ec",
+      "prompt_token_count": 100,
+      "output_token_count": 40,
+      "harmony_final_recipient": "<|constrain|>JSON",
+      "finite_output": {
+        "verdict": "ok"
+      }
+    },
+    "adjudicator": {
+      "model_lineage": "mistral-small-3.1",
+      "freeze_manifest_file_sha256": "c10be883bbe893f59065b4599b7e20cf404ffc43449ae2203d9f654482407621",
+      "launch_authorization_file_sha256": "3c46126293c21185e60d07f84853095ea9b669d09f7fd340dedc98c1da50f99e",
+      "request_specs_file_sha256": "de2d56c157a8658019dcbe8afb695b123a15746a74a54baec3543665fa314e21",
+      "smoke_receipt_file_sha256": "8d85979a8b03b00933e50fa7ae76b876b1c8674d1f10578d1321a1127e2b5665",
+      "smoke_receipt_sha256": "aa4ead0087e09b5e17818082324d279b48adc386790da405ff22a13a95ceb9f2",
+      "native_request_sha256": "b0832b693b3a01b68bae7de4da4a9801f724bf99c225e3ed3e3804de509fc306",
+      "native_result_sha256": "e2ab215c3cb2744951ed8ab8be680bc3ac9969592cb390e1277551b195bd494e",
+      "preflight_receipt_sha256": "65025581fbdd94c8b127f7bbc136e3a6af9b825aeba184d7bc6f6c94d25880c7",
+      "runtime_receipt_sha256": "924af63096aacd9795b1a581827e8de0e0cd03b68ec8b539c912ae19cc72a953",
+      "prompt_token_count": 31,
+      "output_token_count": 10,
+      "harmony_final_recipient": null,
+      "finite_output": {
+        "verdict": "ok"
+      }
+    }
+  },
+  "integrity": {
+    "all_prompt_token_ids_match_engine_reported_ids": true,
+    "all_output_token_decodes_match_engine_candidate_text": true,
+    "all_model_snapshots_unchanged_after_generation": true,
+    "all_preflight_and_runtime_receipts_self_validate": true,
+    "gpt_harmony_analysis_excluded": true,
+    "gpt_harmony_final_recipient_exact_json_constraint_only": true
+  },
+  "claim_scope": {
+    "three_native_model_paths_executed": true,
+    "sealed_control_evidence_established": false,
+    "semantic_sentence_or_chain_decoding_established": false,
+    "private_or_verbatim_cot_recovery_established": false,
+    "latent_cot_like_trajectory_recovery_established": false,
+    "affect_emotion_confidence_doubt_or_stress_recovery_established": false,
+    "reserved_validation_generalization_established": false
+  },
+  "remaining_blockers": [
+    "The sealed outer executor still lacks implemented lock-primaries, run-adjudicator, and lock-all command paths.",
+    "The 40-row semantic controls and 12 adjudicator fixtures have not run under the final adapter source.",
+    "No real trajectory sentence-chain decoder or three-boundary causal intervention has run.",
+    "The separate affect/confidence/doubt/pressure protocol remains unexecuted."
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "interface_version": 3,
+  "kind": "swe_task_state_v4_epistemic_chain_candidate_catalog_config_v3",
+  "status": "prospective_expectation_blind_catalog_contract_before_v3_controls",
+  "scope": {
+    "development_only": true,
+    "reserved_validation_closed": true,
+    "reserved_validation_accessed": false,
+    "expectations_labels_outcomes_activations_accepted": false,
+    "private_chain_of_thought_ground_truth_claimed": false,
+    "affect_emotion_confidence_doubt_or_stress_targeted": false
+  },
+  "algorithm": {
+    "name": "stdlib_exact_visible_unit_segmentation",
+    "version": 1,
+    "coordinate_system": "python_unicode_codepoints",
+    "normalization": "none",
+    "edge_whitespace": "trim_from_unit_edges_only",
+    "newline_boundary": "longest_match_split_outside_protected_ranges",
+    "line_boundary_sequences": [
+      "\r\n",
+      "\n",
+      "\r",
+      "\u000b",
+      "\u000c",
+      "\u001c",
+      "\u001d",
+      "\u001e",
+      "\u0085",
+      "\u2028",
+      "\u2029"
+    ],
+    "sentence_terminal_boundaries": [
+      ".",
+      "?",
+      "!"
+    ],
+    "sentence_closing_characters": "\"'\u201d\u2019)]}",
+    "semicolon_boundary": "preserve_within_line_split_only_at_newline",
+    "colon_fence_grouping": "group_colon_introducer_with_immediately_following_fenced_block",
+    "fenced_code_delimiters": [
+      "```",
+      "~~~"
+    ],
+    "inline_code_delimiter": "`",
+    "url_regex": "(?i)\\b(?:https?://|www\\.)[^\\s<>{}]+",
+    "decimal_regex": "(?<![\\w.])\\d+(?:\\.\\d+)+(?![\\w.])",
+    "initialism_regex": "(?<!\\w)(?:[A-Z]\\.){2,}",
+    "abbreviations": [
+      "e.g.",
+      "i.e.",
+      "vs.",
+      "Dr.",
+      "Mr.",
+      "Mrs.",
+      "Ms.",
+      "Prof.",
+      "Sr.",
+      "Jr.",
+      "St.",
+      "No.",
+      "Fig.",
+      "U.S.",
+      "U.K."
+    ],
+    "empty_text_action": "usable_authenticated_zero_unit_bundle",
+    "whitespace_only_action": "structured_unusable_without_bundle",
+    "truncation": "forbidden",
+    "fuzzy_or_normalized_fallback": "forbidden"
+  },
+  "caps": {
+    "max_units_per_packet": 512,
+    "max_executable_schema_bytes": 16384,
+    "overflow_action": "explicit_failure_without_truncation"
+  },
+  "bindings": {
+    "builder": {
+      "path": "scripts/swe_task_state_v4_epistemic_chain_candidate_catalog_v3.py",
+      "sha256": "0d38bdcb0ec3aae1197375aaf34ceeb16f470df9dd855dc00c698b82e1ee2176"
+    },
+    "runner_v3": {
+      "path": "scripts/swe_task_state_v4_epistemic_chain_annotation_runner_v3.py",
+      "sha256": "c35af19c9f3f1e38208ba7f23467c386ebff2e5fb6572582f9a620f51f394aeb"
+    },
+    "codebook_v2": {
+      "path": "configs/swe_task_state_v4_epistemic_chain_codebook_v2.json",
+      "sha256": "2105a50c7bc13a064ca75c4a69aad631869fbbb2c17c94970eeaa92722aff85c"
+    }
+  }
+}

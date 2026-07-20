@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "interface_version": 3,
+  "kind": "swe_task_state_v4_epistemic_chain_adjudication_control_fixture_config_v3",
+  "scope": "controls_module_only_cpu_testable_fixture_route",
+  "production_runner": {
+    "kind": "swe_task_state_v4_epistemic_chain_annotation_runner_v3",
+    "relative_path": "scripts/swe_task_state_v4_epistemic_chain_annotation_runner_v3.py",
+    "sha256": "c35af19c9f3f1e38208ba7f23467c386ebff2e5fb6572582f9a620f51f394aeb"
+  },
+  "production_codebook": {
+    "relative_path": "configs/swe_task_state_v4_epistemic_chain_codebook_v2.json",
+    "file_sha256": "2105a50c7bc13a064ca75c4a69aad631869fbbb2c17c94970eeaa92722aff85c",
+    "canonical_json_sha256": "abf0854b166f5db473c2b2db1dc2a2faac41ffa7ffee928438dec005ef2cbcca"
+  },
+  "fixture_candidate_provenance": {
+    "origin": "authored_bounded_control_fixture_projection",
+    "intended_use": "sealed_semantic_adjudication_control_fixture_only",
+    "model_generated": false,
+    "native_model_record_lineage_present": false,
+    "production_candidate_record_kind_claimed": false
+  },
+  "blinding": {
+    "domain": "semantic-adjudication-control-fixture-order-v3",
+    "nonce_format": "lowercase_sha256_hex",
+    "nonce_model_visible": false,
+    "canonical_projection_sort_before_nonce_selector": true,
+    "original_order_bound": true
+  },
+  "model_input": {
+    "builder": "production_runner.build_adjudication_messages",
+    "unlabeled": true,
+    "forbidden_field_name_fragments": [
+      "gold",
+      "wrong",
+      "expected",
+      "winner",
+      "position_class",
+      "positionclass",
+      "correct",
+      "incorrect",
+      "preferred",
+      "preference",
+      "label",
+      "target",
+      "expectation"
+    ],
+    "expectation_object_accepted_by_generation_api": false,
+    "expectation_object_in_fixture_lock_or_record": false
+  },
+  "generation": {
+    "native_execution": "production_runner.execute_native_generation",
+    "native_request_reconstruction": "production_runner.build_native_generation_request",
+    "verdict_schema": "production_runner.adjudication_response_schema",
+    "repair_schema": "production_runner.neither_repair_response_schema",
+    "materialization": "production_runner.materialize_completion_proposal_or_materialize_novelty_proposal",
+    "cpu_mock_execution_is_non_gate": true,
+    "fixture_candidates_are_never_native_candidate_records": true,
+    "inner_execution_mode": "native_protocol_adapter_non_gate",
+    "inner_route_claims_actual_model_execution": false,
+    "actual_model_execution_claim_responsibility": "future_sealed_outer_executor",
+    "externally_authenticated_generation_contract_required": true,
+    "exact_prompt_token_ids_bound_before_generation": true,
+    "exact_native_request_reconstruction_required": true
+  },
+  "outer_executor_responsibility": {
+    "nonce_precommit_receipt_reference_required": true,
+    "fixture_route_verifies_precommit_chronology": false,
+    "fixture_route_verifies_expectation_access_chronology": false,
+    "future_sealed_outer_executor_must_establish_chronology": true
+  },
+  "claim_scope": {
+    "visible_semantic_cot_like_structure_targeted": true,
+    "private_chain_of_thought_ground_truth_claimed": false,
+    "private_chain_of_thought_recovery_established": false,
+    "verbatim_private_chain_of_thought_recovery_established": false,
+    "affect_emotion_confidence_doubt_or_stress_targeted": false,
+    "affect_or_emotion_recovery_established": false
+  }
+}

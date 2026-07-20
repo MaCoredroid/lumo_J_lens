@@ -1,0 +1,164 @@
+{
+  "schema_version": 1,
+  "kind": "swe_task_state_v4_epistemic_chain_annotation_runner_v2",
+  "id": "swe-task-state-v4-quote-first-three-family-controls-v2",
+  "status": "prospectively_frozen_before_any_v2_control_or_target_generation",
+  "scope": {
+    "development_data_only": true,
+    "reserved_validation_closed": true,
+    "reserved_validation_accessed": false,
+    "private_chain_of_thought_ground_truth_claimed": false,
+    "affect_or_emotion_targeted": false,
+    "target_annotation_authorized": false,
+    "controls_are_interface_readiness_only": true
+  },
+  "implementation": {
+    "quote_runner": {
+      "path": "scripts/swe_task_state_v4_epistemic_chain_annotation_runner_v2.py",
+      "sha256": "9e8ca934776279e3fa0ebcf01dc4e5c600559187552d5d7b034a7cd4634ae288"
+    },
+    "quote_runner_tests": {
+      "path": "tests/test_swe_task_state_v4_epistemic_chain_annotation_runner_v2.py",
+      "sha256": "59517c44eaed55126a7e577516153a547315d5e931bba42939dce398844c869d"
+    }
+  },
+  "inputs": {
+    "annotation_codebook": {
+      "path": "configs/swe_task_state_v4_epistemic_chain_codebook_v2.json",
+      "size_bytes": 16012,
+      "sha256": "2105a50c7bc13a064ca75c4a69aad631869fbbb2c17c94970eeaa92722aff85c"
+    },
+    "sealed_control_model_inputs": {
+      "path": "artifacts/epistemic-chain-controls-v2-model-inputs-manifest.json",
+      "sha256": "8809a980cae95cfc029c49be5a05ac6aeab4222ba68c44439f0141f705f9528e"
+    },
+    "sealed_control_expectations": {
+      "path": "artifacts/epistemic-chain-controls-v2-expectations-manifest.json",
+      "sha256": "d2bbfc7ac9e8ea10c6e3f05e324ef12311a251e0865bed7a1cb8233ac4515c2c",
+      "forbidden_during_generation": true
+    }
+  },
+  "roles": {
+    "independent_a": {
+      "execution_mode": "local_model",
+      "base_model_lineage": "qwen3.6",
+      "repo_id": "nvidia/Qwen3.6-27B-NVFP4",
+      "revision": "0893e1606ff3d5f97a441f405d5fc541a6bdf404",
+      "snapshot_tree_sha256": "9e81d31df546344ad68696c3cfd6cadce4ad6d3952710a3dc2021c1c2d42414d",
+      "snapshot_file_count": 17,
+      "snapshot_size_bytes": 21941623844,
+      "quantization": "modelopt_fp4",
+      "dtype": "bfloat16",
+      "seed": 17011,
+      "chat_template_kwargs": {
+        "enable_thinking": false
+      },
+      "output_extraction": "direct_structured_text",
+      "vllm_engine_kwargs": {
+        "attention_backend": "TRITON_ATTN",
+        "gdn_prefill_backend": "triton",
+        "mamba_cache_mode": "align",
+        "mamba_block_size": 1024,
+        "mamba_ssm_cache_dtype": "float32",
+        "enable_flashinfer_autotune": false
+      }
+    },
+    "independent_b": {
+      "execution_mode": "local_model",
+      "base_model_lineage": "gpt-oss",
+      "repo_id": "openai/gpt-oss-20b",
+      "revision": "6cee5e81ee83917806bbde320786a8fb61efebee",
+      "snapshot_tree_sha256": "60b907629e6da0ac8239a1103c366894c97bd7054f899c4e6e1f6833c84bad18",
+      "snapshot_file_count": 16,
+      "snapshot_size_bytes": 13789278132,
+      "quantization": "mxfp4",
+      "dtype": "bfloat16",
+      "seed": 29027,
+      "chat_template_kwargs": {
+        "reasoning_effort": "low"
+      },
+      "output_extraction": "openai_harmony_final_channel",
+      "vllm_engine_kwargs": {}
+    },
+    "adjudicator": {
+      "execution_mode": "local_model",
+      "base_model_lineage": "mistral-small-3.1",
+      "repo_id": "RedHatAI/Mistral-Small-3.1-24B-Instruct-2503-quantized.w4a16",
+      "revision": "72add9a622385f641297a6feef5837a06300eecb",
+      "snapshot_tree_sha256": "16bed3903625052c1d2871a8135254acbe731169082f76d910b4b1ddfdf04241",
+      "snapshot_file_count": 17,
+      "snapshot_size_bytes": 15057754757,
+      "quantization": "compressed-tensors",
+      "dtype": "bfloat16",
+      "seed": 53047,
+      "chat_template_kwargs": {},
+      "output_extraction": "direct_structured_text",
+      "vllm_engine_kwargs": {
+        "tokenizer_mode": "mistral",
+        "enforce_eager": true
+      }
+    }
+  },
+  "prompt_contract": {
+    "model_emits_quote_strings_not_offsets": true,
+    "packet_text_allowlist_only": true,
+    "assistant_text_is_untrusted_data": true,
+    "candidate_order_blind": true,
+    "literal_unicode_no_normalization_or_fuzzy_repair": true,
+    "independent_lanes_never_see_each_other": true,
+    "models_never_see_expectations_activations_outcomes_task_or_repository_identity": true
+  },
+  "generation": {
+    "engine": "vllm_offline_structured_outputs",
+    "temperature": 0,
+    "top_p": 1.0,
+    "max_output_tokens": 768,
+    "max_model_len": 90112,
+    "max_num_seqs": 8,
+    "max_num_batched_tokens": 8192,
+    "gpu_memory_utilization": 0.9,
+    "no_input_truncation": true,
+    "vllm_use_flashinfer_sampler": "0",
+    "vllm_enable_v1_multiprocessing": "0",
+    "vllm_disabled_kernels": [
+      "FlashInferFP8ScaledMMLinearKernel",
+      "FlashInferCutlassNvFp4LinearKernel",
+      "FlashInferTrtllmNvFp4LinearKernel",
+      "FlashInferCudnnNvFp4LinearKernel"
+    ],
+    "structured_outputs_config": {
+      "backend": "xgrammar",
+      "disable_any_whitespace": true
+    },
+    "cuda_home_override": null,
+    "prompt_token_accounting": "vllm_request_output.prompt_token_ids"
+  },
+  "readiness_gate": {
+    "status_when_frozen": "not_run",
+    "independent_a_requires": {
+      "completion": 32,
+      "novelty": 8,
+      "all_exact": true
+    },
+    "independent_b_requires": {
+      "completion": 32,
+      "novelty": 8,
+      "all_exact": true
+    },
+    "adjudicator_requires": {
+      "adjudication": 12,
+      "all_exact": true
+    },
+    "target_packet_selection_or_generation_forbidden_until_controls_pass": true,
+    "passing_controls_establishes_annotation_interface_readiness_only": true,
+    "any_bound_byte_or_model_identity_change_resets_gate": true
+  },
+  "claim_scope": {
+    "annotation_is_not_lens_decoding": true,
+    "private_chain_of_thought_recovery_established": false,
+    "latent_sentence_or_concept_chain_recovery_established": false,
+    "emotion_affect_confidence_doubt_or_stress_recovery_established": false,
+    "visible_semantic_labels_are_not_private_internal_ground_truth": true,
+    "control_success_is_not_real_trajectory_or_decoder_success": true
+  }
+}

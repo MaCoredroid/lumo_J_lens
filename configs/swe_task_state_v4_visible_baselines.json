@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "id": "swe-task-state-v4-visible-word-probe-baseline-features",
+  "status": "development_only_reserved_validation_closed",
+  "inputs": {
+    "development_prompts": {
+      "path": ".cache/swe_state_interpreter_v3_development/prompts.json",
+      "sha256": "17f664b3029220458ff62b8e80a90ec5e796f0372217f02b727d6589df38d3d0",
+      "size_bytes": 803705234
+    },
+    "development_public_report": {
+      "path": ".cache/swe_state_interpreter_v3_development/replay/public-report.json",
+      "sha256": "7c943132163749f69bd35e4fa2e52bcfee2318fe349fa77603324a37ffaabe46",
+      "size_bytes": 1241239850
+    },
+    "v3_protocol": {
+      "path": "configs/swe_task_state_interpreter_v3.json",
+      "sha256": "9d8b0a7d5c45dc192365429af27c6193de752cc160458eff8e21807d37662b1d",
+      "size_bytes": 26800
+    },
+    "v3_action_protocol": {
+      "path": "configs/swe_task_state_v3_action_probes.json",
+      "sha256": "0ebd258a2b46beb2a9be3d42cab24680803a2f971cb21e96acecb78e19cd81bf",
+      "size_bytes": 6364
+    },
+    "label_free_alignment_index": {
+      "path": ".cache/swe_task_state_v4_raw_capture/n60-final/alignment-index-v4.json",
+      "sha256": "c0d9e4bd6ad8f6962cf58776441ec4ef042eebbbae8a9959b4149e605c9ae38e",
+      "size_bytes": 567392
+    }
+  },
+  "local_code_dependencies": [
+    {
+      "role": "v4_streaming_extractor",
+      "path": "scripts/swe_task_state_v4_extract.py",
+      "sha256": "43d22531de0cb04d94bf65e5a6ac8897b340c9c34fb2213ff12bfaa662efed10",
+      "size_bytes": 16528
+    },
+    {
+      "role": "v4_sequence_feature_builder",
+      "path": "scripts/swe_task_state_v4_features.py",
+      "sha256": "6106e7bd98f179e5f28d120666d7a824e0ef7c58bb10e308c6823d802a18bb8a",
+      "size_bytes": 11345
+    },
+    {
+      "role": "frozen_v3_analyzer",
+      "path": "scripts/analyze_swe_task_state_v3.py",
+      "sha256": "53c7d41688f6c5ab21f7ad029d343af06e9b13c777fd2e5517ff8d5254ad9e6c",
+      "size_bytes": 215115
+    },
+    {
+      "role": "frozen_v1_analyzer",
+      "path": "scripts/analyze_swe_task_state_interpreter.py",
+      "sha256": "279d0a41742e9feeabd3dbd82b73f609326a4942c983cc2eee7125164ebd0594",
+      "size_bytes": 82043
+    },
+    {
+      "role": "frozen_v2_analyzer",
+      "path": "scripts/analyze_swe_binary_phase_v2.py",
+      "sha256": "eee2f7f49acbaaa5b51144410526f9d62526892c5f27cf929c858035ea07d72e",
+      "size_bytes": 131079
+    },
+    {
+      "role": "frozen_v3_bundle_checker_import",
+      "path": "scripts/check_swe_task_state_v3_development_cohort.py",
+      "sha256": "0b0ddc053669fab6ef6c37ddd26ee523d66a135d7515bc9c6dece10ff979a21c",
+      "size_bytes": 102806
+    },
+    {
+      "role": "frozen_v3_replay_import",
+      "path": "scripts/swe_task_state_v3_replay_pipeline.py",
+      "sha256": "b869a9554efa39b7062a714fa8a117f3d76708bcc29437c7fa06829b00e69ef3",
+      "size_bytes": 106903
+    }
+  ],
+  "campaign": {
+    "all_boundary_count": 1708,
+    "stable_row_count": 1606,
+    "numerically_unstable_row_count": 102,
+    "output_tensor_keys": [
+      "global_index",
+      "history_only",
+      "sequence_logit",
+      "sequence_j",
+      "sequence_logit_j"
+    ],
+    "output_dtypes": {
+      "global_index": "little-endian-int64",
+      "history_only": "little-endian-float64",
+      "sequence_logit": "little-endian-float64",
+      "sequence_j": "little-endian-float64",
+      "sequence_logit_j": "little-endian-float64"
+    }
+  },
+  "variants": {
+    "history_only": {
+      "width": 14,
+      "definition": "frozen causal prior-visible-action history only"
+    },
+    "sequence_logit": {
+      "width": 136,
+      "definition": "history plus ordinary word-probe current, prior-stable delta, prior-EMA deviation, request-gap and no-previous summaries"
+    },
+    "sequence_j": {
+      "width": 136,
+      "definition": "history plus public-J word-probe current, prior-stable delta, prior-EMA deviation, request-gap and no-previous summaries"
+    },
+    "sequence_logit_j": {
+      "width": 256,
+      "definition": "history plus both ordinary and public-J word-probe sequence summaries"
+    }
+  },
+  "authentication": {
+    "exact_input_path_hash_and_size_required": true,
+    "exact_local_code_path_hash_and_size_required": true,
+    "strict_label_free_alignment_schema_required": true,
+    "exact_stable_and_unstable_source_identity_order_required": true,
+    "pre_and_post_input_hash_equality_required": true,
+    "numeric_npz_allowlist_required": true,
+    "npz_reload_verification_required": true,
+    "no_clobber": true,
+    "forbidden_path_fragments": [
+      "reserved",
+      "validation"
+    ]
+  },
+  "feature_boundary": {
+    "allowed_numeric_feature_inputs": [
+      "frozen_extractor.features.history_only",
+      "frozen_extractor.features.sequence_logit",
+      "frozen_extractor.features.sequence_j",
+      "frozen_extractor.features.sequence_logit_j"
+    ],
+    "prior_visible_action_history_scope": "the frozen fourteen-value history may summarize only actions visible before the current boundary",
+    "authentication_or_grouping_only_never_model_features": [
+      "row_id",
+      "task_id",
+      "repository",
+      "request_index",
+      "global_index",
+      "source_id_sha256",
+      "task_id_sha256",
+      "artifact paths hashes and sizes"
+    ],
+    "forbidden_as_features": [
+      "current source action label or collapsed target",
+      "current label status or metric eligibility",
+      "auxiliary diagnostic labels",
+      "current or future completion text",
+      "target or outcome fields",
+      "IDs hashes or repository indicators",
+      "alignment stability flag"
+    ],
+    "label_sidecar_accepted": false,
+    "semantic_ids_as_features_forbidden": true,
+    "repository_as_feature_forbidden": true
+  },
+  "claim_scope": {
+    "private_chain_of_thought_reconstructed": false,
+    "cot_like_observable_event_decoding_established": false,
+    "emotion_decoding_established": false,
+    "causal_interpretation_established": false,
+    "repository_held_out_predictability_established": false,
+    "incremental_value_over_visible_baselines_established": false
+  }
+}

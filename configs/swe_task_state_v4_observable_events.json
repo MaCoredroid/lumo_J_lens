@@ -1,0 +1,247 @@
+{
+  "schema_version": 1,
+  "id": "swe-task-state-v4-observable-event-label-sidecar",
+  "status": "development_only_reserved_validation_closed",
+  "sources": [
+    {
+      "path": ".cache/swe_state_interpreter_v3_development/replay/chunks/chunk-000-prompts.json",
+      "sha256": "8910cc66b6ce7949af53809d60d6a6e4b5c447bfa2e6907aa0cbe01f55459350",
+      "row_count": 517
+    },
+    {
+      "path": ".cache/swe_state_interpreter_v3_development/replay/chunks/chunk-001-prompts.json",
+      "sha256": "e0fbb86323eb7263d334936d05c43bddb4d6bb3a2c6b7d0fb3c1bcc040a91f1e",
+      "row_count": 370
+    },
+    {
+      "path": ".cache/swe_state_interpreter_v3_development/replay/chunks/chunk-002-prompts.json",
+      "sha256": "3210772eac7a1106feb2886e84dc326ff1fc65d766af4a7c293b3d1b9094c5b0",
+      "row_count": 414
+    },
+    {
+      "path": ".cache/swe_state_interpreter_v3_development/replay/chunks/chunk-003-prompts.json",
+      "sha256": "72d968ee8273455a5b0dcb5e665cb24a907197d1e82ce23bc35a5dfc5dea093a",
+      "row_count": 407
+    }
+  ],
+  "eligibility_source": {
+    "path": ".cache/swe_state_interpreter_v4_design/v3-n60-geometric-a020-shared-action-contract-closed.json",
+    "sha256": "e1436a9c7fe763a4fab6ae505af17395a4290faefd0734b230d22127bff0cf8c",
+    "all_rows": 1708,
+    "stable_rows": 1606,
+    "numerically_unstable_rows": 102
+  },
+  "temporal_contract": {
+    "index_symbol": "t",
+    "feature_cutoff": "h_t is the final captured prompt token immediately before ensuing assistant completion t",
+    "target_completion_offsets": {
+      "action_phase": [
+        "t"
+      ],
+      "observable_rationale_language_marker": [
+        "t"
+      ],
+      "transition_kind": [
+        "t-1",
+        "t"
+      ],
+      "milestone_within_2": [
+        "t",
+        "t+1"
+      ],
+      "tool_outcome": [
+        "t"
+      ],
+      "validation_outcome": [
+        "t"
+      ],
+      "terminal_event": [
+        "t"
+      ],
+      "successful_validation_event": [
+        "t"
+      ],
+      "failed_validation_event": [
+        "t"
+      ],
+      "tool_failure_event": [
+        "t"
+      ]
+    },
+    "positive_control_completion_offsets": {
+      "has_prior_edit": "at or before t-1",
+      "has_prior_validate": "at or before t-1",
+      "previous_tool_failure": "t-1"
+    },
+    "latest_allowed_target_completion": "t+1",
+    "completion_t_or_later_as_feature_forbidden": true
+  },
+  "targets": {
+    "action_phase": {
+      "classes": [
+        "inspect",
+        "edit",
+        "check"
+      ],
+      "definition": "ensuing assistant completion t action with validate and finalize collapsed to check"
+    },
+    "observable_rationale_language_marker": {
+      "classes": [
+        "no",
+        "yes"
+      ],
+      "definition": "ensuing materialized assistant completion t matches at least one frozen broad surface-language regex historically stored as diagnosis_expressed; patterns include diagnostic and action-plan wording",
+      "cot_like_scope": "observable process-trace proxy only, not a diagnosis, reasoning, understanding, or hidden/private chain-of-thought"
+    },
+    "transition_kind": {
+      "classes": [
+        "continuation",
+        "advance",
+        "rework"
+      ],
+      "definition": "visible action transition from completion t-1 to completion t; never skip a request"
+    },
+    "milestone_within_2": {
+      "classes": [
+        "none",
+        "edit",
+        "check"
+      ],
+      "definition": "first non-inspection action at completion t or immediately following completion t+1"
+    },
+    "tool_outcome": {
+      "classes": [
+        "success",
+        "failure"
+      ],
+      "definition": "tool execution result attached to ensuing materialized completion t"
+    },
+    "validation_outcome": {
+      "classes": [
+        "success",
+        "failure"
+      ],
+      "definition": "conditional outcome only when ensuing completion t is a validation completion"
+    },
+    "terminal_event": {
+      "classes": [
+        "no",
+        "yes"
+      ],
+      "definition": "ensuing completion t is the terminal completion"
+    },
+    "successful_validation_event": {
+      "classes": [
+        "no",
+        "yes"
+      ],
+      "definition": "unconditional event over ensuing materialized completion t"
+    },
+    "failed_validation_event": {
+      "classes": [
+        "no",
+        "yes"
+      ],
+      "definition": "unconditional event over ensuing materialized completion t"
+    },
+    "tool_failure_event": {
+      "classes": [
+        "no",
+        "yes"
+      ],
+      "definition": "unconditional event over ensuing materialized completion t"
+    }
+  },
+  "positive_controls": {
+    "has_prior_edit": "any earlier visible action in the same task is edit",
+    "has_prior_validate": "any earlier visible action in the same task is validate or finalize",
+    "previous_tool_failure": "the immediately preceding request has an available tool failure"
+  },
+  "expected_stable_support": {
+    "action_phase": {
+      "inspect": 1206,
+      "edit": 98,
+      "check": 266,
+      "unknown": 36
+    },
+    "observable_rationale_language_marker": {
+      "no": 1193,
+      "yes": 356,
+      "unknown": 57
+    },
+    "transition_kind": {
+      "continuation": 1047,
+      "advance": 240,
+      "rework": 195,
+      "unknown": 124
+    },
+    "milestone_within_2": {
+      "none": 940,
+      "edit": 182,
+      "check": 423,
+      "unknown": 61
+    },
+    "tool_outcome": {
+      "success": 1468,
+      "failure": 81,
+      "unknown": 57
+    },
+    "validation_outcome": {
+      "success": 101,
+      "failure": 114,
+      "unknown": 1391
+    },
+    "terminal_event": {
+      "no": 1550,
+      "yes": 48,
+      "unknown": 8
+    },
+    "successful_validation_event": {
+      "no": 1448,
+      "yes": 101,
+      "unknown": 57
+    },
+    "failed_validation_event": {
+      "no": 1435,
+      "yes": 114,
+      "unknown": 57
+    },
+    "tool_failure_event": {
+      "no": 1468,
+      "yes": 81,
+      "unknown": 57
+    },
+    "has_prior_edit": {
+      "no": 775,
+      "yes": 831
+    },
+    "has_prior_validate": {
+      "no": 1037,
+      "yes": 569
+    },
+    "previous_tool_failure": {
+      "no": 1527,
+      "yes": 79
+    }
+  },
+  "forbidden_inputs": [
+    "official_outcome",
+    "metadata.targets",
+    "metadata.target_eligibility",
+    "metadata.analysis_role",
+    "completion_text_as_feature",
+    "diagnosis_regex_hits_as_feature",
+    "observable_rationale_language_label_as_feature",
+    "completion_t_or_later_as_feature",
+    "private_reasoning",
+    "emotion_label"
+  ],
+  "claim_scope": {
+    "private_chain_of_thought_reconstructed": false,
+    "hidden_thought_or_understanding_established": false,
+    "emotion_decoding_established": false,
+    "causal_interpretation_established": false,
+    "repository_held_out_predictability_established": false,
+    "incremental_value_over_visible_baselines_established": false
+  }
+}

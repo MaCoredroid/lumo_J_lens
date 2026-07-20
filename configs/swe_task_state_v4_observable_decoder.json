@@ -1,0 +1,289 @@
+{
+  "schema_version": 1,
+  "id": "swe-task-state-v4-repository-held-out-observable-event-decoder",
+  "status": "development_only_reserved_validation_closed",
+  "status_scope": "execution_and_contract_checks_passed_only_not_a_scientific_validity_gate",
+  "path_guard": {
+    "forbidden_path_fragments": [
+      "reserved",
+      "validation"
+    ]
+  },
+  "artifacts": {
+    "alignment_index_kind": "swe_task_state_v4_label_free_alignment_index",
+    "label_sidecar_kind": "swe_task_state_v4_observable_event_label_sidecar",
+    "feature_bundle_kind": "swe_task_state_v4_label_free_observable_decoder_feature_bundle",
+    "feature_bundle_scope": "numeric_features_and_grouping_only_no_labels_or_outcomes",
+    "feature_bundle_format": "npz_allow_pickle_false",
+    "row_count": 1606,
+    "required_source_roles": [
+      "visible_baselines",
+      "activation_features"
+    ],
+    "required_source_kinds": {
+      "visible_baselines": "swe_task_state_v4_visible_word_probe_baseline_features",
+      "activation_features": "swe_task_state_v4_label_free_activation_feature_campaign"
+    },
+    "source_path_base": "repository_root_unless_absolute",
+    "metadata_arrays": [
+      "global_index",
+      "source_id_sha256",
+      "task_id_sha256",
+      "repository",
+      "request_index"
+    ],
+    "base_feature_blocks": {
+      "history_only": 14,
+      "sequence_j": 136,
+      "sequence_logit": 136,
+      "sequence_logit_j": 256,
+      "raw_activation_current": 192,
+      "public_j_activation_current": 192,
+      "raw_activation_sequence": 578,
+      "public_j_activation_sequence": 578,
+      "raw_public_j_activation_sequence": 1154
+    },
+    "visible_baseline_semantics": {
+      "history_only": "14 frozen causal-history features",
+      "sequence_logit": "ordinary action-word-probe sequence baseline: 96 current action-class token-score features transformed into compact current/delta/prior-EMA blocks, plus 14 causal-history and 2 task-gap features",
+      "sequence_j": "public-J action-word-probe sequence baseline: 96 current action-class token-score features transformed into compact current/delta/prior-EMA blocks, plus 14 causal-history and 2 task-gap features",
+      "sequence_logit_j": "combined ordinary/public-J action-word-probe sequence baseline with both compact temporal blocks, plus 14 causal-history and 2 task-gap features"
+    },
+    "forbidden_array_fields": [
+      "label",
+      "labels",
+      "target",
+      "targets",
+      "outcome",
+      "outcomes",
+      "official_outcome",
+      "completion_text",
+      "diagnosis",
+      "rationale_marker",
+      "emotion"
+    ],
+    "grouping_arrays_never_numeric_features": [
+      "repository",
+      "request_index",
+      "source_id_sha256",
+      "task_id_sha256",
+      "global_index"
+    ]
+  },
+  "target_policy": {
+    "primary_target": "observable_rationale_language_marker",
+    "allowed_targets": [
+      "action_phase",
+      "observable_rationale_language_marker",
+      "transition_kind",
+      "milestone_within_2",
+      "tool_outcome",
+      "validation_outcome",
+      "terminal_event",
+      "successful_validation_event",
+      "failed_validation_event",
+      "tool_failure_event"
+    ],
+    "unknown_status_excluded_never_coerced_to_negative": true,
+    "primary_horizon": "feature_h_t_is_immediately_before_ensuing_visible_completion_t_and_target_uses_only_completion_t",
+    "primary_semantics": "frozen_visible_completion_surface_language_regex_marker_observable_process_trace_proxy",
+    "private_or_hidden_semantics_forbidden": true
+  },
+  "split": {
+    "algorithm": "leave_one_repository_out",
+    "repository_never_used_as_numeric_feature": true,
+    "heldout_labels_never_used_for_fit_or_standardization": true,
+    "minimum_repositories": 2,
+    "repository_order": "sorted_utf8"
+  },
+  "weighting": {
+    "estimand": "equal_repository_then_equal_task_within_repository_then_equal_available_row_within_task",
+    "training_weights_recomputed_on_outer_training_rows_only": true,
+    "fit_weight_mass": "rescale_unit_mass_hierarchical_weights_to_training_row_count",
+    "class_weights": null,
+    "same_evaluation_rows_and_weights_for_every_variant": true
+  },
+  "model": {
+    "family": "weighted_l2_logistic_regression",
+    "implementation": "sklearn.linear_model.LogisticRegression",
+    "C": 0.01,
+    "solver": "lbfgs",
+    "l1_ratio": 0.0,
+    "fit_intercept": true,
+    "max_iter": 4000,
+    "tol": 1e-10,
+    "random_state": 0,
+    "class_weight": null,
+    "standardization": "training_hierarchical_weighted_mean_and_variance_only",
+    "zero_variance_scale": 1.0,
+    "probability_floor": 1e-12,
+    "single_class_training_fold": "explicit_constant_observed_training_class_predictor",
+    "partially_supported_training_fold": "fit_supported_classes_and_floor_absent_class_probabilities"
+  },
+  "variants": [
+    {
+      "name": "history_only",
+      "role": "visible_history_baseline",
+      "components": [
+        "history_only"
+      ],
+      "width": 14
+    },
+    {
+      "name": "sequence_logit",
+      "role": "ordinary_action_word_probe_sequence_baseline",
+      "components": [
+        "sequence_logit"
+      ],
+      "width": 136
+    },
+    {
+      "name": "sequence_j",
+      "role": "public_j_action_word_probe_sequence_baseline",
+      "components": [
+        "sequence_j"
+      ],
+      "width": 136
+    },
+    {
+      "name": "sequence_logit_j",
+      "role": "combined_action_word_probe_sequence_baseline",
+      "components": [
+        "sequence_logit_j"
+      ],
+      "width": 256
+    },
+    {
+      "name": "raw_activation_current",
+      "role": "activation_candidate",
+      "components": [
+        "raw_activation_current"
+      ],
+      "width": 192
+    },
+    {
+      "name": "public_j_activation_current",
+      "role": "activation_candidate",
+      "components": [
+        "public_j_activation_current"
+      ],
+      "width": 192
+    },
+    {
+      "name": "sequence_logit_j_plus_raw_activation_current",
+      "role": "visible_baseline_plus_activation_candidate",
+      "components": [
+        "sequence_logit_j",
+        "raw_activation_current"
+      ],
+      "width": 448
+    },
+    {
+      "name": "sequence_logit_j_plus_public_j_activation_current",
+      "role": "visible_baseline_plus_activation_candidate",
+      "components": [
+        "sequence_logit_j",
+        "public_j_activation_current"
+      ],
+      "width": 448
+    },
+    {
+      "name": "raw_activation_sequence",
+      "role": "activation_candidate",
+      "components": [
+        "raw_activation_sequence"
+      ],
+      "width": 578
+    },
+    {
+      "name": "public_j_activation_sequence",
+      "role": "activation_candidate",
+      "components": [
+        "public_j_activation_sequence"
+      ],
+      "width": 578
+    },
+    {
+      "name": "raw_public_j_activation_sequence",
+      "role": "activation_candidate",
+      "components": [
+        "raw_public_j_activation_sequence"
+      ],
+      "width": 1154
+    },
+    {
+      "name": "sequence_logit_plus_raw_public_j_activation_sequence",
+      "role": "visible_baseline_plus_activation_candidate",
+      "components": [
+        "sequence_logit",
+        "raw_public_j_activation_sequence"
+      ],
+      "width": 1290
+    }
+  ],
+  "paired_comparisons": {
+    "candidate_roles": [
+      "activation_candidate",
+      "visible_baseline_plus_activation_candidate"
+    ],
+    "reference_baselines": [
+      "history_only",
+      "sequence_logit",
+      "sequence_logit_j"
+    ],
+    "nested_comparisons": [
+      {
+        "candidate": "sequence_logit_j_plus_raw_activation_current",
+        "reference": "sequence_logit_j"
+      },
+      {
+        "candidate": "sequence_logit_j_plus_public_j_activation_current",
+        "reference": "sequence_logit_j"
+      }
+    ],
+    "identical_oof_rows_labels_weights_and_folds_required": true,
+    "point_deltas_only_do_not_establish_incremental_value": true
+  },
+  "analysis_chronology": {
+    "nested_augmented_variants_added_after_initial_oof_results_were_observed": true,
+    "nested_comparisons_preregistered": false,
+    "post_hoc_exploratory_only": true,
+    "full_refit_uncertainty_included": false,
+    "model_or_feature_selection_uncertainty_included": false,
+    "untouched_confirmation_set_evaluated": false
+  },
+  "metrics": {
+    "primary": [
+      "weighted_nll",
+      "weighted_multiclass_brier"
+    ],
+    "secondary": [
+      "weighted_accuracy",
+      "weighted_balanced_accuracy",
+      "weighted_auprc",
+      "weighted_auroc"
+    ],
+    "binary_positive_class": "yes",
+    "undefined_single_class_metrics_are_null_with_status": true
+  },
+  "claim_scope": {
+    "primary_target_is_visible_surface_language_marker_only": true,
+    "private_chain_of_thought_reconstructed": false,
+    "cot_or_cot_like_decoding_established": false,
+    "semantic_sentence_or_chain_decoding_established": false,
+    "hidden_thought_understanding_or_intent_established": false,
+    "emotion_decoding_established": false,
+    "causal_interpretation_established": false,
+    "retrospective_sparse_concept_ontology_used_as_all_row_baseline": false,
+    "point_metric_superiority_establishes_incremental_value": false
+  },
+  "mandatory_limitations": [
+    "The primary label is a frozen surface-language marker in the ensuing visible assistant completion and only an observable process-trace proxy; it is not a diagnosis, private chain-of-thought, hidden thought, understanding, intent, or causal explanation.",
+    "No emotion label is fitted or inferred, and these results provide no evidence of emotion decoding.",
+    "Public-J states are deterministic functions of raw residual states under the pinned public map; their comparison measures representation and inductive bias, not access to additional hidden information.",
+    "The ordinary and public-J comparison matrices are existing action-word-probe sequence baselines; the sparse retrospective concept ontology is not an all-row comparator.",
+    "Paired held-out point-metric differences alone do not establish incremental value or statistical reliability.",
+    "The nested augmented variants and comparisons were added after initial out-of-fold results were observed and were not preregistered; no full-refit or model-or-feature-selection uncertainty is included, and no untouched confirmation set was evaluated.",
+    "Passed status records execution and contract-check completion only; it is not a scientific validity, reliability, confirmation, or transport gate."
+  ]
+}

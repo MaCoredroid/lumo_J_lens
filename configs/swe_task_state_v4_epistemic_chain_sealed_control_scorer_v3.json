@@ -1,0 +1,168 @@
+{
+  "schema_version": 1,
+  "interface_version": 3,
+  "kind": "swe_task_state_v4_epistemic_chain_sealed_control_scorer_v3",
+  "status": "prospective_development_scorer_unauthorized_not_run",
+  "scope": {
+    "development_controls_only": true,
+    "model_or_gpu_execution_performed": false,
+    "sealed_control_run_claimed": false,
+    "private_or_verbatim_chain_of_thought_recovery_claimed": false,
+    "latent_cot_like_trajectory_recovery_claimed": false,
+    "affect_emotion_confidence_doubt_or_stress_recovery_claimed": false
+  },
+  "authorization": {
+    "model_access_authorized": false,
+    "gpu_access_authorized": false,
+    "generation_authorized": false,
+    "gate_evidence_authorized": false,
+    "sealed_run_receipt_authorized": false
+  },
+  "bindings": {
+    "scorer_source": {
+      "path": "scripts/swe_task_state_v4_epistemic_chain_sealed_control_scorer_v3.py",
+      "sha256": "35bc2eaccd61189bc5d117695b6de94581159ccede466ab3948dccc54cf96f5d"
+    },
+    "executor_config": {
+      "path": "configs/swe_task_state_v4_epistemic_chain_sealed_control_executor_v3.json",
+      "sha256": "cdeee68b1b72f664de9ab8a8b460ae62fc83952af44bc2e890fa613fcedd8e9d"
+    },
+    "executor_source": {
+      "path": "scripts/swe_task_state_v4_epistemic_chain_sealed_control_executor_v3.py",
+      "sha256": "2f4a4068ba33be8ad9c8c8c93003c52284ec883010b414941cb5a755be356ab6"
+    }
+  },
+  "key_read_contract": {
+    "public_bundle_and_trace_authenticated_first": true,
+    "all_public_locks_authenticated_before_key_read": true,
+    "main_control_key_read_ordinal_from_end": 2,
+    "fixture_adjudication_key_read_ordinal_from_end": 1,
+    "distinct_resolved_paths_required": true,
+    "distinct_device_inode_required": true,
+    "symlinks_forbidden": true,
+    "no_non_key_input_read_after_first_key": true,
+    "external_exact_byte_and_manifest_hashes_required": true
+  },
+  "suite_contract": {
+    "roles": [
+      "independent_a",
+      "independent_b",
+      "adjudicator"
+    ],
+    "ordered_control_ids": [
+      "C01",
+      "C02",
+      "C03",
+      "C04",
+      "C05",
+      "C06",
+      "C07",
+      "C08",
+      "C09",
+      "C10",
+      "C11",
+      "C12",
+      "C13",
+      "C14",
+      "C15",
+      "C16",
+      "C17",
+      "C18",
+      "C19",
+      "C20",
+      "C21",
+      "C22",
+      "C23",
+      "C24",
+      "C25",
+      "C26",
+      "C27",
+      "C28",
+      "C29",
+      "C30",
+      "C31",
+      "C32",
+      "V01",
+      "V02",
+      "V03",
+      "V04",
+      "V05",
+      "V06",
+      "V07",
+      "V08"
+    ],
+    "ordered_fixture_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F12"
+    ],
+    "results_per_role": 40,
+    "native_results_per_role": 39,
+    "sole_host_bypass_control_id": "C32",
+    "fixture_results": 12,
+    "single_suite_nonce": true,
+    "nonce_retry_forbidden": true,
+    "frozen_fixture_seed_schedule_required": true
+  },
+  "proposal_contract": {
+    "completion_decisions": [
+      "chain",
+      "no_chain",
+      "unknown"
+    ],
+    "novelty_decisions": [
+      "novel",
+      "prefix_exposed",
+      "ambiguous",
+      "unknown"
+    ],
+    "completion_unknown_reason": "completion_semantics_ambiguous",
+    "novelty_unknown_reason": "novelty_semantics_ambiguous",
+    "evidence_kind": [
+      "code",
+      "tool_or_test",
+      "spec_contract",
+      "environment"
+    ],
+    "belief_edge": [
+      "supports",
+      "refutes",
+      "narrows"
+    ],
+    "hypothesis_domain": [
+      "source_logic",
+      "interface_contract",
+      "data_type_shape",
+      "environment_dependency",
+      "tooling_path",
+      "test_fixture",
+      "other"
+    ],
+    "action_intent": [
+      "inspect",
+      "edit",
+      "validate"
+    ]
+  },
+  "receipt_contract": {
+    "exclusive_create_required": true,
+    "self_hash_envelope_required": true,
+    "all_claims_false": true,
+    "caller_authoritative_labels_forbidden_in_public_bundle": true,
+    "real_sealed_run_requires_new_reviewed_version": true
+  },
+  "blockers": [
+    "No authorized sealed executor run has produced the required external public evidence inputs.",
+    "This development scorer cannot authorize model, GPU, generation, gate, or sealed-run evidence.",
+    "A real sealed run and any COT-like or emotion-related recovery claim require a new reviewed version and independently authenticated evidence."
+  ]
+}

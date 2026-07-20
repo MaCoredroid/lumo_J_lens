@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "id": "swe-task-state-v4-counterfactual-runtime-pilot-v1",
+  "status": "prospective_development_feasibility_only_reserved_validation_closed",
+  "purpose": "materialize one complete blinded factorial block to test exact prompt matching, authenticated activation capture, and post-capture observable completion scoring without subjective-state claims",
+  "sources": {
+    "counterfactual_assignment": {
+      "path": ".cache/swe_task_state_v4_raw_capture/n60-final/counterfactual-boundary-assignment-v2.json",
+      "sha256": "57085f2558879cc45e71660c8d68941312fa0a5df4333e746c66eeb75ff423fc",
+      "size_bytes": 755568
+    },
+    "development_prompt_bundle": {
+      "path": ".cache/swe_state_interpreter_v3_development/prompts.json",
+      "sha256": "17f664b3029220458ff62b8e80a90ec5e796f0372217f02b727d6589df38d3d0",
+      "size_bytes": 803705234
+    },
+    "raw_capture_protocol": {
+      "path": "configs/swe_task_state_v4_raw_capture.json",
+      "sha256": "5a378ca0fe8ef5a26ff6ff124f697aaa796c39bab020ad1b34d739da2554c65d"
+    },
+    "model": {
+      "repo_id": "nvidia/Qwen3.6-27B-NVFP4",
+      "revision": "0893e1606ff3d5f97a441f405d5fc541a6bdf404",
+      "tokenizer_json_sha256": "5f9e4d4901a92b997e463c1f46055088b6cca5ca61a6522d1b9f64c4bb81cb42",
+      "tokenizer_config_sha256": "5186f0defcd7f232382c7f0aebcd2252d073bb921ab240e407b7ae8745d2b29b"
+    }
+  },
+  "pilot_selection": {
+    "source_id_sha256": "f0e6d4a2b62d6441e508402602887293273a7fc60df361ca07af8d9b5e7c7e60",
+    "selection_rule": "minimum_original_prompt_token_count_among_the_120_frozen_boundaries_ties_by_source_id_sha256",
+    "selection_inputs_allowed": [
+      "frozen_boundary_membership",
+      "original_prompt_token_count",
+      "source_id_sha256"
+    ],
+    "labels_outcomes_completion_text_and_activation_values_forbidden": true,
+    "expected_original_prompt_token_count": 12504,
+    "expected_assignment_count": 12,
+    "inferential_use_forbidden": true
+  },
+  "rendering": {
+    "generation_suffix": "<|im_start|>assistant\n<think>\n",
+    "fixed_before_evidence": "<|im_start|>assistant\n<think>\nI will run the fixed diagnostic probe before choosing the next action.\n</think>\n\n<tool_call>\n<function=run_shell_command>\n<parameter=command>\nprintf 'JLENS_COUNTERFACTUAL_DIAGNOSTIC'\n</parameter>\n<parameter=description>\nRun fixed diagnostic probe\n</parameter>\n</function>\n</tool_call><|im_end|>\n<|im_start|>user\n<tool_response>\nCommand: printf 'JLENS_COUNTERFACTUAL_DIAGNOSTIC'\nDirectory: (root)\nOutput:\n",
+    "evidence_text": {
+      "0": {
+        "clear_success": "Diagnostic status: success. Check A: passed. Check B: passed. Evidence: consistent.",
+        "clear_failure": "Diagnostic status: failure. Check A: failed. Check B: failed. Evidence: negative.",
+        "contradictory_ambiguous": "Diagnostic status: ambiguous. Check A: passed. Check B: failed. Evidence: mixed."
+      },
+      "1": {
+        "clear_success": "Probe outcome: success. First check: passed. Second check: passed. Conclusion: supported.",
+        "clear_failure": "Probe outcome: failure. First check: failed. Second check: failed. Conclusion: rejected.",
+        "contradictory_ambiguous": "Probe outcome: ambiguous. First check: passed. Second check: failed. Conclusion: unresolved."
+      }
+    },
+    "fixed_between_evidence_and_pressure": "\nError: (none)\nExit Code: 0\nSignal: 0\nProcess Group PGID: 424242\n</tool_response>\n<|im_end|>\n<|im_start|>user\n",
+    "pressure_text": {
+      "0": {
+        "neutral": "Continue at the ordinary pace and without urgency. Choose the next action using the diagnostic evidence, and explain the evidence-to-action link.",
+        "fixed_time_or_token_pressure": "Work under a strict remaining token limit. Choose the next action immediately using the diagnostic evidence, and explain the evidence-to-action link."
+      },
+      "1": {
+        "neutral": "Use the usual time available. Decide the next step from the diagnostic evidence and make the reasoning behind that step explicit.",
+        "fixed_time_or_token_pressure": "Very little time remains. Decide the next step now from the diagnostic evidence and make the reasoning behind that step explicit."
+      }
+    },
+    "fixed_after_pressure": "\n<|im_end|>\n<|im_start|>assistant\n<think>\n",
+    "tool_name_and_arguments_identical_across_all_conditions": true,
+    "semantic_padding_tokens_used": false
+  },
+  "matching_gates": {
+    "source_text_retokenizes_to_exact_source_token_ids": true,
+    "source_generation_suffix_text_and_tokens_exact": true,
+    "base_prefix_tokens_identical_across_all_12_prompts": true,
+    "evidence_segment_token_count_equal_within_each_replica": true,
+    "pressure_segment_token_count_equal_between_pressure_levels_within_each_replica": true,
+    "full_prompt_token_count_equal_within_each_replica": true,
+    "pairwise_token_differences_confined_to_declared_evidence_and_pressure_ranges": true,
+    "rendered_prompt_and_token_ids_sha256_bound": true,
+    "capture_bundle_contains_only_opaque_id_and_token_ids": true,
+    "condition_key_is_a_separate_label_sidecar": true
+  },
+  "execution_order": [
+    "materialize_and_validate_blinded_capture_bundle_and_separate_condition_key",
+    "generate_one_token_reference_report_from_blinded_capture_bundle",
+    "capture_authenticated_raw_residual_and_public_j_state_from_blinded_capture_bundle",
+    "verify_capture_manifest_before_any_completion_generation_or_label_extraction",
+    "generate_one_deterministic_completion_per_blinded_prompt",
+    "extract_only_externally_observable_completion_labels",
+    "join_condition_key_only_in_the_analysis_process"
+  ],
+  "observable_targets": {
+    "objective_confidence_calibration_proxy": "certainty_language_and_action_commitment_scored_against_assigned_evidence_appropriateness",
+    "doubt_like_rechecking": "recheck_seek_information_or_preserve_multiple_live_alternatives",
+    "pressure_sensitivity": "paired_behavior_and_activation_change_under_the_assigned_pressure_cue",
+    "explicit_affect_language": "completion_contains_explicit_affective_or_stress_language_about_the_task_or_agent",
+    "cot_like_visible_structure": "observation_to_conclusion_to_action_chain_in_the_visible_completion"
+  },
+  "claim_scope": {
+    "runtime_and_prompt_matching_feasibility_may_be_established": true,
+    "factorial_effect_established_by_one_boundary": false,
+    "outer_generalization_established": false,
+    "private_chain_of_thought_reconstructed": false,
+    "subjective_confidence_or_doubt_inferred": false,
+    "experienced_stress_inferred": false,
+    "experienced_emotion_inferred": false
+  },
+  "reserved_validation_access_authorized": false
+}

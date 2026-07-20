@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "id": "swe-task-state-v4-causal-activation-sequence-features",
+  "status": "development_only_reserved_validation_closed",
+  "projection": {
+    "primary_seed_index": 0,
+    "sensitivity_seed_indices": [
+      1,
+      2,
+      3
+    ],
+    "sources": [
+      "raw_residual",
+      "public_j_state"
+    ],
+    "band_count": 3,
+    "stored_width_per_band": 256,
+    "folded_width_per_band": 64,
+    "current_width_per_source": 192
+  },
+  "temporal": {
+    "features_constructed_before_state_update": true,
+    "state_isolated_by_task": true,
+    "unstable_rows_do_not_update_state": true,
+    "previous_delta": true,
+    "prior_ema_deviation": true,
+    "ema_alpha": 0.5,
+    "gap_feature": "log1p(current_request_index - previous_stable_request_index)",
+    "no_previous_flag": true
+  },
+  "variants": {
+    "raw_activation_current": 192,
+    "public_j_activation_current": 192,
+    "raw_activation_sequence": 578,
+    "public_j_activation_sequence": 578,
+    "raw_public_j_activation_sequence": 1154
+  },
+  "campaign": {
+    "projection_chunk_count": 4,
+    "projection_chunk_boundary_counts": [
+      517,
+      370,
+      414,
+      407
+    ],
+    "total_boundary_count": 1708,
+    "stable_feature_count": 1606,
+    "required_alignment": {
+      "kind": "swe_task_state_v4_label_free_alignment_index",
+      "schema_version": 1,
+      "scope": "grouping_order_and_stability_only_no_labels",
+      "config_sha256": "a28a8e1a43a91fff79a5df1b8319467eb4c497224c5294aa50471a415fca664d",
+      "implementation_sha256": "182b87fd1c38fcd1cdffd264922ff474b8b73211025dd6ef2c0d780d1cf3e7ee",
+      "source_sha256s": [
+        "8910cc66b6ce7949af53809d60d6a6e4b5c447bfa2e6907aa0cbe01f55459350",
+        "e0fbb86323eb7263d334936d05c43bddb4d6bb3a2c6b7d0fb3c1bcc040a91f1e",
+        "3210772eac7a1106feb2886e84dc326ff1fc65d766af4a7c293b3d1b9094c5b0",
+        "72d968ee8273455a5b0dcb5e665cb24a907197d1e82ce23bc35a5dfc5dea093a"
+      ],
+      "eligibility_source_sha256": "e1436a9c7fe763a4fab6ae505af17395a4290faefd0734b230d22127bff0cf8c"
+    },
+    "required_projection_kind": "swe_task_state_v4_label_independent_activation_projection",
+    "required_projection_schema_version": 1,
+    "required_projection_array_keys": [
+      "band_statistics",
+      "boundary_index",
+      "sketches",
+      "source_id_sha256",
+      "token_ids_sha256"
+    ],
+    "output_tensor_keys": [
+      "global_index",
+      "public_j_activation_current",
+      "public_j_activation_sequence",
+      "raw_activation_current",
+      "raw_activation_sequence",
+      "raw_public_j_activation_sequence"
+    ],
+    "output_dtypes": {
+      "global_index": "little-endian-int64",
+      "public_j_activation_current": "little-endian-float64",
+      "public_j_activation_sequence": "little-endian-float64",
+      "raw_activation_current": "little-endian-float64",
+      "raw_activation_sequence": "little-endian-float64",
+      "raw_public_j_activation_sequence": "little-endian-float64"
+    },
+    "authentication": {
+      "require_projection_manifest_sha256": true,
+      "require_projection_data_sha256": true,
+      "require_projection_manifest_status_passed": true,
+      "require_projection_reload_verified": true,
+      "require_alignment_index_sha256": true,
+      "require_exact_chunk_order": true,
+      "require_exact_source_id_order_and_coverage": true,
+      "require_pre_and_post_hash_equality": true,
+      "forbidden_path_fragments": [
+        "reserved",
+        "validation"
+      ],
+      "no_clobber": true
+    }
+  },
+  "feature_boundary": {
+    "allowed_numeric_inputs": [
+      "primary_seed_raw_residual_sketches",
+      "primary_seed_public_j_state_sketches"
+    ],
+    "grouping_or_authentication_only": [
+      "source_id_sha256",
+      "task_id_sha256",
+      "repository",
+      "request_index",
+      "stable_feature_eligible",
+      "projection_boundary_index",
+      "artifact_paths_and_hashes"
+    ],
+    "labels_or_outcomes_accepted": false,
+    "semantic_ids_as_features_forbidden": true,
+    "repository_as_feature_forbidden": true,
+    "request_index_as_semantic_feature_forbidden": true
+  },
+  "claim_scope": {
+    "private_chain_of_thought_reconstructed": false,
+    "cot_like_observable_event_decoding_established": false,
+    "emotion_decoding_established": false,
+    "causal_interpretation_established": false,
+    "incremental_value_over_visible_baselines_established": false
+  }
+}

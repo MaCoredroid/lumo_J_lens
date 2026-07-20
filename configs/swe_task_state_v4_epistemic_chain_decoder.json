@@ -1,0 +1,888 @@
+{
+  "schema_version": 1,
+  "id": "swe-task-state-v4-visible-novel-epistemic-chain-decoder-v1",
+  "status": "prospective_development_protocol_frozen_before_target_annotations",
+  "scope": {
+    "development_data_only": true,
+    "reserved_validation_closed": true,
+    "reserved_validation_accessed": false,
+    "target_annotations_available_when_frozen": false,
+    "target_results_observed_when_frozen": false
+  },
+  "path_guard": {
+    "forbidden_path_fragments": [
+      "reserved",
+      "validation"
+    ],
+    "frozen_input_paths_must_be_relative_to_repository_root": true,
+    "frozen_input_logical_files_must_not_be_symlinks": true,
+    "frozen_input_canonical_targets_must_remain_within_repository_root": true,
+    "every_resolved_path_rechecked_for_forbidden_fragments_before_open": true,
+    "model_snapshot_file_symlinks_allowed_only_after_canonical_path_and_hash_check": true
+  },
+  "frozen_inputs": {
+    "annotation_protocol": {
+      "path": "configs/swe_task_state_v4_epistemic_chain_annotation.json",
+      "sha256": "4c7e985a349f36e8700922dd40652bb8c94e9939aa102fdf931288808f64166d"
+    },
+    "annotation_codebook": {
+      "path": "configs/swe_task_state_v4_epistemic_chain_codebook.json",
+      "sha256": "0575f3ffeccf10fe737877ce47374f21ece96197fcb64f0d61bf514b5e9e75f9"
+    },
+    "completion_packet_manifest": {
+      "path": ".cache/swe_task_state_v4_raw_capture/n60-final/epistemic-chain-completion-packets-v3.json",
+      "sha256": "85859bfcf32fcaca9103cce34a0f1f4a85461d788987039f2b7098154e47c9d2"
+    },
+    "completion_packets": {
+      "path": ".cache/swe_task_state_v4_raw_capture/n60-final/epistemic-chain-completion-packets-v3.jsonl",
+      "sha256": "d7617087e112b2298b6ef94e15c844be199c6a6c655db245ac5da8848179ff94"
+    },
+    "alignment_index": {
+      "path": ".cache/swe_task_state_v4_raw_capture/n60-final/alignment-index-v4.json",
+      "sha256": "c0d9e4bd6ad8f6962cf58776441ec4ef042eebbbae8a9959b4149e605c9ae38e"
+    },
+    "development_prompts": {
+      "path": ".cache/swe_state_interpreter_v3_development/prompts.json",
+      "sha256": "17f664b3029220458ff62b8e80a90ec5e796f0372217f02b727d6589df38d3d0"
+    },
+    "current_observable_artifact_index": {
+      "path": ".cache/swe_task_state_v4_raw_capture/n60-final/observable-current-artifacts-v1.json",
+      "sha256": "68034c0089dfedb17b804f069b728acea9d9d554369b5b7cc86b34a67dff8f9f"
+    }
+  },
+  "annotation_evidence_contract": {
+    "required_future_kind": "swe_task_state_v4_epistemic_chain_adjudication_bundle",
+    "completion_pass": "two_independent_annotators_blind_to_activations_predictions_outcomes_other_annotator_repository_and_task",
+    "novelty_pass": "separate_two_annotator_pass_after_completion_chain_spans_and_slots_are_locked",
+    "adjudication": "third_blind_adjudicator_for_every_disagreement",
+    "distinct_annotator_identities_required": true,
+    "raw_independent_records_retained": true,
+    "adjudicated_final_records_retained": true,
+    "adjudication_reason_and_source_record_hashes_required": true,
+    "exact_materialized_completion_and_prefix_hash_binding_required": true,
+    "all_1549_stable_materialized_rows_finally_available_or_explicit_unknown": true,
+    "single_frozen_nonprefix_unknown_required": true,
+    "labels_physically_separate_from_numeric_features": true,
+    "agreement_denominators": {
+      "completion_has_chain_kappa": "rows_jointly_available_to_both_independent_completion_annotators",
+      "completion_exact_graph_agreement": "rows_jointly_available_to_both_independent_completion_annotators",
+      "novelty_kappa": "locked_positive_rows_jointly_available_to_both_independent_novelty_annotators",
+      "novelty_exact_agreement": "locked_positive_rows_jointly_available_to_both_independent_novelty_annotators"
+    },
+    "exact_graph_tuple": [
+      "has_chain",
+      "evidence_span.start",
+      "evidence_span.end",
+      "evidence_span.text_sha256",
+      "hypothesis_span.start",
+      "hypothesis_span.end",
+      "hypothesis_span.text_sha256",
+      "action_span.start",
+      "action_span.end",
+      "action_span.text_sha256",
+      "evidence_kind",
+      "belief_edge",
+      "hypothesis_domain",
+      "action_intent",
+      "exact_signature"
+    ],
+    "no_chain_exact_graph_tuple": [
+      "has_chain=false"
+    ],
+    "unknown_never_coerced_to_no_chain": true,
+    "fit_before_complete_evidence_and_gate_forbidden": true
+  },
+  "ontology": {
+    "evidence_kind": [
+      "code",
+      "tool_or_test",
+      "spec_contract",
+      "environment"
+    ],
+    "belief_edge": [
+      "supports",
+      "refutes",
+      "narrows"
+    ],
+    "hypothesis_domain": [
+      "source_logic",
+      "interface_contract",
+      "data_type_shape",
+      "environment_dependency",
+      "tooling_path",
+      "test_fixture",
+      "other"
+    ],
+    "action_intent": [
+      "inspect",
+      "edit",
+      "validate"
+    ],
+    "signature_order": "evidence_kind>belief_edge>hypothesis_domain>motivates>action_intent",
+    "cartesian_signature_count": 252,
+    "no_chain_class": "__no_novel_chain__"
+  },
+  "target_projection": {
+    "completion_has_chain": {
+      "classes": [
+        "no",
+        "yes"
+      ],
+      "rows": "all_final_annotation_status_available_completion_records",
+      "positive": "has_chain_true_regardless_of_final_novelty_status",
+      "unknowns_excluded": true
+    },
+    "primary_has_novel_chain": {
+      "classes": [
+        "no",
+        "yes"
+      ],
+      "rows": "available_no_chain_records_plus_available_positive_records_with_novelty_novel",
+      "positive": "has_chain_true_and_novelty_status_novel",
+      "negative": "has_chain_false",
+      "prefix_exposed_positive": "excluded_from_primary_and_retained_as_control",
+      "ambiguous_novelty": "unknown_excluded_never_negative",
+      "annotation_unknown": "unknown_excluded_never_negative"
+    },
+    "conditional_slot_heads": [
+      {
+        "name": "evidence_kind",
+        "classes_from_ontology": "evidence_kind"
+      },
+      {
+        "name": "belief_edge",
+        "classes_from_ontology": "belief_edge"
+      },
+      {
+        "name": "hypothesis_domain",
+        "classes_from_ontology": "hypothesis_domain"
+      },
+      {
+        "name": "action_intent",
+        "classes_from_ontology": "action_intent"
+      }
+    ],
+    "conditional_slot_rows": "primary_has_novel_chain_positive_rows_only",
+    "factorized_exact_signature": {
+      "attempt_only_after_binary_agreement_support_and_all_required_slot_head_gates": true,
+      "prediction_rule": "primary_has_novel_chain_argmax_then_each_conditional_slot_argmax",
+      "negative_prediction": "no_chain_when_primary_has_novel_chain_argmax_is_no",
+      "positive_prediction": "render_signature_from_four_conditional_slot_argmax_values",
+      "row_nll_negative": "negative_log_primary_has_novel_chain_probability_no",
+      "row_nll_positive": "negative_log_primary_has_novel_chain_probability_yes_plus_sum_of_four_negative_log_true_slot_probabilities",
+      "conditional_independence_is_modeling_assumption_not_ground_truth": true
+    },
+    "direct_exact_signature_head": {
+      "classes": "all_252_frozen_cartesian_signatures",
+      "rows": "primary_has_novel_chain_positive_rows_only",
+      "fit_only_if_direct_signature_support_gate_passes": true,
+      "rare_signature_pooling_forbidden": true,
+      "heldout_or_rare_signature_rows_may_not_be_dropped": true,
+      "absent_training_class_probability": "probability_floor_then_row_renormalize",
+      "failure_status": "not_fit_insufficient_exact_signature_support"
+    }
+  },
+  "support_and_agreement_gate": {
+    "minimum_novel_positive_chains": 100,
+    "minimum_novel_positive_chains_per_repository": 5,
+    "minimum_each_belief_edge": 40,
+    "minimum_repositories_per_belief_edge": 8,
+    "binary_head_support": {
+      "completion_has_chain": {
+        "minimum_rows_per_class": 100,
+        "minimum_tasks_per_class": 20,
+        "minimum_repositories_per_class": 8,
+        "minimum_rows_per_class_in_every_outer_training_fold": 1
+      },
+      "primary_has_novel_chain": {
+        "minimum_rows_per_class": 100,
+        "minimum_tasks_per_class": 20,
+        "minimum_repositories_per_class": 8,
+        "minimum_rows_per_class_in_every_outer_training_fold": 1
+      }
+    },
+    "conditional_slot_head_support": {
+      "evidence_kind": {
+        "minimum_rows_per_class": 20,
+        "minimum_tasks_per_class": 10,
+        "minimum_repositories_per_class": 5,
+        "minimum_rows_per_class_in_every_outer_training_fold": 1
+      },
+      "belief_edge": {
+        "minimum_rows_per_class": 40,
+        "minimum_tasks_per_class": 20,
+        "minimum_repositories_per_class": 8,
+        "minimum_rows_per_class_in_every_outer_training_fold": 1
+      },
+      "hypothesis_domain": {
+        "minimum_rows_per_class": 10,
+        "minimum_tasks_per_class": 5,
+        "minimum_repositories_per_class": 4,
+        "minimum_rows_per_class_in_every_outer_training_fold": 1
+      },
+      "action_intent": {
+        "minimum_rows_per_class": 20,
+        "minimum_tasks_per_class": 10,
+        "minimum_repositories_per_class": 5,
+        "minimum_rows_per_class_in_every_outer_training_fold": 1
+      }
+    },
+    "minimum_completion_exact_graph_agreement": 0.75,
+    "minimum_completion_has_chain_kappa": 0.7,
+    "minimum_novelty_exact_agreement": 0.75,
+    "minimum_novelty_kappa": 0.7,
+    "all_disagreements_adjudicated": true,
+    "per_head_failure_actions": {
+      "agreement_failure": "do_not_fit_any_head",
+      "completion_binary_support_failure": "block_completion_has_chain_head_and_every_full_concept_chain_claim",
+      "primary_binary_support_failure": "block_primary_has_novel_chain_and_all_downstream_heads",
+      "novel_positive_total_or_repository_support_failure": "do_not_fit_primary_has_novel_chain_or_downstream_heads",
+      "belief_edge_support_failure": "block_original_belief_edge_and_exact_signature_heads_but_do_not_block_predeclared_binary_heads",
+      "other_slot_support_failure": "block_only_that_slot_and_every_full_signature_or_full_concept_chain_claim_that_requires_it",
+      "proposition_content_failure": "block_sentence_content_and_full_concept_chain_claims_but_retain_narrow_binary_or_supported_slot_results"
+    },
+    "binary_heads_may_fit_when_their_own_agreement_and_support_gates_pass_even_if_an_edge_or_signature_gate_fails": true,
+    "belief_edge_fallback": {
+      "allowed_only_before_any_model_fit": true,
+      "condition": "original_refutes_or_narrows_support_gate_fails",
+      "mapping": {
+        "supports": "supports",
+        "refutes": "revises",
+        "narrows": "revises"
+      },
+      "claim_name": "collapsed_revision_chain_not_original_three_edge_signature"
+    },
+    "direct_signature_support_gate": {
+      "minimum_distinct_signatures": 2,
+      "minimum_rows_for_every_observed_signature": 5,
+      "minimum_tasks_for_every_observed_signature": 3,
+      "minimum_repositories_for_every_observed_signature": 2,
+      "failure_does_not_block_factorized_slot_heads": true
+    },
+    "full_concept_chain_claim_requires": [
+      "completion_has_chain_head_gate_passed",
+      "primary_has_novel_chain_head_gate_passed",
+      "all_four_original_slot_head_gates_passed",
+      "factorized_exact_signature_evaluated",
+      "proposition_content_lane_gate_passed",
+      "predictive_full_concept_chain_gate_passed",
+      "strictly_nested_activation_comparison_complete",
+      "full_refit_paired_intervals_complete"
+    ]
+  },
+  "full_prefix_semantic_baseline": {
+    "name": "full_prefix_lsa",
+    "source": "exact_current_rendered_prompt_text_h_t",
+    "source_row": "development_prompts.row.text",
+    "target_completion_or_later_text_forbidden": true,
+    "repository_task_ids_or_hashes_not_tokenized_as_added_features": true,
+    "rendered_tool_blocks_retained_because_they_are_model_visible_at_h_t": true,
+    "complete_prefix_not_suffix_only": true,
+    "fit_scope": "fit_independently_inside_each_outer_or_inner_training_repository_set",
+    "heldout_prefix_text_used_for_fit": false,
+    "vectorizer": {
+      "implementation": "sklearn.feature_extraction.text.TfidfVectorizer",
+      "input": "content",
+      "encoding": "utf-8",
+      "decode_error": "strict",
+      "analyzer": "word",
+      "ngram_range": [
+        1,
+        2
+      ],
+      "lowercase": true,
+      "strip_accents": "unicode",
+      "preprocessor": null,
+      "tokenizer": null,
+      "stop_words": null,
+      "token_pattern": "(?u)\\b[\\w./:-]{2,}\\b",
+      "min_df": 2,
+      "max_df": 1.0,
+      "max_features": 32768,
+      "vocabulary": null,
+      "binary": false,
+      "sublinear_tf": true,
+      "norm": "l2",
+      "use_idf": true,
+      "smooth_idf": true,
+      "dtype": "float64"
+    },
+    "latent_semantic_projection": {
+      "implementation": "sklearn.decomposition.TruncatedSVD",
+      "n_components": 256,
+      "algorithm": "randomized",
+      "n_iter": 7,
+      "n_oversamples": 10,
+      "power_iteration_normalizer": "auto",
+      "random_state": 20260720,
+      "tol": 0.0,
+      "output_width": 256,
+      "fit_on_outer_or_inner_training_tfidf_only": true
+    },
+    "fold_transform_hashes_required": true,
+    "fold_transform_authentication": {
+      "digest": "sha256_of_canonical_json_component_manifest",
+      "binds": [
+        "numpy_and_scikit_learn_implementation_versions",
+        "all_frozen_vectorizer_parameters",
+        "learned_vocabulary_term_to_column_mapping",
+        "learned_feature_order",
+        "learned_idf_float64_values",
+        "all_frozen_svd_parameters",
+        "learned_svd_components_float64_values",
+        "learned_svd_singular_values_float64_values",
+        "learned_svd_explained_variance_float64_values",
+        "learned_svd_explained_variance_ratio_float64_values"
+      ],
+      "single_complete_fold_transform_sha256_required": true,
+      "components_only_hash_is_insufficient": true
+    },
+    "same_fold_transform_shared_by_every_variant_that_contains_this_block": true,
+    "interpretation": "latent_semantic_visible_text_control_not_private_reasoning_sensor"
+  },
+  "frozen_proposition_embedding_model": {
+    "repo_id": "sentence-transformers/all-MiniLM-L6-v2",
+    "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+    "downloaded_before_target_annotations": true,
+    "snapshot_files": {
+      "1_Pooling/config.json": {
+        "sha256": "4be450dde3b0273bb9787637cfbd28fe04a7ba6ab9d36ac48e92b11e350ffc23",
+        "size_bytes": 190
+      },
+      "config.json": {
+        "sha256": "953f9c0d463486b10a6871cc2fd59f223b2c70184f49815e7efbcab5d8908b41",
+        "size_bytes": 612
+      },
+      "model.safetensors": {
+        "sha256": "53aa51172d142c89d9012cce15ae4d6cc0ca6895895114379cacb4fab128d9db",
+        "size_bytes": 90868376
+      },
+      "modules.json": {
+        "sha256": "84e40c8e006c9b1d6c122e02cba9b02458120b5fb0c87b746c41e0207cf642cf",
+        "size_bytes": 349
+      },
+      "sentence_bert_config.json": {
+        "sha256": "fc1993fde0a95c24ec6c022539d41cf6e2f7c9721e5415d6fb6897472a9cd4b7",
+        "size_bytes": 53
+      },
+      "special_tokens_map.json": {
+        "sha256": "303df45a03609e4ead04bc3dc1536d0ab19b5358db685b6f3da123d05ec200e3",
+        "size_bytes": 112
+      },
+      "tokenizer.json": {
+        "sha256": "be50c3628f2bf5bb5e3a7f17b1f74611b2561a3a27eeab05e5aa30f411572037",
+        "size_bytes": 466247
+      },
+      "tokenizer_config.json": {
+        "sha256": "acb92769e8195aabd29b7b2137a9e6d6e25c476a4f15aa4355c233426c61576b",
+        "size_bytes": 350
+      },
+      "vocab.txt": {
+        "sha256": "07eced375cec144d27c900241f3e339478dec958f92fddbc551f295c992038a3",
+        "size_bytes": 231508
+      }
+    },
+    "implementation": "transformers.AutoTokenizer_and_AutoModel",
+    "tokenization": {
+      "add_special_tokens": true,
+      "padding": true,
+      "truncation": true,
+      "max_length": 256
+    },
+    "pooling": "attention_mask_weighted_mean_of_last_hidden_state",
+    "normalization": "row_l2",
+    "inference_mode": "torch_no_grad_model_eval",
+    "embedding_width": 384,
+    "output_dtype": "little_endian_float32",
+    "empty_span_forbidden": true,
+    "span_truncation_flag_and_token_count_required": true,
+    "embedding_model_never_finetuned": true
+  },
+  "proposition_content_lane": {
+    "status": "required_for_any_sentence_or_cot_like_content_claim",
+    "rows": "adjudicated_available_has_chain_true_novelty_novel_only",
+    "targets": {
+      "primary": "exact_hypothesis_span_H_text_embedding",
+      "secondary": [
+        "exact_evidence_span_E_text_embedding",
+        "exact_action_span_A_text_embedding",
+        "concatenated_E_H_A_embedding_triplet"
+      ]
+    },
+    "target_artifact": {
+      "future_kind": "swe_task_state_v4_epistemic_span_embedding_sidecar",
+      "physically_separate_from_model_features": true,
+      "exact_source_completion_and_span_hashes_required": true,
+      "target_embeddings_never_model_inputs": true,
+      "heldout_target_embeddings_used_only_for_scoring_and_declared_closed_set_candidate_audit": true
+    },
+    "regressor": {
+      "family": "weighted_multioutput_ridge",
+      "implementation": "sklearn.linear_model.Ridge",
+      "alpha": 100.0,
+      "fit_intercept": true,
+      "solver": "svd",
+      "input_standardization": "training_hierarchical_weighted_mean_and_variance_only",
+      "output": "384_wide_H_or_1152_wide_concatenated_E_H_A",
+      "each_predicted_384_wide_span_block_l2_normalized_before_scoring": true,
+      "hyperparameter_selection_after_labels": false,
+      "fit_rows": "novel_positive_outer_or_inner_training_rows_only"
+    },
+    "feature_variants": "same_variants_and_strictly_nested_comparisons_as_categorical_heads",
+    "primary_continuous_metrics": [
+      "hierarchical_weighted_true_H_cosine",
+      "hierarchical_weighted_true_H_squared_error",
+      "hierarchical_weighted_E_H_A_mean_block_cosine"
+    ],
+    "heldout_closed_set_identification": {
+      "candidate_pool": "all_deduplicated_true_H_embeddings_in_the_same_heldout_repository_fold",
+      "candidate_pool_is_future_derived_and_never_available_to_the_online_decoder": true,
+      "equivalence_key": "exact_hypothesis_span_text_sha256",
+      "scores": "cosine_between_predicted_H_embedding_and_each_candidate_H_embedding",
+      "metrics": [
+        "recall_at_1",
+        "recall_at_5",
+        "recall_at_10",
+        "mean_reciprocal_rank"
+      ],
+      "interpretation": "retrospective_fixed_candidate_identification_not_open_ended_sentence_generation"
+    },
+    "training_only_prototype_retrieval": {
+      "candidate_pool": "deduplicated_H_or_E_H_A_span_embeddings_from_outer_training_repositories_only",
+      "heldout_text_or_embedding_in_candidate_pool_forbidden": true,
+      "deduplication_key": "ordered_span_text_sha256_tuple",
+      "tie_break": "candidate_span_hash_then_source_id_sha256",
+      "H_score": "cosine_predicted_H_to_training_candidate_H",
+      "E_H_A_score": "mean_of_three_corresponding_block_cosines",
+      "render": "nearest_training_only_exact_E_H_A_spans_plus_its_canonical_slots_and_source_hash",
+      "metrics": [
+        "retrieved_H_to_true_H_cosine",
+        "retrieved_E_H_A_to_true_E_H_A_mean_block_cosine",
+        "oracle_training_neighbor_cosine",
+        "oracle_neighbor_regret",
+        "oracle_top_1_neighbor_hit",
+        "oracle_top_5_neighbor_hit",
+        "oracle_top_10_neighbor_hit"
+      ],
+      "rendered_text_is_retrieved_training_trace_not_reconstructed_heldout_sentence": true
+    },
+    "abstention": {
+      "content_confidence": "maximum_cosine_between_predicted_embedding_and_training_only_prototype_pool",
+      "threshold_grid": [
+        0.0,
+        0.2,
+        0.4,
+        0.5,
+        0.6,
+        0.7,
+        0.8,
+        0.9
+      ],
+      "selection": "inner_repository_heldout_only",
+      "report_full_semantic_quality_coverage_curve": true,
+      "end_to_end_render_requires_both_factorized_chain_acceptance_and_content_acceptance": true
+    },
+    "claim_gate": {
+      "coarse_slot_results_alone_never_sufficient": true,
+      "heldout_closed_set_retrieval_alone_never_sufficient": true,
+      "training_only_retrieval_and_continuous_cosine_required": true,
+      "strictly_nested_activation_candidate_must_be_compared_with_strong_visible_reference": true,
+      "full_refit_paired_intervals_required": true,
+      "evaluation_completion_without_predictive_improvement_never_sufficient": true,
+      "one_predeclared_candidate_must_pass_every_predictive_requirement_without_mixing_candidates": true,
+      "predictive_nested_delta_requirements": [
+        {
+          "metric": "factorized_full_signature_nll",
+          "improvement_orientation": "reference_minus_candidate",
+          "minimum_point_improvement_exclusive": 0.0,
+          "minimum_multiplicity_adjusted_paired_interval_lower_bound_exclusive": 0.0
+        },
+        {
+          "metric": "true_H_cosine",
+          "improvement_orientation": "candidate_minus_reference",
+          "minimum_point_improvement_exclusive": 0.0,
+          "minimum_multiplicity_adjusted_paired_interval_lower_bound_exclusive": 0.0
+        },
+        {
+          "metric": "training_only_retrieved_H_to_true_H_cosine",
+          "improvement_orientation": "candidate_minus_reference",
+          "minimum_point_improvement_exclusive": 0.0,
+          "minimum_multiplicity_adjusted_paired_interval_lower_bound_exclusive": 0.0
+        }
+      ],
+      "paired_interval_evidence": {
+        "algorithm": "hierarchical_bayesian_cluster_bootstrap_with_full_model_refit",
+        "draw_count": 1000,
+        "interval_level": 0.95,
+        "multiplicity_adjustment_required_across_both_candidates_and_all_required_metrics": true,
+        "multiplicity_method": "bonferroni_equal_tailed_percentile",
+        "family_size": 6,
+        "adjusted_lower_quantile": 0.004166666666666667,
+        "adjusted_upper_quantile": 0.9958333333333333
+      },
+      "absolute_semantic_quality_floors": {
+        "hierarchical_weighted_true_H_cosine": 0.35,
+        "hierarchical_weighted_training_only_retrieved_H_to_true_H_cosine": 0.35,
+        "proposition_content_accepted_coverage": 0.2
+      },
+      "all_required_categorical_slot_heads_must_pass_for_full_concept_chain_claim": true,
+      "literal_or_private_sentence_recovery_claim_forbidden": true
+    }
+  },
+  "causal_prior_chain_control": {
+    "name": "prior_visible_chain",
+    "width": 24,
+    "source": "immediately_preceding_visible_completion_annotation_in_same_task_only",
+    "task_reset_required": true,
+    "current_or_future_annotation_forbidden": true,
+    "unstable_or_unannotated_prior_boundary": "unknown",
+    "status_one_hot_order": [
+      "none_first_turn",
+      "unknown",
+      "no_chain",
+      "novel_chain",
+      "prefix_exposed_chain",
+      "ambiguous_novelty_chain"
+    ],
+    "positive_slot_one_hot_order": [
+      "evidence_kind_4",
+      "belief_edge_3",
+      "hypothesis_domain_7",
+      "action_intent_3"
+    ],
+    "additional_fields": [
+      "log1p_request_gap"
+    ],
+    "construction_after_annotation_lock_only": true,
+    "label_derived_but_strictly_causal_control": true,
+    "first_turn_exclusion_sensitivity_required": true
+  },
+  "numeric_feature_blocks": {
+    "sequence_logit_j": 256,
+    "raw_activation_current": 192,
+    "public_j_activation_current": 192,
+    "full_prefix_lsa": 256,
+    "prior_visible_chain": 24
+  },
+  "variants": [
+    {
+      "name": "full_prefix_lsa",
+      "role": "visible_prefix_semantic_baseline",
+      "components": [
+        "full_prefix_lsa"
+      ],
+      "width": 256
+    },
+    {
+      "name": "sequence_logit_j",
+      "role": "strongest_existing_word_probe_baseline",
+      "components": [
+        "sequence_logit_j"
+      ],
+      "width": 256
+    },
+    {
+      "name": "full_prefix_lsa_plus_sequence_logit_j",
+      "role": "combined_visible_baseline",
+      "components": [
+        "full_prefix_lsa",
+        "sequence_logit_j"
+      ],
+      "width": 512
+    },
+    {
+      "name": "strong_visible_reference",
+      "role": "strongest_visible_and_causal_reference",
+      "components": [
+        "full_prefix_lsa",
+        "sequence_logit_j",
+        "prior_visible_chain"
+      ],
+      "width": 536
+    },
+    {
+      "name": "raw_activation_current",
+      "role": "activation_only_diagnostic",
+      "components": [
+        "raw_activation_current"
+      ],
+      "width": 192
+    },
+    {
+      "name": "public_j_activation_current",
+      "role": "activation_only_diagnostic",
+      "components": [
+        "public_j_activation_current"
+      ],
+      "width": 192
+    },
+    {
+      "name": "strong_visible_reference_plus_raw_activation_current",
+      "role": "strictly_nested_activation_candidate",
+      "components": [
+        "full_prefix_lsa",
+        "sequence_logit_j",
+        "prior_visible_chain",
+        "raw_activation_current"
+      ],
+      "width": 728
+    },
+    {
+      "name": "strong_visible_reference_plus_public_j_activation_current",
+      "role": "strictly_nested_activation_candidate",
+      "components": [
+        "full_prefix_lsa",
+        "sequence_logit_j",
+        "prior_visible_chain",
+        "public_j_activation_current"
+      ],
+      "width": 728
+    }
+  ],
+  "nested_comparisons": [
+    {
+      "candidate": "strong_visible_reference_plus_raw_activation_current",
+      "reference": "strong_visible_reference",
+      "candidate_only_component": "raw_activation_current"
+    },
+    {
+      "candidate": "strong_visible_reference_plus_public_j_activation_current",
+      "reference": "strong_visible_reference",
+      "candidate_only_component": "public_j_activation_current"
+    }
+  ],
+  "split_and_weighting": {
+    "outer_split": "leave_one_repository_out",
+    "repository_order": "sorted_utf8",
+    "minimum_repositories": 2,
+    "same_outer_rows_folds_labels_weights_and_heads_for_all_variants": true,
+    "heldout_repository_labels_text_and_features_never_used_for_fit_standardization_calibration_or_abstention_selection": true,
+    "evaluation_estimand": "equal_repository_then_equal_task_then_equal_available_row",
+    "training_weights": "recomputed_equal_repository_then_equal_task_then_equal_available_row_on_training_rows_only",
+    "conditional_slot_weights": "recomputed_on_novel_positive_training_rows_only",
+    "repository_and_identity_fields_never_numeric_features": true,
+    "helper_fold_provenance": {
+      "required_fields": [
+        "fold_id",
+        "training_source_ids",
+        "heldout_source_ids"
+      ],
+      "source_id_format": "lowercase_sha256",
+      "training_and_heldout_ids_unique_and_disjoint": true,
+      "ridge_training_rows_must_bind_to_training_source_ids": true,
+      "ridge_test_rows_must_bind_to_heldout_source_ids": true,
+      "training_prototypes_must_bind_to_training_source_ids": true,
+      "closed_set_queries_and_candidates_must_bind_to_heldout_source_ids": true,
+      "provenance_claims_may_not_be_inferred_from_argument_names": true
+    }
+  },
+  "model": {
+    "family": "weighted_l2_logistic_regression",
+    "implementation": "sklearn.linear_model.LogisticRegression",
+    "C": 0.01,
+    "solver": "lbfgs",
+    "fit_intercept": true,
+    "max_iter": 4000,
+    "tol": 1E-10,
+    "random_state": 0,
+    "class_weight": null,
+    "standardization": "training_hierarchical_weighted_mean_and_variance_only_after_fold_local_prefix_lsa",
+    "probability_floor": 1E-12,
+    "single_class_training_fold": "constant_observed_training_class_predictor",
+    "partially_supported_training_fold": "fit_supported_classes_floor_absent_class_probabilities_and_renormalize",
+    "hyperparameter_selection_after_labels": false
+  },
+  "nested_calibration_and_abstention": {
+    "inner_split": "leave_one_training_repository_out",
+    "minimum_inner_repositories": 5,
+    "all_model_heads_and_prefix_lsa_transformations_refit_inside_each_inner_fold": true,
+    "outer_heldout_labels_used_for_selection": false,
+    "temperature": {
+      "applied_to": "factorized_row_likelihood_and_each_reported_head_probability_separately",
+      "grid": [
+        0.5,
+        0.67,
+        0.8,
+        1.0,
+        1.25,
+        1.5,
+        2.0,
+        3.0
+      ],
+      "criterion": "minimum_inner_hierarchical_weighted_nll",
+      "tie_break": "minimum_absolute_log_temperature_then_numeric_temperature"
+    },
+    "factorized_exact_prediction": "has_novel_chain_argmax_then_slot_argmax_if_yes",
+    "factorized_exact_confidence": "minimum_of_selected_has_novel_chain_probability_and_four_selected_slot_probabilities_for_positive_predictions_or_selected_no_chain_probability_for_negative_predictions",
+    "threshold_grid": [
+      0.0,
+      0.1,
+      0.2,
+      0.3,
+      0.4,
+      0.5,
+      0.6,
+      0.7,
+      0.8,
+      0.9,
+      0.95,
+      0.975,
+      0.99
+    ],
+    "accept_when": "factorized_exact_confidence_greater_than_or_equal_to_selected_threshold",
+    "passing_floors": {
+      "accepted_exact_match": 0.7,
+      "coverage": 0.2,
+      "minimum_accepted_true_novel_positive_rows": 10,
+      "minimum_accepted_true_no_chain_rows": 10
+    },
+    "passing_selection": "maximum_coverage_then_accepted_exact_match_then_lowest_threshold",
+    "fallback": "maximum_accepted_exact_match_then_coverage_then_lowest_threshold",
+    "fallback_blocks_reliability_claim": true,
+    "fixed_descriptive_risk_coverage_curve_always_reported": true
+  },
+  "metrics": {
+    "primary": "joint_categorical_chain_and_proposition_content_evaluation",
+    "primary_rows": "novel_positive_plus_no_chain_primary_rows",
+    "primary_outputs": [
+      "factorized_full_signature_nll",
+      "nonselective_exact_match",
+      "coverage",
+      "selective_exact_match",
+      "abstention_counted_as_incorrect_exact_match",
+      "novel_positive_signature_exact_match",
+      "risk_coverage_curve",
+      "area_under_risk_coverage_curve"
+    ],
+    "completion_has_chain": [
+      "nll",
+      "brier",
+      "balanced_accuracy",
+      "macro_f1",
+      "auroc",
+      "auprc"
+    ],
+    "primary_has_novel_chain": [
+      "nll",
+      "brier",
+      "balanced_accuracy",
+      "macro_f1",
+      "auroc",
+      "auprc"
+    ],
+    "conditional_slots": [
+      "nll",
+      "multiclass_brier",
+      "macro_f1",
+      "balanced_accuracy"
+    ],
+    "direct_signature_if_gate_passes": [
+      "conditional_nll",
+      "macro_f1",
+      "conditional_exact_match",
+      "combined_chain_and_signature_exact_match_with_abstention"
+    ],
+    "per_repository_metrics_required": true,
+    "action_intent_stratified_reporting_required": true,
+    "prefix_exposed_control_reported_separately": true,
+    "unknowns_excluded_with_denominators": true,
+    "no_chain_dominance_controls": [
+      "balanced_has_novel_chain_accuracy",
+      "novel_positive_conditional_exact_match",
+      "accepted_support_by_true_chain_status"
+    ],
+    "paired_nested_deltas": [
+      "factorized_full_signature_nll",
+      "primary_has_novel_chain_nll",
+      "each_conditional_slot_nll",
+      "nonselective_exact_match",
+      "area_under_risk_coverage_curve",
+      "true_H_cosine",
+      "heldout_closed_set_recall_at_1",
+      "training_only_retrieved_H_to_true_H_cosine",
+      "training_only_oracle_neighbor_regret"
+    ],
+    "point_deltas_alone_establish_incremental_value": false
+  },
+  "full_refit_uncertainty": {
+    "algorithm": "hierarchical_bayesian_cluster_bootstrap_with_full_model_refit",
+    "draw_count": 1000,
+    "rng": "numpy.random.Generator(PCG64)",
+    "seed": 20260720,
+    "repository_weights": "independent_unit_exponential_then_normalize",
+    "task_within_repository_weights": "independent_unit_exponential_then_normalize",
+    "rows_within_task": "retain_complete_ordered_trajectory_equal_mass_no_row_resampling",
+    "same_draw_weights_for_all_heads_variants_and_paired_differences": true,
+    "each_draw_refits": [
+      "weighted_standardizers",
+      "all_outer_models",
+      "all_inner_models",
+      "head_temperatures",
+      "factorized_exact_abstention_thresholds",
+      "all_proposition_embedding_ridge_models",
+      "proposition_content_abstention_thresholds"
+    ],
+    "prefix_lsa_reuse_allowed_only_when_training_row_set_and_transform_hash_are_identical": true,
+    "fixed_oof_prediction_bootstrap_for_primary_intervals_forbidden": true,
+    "interval": "equal_tailed_percentile",
+    "quantiles": [
+      0.025,
+      0.975
+    ],
+    "paired_nested_difference_intervals_required": true,
+    "deterministic_per_draw_seed_and_resume_identity_required": true,
+    "all_draws_required_no_silent_downgrade": true
+  },
+  "controls_and_sensitivities": {
+    "within_repository_task_label_permutation_null": true,
+    "first_turn_exclusion": true,
+    "prefix_exposed_copy_or_restatement": true,
+    "broad_rationale_marker_no_chain_negative": true,
+    "completion_length_and_request_index_bin_stratification": true,
+    "projection_seed_sensitivity_required": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "projection_seed_status": "only_seed_0_current_blocks_exist_in_current_feature_bundle",
+    "hard_negative_same_action_intent_status": "not_constructible_from_current_no_chain_record_because_no_chain_slots_are_frozen_null",
+    "hard_negative_remediation": "freeze_a_blinded_no_chain_action_intent_extension_or_use_a_predeclared_observable_action_phase_proxy_before_any_hard_negative_analysis",
+    "hard_negative_control_may_not_be_claimed_complete_until_remediated": true
+  },
+  "renderer": {
+    "template": "{evidence_kind} evidence {belief_edge_verb} a {hypothesis_domain} conclusion; that conclusion motivates {action_intent_gerund}.",
+    "renderer_output": "coarse_ontology_summary_or_explicitly_marked_nearest_training_only_proposition",
+    "source_span_text_reconstruction": false,
+    "proposition_specific_hypothesis_reconstruction": false,
+    "free_form_sentence_reconstruction": false,
+    "coarse_renderer_may_be_called_sentence_or_cot_like_content_decoding": false,
+    "nearest_training_proposition_may_be_called_reconstructed_heldout_sentence": false
+  },
+  "claim_scope": {
+    "visible_future_semantic_cot_like_chain_is_distinct_target": true,
+    "visible_rationale_word_marker_is_not_substitute_for_chain_target": true,
+    "primary_novel_chain_metrics_condition_on_excluding_prefix_exposed_future_positives": true,
+    "affect_emotion_confidence_doubt_stress_are_separate_target_lane": true,
+    "semantic_chain_decoding_established_before_annotations_gates_and_evaluation": false,
+    "coarse_ontology_chain_classification_established": false,
+    "proposition_embedding_or_training_only_retrieval_established": false,
+    "proposition_specific_sentence_reconstruction_established": false,
+    "private_internal_chain_of_thought_decoding_established": false,
+    "subjective_emotion_confidence_doubt_or_stress_decoding_established": false,
+    "causal_understanding_or_intent_established": false,
+    "operational_reliability_established": false,
+    "untouched_confirmation_required_for_reliability": true
+  },
+  "mandatory_limitations": [
+    "The target is an explicit semantic E-to-H-to-A chain in a future visible assistant completion. It is a COT-like process target, but it is not private or hidden chain-of-thought ground truth.",
+    "The frozen four-slot ontology is only coarse chain classification and cannot by itself be called sentence or COT-like content decoding. Proposition-content evidence requires the separate held-out embedding and training-only retrieval lane.",
+    "The proposition lane predicts a frozen semantic embedding and may retrieve an explicitly marked training-only proposition. It does not recover the literal heldout hypothesis span or generate private reasoning.",
+    "Completing the evaluation is not evidence of decoding: a full concept-chain claim additionally requires one predeclared nested activation candidate to clear every absolute semantic-quality floor and every multiplicity-adjusted positive paired-improvement bound without mixing candidates.",
+    "A visible rationale-language word marker is not evidence that this semantic chain target can be decoded.",
+    "Primary novel-chain metrics are conditional on the declared primary row set: prefix-exposed future-positive chains are excluded and reported only as a separate control, so these metrics are not all-boundary operational performance.",
+    "Affect, emotion, confidence, doubt, and stress are separate targets and cannot be inferred from this semantic-chain evaluation.",
+    "Public-J is a deterministic transform of raw residual state; its comparison measures representation and inductive bias, not access to extra hidden information.",
+    "Development repository-held-out and full-refit bootstrap results are not untouched confirmation or operational reliability evidence."
+  ]
+}

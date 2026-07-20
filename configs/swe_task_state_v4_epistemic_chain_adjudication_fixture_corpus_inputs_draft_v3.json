@@ -1,0 +1,182 @@
+{
+  "schema_version": 1,
+  "interface_version": 3,
+  "kind": "swe_task_state_v4_epistemic_chain_adjudication_fixture_corpus_inputs_draft_v3",
+  "status": "prospective_draft_not_sealed_not_run",
+  "scope": {
+    "development_controls_only": true,
+    "reserved_validation_closed": true,
+    "reserved_validation_accessed": false,
+    "visible_semantic_cot_like_structure_targeted": true,
+    "private_chain_of_thought_recovery_established": false,
+    "verbatim_private_chain_of_thought_recovery_established": false,
+    "affect_emotion_confidence_doubt_or_stress_targeted": false,
+    "actual_model_execution_claimed": false
+  },
+  "counts": {
+    "completion": 9,
+    "novelty": 3,
+    "total": 12
+  },
+  "identity": {
+    "suite_id": "v3-authored-adjudication-fixture-draft-citrine-2026-07",
+    "packet_id_domain": "v3-fixture-draft-packet-citrine",
+    "packet_salt": "5f6d6bb9d51e6e9d-fixture-packet-salt",
+    "source_id_domain": "v3-fixture-draft-source-citrine",
+    "source_salt": "d6fb8e97f72bc95a-fixture-source-salt",
+    "shard_seed": "fixture-draft-shard-seed-41c70b35",
+    "packet_serial_base": 73100
+  },
+  "nonce_provenance": {
+    "status": "external_precommit_pending",
+    "placeholder_receipt_reference": "pending://external-fixture-nonce-precommit/v3/citrine",
+    "placeholder_receipt_reference_sha256": "95cbdc9efce7423b902852d1b95cabc18394233000949e3b70a84e9463d95e2b",
+    "actual_fixture_nonce_present": false,
+    "precommit_chronology_claimed": false,
+    "semantic_access_chronology_claimed": false,
+    "chronology_responsibility": "future_sealed_outer_executor"
+  },
+  "bindings": {
+    "input_builder": {
+      "path": "scripts/swe_task_state_v4_epistemic_chain_adjudication_fixture_corpus_inputs_draft_v3.py",
+      "sha256": "2984da9e9af8c358370a7719d7dacd5957063bebe39e9322904d37a6f6bcb5c8"
+    },
+    "fixture_config": {
+      "path": "configs/swe_task_state_v4_epistemic_chain_adjudication_fixture_v3.json",
+      "sha256": "558c2d4dc5285a2ed74ec33c502ae8989645d831d7b868604349ef5689b04bd4"
+    },
+    "fixture_protocol": {
+      "path": "scripts/swe_task_state_v4_epistemic_chain_adjudication_fixture_v3.py",
+      "sha256": "fa4b5ef6d836ae1145ee7e6a626a47f1c647eb60f8c95ae5f7e6ba12edca48a9"
+    },
+    "candidate_catalog_config": {
+      "path": "configs/swe_task_state_v4_epistemic_chain_candidate_catalog_v3.json",
+      "sha256": "c9f2598985d2f3eab27e923bd2aa35049ed2f478a311181354349a4cc88ba15e"
+    },
+    "candidate_catalog_builder": {
+      "path": "scripts/swe_task_state_v4_epistemic_chain_candidate_catalog_v3.py",
+      "sha256": "0d38bdcb0ec3aae1197375aaf34ceeb16f470df9dd855dc00c698b82e1ee2176"
+    },
+    "runner_v3": {
+      "path": "scripts/swe_task_state_v4_epistemic_chain_annotation_runner_v3.py",
+      "sha256": "c35af19c9f3f1e38208ba7f23467c386ebff2e5fb6572582f9a620f51f394aeb"
+    },
+    "codebook_v2": {
+      "path": "configs/swe_task_state_v4_epistemic_chain_codebook_v2.json",
+      "sha256": "2105a50c7bc13a064ca75c4a69aad631869fbbb2c17c94970eeaa92722aff85c"
+    }
+  },
+  "cases": [
+    {
+      "case_id": "F01",
+      "annotation_pass": "completion_chain",
+      "assistant_text": "The focused redirect test returns branch `legacy`. This shows the stale branch selector remains active. I will inspect the redirect predicate.",
+      "authored_candidates": [
+        {"decision": "chain", "unit_ordinals": {"evidence": 0, "hypothesis": 1, "action": 2}, "ontology": {"evidence_kind": "tool_or_test", "belief_edge": "supports", "hypothesis_domain": "source_logic", "action_intent": "inspect"}},
+        {"decision": "no_chain"}
+      ]
+    },
+    {
+      "case_id": "F02",
+      "annotation_pass": "completion_chain",
+      "assistant_text": "Digest Δ disagrees in the verifier log. Digest Δ disagrees in the verifier log. The mismatch shows the cached bundle is damaged. I will validate a fresh download.",
+      "authored_candidates": [
+        {"decision": "chain", "unit_ordinals": {"evidence": 0, "hypothesis": 2, "action": 3}, "ontology": {"evidence_kind": "tool_or_test", "belief_edge": "supports", "hypothesis_domain": "other", "action_intent": "validate"}},
+        {"decision": "chain", "unit_ordinals": {"evidence": 1, "hypothesis": 2, "action": 3}, "ontology": {"evidence_kind": "tool_or_test", "belief_edge": "supports", "hypothesis_domain": "other", "action_intent": "validate"}}
+      ]
+    },
+    {
+      "case_id": "F03",
+      "annotation_pass": "completion_chain",
+      "assistant_text": "The handbook quotes “The socket closed. This confirms a transport defect. Therefore I will inspect the connector.” No current task observation follows.",
+      "authored_candidates": [
+        {"decision": "no_chain"},
+        {"decision": "unknown", "unknown_reason": "completion_semantics_ambiguous"}
+      ]
+    },
+    {
+      "case_id": "F04",
+      "annotation_pass": "completion_chain",
+      "assistant_text": "The μ8 diagnostic reports shape `(4, 2)`. The matrix shape indicates scalar dispatch was bypassed. I will edit the scalar guard 🚀.",
+      "authored_candidates": [
+        {"decision": "no_chain"},
+        {"decision": "chain", "unit_ordinals": {"evidence": 0, "hypothesis": 1, "action": 2}, "ontology": {"evidence_kind": "tool_or_test", "belief_edge": "supports", "hypothesis_domain": "data_type_shape", "action_intent": "edit"}}
+      ]
+    },
+    {
+      "case_id": "F05",
+      "annotation_pass": "completion_chain",
+      "assistant_text": "The decoder printed:\n```\nshape=(4, 2), dtype=μ8\n```\nThe two-axis result narrows the defect to matrix dispatch. I will inspect the scalar branch.",
+      "authored_candidates": [
+        {"decision": "chain", "unit_ordinals": {"evidence": 0, "hypothesis": 1, "action": 2}, "ontology": {"evidence_kind": "tool_or_test", "belief_edge": "narrows", "hypothesis_domain": "data_type_shape", "action_intent": "inspect"}},
+        {"decision": "no_chain"}
+      ]
+    },
+    {
+      "case_id": "F06",
+      "annotation_pass": "completion_chain",
+      "assistant_text": "The cache probe reports a stale entry. That result identifies the cache invalidation branch. I will edit the contributor guide heading.",
+      "authored_candidates": [
+        {"decision": "chain", "unit_ordinals": {"evidence": 0, "hypothesis": 1, "action": 2}, "ontology": {"evidence_kind": "tool_or_test", "belief_edge": "supports", "hypothesis_domain": "source_logic", "action_intent": "edit"}},
+        {"decision": "no_chain"}
+      ]
+    },
+    {
+      "case_id": "F07",
+      "annotation_pass": "prefix_novelty",
+      "visible_prefix": "The request schema loaded successfully and the dry-run command is ready.",
+      "locked_hypothesis": "The cache key drops the workspace identifier.",
+      "authored_candidates": [
+        {"decision": "novel"},
+        {"decision": "prefix_exposed"}
+      ]
+    },
+    {
+      "case_id": "F08",
+      "annotation_pass": "prefix_novelty",
+      "visible_prefix": "Every upload without a checksum skips deduplication.",
+      "locked_hypothesis": "Uploads missing a checksum are not deduplicated.",
+      "authored_candidates": [
+        {"decision": "ambiguous"},
+        {"decision": "prefix_exposed"}
+      ]
+    },
+    {
+      "case_id": "F09",
+      "annotation_pass": "completion_chain",
+      "assistant_text": "The unit test records status 503. The failure narrows the defect to retry classification. I will inspect the retry predicate.",
+      "authored_candidates": [
+        {"decision": "no_chain"},
+        {"decision": "unknown", "unknown_reason": "completion_semantics_ambiguous"}
+      ]
+    },
+    {
+      "case_id": "F10",
+      "annotation_pass": "completion_chain",
+      "assistant_text": "Trace λ repeats token `é`. Trace λ repeats token `é`. The repeat shows normalization happens twice. I will edit the NFC pass.",
+      "authored_candidates": [
+        {"decision": "chain", "unit_ordinals": {"evidence": 1, "hypothesis": 2, "action": 3}, "ontology": {"evidence_kind": "tool_or_test", "belief_edge": "supports", "hypothesis_domain": "source_logic", "action_intent": "edit"}},
+        {"decision": "no_chain"}
+      ]
+    },
+    {
+      "case_id": "F11",
+      "annotation_pass": "completion_chain",
+      "assistant_text": "The contract permits an empty tuple. This refutes the claim that one item is mandatory. I will validate `()`.",
+      "authored_candidates": [
+        {"decision": "no_chain"},
+        {"decision": "unknown", "unknown_reason": "completion_semantics_ambiguous"}
+      ]
+    },
+    {
+      "case_id": "F12",
+      "annotation_pass": "prefix_novelty",
+      "visible_prefix": "The launcher is one possible source of the altered signal code.",
+      "locked_hypothesis": "The launcher changes the signal code.",
+      "authored_candidates": [
+        {"decision": "novel"},
+        {"decision": "prefix_exposed"}
+      ]
+    }
+  ]
+}

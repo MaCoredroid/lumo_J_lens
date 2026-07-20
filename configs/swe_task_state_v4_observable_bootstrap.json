@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "id": "swe-task-state-v4-fixed-oof-hierarchical-bootstrap",
+  "status": "development_only_reserved_validation_closed",
+  "inputs": {
+    "decoder_report": {
+      "path": ".cache/swe_task_state_v4_raw_capture/n60-final/observable-rationale-marker-v1.json",
+      "sha256": "f731281e071bee8323156d8a6f966c6b92e40623db29455d31f795edb3efbb6b"
+    },
+    "alignment_index": {
+      "path": ".cache/swe_task_state_v4_raw_capture/n60-final/alignment-index-v4.json",
+      "sha256": "c0d9e4bd6ad8f6962cf58776441ec4ef042eebbbae8a9959b4149e605c9ae38e"
+    },
+    "observable_label_sidecar": {
+      "path": ".cache/swe_task_state_v4_raw_capture/n60-final/observable-events-v4.json",
+      "sha256": "3e54d3510fea892059369b2f7cbac93381504fcc22a2732bb8fca5252a42cf18"
+    }
+  },
+  "target": "observable_rationale_language_marker",
+  "reference": "sequence_logit",
+  "candidates": [
+    "raw_activation_current",
+    "public_j_activation_current",
+    "raw_activation_sequence",
+    "public_j_activation_sequence",
+    "raw_public_j_activation_sequence",
+    "sequence_logit_plus_raw_public_j_activation_sequence"
+  ],
+  "additional_comparisons": [
+    {
+      "candidate": "public_j_activation_current",
+      "reference": "raw_activation_current"
+    }
+  ],
+  "bootstrap": {
+    "draw_count": 5000,
+    "rng": "numpy.random.Generator(PCG64)",
+    "seed": 20260719,
+    "hierarchy": [
+      "repository_with_replacement",
+      "task_within_repository_with_replacement",
+      "available_row_within_task_with_replacement"
+    ],
+    "estimand": "equal_repository_then_equal_task_within_repository_then_equal_available_row_within_task",
+    "interval": "equal_tailed_percentile",
+    "lower_quantile": 0.025,
+    "upper_quantile": 0.975,
+    "fixed_oof_predictions_no_model_refit": true,
+    "paired_resampling_for_candidate_and_reference": true
+  },
+  "interpretation": {
+    "configured_after_point_results_were_observed": true,
+    "multiplicity_adjusted": false,
+    "refit_uncertainty_included": false,
+    "transport_or_confirmation_claim_allowed": false
+  },
+  "claim_scope": {
+    "private_chain_of_thought_reconstructed": false,
+    "hidden_thought_understanding_or_intent_established": false,
+    "emotion_decoding_established": false,
+    "causal_interpretation_established": false,
+    "incremental_value_statistically_established": false,
+    "operational_reliability_established": false
+  }
+}

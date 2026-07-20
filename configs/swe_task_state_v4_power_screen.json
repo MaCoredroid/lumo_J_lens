@@ -1,0 +1,164 @@
+{
+  "schema_version": 1,
+  "id": "swe-task-state-v4-paired-proper-power-screen-v1",
+  "status": "design_only_nonconfirmatory_fixed_prediction_power",
+  "source_artifact": {
+    "canonical_path": ".cache/swe_state_interpreter_v4_design/v3-n60-geometric-a020-shared-action-contract-closed.json",
+    "sha256": "e1436a9c7fe763a4fab6ae505af17395a4290faefd0734b230d22127bff0cf8c",
+    "required_status": "completed_design_screen_not_confirmatory",
+    "required_scope": "authenticated_v3_n60_design_only_reserved_validation_closed",
+    "required_reserved_validation_accessed": false,
+    "required_reserved_validation_allowed": false,
+    "required_operational_reliability_claim": false,
+    "required_independent_v4_development_result": false,
+    "required_fresh_disjoint_confirmation": true,
+    "candidate_procedure": "j_forecast_geometric_pool_logit_policy",
+    "reference_procedure": "sequence_logit",
+    "classes_in_order": [
+      "inspect",
+      "edit",
+      "check_or_finish"
+    ],
+    "known_ordered_row_identity_sha256": "7a395b956c5ac27b5c8b3a7a8adf47a8a5384e2f43ed0afa354ffb52c7b38291",
+    "ordered_row_identity_sha256": "78c434fbf149e43ae927a935b94afa7c666350430e648b001589f3a6dbea2de4",
+    "evaluator_contract_sha256": "569e18ab1faf2020cf0bcca115e94247d495cf4b3d3639a0f9561fdf11b8f1d5",
+    "candidate_forecast_q_float64_sha256": "85b4b7c6161bdde76261d0dd8780ae329661515bac9329e35f22d990aeb15a38",
+    "reference_forecast_q_float64_sha256": "a6c36ad3a5893316eabc5237d73902f505f61150931062e9fa86650b48337bdc",
+    "shared_decision_d_float64_sha256": "4e281d3e6c12ddb0c398839d316f3b73beb0d909e2b010d862eb3dbfe2fca1f7",
+    "shared_decision_raw_r_float64_sha256": "25be8a27c1c380807992e0eab4bd717cbd576e62d8ac14dd5937e8562c7cfd1b",
+    "candidate_forecast_raw_p_float64_sha256": "7840ca701dc2a621b602397cb73656306d90a0e7e9e0f3c0ea2a64e7ff52f703",
+    "reference_forecast_raw_p_float64_sha256": "25be8a27c1c380807992e0eab4bd717cbd576e62d8ac14dd5937e8562c7cfd1b",
+    "known_metric_rows": 1570,
+    "prediction_rows": 1606
+  },
+  "future_allocation_in_order": {
+    "astropy/astropy": 7,
+    "django/django": 177,
+    "matplotlib/matplotlib": 16,
+    "pallets/flask": 1,
+    "pydata/xarray": 5,
+    "pytest-dev/pytest": 2,
+    "scikit-learn/scikit-learn": 16,
+    "sphinx-doc/sphinx": 23,
+    "sympy/sympy": 39
+  },
+  "loss_contract": {
+    "difference_direction": "candidate_minus_reference",
+    "nll_row_difference": "-log(q_candidate_true)+log(q_reference_true)",
+    "brier_row_difference": "sum_k((q_candidate_k-one_hot_k)^2)-sum_k((q_reference_k-one_hot_k)^2)",
+    "task_profile": "equal_mean_of_known_rows_within_whole_task",
+    "point_estimand": "equal_repository_then_equal_known_task_within_repository_then_equal_known_row_within_task",
+    "paired_rows_required": true
+  },
+  "resampling_contract": {
+    "numpy_version": "2.5.1",
+    "bit_generator": "PCG64",
+    "seed": 20260727,
+    "outer_cohorts": 10000,
+    "outer_batch_size": 10,
+    "outer_task_resampling": "whole_task_profiles_with_replacement_within_same_repository",
+    "inner_bootstrap_draws": 1000,
+    "repository_weight_distribution": {
+      "family": "Gamma",
+      "shape": 1.0,
+      "scale": 1.0,
+      "normalization": "divide_by_sum_across_repositories"
+    },
+    "task_weight_distribution": {
+      "family": "Gamma",
+      "shape": 1.0,
+      "scale": 1.0,
+      "normalization": "divide_by_sum_within_repository"
+    },
+    "every_sampled_task_retained_in_every_inner_draw": true,
+    "candidate_reference_use_same_draws": true,
+    "upper_quantile": 0.975,
+    "quantile_method": "linear"
+  },
+  "flask_scenarios_in_order": {
+    "django_domain_proxy": {
+      "kind": "sample_one_whole_task_profile",
+      "source_repository": "django/django"
+    },
+    "exchangeable_repository_task_proxy": {
+      "kind": "sample_repository_uniformly_then_one_task_uniformly",
+      "repository_source": "all_ten_frozen_source_repositories"
+    },
+    "neutral_zero_effect": {
+      "kind": "fixed_paired_task_profile",
+      "nll_difference": 0.0,
+      "brier_difference": 0.0
+    },
+    "empirical_marginal_p90_adverse": {
+      "kind": "fixed_empirical_marginal_quantile_profile",
+      "quantile": 0.9,
+      "source": "all_sixty_frozen_task_profiles",
+      "quantile_method": "linear"
+    }
+  },
+  "decision_rule": {
+    "nll_gate": "bootstrap_upper_strictly_less_than_zero",
+    "brier_gate": "bootstrap_upper_strictly_less_than_zero",
+    "cohort_joint_pass": "nll_gate_and_brier_gate",
+    "minimum_acceptable_joint_power": 0.8,
+    "go_requires_every_declared_flask_scenario_at_or_above_minimum": true,
+    "pass_label": "GO",
+    "fail_label": "NO_GO",
+    "fresh_cohort_selection_or_generation_authorized_by_power_screen": false
+  },
+  "temperature_reselection_sensitivity": {
+    "enabled": true,
+    "interpretation": "fixed_oof_raw_probability_sensitivity_not_full_model_refit_power",
+    "flask_scenario": "django_domain_proxy",
+    "seed": 20260723,
+    "outer_cohorts": 10000,
+    "outer_batch_size": 5,
+    "inner_bootstrap_draws": 1000,
+    "temperature_grid": [
+      0.5,
+      0.75,
+      1.0,
+      1.25,
+      1.5,
+      2.0,
+      3.0,
+      4.0
+    ],
+    "fixed_temperature": 1.0,
+    "selection_objective": "independent_branch_weighted_nll_minimum",
+    "reference_raw_source": "sequence_logit",
+    "candidate_secondary_raw_source": "sequence_logit_j",
+    "candidate_geometric_secondary_weight": 0.2,
+    "reference_raw_float64_sha256": "b550c0e81429ea120f94d8ae35ed3435f8c77322c645f12a58d2d2dd8c6a525d",
+    "candidate_secondary_raw_float64_sha256": "ded673c92db89d63dbe9a06af8494159cc958840333a4621f93312482f54e0ad",
+    "known_row_ids_sha256": "f603940501b273cdcd3c59f2a05ad331e3a2b313571c614cc997fe6fd4e6a96d",
+    "same_hierarchical_draws_for_both_branches": true,
+    "models_refit": false
+  },
+  "output_contract": {
+    "dedicated_root": ".cache/swe_state_interpreter_v4_design",
+    "default_filename": "v3-n60-geometric-a020-paired-proper-power-screen.json",
+    "new_output_no_clobber": true,
+    "forbidden_casefolded_path_components": [
+      "reserved",
+      "validation"
+    ]
+  },
+  "data_policy": {
+    "input_scope": "exact_contract_closed_nonconfirmatory_design_artifact_only",
+    "prediction_fields_consumed": [
+      "row_id",
+      "task_id",
+      "repo",
+      "label",
+      "metric_evaluable",
+      "forecast_probabilities_q",
+      "decision_probabilities_d"
+    ],
+    "task_text_prompt_completion_patch_or_trajectory_fields_consumed": false,
+    "reserved_validation_accessed": false,
+    "reserved_validation_allowed": false,
+    "confirmatory_interpretation_forbidden": true,
+    "full_model_refit_power_estimated": false
+  }
+}
