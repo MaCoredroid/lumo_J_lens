@@ -91,6 +91,29 @@ PROVIDED init-suite used those same current shas.
   bit). One-line fix: pass the role-resolved `max_output_tokens` (adapter repinned
   033252d0→77125141, cfg 22f22002→ad818dc8). Unit suite green (41+29 subtests).
   r5 preserved as an immutable failed suite.
-- r6: forked 2026-07-20 with the fixed adapter; driver relaunched. The GPT-OSS
-  Primary B run is the live verification of the r5 fix. **No run has reached the
-  adjudicator yet — that remains the frontier after both primaries lock.**
+- r6: forked with the fixed adapter. Primary A LOCKED; GPT-OSS Primary B *initial*
+  PASSED (r5 sampling-params fix verified end-to-end). Then FAILED CLOSED at
+  GPT-OSS Primary B *detail* run: `openai_harmony.HarmonyError: Unexpected EOS
+  while waiting for message header to complete` at extract_openai_harmony_final_channel.
+  DECISIVE: the `finish_reason == "stop"` gate passes *before* extraction, so the
+  request finished on a genuine stop token — NOT 2048-token truncation (which
+  reports finish_reason "length"). GPT-OSS emits a stop-terminated sequence with
+  no complete final-channel header on the harder 7-field detail schema, and the
+  strict single-final-channel contract correctly rejects it. This is model
+  non-conformance, NOT a serialization/contract bug and NOT a budget shortfall.
+  r6 preserved as an immutable failed suite.
+
+## OPEN DECISION (blocks progress — needs the researcher)
+GPT-OSS occasionally fails to emit a conforming Harmony final channel on detail
+requests. Forking r7 with unchanged source fails identically. Resolution is a
+research-design call on the sealed-evidence contract, NOT a mechanical fix:
+  (a) treat a non-conforming GPT-OSS detail generation as an explicit protocol
+      outcome (unknown/abstention), analogous to the semantic-unknown path;
+  (b) allow bounded, disclosed retries with fresh seeds for the harmony-parse
+      failure only (tension with the no-retry doctrine);
+  (c) adjust the GPT-OSS detail prompt/decoding to raise final-channel reliability;
+  (d) accept GPT-OSS non-conformance and scope those cases out with disclosure.
+Do NOT weaken the strict Harmony contract autonomously. First useful diagnostic
+if resumed: instrument a non-sealed replay of r6's frozen 23 independent-b-detail
+requests through GPT-OSS to measure how many fail and whether it's 1 flaky case
+or systematic. The loop was paused here pending this decision.
