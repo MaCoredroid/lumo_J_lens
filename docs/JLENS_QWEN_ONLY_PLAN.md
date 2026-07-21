@@ -94,14 +94,23 @@ BOTH source distributions.
       action-word-probe baseline: sequence_logit = ordinary logit, sequence_j =
       public-J). NOT in the report artifacts (those are summaries). Next: run those
       decoders to emit per-boundary per-source probabilities as the divergence input.
-- [ ] Compute `source_disagreement` per boundary across the trajectory; scale to
-      the N60 development cohort (the single captured task is not enough for stats).
-- [ ] Evaluate whether HIGH divergence flags meaningful structure, using only free
-      signals: (a) does it concentrate at epistemic-event boundaries
-      (diagnosis/bug/patch/fix milestones via the CoT reader join); (b) does it
-      coincide with detours/non-advancing steps; (c) how it distributes across
-      regions (reasoning vs visible vs tool). Report effect sizes + a permutation
-      null (divergence-vs-random-boundary) so a signal isn't over-claimed.
+- [x] Compute `source_disagreement` per boundary across the N60 cohort. Data was
+      already materialized: `observable-action-phase-v1.json` carries
+      `variants/sequence_logit` and `variants/sequence_j` OOF probabilities (1570
+      rows, identical folds/labels/weights), so no decoder run was needed. Built
+      `scripts/swe_task_state_v4_source_divergence.py` (+ test, 7 pass; JSD verified
+      to match `reasoning_trace`).
+- [x] Eval (b) divergence-flags-error: **RESULT — divergence significantly flags
+      lens mispredictions.** On 1570 rows (332 error / 1238 correct of the pooled
+      `sequence_logit_j` forecast vs the agent's own next action): divergence mean
+      **0.01445 on error vs 0.00908 on correct** (effect +0.00538), **error-detection
+      AUC 0.631**, label-permutation **p ≈ 2e-4** (5000 perms). Small absolute JSD
+      (sources usually agree) but a real, significant signal. "Error" = pooled
+      forecast argmax != free next-action label.
+- [ ] (follow-on) Eval (a) event-concentration + (c) region distribution — needs
+      per-row semantic events for the 1570 cohort (the CoT reader currently covers
+      the single demo trajectory). Check whether cohort-wide event tags exist; if
+      not, this is descriptive-only on the demo trajectory. Non-blocking for P3.
 
 **P3 — report**
 - [ ] One Qwen-only J-lens report: per-boundary action + CoT + latent
