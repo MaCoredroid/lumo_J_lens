@@ -454,12 +454,19 @@ Report: `docs/JLENS_TRUSTWORTHY_CONCEPT_LENS.md`. Goal: make the lens trustworth
 so a lens-vs-CoT disagreement is meaningful.
 - [x] Diagnosed WHY weak families fail: adjacent-blob confusion (source_edit->substitution 0.47,
       repair->substitution 0.30; substitution is a magnet), not noise. `faithfulness_confusion.py`.
-- [x] Per-concept probes FAIL out-of-sample: data-driven discriminative forms (log-odds from the
-      tagged CoT corpus, >=2-task filter), honest 10/10 train/test split -> held-out 0.20 vs v2 0.39
-      (they wreck verification 0.59->0.09). Better vocab can't recover distinctions absent from the
-      residual. `datadriven_concept_forms.py`, `perfamily_trust_eval.py`, v5 pooled readout (219 tok).
-- [x] TRUSTWORTHY GRANULARITY = 3 concepts locate/modify_code/assess: held-out 0.74, per-family
-      recall 0.76/0.83/0.68 (vs 14-fine 0.39, 5-super 0.58). `superconcept_faithfulness.py`.
+- [x] NAIVE per-concept forms fail: data-driven discriminative forms (log-odds, >=2-task filter),
+      honest split -> held-out 0.20 vs v2 0.39 (wreck verification 0.59->0.09). But this measured the
+      argmax-of-means readout (substitution magnet dominates), NOT the residual.
+- [x] **CORRECTION — a LEARNED per-concept probe WORKS** (`concept_linear_probe.py`): multinomial
+      LogReg over the 219 pooled scored-token logprobs (band-mean L40-47), grouped 5-fold CV by task.
+      Held-out acc 0.54 vs naive 0.39; per-family recall jumps: task_resolution 0->0.80, dependency
+      0->0.63, broad_success 0.13->0.55, failure_confirmation 0.20->0.42, source_localization
+      0.44->0.66, source_edit 0.18->0.35. Most fine families now TRUSTWORTHY per-family; the fine
+      distinctions ARE decodable from the residual via the lens. Hard remainder: repair 0.21, edit
+      0.35 (entangled change-code pair); substitution/focused/rare families lack support.
+- [x] Coarse training-free fallback = 3 concepts locate/modify_code/assess: held-out 0.74, per-family
+      0.76/0.83/0.68. `superconcept_faithfulness.py`. (The learned fine probe is stronger when a
+      labeled corpus exists.)
 - [x] PAYOFF: `concept_disagreement.py` — agreement 0.72 over 532 turns; ranks 147 disagreements by
       confidence margin. Top disagreements are real: the end-of-thinking state anticipates the next
       action (tag locate/assess but text "I need to add..."/"use sed to make the change"/"apply the
