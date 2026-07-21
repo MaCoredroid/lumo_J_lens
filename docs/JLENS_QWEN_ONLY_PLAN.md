@@ -331,7 +331,21 @@ readout). Plus the Qwen tagger on each task's CoT. Then faithfulness across task
       8 experiments x 32 layers (16-47) in **54 s**, valid per-layer jacobian_lens/logit_lens
       + scored_vocabulary (status:"failed" is the expected lens-readout marker concept_chain
       requires). The biggest P7b risk (fragile capture generalization) is RETIRED.
-- [ ] Build the per-turn prompts-file (all per-turn proxy dumps at end-of-thinking) + run
+- [!] **BLOCKER / DESIGN FORK (paused for user, 2026-07-21).** Both halves' MECHANICS are
+      proven (tagger + GPU capture), but the internal concept-chain's VOCAB is hand-curated
+      PER TASK: `configs/swe_intermediate_concept_probes.json` is `exploratory_one_task_adaptation`
+      for sympy__sympy-13480 — its concept items are that task's specific milestones
+      (nameerror_reproduced, defined_identifier_correction, ...) with token forms selected from
+      that task's text/trace. So the internal readout does NOT transfer to the cohort as-is.
+      Cohort faithfulness needs a GENERAL, task-independent concept-form vocab for the 14
+      families (the internal analog of the general auto-tagger). Options for the user:
+      (A) build a general concept-form vocab (task-independent single-token surfaces per family;
+          I define + verify them in the Qwen vocab) — a design choice on the internal readout;
+      (B) reformulate faithfulness (e.g. compare the tagger to a different Qwen-internal signal
+          that IS general, like the action-gauge sequence_j readout already at cohort scale);
+      (C) accept the strong single-task faithfulness result (0.44/0.60 after the probe fix) +
+          the validated cohort auto-tagger as the deliverable; stop the cohort internal capture.
+      Per-turn prompts + capture are ready to run once the vocab question is decided. + run
       the public+native capture over the cohort; then generalize concept_chain's input
       binding to score the cohort reports; then faithfulness vs the tagger tags.: batch across tasks/boundaries, keep
       GPU util high (profile; target >0.78 effective, fix host-bound stalls), capture only
