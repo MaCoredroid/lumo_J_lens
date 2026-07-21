@@ -240,10 +240,36 @@ tiny single-run). Document the caveat in-code.
       diagnosed, retrospective correction recovers a moderate signal (0.44 / 0.60
       strict), lens correctly causal. Docstring updated to reflect this is by design.
 
-## Faithfulness thread: COMPLETE
-Remaining OPTIONAL fork (user's call, not started): cohort-scale — run the causal
-lens over N60 and apply the retrospective centering over that larger background
-(where cross-boundary centering is a proper background baseline). Heavy GPU.
+## Faithfulness thread: single-task COMPLETE. Cohort-scale = P7.
+
+## P7 — Qwen CoT-event auto-tagger for cohort-scale faithfulness (user, 2026-07-20)
+Cohort-scale was blocked: the CoT events, ontology, and human labels are ALL
+hand-curated for the one demo task (`materialize_swe_jlens_trajectory.py::SEMANTIC_EVENTS`
+is a hand-written {turn: (label, exact-CoT-sentence)} dict; `materialize_swe_intermediate_probes.py`
+hard-errors unless `exploratory_one_task_adaptation`). User chose to build an automated
+Qwen-only tagger so the faithfulness eval can scale to n>>1.
+
+**Inference path:** serve Qwen via `scripts/start_server.sh` /
+`serve_qwen36_27b_nvfp4_mtp.sh` -> OpenAI API on **port 9952**, served `qwen3.6-27b-nvfp4`.
+**Tag space = the 14 scorable concept families** (shared with the internal concept
+readout, so the comparison is direct; reviewable — some may not fit non-bug tasks).
+**Design:** Qwen tags each CoT boundary with a concept family (or abstain); faithfulness
+= internal concept-chain top-1 (baseline-centered, retrospective) vs Qwen's CoT tag.
+Both Qwen-only; drops the hand-curated event->concept mapping.
+
+**Steps (loop-driven, /loop 20m monitor):**
+- [ ] Build `swe_task_state_v4_cot_concept_tagger.py`: family definitions, prompt,
+      strict parse/validate (constrained to the 14 families + abstain), server-query
+      fn. CPU-testable parsing.
+- [ ] Serve Qwen (9952); tag the 9 demo turns; VALIDATE vs the hand-curated
+      EVENT_TO_CONCEPT mapping — the tagger must roughly agree before scaling. PAUSE +
+      surface if tagger-vs-hand agreement is poor (the tagger would be unreliable).
+- [ ] Generalize `materialize_swe_intermediate_probes.py` to run over cohort tasks
+      (concept-probe capture, GPU) — the long-running monitored job.
+- [ ] Run tagger + probe-gen over the cohort; compute cohort faithfulness
+      (tagged concept vs internal centered top-1) + report v3.
+- PAUSE on genuine design forks (taxonomy fit, poor tagger agreement, capture-cost).
+- STOP when cohort faithfulness is computed + in the report, green.
 
 **Loop discipline unchanged:** pause on a NEW design fork (e.g. the mapping being
 too ambiguous, or the cohort-scale decision); stop when the faithfulness result is
