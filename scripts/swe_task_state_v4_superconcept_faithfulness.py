@@ -113,7 +113,14 @@ def compute(readout: Path = DEFAULT_READOUT, *, vocab: Path = VOCAB_V2, layer: i
 
 
 def main() -> int:
-    r = compute()
+    import argparse
+
+    p = argparse.ArgumentParser(description=__doc__)
+    p.add_argument("--report", type=Path, default=DEFAULT_READOUT)
+    p.add_argument("--vocab", type=Path, default=VOCAB_V2)
+    p.add_argument("--layer", type=int, default=PEAK)
+    a = p.parse_args()
+    r = compute(a.report, vocab=a.vocab, layer=a.layer)
     Path(DEFAULT_OUT).write_text(json.dumps(r, indent=2) + "\n")
     print(f"=== super-concept faithfulness @ L{r['layer']} (5 groups) ===")
     print(f"n={r['n_turns']}  centered={r['faithfulness_centered']}  (uniform {r['baseline_uniform']})")

@@ -1,0 +1,132 @@
+{
+  "kind": "perfamily_trust_eval",
+  "layer": 44,
+  "n_train_tasks": 10,
+  "n_test_tasks": 10,
+  "test_v2_fine": {
+    "n": 276,
+    "faithfulness": 0.3913,
+    "per_family": {
+      "source_localization": {
+        "n": 122,
+        "recall": 0.443
+      },
+      "verification": {
+        "n": 70,
+        "recall": 0.586
+      },
+      "source_edit": {
+        "n": 34,
+        "recall": 0.176
+      },
+      "repair": {
+        "n": 10,
+        "recall": 0.1
+      },
+      "failure_confirmation": {
+        "n": 10,
+        "recall": 0.2
+      },
+      "dependency_unavailable": {
+        "n": 8,
+        "recall": 0.0
+      },
+      "broad_success": {
+        "n": 8,
+        "recall": 0.125
+      },
+      "task_resolution": {
+        "n": 6,
+        "recall": 0.0
+      },
+      "test_success": {
+        "n": 5,
+        "recall": 0.0
+      },
+      "substitution_operation": {
+        "n": 2,
+        "recall": 1.0
+      },
+      "focused_validation": {
+        "n": 1,
+        "recall": 1.0
+      }
+    }
+  },
+  "test_datadriven_fine": {
+    "n": 276,
+    "faithfulness": 0.2029,
+    "per_family": {
+      "source_localization": {
+        "n": 122,
+        "recall": 0.254
+      },
+      "verification": {
+        "n": 70,
+        "recall": 0.086
+      },
+      "source_edit": {
+        "n": 34,
+        "recall": 0.118
+      },
+      "repair": {
+        "n": 10,
+        "recall": 0.0
+      },
+      "failure_confirmation": {
+        "n": 10,
+        "recall": 0.3
+      },
+      "dependency_unavailable": {
+        "n": 8,
+        "recall": 0.5
+      },
+      "broad_success": {
+        "n": 8,
+        "recall": 0.375
+      },
+      "task_resolution": {
+        "n": 6,
+        "recall": 0.5
+      },
+      "test_success": {
+        "n": 5,
+        "recall": 0.0
+      },
+      "substitution_operation": {
+        "n": 2,
+        "recall": 1.0
+      },
+      "focused_validation": {
+        "n": 1,
+        "recall": 0.0
+      }
+    }
+  },
+  "test_super_v2": {
+    "n": 276,
+    "faithfulness": 0.5833,
+    "per_family": {
+      "locate": {
+        "n": 122,
+        "recall": 0.664
+      },
+      "verify_check": {
+        "n": 81,
+        "recall": 0.432
+      },
+      "modify_code": {
+        "n": 46,
+        "recall": 0.783
+      },
+      "success_resolve": {
+        "n": 19,
+        "recall": 0.421
+      },
+      "fault": {
+        "n": 8,
+        "recall": 0.125
+      }
+    }
+  }
+}

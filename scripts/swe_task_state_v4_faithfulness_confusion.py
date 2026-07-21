@@ -76,7 +76,14 @@ def compute(readout: Path = DEFAULT_READOUT, *, vocab: Path = VOCAB_V2, layer: i
 
 
 def main() -> int:
-    result = compute()
+    import argparse
+
+    p = argparse.ArgumentParser(description=__doc__)
+    p.add_argument("--report", type=Path, default=DEFAULT_READOUT)
+    p.add_argument("--vocab", type=Path, default=VOCAB_V2)
+    p.add_argument("--layer", type=int, default=PEAK)
+    a = p.parse_args()
+    result = compute(a.report, vocab=a.vocab, layer=a.layer)
     Path(DEFAULT_OUT).write_text(json.dumps(result, indent=2) + "\n")
     print(f"=== confusion @ L{result['layer']} (true family -> where the lens puts it) ===")
     for tag, s in result["by_true_family"].items():
