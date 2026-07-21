@@ -384,6 +384,40 @@ readout). Plus the Qwen tagger on each task's CoT. Then faithfulness across task
 - PAUSE on genuine design forks (taxonomy fit, poor tagger agreement, capture-cost).
 - STOP when cohort faithfulness is computed + in the report, green.
 
+## P7c-final — faithful per-turn reconstruction + cohort capture (2026-07-21)
+- [x] RERUN VERDICT: the greenlit qwen-code rerun (20 tagged tasks + proxy dumps) is
+      UNUSABLE for the end-of-thinking boundary — it ran with `enable_thinking:False`, so the
+      model generated NO thinking (rerun traces are text-only; the dumps' chat_template_kwargs
+      confirm it). Its only salvage: the dumps carry the fixed agent framing (the 42.5k-char
+      system prompt is run-independent; plus each task's initial user message).
+- [x] PIVOT to a FAITHFUL trace reconstruction (self-aligned; no fragile guessing).
+      `swe_task_state_v4_build_cohort_prompts.py`: per tagged turn, stitch
+        (a) fixed framing (system + task user-message) from the rerun dumps, and
+        (b) the ORIGINAL thinking-on canonical trace's turn-by-turn assistant actions + tool
+            results, walked in order (tool_use<->tool_result linked by id), with the current
+            turn's EXACT thinking appended to the assistant generation prompt so the boundary
+            lands on the last thinking token (end_of_thinking).
+      Prior-turn thinking is dropped from history (the qwen-code agent strips it — confirmed by
+      the dumps). Prompts rendered via the live server /tokenize (exact production template; the
+      codex jinja needs custom filters transformers lacks). Turn indices align 1:1 with the 535
+      tags (0 mismatches across all 20 tasks).
+- [x] COVERAGE (honest): real sent-prompts run to ~32k (rerun-dump p90=32129, a few >32768 ->
+      the 400s), i.e. the agent runs near the 32768 context limit without heavy compression.
+      Full reconstructions: p50=31926, p90=47626, max=85393 tokens. 293/535 turns fit <=32768
+      (kept); 242 dropped (their real prompts also strained/exceeded the window). Bias: kept
+      turns skew EARLY/MID (turn-index p90=21); late-trajectory concepts under-covered —
+      verification 51/135, task_resolution 4/15, focused_validation 2/12, broad_success 7/22;
+      source_localization well-covered 143/206. The number is most valid for localize/edit/
+      repair reasoning, weaker for resolve/validate.
+- [x] Scoring + faithfulness tooling: `swe_task_state_v4_cohort_faithfulness.py` (+test, 3 pass;
+      full related suite 15 pass) joins the readout's baseline-centered top-1 to each turn's tag
+      -> cohort faithfulness (centered + raw), per-family recall, per-task, vs the majority-class
+      + uniform baselines; excludes `none` tags.
+- [~] RUNNING: VJP capture (`run_jlens_nvfp4.sh --lens-kind public`, layers 16-47, pos -1,
+      general-vocab scored tokens, max-model-len 32768) over the 293 boundaries ->
+      artifacts/cohort-perturn-readout-v3.json. GPU util oscillates 18%<->100% (host-bound
+      per-layer readout between GPU prefills); one-shot, acceptable. Next: score -> report v3.
+
 **Loop discipline unchanged:** pause on a NEW design fork (e.g. the mapping being
 too ambiguous, or the cohort-scale decision); stop when the faithfulness result is
 in the report and green.
