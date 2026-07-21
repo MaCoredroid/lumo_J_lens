@@ -216,7 +216,23 @@ tiny single-run). Document the caveat in-code.
       post-hoc re-rank), confirm 0.44/0.60-ish carries through; update report v3.
 - [ ] PAUSE if the change would weaken the strict fail-closed selection contract or a
       test reveals an integrity issue — surface, don't force.
-- [ ] Then the cohort-scale fork (run the corrected lens over N60) is the user's call.
+- [!] **BLOCKED — integrity finding (2026-07-20):** baking cross-boundary background
+      centering into the lens VIOLATES the lens's online/causal contract. The additive
+      `baseline_centered_rankings` change was reverted because
+      `test_future_score_mutation_cannot_change_earlier_online_nodes` failed: a family
+      baseline over ALL boundaries uses FUTURE boundaries, so mutating a future
+      boundary changes earlier boundaries' centered rankings. A full-background
+      baseline is inherently RETROSPECTIVE; it cannot be a causal lens feature.
+      Reframe: baseline-centering belongs in the RETROSPECTIVE faithfulness analysis
+      (where it already lives, `swe_task_state_v4_cot_concept_faithfulness.py`), not
+      the online lens. Options surfaced to the user:
+      (A) keep centering retrospective-only (current post-hoc re-rank) — the lens stays
+          causal/raw; recommended;
+      (B) causal prior-only/expanding baseline in the lens (uses boundaries <= current;
+          noisy early, converges at cohort scale, order-dependent);
+      (C) fixed EXTERNAL null-context/prior baseline baked in — needs a NEW reference
+          capture (heavier), then it IS causal.
+      Then cohort-scale is a separate fork. **Loop paused pending this decision.**
 
 **Loop discipline unchanged:** pause on a NEW design fork (e.g. the mapping being
 too ambiguous, or the cohort-scale decision); stop when the faithfulness result is
