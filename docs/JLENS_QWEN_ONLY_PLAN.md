@@ -355,8 +355,10 @@ readout). Plus the Qwen tagger on each task's CoT. Then faithfulness across task
       done/complete/solved). Enforces the concept-chain rules: every form a single Qwen token,
       globally unique across families, >=2/family. 14/14 scorable, 0 collisions. This is the
       internal analog of the general auto-tagger.
-- [ ] Build a general concept scorer (reuse concept_chain._report_scores/_ranking math with
-      this vocab): per-turn readout -> 14 family scores -> baseline-center -> top-1.
+- [x] General concept scorer `swe_task_state_v4_general_concept_scorer.py` (+ test, 3 pass):
+      reads a VJP-lens readout, computes each family's mean form/layer log-prob (concept-chain
+      convention) over the general vocab, ranks, LOO baseline-centers -> top-1 per boundary.
+      Reuses the concept-chain math; works on ANY task's readout. Full suite: 243 passed.
 - [ ] Per-turn prompts-file (proxy dumps + thinking continuation, end-of-thinking) with these
       forms as scored vocab; run the public+native capture; then cohort faithfulness vs tagger. + run
       the public+native capture over the cohort; then generalize concept_chain's input
