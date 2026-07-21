@@ -233,6 +233,17 @@ tiny single-run). Document the caveat in-code.
       (C) fixed EXTERNAL null-context/prior baseline baked in — needs a NEW reference
           capture (heavier), then it IS causal.
       Then cohort-scale is a separate fork. **Loop paused pending this decision.**
+- [x] **RESOLVED (user, 2026-07-20): keep it retrospective (option A).** The lens
+      stays causal/raw; baseline-centering remains in the retrospective faithfulness
+      analysis, which the failed bake-in proved is the methodologically correct layer.
+      Nothing more to build on the lens. Faithfulness thread settled: probe artifact
+      diagnosed, retrospective correction recovers a moderate signal (0.44 / 0.60
+      strict), lens correctly causal. Docstring updated to reflect this is by design.
+
+## Faithfulness thread: COMPLETE
+Remaining OPTIONAL fork (user's call, not started): cohort-scale — run the causal
+lens over N60 and apply the retrospective centering over that larger background
+(where cross-boundary centering is a proper background baseline). Heavy GPU.
 
 **Loop discipline unchanged:** pause on a NEW design fork (e.g. the mapping being
 too ambiguous, or the cohort-scale decision); stop when the faithfulness result is

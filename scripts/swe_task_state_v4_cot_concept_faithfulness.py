@@ -113,6 +113,12 @@ def _attach_baseline_centered_top1(boundaries: list[dict[str, Any]]) -> None:
     families (focused_validation, verification) win regardless of the active
     concept. Centering each family by its baseline over the other boundaries
     removes that bias and yields the concept that is unusually elevated HERE.
+
+    This centering lives HERE, in the retrospective faithfulness analysis, on
+    purpose: a cross-boundary background baseline uses every boundary (incl.
+    future ones), so it CANNOT be an online/causal feature of the lens itself
+    (baking it into concept_chain.py breaks its future-invariance contract).
+    Retrospective analysis is allowed to use all boundaries; the lens stays raw.
     """
     for source in ("public_j", "native_j"):
         key = f"{source}_scores"
