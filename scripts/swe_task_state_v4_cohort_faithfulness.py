@@ -35,12 +35,12 @@ def _scorer():
     return mod
 
 
-def compute(report_path: Path = DEFAULT_REPORT) -> dict[str, Any]:
+def compute(report_path: Path = DEFAULT_REPORT, *, vocab_path: Path | None = None) -> dict[str, Any]:
     scorer = _scorer()
     report = json.loads(Path(report_path).read_text())  # load once (report can be ~600 MB)
     experiments = report.get("experiments", [])
     meta_by_id = {e.get("id"): (e.get("metadata") or {}) for e in experiments}
-    family_ids = scorer.family_token_ids()
+    family_ids = scorer.family_token_ids(vocab_path) if vocab_path else scorer.family_token_ids()
     rows = []
     for i, e in enumerate(experiments):
         scores = scorer.score_experiment(e, family_ids)
@@ -120,9 +120,10 @@ def main(argv: Any = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--report", type=Path, default=DEFAULT_REPORT)
     parser.add_argument("--out", type=Path, default=DEFAULT_OUT)
+    parser.add_argument("--vocab", type=Path, default=None, help="concept-form vocab (default v1)")
     args = parser.parse_args(argv)
 
-    result = compute(args.report)
+    result = compute(args.report, vocab_path=args.vocab)
     args.out.parent.mkdir(parents=True, exist_ok=True)
     # keep the artifact compact: drop per-record detail into a sibling if large
     args.out.write_text(json.dumps({k: v for k, v in result.items() if k != "records"}, indent=2) + "\n")

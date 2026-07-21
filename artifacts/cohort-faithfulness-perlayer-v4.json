@@ -1,0 +1,282 @@
+{
+  "kind": "swe_task_state_v4_cohort_faithfulness_perlayer_v3",
+  "report": "artifacts/cohort-perturn-readout-v4.json",
+  "n_turns": 532,
+  "n_layers": 32,
+  "all_layer_avg_centered": 0.307,
+  "best_layer": 44,
+  "best_layer_centered": 0.4117,
+  "best_layer_raw": 0.5846,
+  "best_band": {
+    "band": "39-43",
+    "n_layers": 5,
+    "faithfulness_centered": 0.4117
+  },
+  "bands": [
+    {
+      "band": "44-47",
+      "n_layers": 4,
+      "faithfulness_centered": 0.3835
+    },
+    {
+      "band": "42-47",
+      "n_layers": 6,
+      "faithfulness_centered": 0.3947
+    },
+    {
+      "band": "40-47",
+      "n_layers": 8,
+      "faithfulness_centered": 0.4004
+    },
+    {
+      "band": "38-47",
+      "n_layers": 10,
+      "faithfulness_centered": 0.4079
+    },
+    {
+      "band": "36-47",
+      "n_layers": 12,
+      "faithfulness_centered": 0.3985
+    },
+    {
+      "band": "32-47",
+      "n_layers": 16,
+      "faithfulness_centered": 0.4004
+    },
+    {
+      "band": "39-43",
+      "n_layers": 5,
+      "faithfulness_centered": 0.4117
+    },
+    {
+      "band": "40-44",
+      "n_layers": 5,
+      "faithfulness_centered": 0.4079
+    },
+    {
+      "band": "38-45",
+      "n_layers": 8,
+      "faithfulness_centered": 0.3966
+    }
+  ],
+  "per_layer": [
+    {
+      "layer": 16,
+      "faithfulness_centered": 0.1579,
+      "faithfulness_raw": 0.0789
+    },
+    {
+      "layer": 17,
+      "faithfulness_centered": 0.1898,
+      "faithfulness_raw": 0.235
+    },
+    {
+      "layer": 18,
+      "faithfulness_centered": 0.203,
+      "faithfulness_raw": 0.1353
+    },
+    {
+      "layer": 19,
+      "faithfulness_centered": 0.188,
+      "faithfulness_raw": 0.094
+    },
+    {
+      "layer": 20,
+      "faithfulness_centered": 0.1974,
+      "faithfulness_raw": 0.1184
+    },
+    {
+      "layer": 21,
+      "faithfulness_centered": 0.1823,
+      "faithfulness_raw": 0.156
+    },
+    {
+      "layer": 22,
+      "faithfulness_centered": 0.1917,
+      "faithfulness_raw": 0.1523
+    },
+    {
+      "layer": 23,
+      "faithfulness_centered": 0.2011,
+      "faithfulness_raw": 0.1372
+    },
+    {
+      "layer": 24,
+      "faithfulness_centered": 0.2218,
+      "faithfulness_raw": 0.2481
+    },
+    {
+      "layer": 25,
+      "faithfulness_centered": 0.2274,
+      "faithfulness_raw": 0.3271
+    },
+    {
+      "layer": 26,
+      "faithfulness_centered": 0.2632,
+      "faithfulness_raw": 0.3647
+    },
+    {
+      "layer": 27,
+      "faithfulness_centered": 0.2744,
+      "faithfulness_raw": 0.2632
+    },
+    {
+      "layer": 28,
+      "faithfulness_centered": 0.265,
+      "faithfulness_raw": 0.3759
+    },
+    {
+      "layer": 29,
+      "faithfulness_centered": 0.2801,
+      "faithfulness_raw": 0.3872
+    },
+    {
+      "layer": 30,
+      "faithfulness_centered": 0.2838,
+      "faithfulness_raw": 0.2632
+    },
+    {
+      "layer": 31,
+      "faithfulness_centered": 0.2707,
+      "faithfulness_raw": 0.1805
+    },
+    {
+      "layer": 32,
+      "faithfulness_centered": 0.2707,
+      "faithfulness_raw": 0.2462
+    },
+    {
+      "layer": 33,
+      "faithfulness_centered": 0.3327,
+      "faithfulness_raw": 0.4342
+    },
+    {
+      "layer": 34,
+      "faithfulness_centered": 0.3365,
+      "faithfulness_raw": 0.5451
+    },
+    {
+      "layer": 35,
+      "faithfulness_centered": 0.3571,
+      "faithfulness_raw": 0.5827
+    },
+    {
+      "layer": 36,
+      "faithfulness_centered": 0.3797,
+      "faithfulness_raw": 0.5771
+    },
+    {
+      "layer": 37,
+      "faithfulness_centered": 0.3835,
+      "faithfulness_raw": 0.5827
+    },
+    {
+      "layer": 38,
+      "faithfulness_centered": 0.3985,
+      "faithfulness_raw": 0.5846
+    },
+    {
+      "layer": 39,
+      "faithfulness_centered": 0.4098,
+      "faithfulness_raw": 0.5959
+    },
+    {
+      "layer": 40,
+      "faithfulness_centered": 0.4004,
+      "faithfulness_raw": 0.5846
+    },
+    {
+      "layer": 41,
+      "faithfulness_centered": 0.4098,
+      "faithfulness_raw": 0.5752
+    },
+    {
+      "layer": 42,
+      "faithfulness_centered": 0.3947,
+      "faithfulness_raw": 0.5865
+    },
+    {
+      "layer": 43,
+      "faithfulness_centered": 0.4079,
+      "faithfulness_raw": 0.5846
+    },
+    {
+      "layer": 44,
+      "faithfulness_centered": 0.4117,
+      "faithfulness_raw": 0.5846
+    },
+    {
+      "layer": 45,
+      "faithfulness_centered": 0.3929,
+      "faithfulness_raw": 0.5808
+    },
+    {
+      "layer": 46,
+      "faithfulness_centered": 0.3703,
+      "faithfulness_raw": 0.5846
+    },
+    {
+      "layer": 47,
+      "faithfulness_centered": 0.3421,
+      "faithfulness_raw": 0.5883
+    }
+  ],
+  "best_layer_per_family_recall": {
+    "source_localization": {
+      "n": 206,
+      "recall_centered": 0.461
+    },
+    "verification": {
+      "n": 135,
+      "recall_centered": 0.615
+    },
+    "source_edit": {
+      "n": 51,
+      "recall_centered": 0.235
+    },
+    "repair": {
+      "n": 33,
+      "recall_centered": 0.121
+    },
+    "broad_success": {
+      "n": 22,
+      "recall_centered": 0.045
+    },
+    "failure_confirmation": {
+      "n": 19,
+      "recall_centered": 0.368
+    },
+    "dependency_unavailable": {
+      "n": 16,
+      "recall_centered": 0.062
+    },
+    "task_resolution": {
+      "n": 15,
+      "recall_centered": 0.333
+    },
+    "focused_validation": {
+      "n": 12,
+      "recall_centered": 0.5
+    },
+    "test_success": {
+      "n": 7,
+      "recall_centered": 0.0
+    },
+    "substitution_operation": {
+      "n": 7,
+      "recall_centered": 0.714
+    },
+    "defined_identifier": {
+      "n": 6,
+      "recall_centered": 0.0
+    },
+    "located_source": {
+      "n": 2,
+      "recall_centered": 0.0
+    },
+    "runtime_name_failure": {
+      "n": 1,
+      "recall_centered": 0.0
+    }
+  }
+}

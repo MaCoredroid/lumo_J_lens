@@ -61,11 +61,11 @@ def _faith_at(prepped, layer_idxs, family_ids, scorer) -> float:
     return sum(rows[i]["top1_centered"] == prepped[i][0] for i in range(n)) / n if n else 0.0
 
 
-def compute(report_path: Path = DEFAULT_REPORT) -> dict[str, Any]:
+def compute(report_path: Path = DEFAULT_REPORT, *, vocab_path: Path | None = None) -> dict[str, Any]:
     scorer = _scorer()
     report = json.loads(Path(report_path).read_text())
     experiments = report.get("experiments", [])
-    family_ids = scorer.family_token_ids()
+    family_ids = scorer.family_token_ids(vocab_path) if vocab_path else scorer.family_token_ids()
 
     # precompute per-experiment: (tag, [ {tid:logprob} per captured layer ]) and the layer labels
     prepped = []
@@ -148,9 +148,10 @@ def main(argv: Any = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--report", type=Path, default=DEFAULT_REPORT)
     parser.add_argument("--out", type=Path, default=DEFAULT_OUT)
+    parser.add_argument("--vocab", type=Path, default=None, help="concept-form vocab (default v1)")
     args = parser.parse_args(argv)
 
-    result = compute(args.report)
+    result = compute(args.report, vocab_path=args.vocab)
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(result, indent=2) + "\n")
 

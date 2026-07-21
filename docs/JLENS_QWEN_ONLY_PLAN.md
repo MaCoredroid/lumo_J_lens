@@ -431,6 +431,24 @@ readout). Plus the Qwen tagger on each task's CoT. Then faithfulness across task
       error only on missing readout-venv deps: transformers/safetensors/pytest/openai-harmony).
 - [x] STOP: per-turn cohort faithfulness is in report v3 + suite green -> loop stopped.
 
+## P7c-levers — pushing 0.31 -> 0.41 (user greenlit all 3 levers, 2026-07-21)
+Report: `docs/JLENS_COHORT_FAITHFULNESS_REPORT_v4.md`. Headline **0.41 centered** (n=532,
+full 535-turn coverage, late-layer peak L39-44 plateau, v2 vocab) — up from v3 0.31, now
+ABOVE the majority baseline (0.387) and 5.7x uniform. Clean factorial ablation at L41 (v1
+subset of v2, so one readout scores both vocabs):
+- [x] Lever 1 (depth): the concept signal is late-layer localized. All-layer avg 0.307 ->
+      single L41 0.379 (+0.072, biggest lever); bands re-dilute. `cohort_faithfulness_perlayer.py`.
+- [x] Lever 2 (vocab): v1(63) -> v2(126 forms) = +0.030 at fixed context/coverage.
+      `general_concept_forms_v2.py` -> `..._v2.json`.
+- [x] Lever 3 (coverage): bounded context (all 535 turns, 0 dropped, cap 30k) costs only
+      -0.007 vs full (approximation VALIDATED); adding the 242 late turns RAISES faithfulness
+      +0.024 (they're not harder -> v3's early bias understated, not inflated).
+      `build_cohort_prompts_bounded.py` (local template render, offline), `faithfulness_ablation.py`.
+- Per-concept at L44 broadens vs v3: source_localization 0.25->0.46, source_edit 0.04->0.24,
+      task_resolution 0->0.33, failure_confirmation 0.27->0.37; verification 0.62 + substitution
+      0.71 stay strong; repair/dependency/broad_success/test still weak. v3's "only verification"
+      read was an artifact of layer-dilution + sparse vocab + coverage bias.
+
 **Loop discipline unchanged:** pause on a NEW design fork (e.g. the mapping being
 too ambiguous, or the cohort-scale decision); stop when the faithfulness result is
 in the report and green.
