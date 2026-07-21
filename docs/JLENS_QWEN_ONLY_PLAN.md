@@ -345,7 +345,20 @@ readout). Plus the Qwen tagger on each task's CoT. Then faithfulness across task
           that IS general, like the action-gauge sequence_j readout already at cohort scale);
       (C) accept the strong single-task faithfulness result (0.44/0.60 after the probe fix) +
           the validated cohort auto-tagger as the deliverable; stop the cohort internal capture.
-      Per-turn prompts + capture are ready to run once the vocab question is decided. + run
+      Per-turn prompts + capture are ready to run once the vocab question is decided.
+
+## P7c — general concept-form vocab (user chose: build general vocab, 2026-07-21)
+- [x] `swe_task_state_v4_general_concept_forms.py` (+ test, 4 pass) ->
+      `configs/swe_task_state_v4_general_concept_forms.json`: TASK-INDEPENDENT single-token
+      surface forms for ALL 14 scorable families (e.g. source_localization=locate/where/
+      search/pinpoint; verification=verify/check/validate/confirm; task_resolution=resolved/
+      done/complete/solved). Enforces the concept-chain rules: every form a single Qwen token,
+      globally unique across families, >=2/family. 14/14 scorable, 0 collisions. This is the
+      internal analog of the general auto-tagger.
+- [ ] Build a general concept scorer (reuse concept_chain._report_scores/_ranking math with
+      this vocab): per-turn readout -> 14 family scores -> baseline-center -> top-1.
+- [ ] Per-turn prompts-file (proxy dumps + thinking continuation, end-of-thinking) with these
+      forms as scored vocab; run the public+native capture; then cohort faithfulness vs tagger. + run
       the public+native capture over the cohort; then generalize concept_chain's input
       binding to score the cohort reports; then faithfulness vs the tagger tags.: batch across tasks/boundaries, keep
       GPU util high (profile; target >0.78 effective, fix host-bound stalls), capture only

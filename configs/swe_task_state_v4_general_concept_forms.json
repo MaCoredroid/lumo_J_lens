@@ -1,0 +1,352 @@
+{
+  "kind": "swe_task_state_v4_general_concept_forms_v1",
+  "task_independent": true,
+  "n_families_scorable": 14,
+  "unscorable_families": [],
+  "shared_tokens_dropped": [],
+  "families": {
+    "source_localization": [
+      {
+        "form": "locate",
+        "surface": " locate",
+        "token_id": 23748
+      },
+      {
+        "form": "where",
+        "surface": " where",
+        "token_id": 1332
+      },
+      {
+        "form": "search",
+        "surface": " search",
+        "token_id": 2624
+      },
+      {
+        "form": "locating",
+        "surface": " locating",
+        "token_id": 69449
+      },
+      {
+        "form": "pinpoint",
+        "surface": " pinpoint",
+        "token_id": 64289
+      }
+    ],
+    "substitution_operation": [
+      {
+        "form": "replace",
+        "surface": " replace",
+        "token_id": 8032
+      },
+      {
+        "form": "substitute",
+        "surface": " substitute",
+        "token_id": 26782
+      },
+      {
+        "form": "swap",
+        "surface": " swap",
+        "token_id": 13881
+      },
+      {
+        "form": "replacing",
+        "surface": " replacing",
+        "token_id": 24101
+      }
+    ],
+    "located_source": [
+      {
+        "form": "located",
+        "surface": " located",
+        "token_id": 7172
+      },
+      {
+        "form": "here",
+        "surface": " here",
+        "token_id": 1532
+      },
+      {
+        "form": "spotted",
+        "surface": " spotted",
+        "token_id": 28588
+      }
+    ],
+    "defined_identifier": [
+      {
+        "form": "identifier",
+        "surface": " identifier",
+        "token_id": 12448
+      },
+      {
+        "form": "variable",
+        "surface": " variable",
+        "token_id": 3759
+      },
+      {
+        "form": "attribute",
+        "surface": " attribute",
+        "token_id": 6816
+      },
+      {
+        "form": "symbol",
+        "surface": " symbol",
+        "token_id": 7489
+      }
+    ],
+    "runtime_name_failure": [
+      {
+        "form": "undefined",
+        "surface": " undefined",
+        "token_id": 5438
+      },
+      {
+        "form": "crash",
+        "surface": " crash",
+        "token_id": 9626
+      },
+      {
+        "form": "traceback",
+        "surface": " traceback",
+        "token_id": 44521
+      },
+      {
+        "form": "exception",
+        "surface": " exception",
+        "token_id": 4531
+      },
+      {
+        "form": "broken",
+        "surface": " broken",
+        "token_id": 10548
+      },
+      {
+        "form": "typo",
+        "surface": " typo",
+        "token_id": 82170
+      }
+    ],
+    "failure_confirmation": [
+      {
+        "form": "fails",
+        "surface": " fails",
+        "token_id": 14107
+      },
+      {
+        "form": "reproduce",
+        "surface": " reproduce",
+        "token_id": 22090
+      },
+      {
+        "form": "reproduced",
+        "surface": " reproduced",
+        "token_id": 52783
+      },
+      {
+        "form": "failing",
+        "surface": " failing",
+        "token_id": 20738
+      }
+    ],
+    "source_edit": [
+      {
+        "form": "edit",
+        "surface": " edit",
+        "token_id": 4351
+      },
+      {
+        "form": "modify",
+        "surface": " modify",
+        "token_id": 5427
+      },
+      {
+        "form": "change",
+        "surface": " change",
+        "token_id": 2222
+      },
+      {
+        "form": "editing",
+        "surface": " editing",
+        "token_id": 15205
+      },
+      {
+        "form": "rewrite",
+        "surface": " rewrite",
+        "token_id": 17591
+      }
+    ],
+    "repair": [
+      {
+        "form": "fix",
+        "surface": " fix",
+        "token_id": 4884
+      },
+      {
+        "form": "repair",
+        "surface": " repair",
+        "token_id": 12368
+      },
+      {
+        "form": "correct",
+        "surface": " correct",
+        "token_id": 4252
+      },
+      {
+        "form": "fixing",
+        "surface": " fixing",
+        "token_id": 34082
+      },
+      {
+        "form": "correcting",
+        "surface": " correcting",
+        "token_id": 78571
+      }
+    ],
+    "verification": [
+      {
+        "form": "verify",
+        "surface": " verify",
+        "token_id": 9845
+      },
+      {
+        "form": "check",
+        "surface": " check",
+        "token_id": 1716
+      },
+      {
+        "form": "validate",
+        "surface": " validate",
+        "token_id": 9307
+      },
+      {
+        "form": "confirm",
+        "surface": " confirm",
+        "token_id": 7440
+      },
+      {
+        "form": "verifying",
+        "surface": " verifying",
+        "token_id": 66532
+      }
+    ],
+    "broad_success": [
+      {
+        "form": "works",
+        "surface": " works",
+        "token_id": 4138
+      },
+      {
+        "form": "succeed",
+        "surface": " succeed",
+        "token_id": 11655
+      },
+      {
+        "form": "robust",
+        "surface": " robust",
+        "token_id": 21094
+      },
+      {
+        "form": "everything",
+        "surface": " everything",
+        "token_id": 4156
+      },
+      {
+        "form": "overall",
+        "surface": " overall",
+        "token_id": 7830
+      }
+    ],
+    "dependency_unavailable": [
+      {
+        "form": "unavailable",
+        "surface": " unavailable",
+        "token_id": 33829
+      },
+      {
+        "form": "missing",
+        "surface": " missing",
+        "token_id": 7167
+      },
+      {
+        "form": "install",
+        "surface": " install",
+        "token_id": 4433
+      },
+      {
+        "form": "absent",
+        "surface": " absent",
+        "token_id": 26334
+      }
+    ],
+    "focused_validation": [
+      {
+        "form": "specific",
+        "surface": " specific",
+        "token_id": 3050
+      },
+      {
+        "form": "targeted",
+        "surface": " targeted",
+        "token_id": 16609
+      },
+      {
+        "form": "focused",
+        "surface": " focused",
+        "token_id": 10419
+      },
+      {
+        "form": "narrow",
+        "surface": " narrow",
+        "token_id": 14590
+      }
+    ],
+    "test_success": [
+      {
+        "form": "passed",
+        "surface": " passed",
+        "token_id": 5642
+      },
+      {
+        "form": "succeeds",
+        "surface": " succeeds",
+        "token_id": 48396
+      },
+      {
+        "form": "passing",
+        "surface": " passing",
+        "token_id": 11946
+      },
+      {
+        "form": "green",
+        "surface": " green",
+        "token_id": 5983
+      }
+    ],
+    "task_resolution": [
+      {
+        "form": "resolved",
+        "surface": " resolved",
+        "token_id": 19072
+      },
+      {
+        "form": "done",
+        "surface": " done",
+        "token_id": 2725
+      },
+      {
+        "form": "complete",
+        "surface": " complete",
+        "token_id": 4434
+      },
+      {
+        "form": "finished",
+        "surface": " finished",
+        "token_id": 7807
+      },
+      {
+        "form": "solved",
+        "surface": " solved",
+        "token_id": 27050
+      }
+    ]
+  }
+}
