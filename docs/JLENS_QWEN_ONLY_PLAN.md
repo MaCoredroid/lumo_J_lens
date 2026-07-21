@@ -449,6 +449,23 @@ subset of v2, so one readout scores both vocabs):
       0.71 stay strong; repair/dependency/broad_success/test still weak. v3's "only verification"
       read was an artifact of layer-dilution + sparse vocab + coverage bias.
 
+## P7c-trust — trustworthy lens + meaningful disagreement (user goal, 2026-07-21)
+Report: `docs/JLENS_TRUSTWORTHY_CONCEPT_LENS.md`. Goal: make the lens trustworthy per-family
+so a lens-vs-CoT disagreement is meaningful.
+- [x] Diagnosed WHY weak families fail: adjacent-blob confusion (source_edit->substitution 0.47,
+      repair->substitution 0.30; substitution is a magnet), not noise. `faithfulness_confusion.py`.
+- [x] Per-concept probes FAIL out-of-sample: data-driven discriminative forms (log-odds from the
+      tagged CoT corpus, >=2-task filter), honest 10/10 train/test split -> held-out 0.20 vs v2 0.39
+      (they wreck verification 0.59->0.09). Better vocab can't recover distinctions absent from the
+      residual. `datadriven_concept_forms.py`, `perfamily_trust_eval.py`, v5 pooled readout (219 tok).
+- [x] TRUSTWORTHY GRANULARITY = 3 concepts locate/modify_code/assess: held-out 0.74, per-family
+      recall 0.76/0.83/0.68 (vs 14-fine 0.39, 5-super 0.58). `superconcept_faithfulness.py`.
+- [x] PAYOFF: `concept_disagreement.py` — agreement 0.72 over 532 turns; ranks 147 disagreements by
+      confidence margin. Top disagreements are real: the end-of-thinking state anticipates the next
+      action (tag locate/assess but text "I need to add..."/"use sed to make the change"/"apply the
+      fix" -> lens modify_code). Triage of candidate surface-internal divergences, not a verdict
+      (~25% lens error; some are pivots). +test; pipeline suite green (18).
+
 **Loop discipline unchanged:** pause on a NEW design fork (e.g. the mapping being
 too ambiguous, or the cohort-scale decision); stop when the faithfulness result is
 in the report and green.
