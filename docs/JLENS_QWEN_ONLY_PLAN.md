@@ -309,6 +309,14 @@ readout). Plus the Qwen tagger on each task's CoT. Then faithfulness across task
       (`artifacts/cohort-cot-tags-summary-v1.json`; full tags in .cache). Diverse +
       narratively coherent (localize->edit/repair->verify->resolve); source_localization
       +verification = 63% (agents explore+check a lot; mild tagger lean). TAGGER SIDE DONE.
+- [x] Internal-capture INPUT path validated: the VJP capture (`run_jlens_nvfp4.py`) takes
+      a `--prompts-file` (per-boundary token_ids) + a TASK-INDEPENDENT J checkpoint. Exact
+      prompts come FREE from the recorded proxy dumps (`runs/*/proxy_dumps/chat_*.json` =
+      exact {messages, tools, chat_template_kwargs} sent to the model) -> POST to the
+      server's `/tokenize` -> exact token_ids (validated: 8-msg request -> 13670 tokens). No
+      fragile reconstruction, no separate tokenizer. Caveat: proxy dumps exist for some runs
+      only + are globally numbered -> need dump->task/turn mapping. `render_request` core is
+      generic; the single-task hard-wiring is only validation constants.
 - [ ] Generalize + SPEED-optimize the VJP capture: batch across tasks/boundaries, keep
       GPU util high (profile; target >0.78 effective, fix host-bound stalls), capture only
       the per-turn concept boundaries (not all offsets) to cut cost.
