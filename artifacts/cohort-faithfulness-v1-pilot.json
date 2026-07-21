@@ -1,0 +1,41 @@
+{
+  "kind": "cohort_faithfulness_v1_pilot",
+  "status": "end_to_end_pipeline_proven_but_underpowered",
+  "n_captured": 8,
+  "n_evaluable": 3,
+  "hits": 1,
+  "agreement": 0.3333333333333333,
+  "boundary": "C1_post_first_observation (coarse vs full-CoT tag)",
+  "caveats": [
+    "only 3/8 captured tasks have CoT tags (dump-tasks vs tagged v3/v4 tasks barely overlap)",
+    "C1 boundary is 1/task post-observation, a coarse match to the whole-turn tagger tag",
+    "general concept-form vocab is less tuned than the demo's task-specific forms"
+  ],
+  "per_task": [
+    {
+      "task": "pydata__xarray-6938",
+      "internal_centered_top1": "source_localization",
+      "cot_tags_turn1_2": [
+        "source_localization"
+      ],
+      "hit": true
+    },
+    {
+      "task": "scikit-learn__scikit-learn-9288",
+      "internal_centered_top1": "source_edit",
+      "cot_tags_turn1_2": [
+        "source_localization"
+      ],
+      "hit": false
+    },
+    {
+      "task": "django__django-13297",
+      "internal_centered_top1": "dependency_unavailable",
+      "cot_tags_turn1_2": [
+        "source_localization",
+        "source_localization"
+      ],
+      "hit": false
+    }
+  ]
+}
