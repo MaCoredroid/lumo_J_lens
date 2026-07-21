@@ -1,0 +1,555 @@
+{
+  "kind": "swe_task_state_v4_datadriven_concept_forms_v3",
+  "top_k": 16,
+  "min_count": 4,
+  "n_families": 11,
+  "families": {
+    "source_localization": [
+      {
+        "form": "analyze",
+        "token_id": 22903,
+        "log_odds": 2.997
+      },
+      {
+        "form": "base",
+        "token_id": 3051,
+        "log_odds": 2.853
+      },
+      {
+        "form": "around",
+        "token_id": 2094,
+        "log_odds": 2.694
+      },
+      {
+        "form": "project",
+        "token_id": 2313,
+        "log_odds": 2.694
+      },
+      {
+        "form": "finding",
+        "token_id": 8996,
+        "log_odds": 2.571
+      },
+      {
+        "form": "task",
+        "token_id": 3274,
+        "log_odds": 2.445
+      },
+      {
+        "form": "base",
+        "token_id": 2255,
+        "log_odds": 2.433
+      },
+      {
+        "form": "explore",
+        "token_id": 12804,
+        "log_odds": 2.433
+      },
+      {
+        "form": "defined",
+        "token_id": 4364,
+        "log_odds": 2.433
+      },
+      {
+        "form": "exploring",
+        "token_id": 23218,
+        "log_odds": 2.433
+      },
+      {
+        "form": "range",
+        "token_id": 2020,
+        "log_odds": 2.273
+      },
+      {
+        "form": "adjust",
+        "token_id": 37437,
+        "log_odds": 2.273
+      },
+      {
+        "form": "against",
+        "token_id": 2272,
+        "log_odds": 2.273
+      },
+      {
+        "form": "second",
+        "token_id": 2018,
+        "log_odds": 2.273
+      },
+      {
+        "form": "structure",
+        "token_id": 5759,
+        "log_odds": 2.26
+      },
+      {
+        "form": "scale",
+        "token_id": 5281,
+        "log_odds": 2.2
+      }
+    ],
+    "verification": [
+      {
+        "form": "verify",
+        "token_id": 9845,
+        "log_odds": 3.163
+      },
+      {
+        "form": "works",
+        "token_id": 4138,
+        "log_odds": 2.574
+      },
+      {
+        "form": "quick",
+        "token_id": 3841,
+        "log_odds": 2.207
+      },
+      {
+        "form": "reproduction",
+        "token_id": 37276,
+        "log_odds": 2.102
+      },
+      {
+        "form": "applied",
+        "token_id": 8977,
+        "log_odds": 2.063
+      },
+      {
+        "form": "described",
+        "token_id": 7246,
+        "log_odds": 2.017
+      },
+      {
+        "form": "diff",
+        "token_id": 3515,
+        "log_odds": 2.017
+      },
+      {
+        "form": "looks",
+        "token_id": 5686,
+        "log_odds": 1.852
+      },
+      {
+        "form": "final",
+        "token_id": 1534,
+        "log_odds": 1.77
+      },
+      {
+        "form": "correctly",
+        "token_id": 12083,
+        "log_odds": 1.724
+      },
+      {
+        "form": "running",
+        "token_id": 4162,
+        "log_odds": 1.402
+      },
+      {
+        "form": "state",
+        "token_id": 1528,
+        "log_odds": 1.348
+      },
+      {
+        "form": "didn",
+        "token_id": 3105,
+        "log_odds": 1.348
+      },
+      {
+        "form": "scenario",
+        "token_id": 14611,
+        "log_odds": 1.283
+      },
+      {
+        "form": "script",
+        "token_id": 5148,
+        "log_odds": 1.283
+      },
+      {
+        "form": "ader",
+        "token_id": 966,
+        "log_odds": 1.245
+      }
+    ],
+    "repair": [
+      {
+        "form": "formats",
+        "token_id": 19251,
+        "log_odds": 4.639
+      },
+      {
+        "form": "standard",
+        "token_id": 5129,
+        "log_odds": 3.728
+      },
+      {
+        "form": "fix",
+        "token_id": 4884,
+        "log_odds": 3.105
+      },
+      {
+        "form": "format",
+        "token_id": 3443,
+        "log_odds": 2.978
+      },
+      {
+        "form": "fall",
+        "token_id": 4255,
+        "log_odds": 2.87
+      },
+      {
+        "form": "round",
+        "token_id": 4625,
+        "log_odds": 2.805
+      },
+      {
+        "form": "requires",
+        "token_id": 7225,
+        "log_odds": 2.805
+      },
+      {
+        "form": "back",
+        "token_id": 1142,
+        "log_odds": 2.785
+      },
+      {
+        "form": "Since",
+        "token_id": 8439,
+        "log_odds": 2.785
+      },
+      {
+        "form": "clear",
+        "token_id": 2708,
+        "log_odds": 2.735
+      },
+      {
+        "form": "None",
+        "token_id": 3928,
+        "log_odds": 2.647
+      },
+      {
+        "form": "produces",
+        "token_id": 18082,
+        "log_odds": 2.621
+      },
+      {
+        "form": "needed",
+        "token_id": 4221,
+        "log_odds": 2.621
+      },
+      {
+        "form": "version",
+        "token_id": 2243,
+        "log_odds": 2.621
+      },
+      {
+        "form": "def",
+        "token_id": 727,
+        "log_odds": 2.564
+      },
+      {
+        "form": "characters",
+        "token_id": 5587,
+        "log_odds": 2.546
+      }
+    ],
+    "source_edit": [
+      {
+        "form": "sed",
+        "token_id": 30293,
+        "log_odds": 2.813
+      },
+      {
+        "form": "edit",
+        "token_id": 4351,
+        "log_odds": 2.497
+      },
+      {
+        "form": "import",
+        "token_id": 1120,
+        "log_odds": 2.497
+      },
+      {
+        "form": "add",
+        "token_id": 884,
+        "log_odds": 2.408
+      },
+      {
+        "form": "modify",
+        "token_id": 5427,
+        "log_odds": 2.081
+      },
+      {
+        "form": "remove",
+        "token_id": 3921,
+        "log_odds": 1.958
+      },
+      {
+        "form": "write",
+        "token_id": 3165,
+        "log_odds": 1.876
+      },
+      {
+        "form": "after",
+        "token_id": 1238,
+        "log_odds": 1.842
+      },
+      {
+        "form": "insight",
+        "token_id": 19407,
+        "log_odds": 1.798
+      },
+      {
+        "form": "setup",
+        "token_id": 14746,
+        "log_odds": 1.595
+      },
+      {
+        "form": "line",
+        "token_id": 1500,
+        "log_odds": 1.566
+      },
+      {
+        "form": "lines",
+        "token_id": 4965,
+        "log_odds": 1.497
+      },
+      {
+        "form": "result",
+        "token_id": 1067,
+        "log_odds": 1.253
+      },
+      {
+        "form": "logic",
+        "token_id": 11870,
+        "log_odds": 1.253
+      },
+      {
+        "form": "self",
+        "token_id": 701,
+        "log_odds": 1.241
+      },
+      {
+        "form": "list",
+        "token_id": 1103,
+        "log_odds": 1.193
+      }
+    ],
+    "broad_success": [
+      {
+        "form": "broader",
+        "token_id": 25971,
+        "log_odds": 4.452
+      },
+      {
+        "form": "else",
+        "token_id": 745,
+        "log_odds": 3.742
+      },
+      {
+        "form": "anything",
+        "token_id": 3977,
+        "log_odds": 2.801
+      },
+      {
+        "form": "suite",
+        "token_id": 15705,
+        "log_odds": 2.741
+      },
+      {
+        "form": "broken",
+        "token_id": 10548,
+        "log_odds": 2.549
+      },
+      {
+        "form": "nothing",
+        "token_id": 4161,
+        "log_odds": 2.395
+      },
+      {
+        "form": "sure",
+        "token_id": 2617,
+        "log_odds": 2.148
+      },
+      {
+        "form": "break",
+        "token_id": 1387,
+        "log_odds": 2.049
+      },
+      {
+        "form": "related",
+        "token_id": 5265,
+        "log_odds": 1.277
+      },
+      {
+        "form": "doesn",
+        "token_id": 3070,
+        "log_odds": 1.21
+      }
+    ],
+    "failure_confirmation": [
+      {
+        "form": "reproduce",
+        "token_id": 22090,
+        "log_odds": 4.223
+      },
+      {
+        "form": "happening",
+        "token_id": 12125,
+        "log_odds": 2.866
+      },
+      {
+        "form": "error",
+        "token_id": 1412,
+        "log_odds": 1.089
+      }
+    ],
+    "focused_validation": [
+      {
+        "form": "specific",
+        "token_id": 3050,
+        "log_odds": 2.635
+      }
+    ],
+    "defined_identifier": [
+      {
+        "form": "name",
+        "token_id": 803,
+        "log_odds": 4.502
+      },
+      {
+        "form": "class",
+        "token_id": 523,
+        "log_odds": 3.944
+      },
+      {
+        "form": "correct",
+        "token_id": 4252,
+        "log_odds": 2.565
+      }
+    ],
+    "task_resolution": [
+      {
+        "form": "complete",
+        "token_id": 4434,
+        "log_odds": 5.989
+      },
+      {
+        "form": "Added",
+        "token_id": 17158,
+        "log_odds": 5.375
+      },
+      {
+        "form": "summarize",
+        "token_id": 59987,
+        "log_odds": 5.03
+      },
+      {
+        "form": "consistent",
+        "token_id": 12594,
+        "log_odds": 4.679
+      },
+      {
+        "form": "Changed",
+        "token_id": 44752,
+        "log_odds": 4.272
+      },
+      {
+        "form": "ensures",
+        "token_id": 24546,
+        "log_odds": 4.272
+      },
+      {
+        "form": "pass",
+        "token_id": 1440,
+        "log_odds": 3.35
+      },
+      {
+        "form": "minimal",
+        "token_id": 16866,
+        "log_odds": 3.158
+      },
+      {
+        "form": "tests",
+        "token_id": 6813,
+        "log_odds": 2.934
+      },
+      {
+        "form": "values",
+        "token_id": 2663,
+        "log_odds": 2.151
+      },
+      {
+        "form": "existing",
+        "token_id": 6149,
+        "log_odds": 1.692
+      },
+      {
+        "form": "case",
+        "token_id": 1105,
+        "log_odds": 1.547
+      }
+    ],
+    "dependency_unavailable": [
+      {
+        "form": "tool",
+        "token_id": 5224,
+        "log_odds": 5.101
+      },
+      {
+        "form": "denied",
+        "token_id": 14390,
+        "log_odds": 4.597
+      },
+      {
+        "form": "permission",
+        "token_id": 7634,
+        "log_odds": 3.9
+      },
+      {
+        "form": "available",
+        "token_id": 2420,
+        "log_odds": 3.838
+      },
+      {
+        "form": "runner",
+        "token_id": 21568,
+        "log_odds": 3.675
+      },
+      {
+        "form": "try",
+        "token_id": 1380,
+        "log_odds": 3.024
+      },
+      {
+        "form": "read",
+        "token_id": 1301,
+        "log_odds": 3.012
+      },
+      {
+        "form": "instead",
+        "token_id": 4370,
+        "log_odds": 2.173
+      },
+      {
+        "form": "since",
+        "token_id": 2394,
+        "log_odds": 1.735
+      },
+      {
+        "form": "file",
+        "token_id": 999,
+        "log_odds": 1.114
+      }
+    ],
+    "test_success": [
+      {
+        "form": "run",
+        "token_id": 1542,
+        "log_odds": 2.78
+      },
+      {
+        "form": "test",
+        "token_id": 1228,
+        "log_odds": 2.128
+      }
+    ]
+  }
+}
