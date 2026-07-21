@@ -1,0 +1,388 @@
+{
+  "kind": "cohort_cot_tags_summary_v1",
+  "n_tasks": 20,
+  "total_turns": 535,
+  "overall_distribution": {
+    "source_localization": 206,
+    "verification": 135,
+    "source_edit": 51,
+    "repair": 33,
+    "broad_success": 22,
+    "failure_confirmation": 19,
+    "dependency_unavailable": 16,
+    "task_resolution": 15,
+    "focused_validation": 12,
+    "test_success": 7,
+    "substitution_operation": 7,
+    "defined_identifier": 6,
+    "none": 3,
+    "located_source": 2,
+    "runtime_name_failure": 1
+  },
+  "per_task": [
+    {
+      "task": "astropy__astropy-14508",
+      "n_turns": 33,
+      "distinct": 9,
+      "top": [
+        [
+          "source_localization",
+          9
+        ],
+        [
+          "verification",
+          8
+        ],
+        [
+          "repair",
+          5
+        ]
+      ]
+    },
+    {
+      "task": "astropy__astropy-14539",
+      "n_turns": 34,
+      "distinct": 8,
+      "top": [
+        [
+          "source_localization",
+          10
+        ],
+        [
+          "verification",
+          9
+        ],
+        [
+          "failure_confirmation",
+          5
+        ]
+      ]
+    },
+    {
+      "task": "django__django-10914",
+      "n_turns": 21,
+      "distinct": 10,
+      "top": [
+        [
+          "source_localization",
+          5
+        ],
+        [
+          "repair",
+          3
+        ],
+        [
+          "verification",
+          3
+        ]
+      ]
+    },
+    {
+      "task": "django__django-13297",
+      "n_turns": 25,
+      "distinct": 8,
+      "top": [
+        [
+          "source_localization",
+          13
+        ],
+        [
+          "verification",
+          5
+        ],
+        [
+          "source_edit",
+          2
+        ]
+      ]
+    },
+    {
+      "task": "django__django-16938",
+      "n_turns": 46,
+      "distinct": 11,
+      "top": [
+        [
+          "source_localization",
+          17
+        ],
+        [
+          "verification",
+          11
+        ],
+        [
+          "repair",
+          4
+        ]
+      ]
+    },
+    {
+      "task": "matplotlib__matplotlib-25332",
+      "n_turns": 27,
+      "distinct": 8,
+      "top": [
+        [
+          "source_localization",
+          11
+        ],
+        [
+          "verification",
+          7
+        ],
+        [
+          "source_edit",
+          2
+        ]
+      ]
+    },
+    {
+      "task": "matplotlib__matplotlib-26291",
+      "n_turns": 30,
+      "distinct": 10,
+      "top": [
+        [
+          "source_localization",
+          7
+        ],
+        [
+          "verification",
+          7
+        ],
+        [
+          "repair",
+          5
+        ]
+      ]
+    },
+    {
+      "task": "mwaskom__seaborn-3069",
+      "n_turns": 32,
+      "distinct": 4,
+      "top": [
+        [
+          "source_localization",
+          22
+        ],
+        [
+          "source_edit",
+          5
+        ],
+        [
+          "verification",
+          4
+        ]
+      ]
+    },
+    {
+      "task": "psf__requests-5414",
+      "n_turns": 48,
+      "distinct": 10,
+      "top": [
+        [
+          "verification",
+          15
+        ],
+        [
+          "source_localization",
+          14
+        ],
+        [
+          "repair",
+          5
+        ]
+      ]
+    },
+    {
+      "task": "psf__requests-6028",
+      "n_turns": 31,
+      "distinct": 6,
+      "top": [
+        [
+          "source_localization",
+          13
+        ],
+        [
+          "verification",
+          10
+        ],
+        [
+          "repair",
+          3
+        ]
+      ]
+    },
+    {
+      "task": "pydata__xarray-4094",
+      "n_turns": 30,
+      "distinct": 11,
+      "top": [
+        [
+          "source_localization",
+          10
+        ],
+        [
+          "verification",
+          8
+        ],
+        [
+          "source_edit",
+          3
+        ]
+      ]
+    },
+    {
+      "task": "pydata__xarray-6938",
+      "n_turns": 1,
+      "distinct": 1,
+      "top": [
+        [
+          "source_localization",
+          1
+        ]
+      ]
+    },
+    {
+      "task": "pylint-dev__pylint-4970",
+      "n_turns": 29,
+      "distinct": 7,
+      "top": [
+        [
+          "source_localization",
+          14
+        ],
+        [
+          "verification",
+          8
+        ],
+        [
+          "source_edit",
+          3
+        ]
+      ]
+    },
+    {
+      "task": "pytest-dev__pytest-8399",
+      "n_turns": 30,
+      "distinct": 6,
+      "top": [
+        [
+          "source_localization",
+          12
+        ],
+        [
+          "verification",
+          10
+        ],
+        [
+          "source_edit",
+          4
+        ]
+      ]
+    },
+    {
+      "task": "scikit-learn__scikit-learn-12585",
+      "n_turns": 10,
+      "distinct": 6,
+      "top": [
+        [
+          "source_localization",
+          3
+        ],
+        [
+          "verification",
+          3
+        ],
+        [
+          "none",
+          1
+        ]
+      ]
+    },
+    {
+      "task": "scikit-learn__scikit-learn-25973",
+      "n_turns": 40,
+      "distinct": 9,
+      "top": [
+        [
+          "source_localization",
+          14
+        ],
+        [
+          "source_edit",
+          11
+        ],
+        [
+          "verification",
+          9
+        ]
+      ]
+    },
+    {
+      "task": "scikit-learn__scikit-learn-9288",
+      "n_turns": 1,
+      "distinct": 1,
+      "top": [
+        [
+          "source_localization",
+          1
+        ]
+      ]
+    },
+    {
+      "task": "sphinx-doc__sphinx-8269",
+      "n_turns": 22,
+      "distinct": 5,
+      "top": [
+        [
+          "source_localization",
+          11
+        ],
+        [
+          "verification",
+          7
+        ],
+        [
+          "failure_confirmation",
+          2
+        ]
+      ]
+    },
+    {
+      "task": "sympy__sympy-13480",
+      "n_turns": 10,
+      "distinct": 5,
+      "top": [
+        [
+          "source_localization",
+          4
+        ],
+        [
+          "verification",
+          2
+        ],
+        [
+          "broad_success",
+          2
+        ]
+      ]
+    },
+    {
+      "task": "sympy__sympy-24066",
+      "n_turns": 35,
+      "distinct": 8,
+      "top": [
+        [
+          "source_localization",
+          15
+        ],
+        [
+          "verification",
+          9
+        ],
+        [
+          "source_edit",
+          4
+        ]
+      ]
+    }
+  ]
+}

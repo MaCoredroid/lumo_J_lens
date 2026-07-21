@@ -303,7 +303,12 @@ readout). Plus the Qwen tagger on each task's CoT. Then faithfulness across task
       materialize_swe_jlens_prompts) -> the cohort path is a STREAMLINED capture reusing
       the lens core (VJP + J projection + concept scoring) at AUTO per-turn boundaries,
       not a replay of the hand-curated single-task machinery.
-- [ ] Tag the 535 cohort turns with the validated Qwen tagger (cheap; the tagger side).
+- [x] Tagged all 535 cohort turns (`swe_task_state_v4_cohort_cot_tags.py`) at 99% GPU
+      util (2 concurrent workers): 20 tasks / 535 turns / 15 distinct concepts. Overall
+      dist: source_localization 206, verification 135, source_edit 51, repair 33, ...
+      (`artifacts/cohort-cot-tags-summary-v1.json`; full tags in .cache). Diverse +
+      narratively coherent (localize->edit/repair->verify->resolve); source_localization
+      +verification = 63% (agents explore+check a lot; mild tagger lean). TAGGER SIDE DONE.
 - [ ] Generalize + SPEED-optimize the VJP capture: batch across tasks/boundaries, keep
       GPU util high (profile; target >0.78 effective, fix host-bound stalls), capture only
       the per-turn concept boundaries (not all offsets) to cut cost.
