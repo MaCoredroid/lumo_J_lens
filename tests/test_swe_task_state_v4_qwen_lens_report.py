@@ -40,6 +40,14 @@ class QwenLensReportTests(unittest.TestCase):
         self.assertLessEqual(flag["error_detection_auc"], 1.0)
         self.assertEqual(flag["n_error"] + flag["n_correct"], flag["n_rows"])
 
+    def test_cot_faithfulness_section_present_and_distinct(self):
+        if "cot_faithfulness" not in self.report:
+            self.skipTest("concept-chain artifact not present")
+        cf = self.report["cot_faithfulness"]
+        self.assertIn("lens_reliability_flag", cf["distinct_from"])
+        self.assertGreaterEqual(cf["faithfulness_top1_agreement_all"], 0.0)
+        self.assertLessEqual(cf["faithfulness_top1_agreement_all"], 1.0)
+
     def test_free_cot_timeline_and_limitations(self):
         self.assertTrue(self.report["limitations"])
         demo = self.report["free_cot_timeline_demo"]

@@ -31,6 +31,9 @@ if str(ROOT) not in sys.path:
 
 from scripts import swe_task_state_v4_source_divergence as divergence  # noqa: E402
 from scripts import swe_task_state_v4_trajectory_cot_reader as cot  # noqa: E402
+from scripts import (  # noqa: E402
+    swe_task_state_v4_cot_concept_faithfulness as cot_faithfulness,
+)
 
 ACTION_PHASE_ARTIFACT = divergence.ACTION_PHASE_ARTIFACT
 REPORT_PATH = ROOT / "artifacts/jlens-qwen-only-report-v1.json"
@@ -112,6 +115,27 @@ def build_report(*, permutations: int = 2000) -> dict[str, Any]:
         ],
     }
 
+    if (
+        cot_faithfulness.CONCEPT_CHAIN_ARTIFACT.exists()
+        and cot.DEFAULT_TRAJECTORY.exists()
+    ):
+        faith = cot_faithfulness.score_faithfulness()
+        report["cot_faithfulness"] = {
+            "definition": "does the internal concept-chain readout encode the concept "
+            "the model's own CoT claims at that boundary (top-1 agreement)",
+            "distinct_from": "the lens_reliability_flag above (which is probe-vs-probe, not faithfulness)",
+            "result": (
+                "WEAK/PARTIAL: internal top-1 matches the CoT-implied concept "
+                f"{faith['faithfulness_top1_agreement_all']:.2f} of the time "
+                f"({faith['n_mapped_events_aligned']} events; "
+                f"{faith['faithfulness_top1_agreement_strict']:.2f} on strict-fidelity "
+                f"boundaries). Free CoT events agree with human labels "
+                f"{faith['free_event_vs_human_label_agreement']:.2f}, but the internal "
+                "readout tracks neither reliably."
+            ),
+            **faith,
+        }
+
     if cot.DEFAULT_TRAJECTORY.exists():
         ctx = cot.read_free_reasoning_context()
         report["free_cot_timeline_demo"] = {
@@ -152,6 +176,13 @@ def main(argv: Any = None) -> int:
         f" (error {flag['divergence_mean_on_error']:.4f} vs correct"
         f" {flag['divergence_mean_on_correct']:.4f})"
     )
+    if "cot_faithfulness" in report:
+        cf = report["cot_faithfulness"]
+        print(
+            f"  CoT faithfulness (real): internal concept matches CoT claim"
+            f" {cf['faithfulness_top1_agreement_all']:.2f} top-1"
+            f" ({cf['n_mapped_events_aligned']} events, single task) — WEAK/PARTIAL"
+        )
     return 0
 
 

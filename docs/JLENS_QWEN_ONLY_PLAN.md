@@ -122,7 +122,61 @@ BOTH source distributions.
       epistemic timeline; plus scope (no GPT-OSS/Mistral/human labels) and honest
       limitations (event-concentration not cohort-scale).
 
-**Loop stop condition met: P3 report exists and its eval is green.**
+**P3 report exists and green (v1). Follow-on faithfulness work below.**
+
+---
+
+## P4 — REAL faithfulness: CoT-event ↔ internal-concept agreement (user, 2026-07-20)
+The P2 divergence metric was rescoped as a lens-reliability flag, NOT faithfulness
+(both sources are internal probes). Real CoT-faithfulness = does the internal
+concept-chain readout encode the concept the CoT claims at that boundary.
+
+**Data (from scoping workflow wf_b875405b-43c):**
+- Concept-chain readout: `scripts/swe_task_state_v4_concept_chain.py` ->
+  `.cache/swe_task_state_v4_concept_chain/common-ontology-chain.json`. Per boundary
+  (`boundary.request_index`+`boundary.offset`): `candidate_rankings.{public_j,native_j,
+  ordinary_logit}.top_k` + `selection.selected_concept_id`; 17 families, 14 scorable
+  (excluded: typographical_error, repair_success, repair_summary). Also carries
+  `evaluation.boundary_rows[i].positive_concept_ids` (human reference labels).
+- Free CoT events: `swe_task_state_v4_trajectory_cot_reader` (per turn/offset).
+- **Both are the SAME single demo task** (swe-sympy-13480): 10 boundaries, 5
+  strict-fidelity, 3 selected. So P4 is DESCRIPTIVE, n=1, uncalibrated — the honest
+  hard result (design doc already: 5/10 fidelity, 3/10 selected).
+
+**Event -> concept mapping (a design choice; high-confidence, scorable only):**
+diagnosis_named->source_localization, source_location_reaffirmed->located_source,
+correct_identifier_named->defined_identifier, failure_confirmed->failure_confirmation,
+original_reproduction_passed->verification, broader_values_passed->broad_success,
+pytest_unavailable->dependency_unavailable, focused_test_passed->test_success,
+task_resolved->task_resolution. (fix_working->repair_success dropped: unscorable.
+bug_recognized/patch_target_named/reproduction_planned: medium/low, reported separately.)
+The mapping is an explicit, reviewable table in the module — the user can adjust it.
+
+**Preliminary signal (from public_j top1 vs mapping):** MIXED — matches at
+defined_identifier / dependency_unavailable / verification / task_resolution; misses at
+turn-1 diagnosis (reads focused_validation); public_j has a focused_validation bias (7/10).
+
+**Steps:**
+- [x] `swe_task_state_v4_cot_concept_faithfulness.py` (+ test, 4 pass): aligns free
+      events to concept boundaries by (request_index, offset), scores internal top-1
+      vs the CoT-implied concept, cross-checks free events vs human positive labels.
+- [x] Folded into the report (v2) as `cot_faithfulness`, distinct from the
+      reliability flag.
+- [x] **RESULT (honest): WEAK/PARTIAL.** Internal concept-chain top-1 matches the
+      model's own CoT-implied concept only **0.33** of the time (3/9 events; 0.40 on
+      strict-fidelity boundaries). The free CoT events DO agree with human labels
+      (~1.0), but the internal readout tracks neither reliably, and public_j has a
+      focused_validation bias (7/10). i.e. on this task the lens does NOT reliably
+      encode what the CoT claims — the falsifying result the design doc foreshadowed.
+- [ ] (enrichment) report the uncertain-mapping events separately; add native_j
+      agreement + the focused_validation-bias note.
+- [ ] **DESIGN FORK (surface, don't guess):** cohort-scale faithfulness requires
+      running the concept-chain lens over the N60 cohort — heavy, and the single-task
+      result is already weak. Ask the user whether it's worth it before doing.
+
+**Loop discipline unchanged:** pause on a NEW design fork (e.g. the mapping being
+too ambiguous, or the cohort-scale decision); stop when the faithfulness result is
+in the report and green.
 
 ## Loop discipline
 - Advance concrete build/test/eval steps autonomously; commit + push each step.
