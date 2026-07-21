@@ -69,6 +69,12 @@ def _topk_ids(candidate_rankings: dict[str, Any], source: str) -> list[str]:
     return [entry["concept_id"] for entry in ranked]
 
 
+def _full_scores(candidate_rankings: dict[str, Any], source: str) -> dict[str, float]:
+    block = candidate_rankings.get(source, {})
+    ranked = block.get("full_ranking") or []
+    return {e["concept_id"]: e["mean_logprob_score"] for e in ranked}
+
+
 def load_concept_boundaries(path: Path = CONCEPT_CHAIN_ARTIFACT) -> list[dict[str, Any]]:
     doc = json.loads(Path(path).read_text())
     positives = {
@@ -86,7 +92,9 @@ def load_concept_boundaries(path: Path = CONCEPT_CHAIN_ARTIFACT) -> list[dict[st
                 "offset": off,
                 "public_j_top1": _top1(cr, "public_j"),
                 "public_j_topk": _topk_ids(cr, "public_j"),
+                "public_j_scores": _full_scores(cr, "public_j"),
                 "native_j_top1": _top1(cr, "native_j"),
+                "native_j_scores": _full_scores(cr, "native_j"),
                 "selected_concept_id": b.get("selection", {}).get("selected_concept_id"),
                 "paired_strict_pass": b.get("numerical_fidelity", {}).get(
                     "paired_strict_adapter_pass", False
@@ -94,7 +102,37 @@ def load_concept_boundaries(path: Path = CONCEPT_CHAIN_ARTIFACT) -> list[dict[st
                 "human_positive_concept_ids": positives.get((ri, off), []),
             }
         )
+    _attach_baseline_centered_top1(out)
     return out
+
+
+def _attach_baseline_centered_top1(boundaries: list[dict[str, Any]]) -> None:
+    """Re-rank each boundary by score MINUS a leave-one-out per-family baseline.
+
+    The raw concept score is an absolute mean log-prob, so high-token-frequency
+    families (focused_validation, verification) win regardless of the active
+    concept. Centering each family by its baseline over the other boundaries
+    removes that bias and yields the concept that is unusually elevated HERE.
+    """
+    for source in ("public_j", "native_j"):
+        key = f"{source}_scores"
+        families = sorted({f for b in boundaries for f in b[key]})
+        n = len(boundaries)
+        for i, b in enumerate(boundaries):
+            centered = {}
+            for f in families:
+                if f not in b[key]:
+                    continue
+                others = [
+                    boundaries[j][key][f]
+                    for j in range(n)
+                    if j != i and f in boundaries[j][key]
+                ]
+                baseline = sum(others) / len(others) if others else 0.0
+                centered[f] = b[key][f] - baseline
+            b[f"{source}_centered_top1"] = (
+                max(centered, key=centered.get) if centered else None
+            )
 
 
 def _event_coordinates(trajectory_path: Path | None = None) -> dict[str, tuple[int, int]]:
@@ -141,8 +179,10 @@ def _score_mapping(
                 "aligned_boundary": {"request_index": b["request_index"], "offset": b["offset"]},
                 "internal_public_j_top1": b["public_j_top1"],
                 "internal_native_j_top1": b["native_j_top1"],
+                "internal_public_j_centered_top1": b.get("public_j_centered_top1"),
                 "match_top1": b["public_j_top1"] == concept,
                 "match_top1_native_j": b["native_j_top1"] == concept,
+                "match_top1_centered": b.get("public_j_centered_top1") == concept,
                 "match_topk": concept in b["public_j_topk"],
                 "paired_strict_pass": b["paired_strict_pass"],
                 "human_positive_concept_ids": b["human_positive_concept_ids"],
@@ -156,6 +196,12 @@ def _score_mapping(
         "faithfulness_top1_agreement_all": _rate(rows, "match_top1"),
         "faithfulness_top1_agreement_strict": _rate(strict, "match_top1"),
         "faithfulness_top1_agreement_native_j_all": _rate(rows, "match_top1_native_j"),
+        "faithfulness_top1_agreement_baseline_centered_all": _rate(
+            rows, "match_top1_centered"
+        ),
+        "faithfulness_top1_agreement_baseline_centered_strict": _rate(
+            strict, "match_top1_centered"
+        ),
         "faithfulness_topk_agreement_all": _rate(rows, "match_topk"),
         "free_event_vs_human_label_agreement": _rate(rows, "cot_agrees_with_human_label"),
         "per_event": rows,
@@ -167,13 +213,22 @@ def _focused_validation_bias(boundaries: list[dict[str, Any]]) -> dict[str, Any]
     if n == 0:
         return {}
     return {
-        "note": "public_j collapses onto focused_validation regardless of the boundary",
+        "note": "raw public_j collapses onto focused_validation (baseline-frequency bias); "
+        "leave-one-out per-family centering removes the collapse",
         "n_boundaries": n,
-        "public_j_top1_is_focused_validation": (
+        "public_j_top1_is_focused_validation_raw": (
             sum(1 for b in boundaries if b["public_j_top1"] == "focused_validation") / n
         ),
-        "native_j_top1_is_focused_validation": (
+        "native_j_top1_is_focused_validation_raw": (
             sum(1 for b in boundaries if b["native_j_top1"] == "focused_validation") / n
+        ),
+        "public_j_top1_is_focused_validation_centered": (
+            sum(
+                1
+                for b in boundaries
+                if b.get("public_j_centered_top1") == "focused_validation"
+            )
+            / n
         ),
     }
 

@@ -125,17 +125,20 @@ def build_report(*, permutations: int = 2000) -> dict[str, Any]:
             "the model's own CoT claims at that boundary (top-1 agreement)",
             "distinct_from": "the lens_reliability_flag above (which is probe-vs-probe, not faithfulness)",
             "result": (
-                "WEAK/PARTIAL: internal top-1 matches the CoT-implied concept "
-                f"{faith['faithfulness_top1_agreement_all']:.2f} of the time (public_j) / "
-                f"{faith['faithfulness_top1_agreement_native_j_all']:.2f} (native_j) "
-                f"across {faith['n_mapped_events_aligned']} events; "
-                f"{faith['faithfulness_top1_agreement_strict']:.2f} on strict-fidelity "
-                f"boundaries. Free CoT events agree with human labels "
-                f"{faith['free_event_vs_human_label_agreement']:.2f}, but the internal "
-                "readout tracks neither reliably. Root cause: public_j collapses onto "
-                f"focused_validation on "
-                f"{faith['focused_validation_bias']['public_j_top1_is_focused_validation']:.1f} "
-                "of boundaries (a degenerate bias)."
+                "MODERATE after a probe fix. RAW internal top-1 matched the CoT-implied "
+                f"concept only {faith['faithfulness_top1_agreement_all']:.2f} — but that was "
+                "largely a PROBE ARTIFACT: the raw score is an absolute mean log-prob, so "
+                "high-frequency families win, and public_j collapsed onto focused_validation "
+                f"on {faith['focused_validation_bias']['public_j_top1_is_focused_validation_raw']:.1f} "
+                "of boundaries. Leave-one-out per-family BASELINE CENTERING removes the "
+                f"collapse (focused_validation share -> "
+                f"{faith['focused_validation_bias']['public_j_top1_is_focused_validation_centered']:.1f}) "
+                "and lifts agreement to "
+                f"{faith['faithfulness_top1_agreement_baseline_centered_all']:.2f} overall / "
+                f"{faith['faithfulness_top1_agreement_baseline_centered_strict']:.2f} on "
+                "strict-fidelity boundaries. So the lens PARTIALLY tracks the CoT once the "
+                "baseline bias is corrected; free CoT events agree with human labels "
+                f"{faith['free_event_vs_human_label_agreement']:.2f}. Still single-task/uncalibrated."
             ),
             **faith,
         }
@@ -183,9 +186,11 @@ def main(argv: Any = None) -> int:
     if "cot_faithfulness" in report:
         cf = report["cot_faithfulness"]
         print(
-            f"  CoT faithfulness (real): internal concept matches CoT claim"
-            f" {cf['faithfulness_top1_agreement_all']:.2f} top-1"
-            f" ({cf['n_mapped_events_aligned']} events, single task) — WEAK/PARTIAL"
+            f"  CoT faithfulness (real): internal-concept vs CoT top-1"
+            f" raw={cf['faithfulness_top1_agreement_all']:.2f} ->"
+            f" baseline-centered={cf['faithfulness_top1_agreement_baseline_centered_all']:.2f}"
+            f" ({cf['faithfulness_top1_agreement_baseline_centered_strict']:.2f} strict);"
+            f" raw collapse was a probe artifact — MODERATE after fix, single task"
         )
     return 0
 

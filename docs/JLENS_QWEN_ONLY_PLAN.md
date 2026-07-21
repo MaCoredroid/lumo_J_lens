@@ -175,11 +175,29 @@ turn-1 diagnosis (reads focused_validation); public_j has a focused_validation b
       cause of the weak faithfulness). All in report v2. Suite 224 passed.
 
 **P4 enrichments COMPLETE. Only the cohort-scale fork remains → loop STOPPED.**
-- [ ] **DESIGN FORK (user):** cohort-scale faithfulness requires running the
-      concept-chain lens over the N60 cohort — heavy, and the single-task result is
-      already weak with a degenerate public_j bias. Is it worth scaling, or is
-      "the concept-chain lens does not faithfully track the CoT" a sufficient finding
-      to record and move on? Do NOT start without the user.
+- [~] cohort-scale fork was surfaced; user chose **"diagnose/fix the probe first"** ->
+      superseded by P5.
+
+## P5 — diagnose + fix the concept-probe degeneracy (user, 2026-07-20)
+- [x] **Diagnosed:** the collapse is a BASELINE-FREQUENCY artifact, not model
+      unfaithfulness. The concept score is an absolute mean log-prob over a family's
+      token forms with NO baseline correction, so high-frequency families dominate:
+      focused_validation has the highest baseline mean (-12.96) and the CoT-mapped
+      families sit near the bottom (source_localization -16.4, located_source -16.9).
+- [x] **Fixed (post-hoc re-ranking):** leave-one-out per-family baseline centering in
+      `swe_task_state_v4_cot_concept_faithfulness.py::_attach_baseline_centered_top1`.
+      Effect: focused_validation top-1 share 6/10 -> 0/10; CoT-faithfulness top-1
+      **0.33 -> 0.44 overall, 0.40 -> 0.60 on strict-fidelity boundaries**. So much of
+      the "weak faithfulness" WAS a probe artifact; the lens PARTIALLY tracks the CoT
+      once corrected. Report v2 reframed accordingly. Suite 224 passed.
+- [ ] (follow-on) the fix is a POST-HOC re-rank using an LOO baseline over the 10 eval
+      boundaries; a production fix would bake a proper reference/null-context baseline
+      into `concept_chain.py` itself (heavier; re-runs the lens). And residual misses
+      are partly semantic-adjacency (source_localization vs located_source) + offset
+      alignment — a family-group match would raise agreement further.
+- [ ] **RE-OPENED FORK (user):** now that the probe fix roughly recovers a moderate
+      faithfulness signal, is cohort-scale worth it (bake the baseline fix into
+      concept_chain.py + run over N60)? Surface, do not start without the user.
 
 **Loop discipline unchanged:** pause on a NEW design fork (e.g. the mapping being
 too ambiguous, or the cohort-scale decision); stop when the faithfulness result is

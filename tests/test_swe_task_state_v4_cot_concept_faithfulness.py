@@ -62,10 +62,13 @@ class RealTaskFaithfulnessTests(unittest.TestCase):
         # uncertain (lower-confidence) mapping reported separately
         self.assertIn("uncertain_mapping", r)
         self.assertIn("n_mapped_events_aligned", r["uncertain_mapping"])
-        # the focused_validation degeneracy is quantified over all boundaries
+        # baseline-centered agreement is reported alongside raw
+        self.assertIsNotNone(r["faithfulness_top1_agreement_baseline_centered_all"])
+        # the focused_validation degeneracy is quantified, and centering removes it
         bias = r["focused_validation_bias"]
         self.assertEqual(bias["n_boundaries"], 10)
-        self.assertGreater(bias["public_j_top1_is_focused_validation"], 0.4)
+        self.assertGreater(bias["public_j_top1_is_focused_validation_raw"], 0.4)
+        self.assertLess(bias["public_j_top1_is_focused_validation_centered"], 0.2)
 
     def test_known_boundaries(self):
         by_event = {row["event"]: row for row in self.result["per_event"]}
