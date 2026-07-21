@@ -37,9 +37,15 @@ def _scorer():
 
 def compute(report_path: Path = DEFAULT_REPORT) -> dict[str, Any]:
     scorer = _scorer()
-    report = json.loads(Path(report_path).read_text())
-    meta_by_id = {e.get("id"): (e.get("metadata") or {}) for e in report.get("experiments", [])}
-    rows = scorer.score_report(Path(report_path))
+    report = json.loads(Path(report_path).read_text())  # load once (report can be ~600 MB)
+    experiments = report.get("experiments", [])
+    meta_by_id = {e.get("id"): (e.get("metadata") or {}) for e in experiments}
+    family_ids = scorer.family_token_ids()
+    rows = []
+    for i, e in enumerate(experiments):
+        scores = scorer.score_experiment(e, family_ids)
+        rows.append({"index": i, "id": e.get("id"), "family_scores": scores, "top1": scorer._top1(scores)})
+    scorer._attach_centered_top1(rows)
 
     records = []
     for r in rows:

@@ -17,3 +17,4 @@ __pycache__/
 /validation/jlens-swe-behavioral-n20-2026-07-18/.pilot.lock/
 /validation/jlens-swe-behavioral-n20-2026-07-18/.latest.tmp.*
 /validation/jlens-swe-behavioral-n20-2026-07-18/.latest-prepared.tmp.*
+artifacts/cohort-perturn-readout-*.json

@@ -413,10 +413,23 @@ readout). Plus the Qwen tagger on each task's CoT. Then faithfulness across task
       full related suite 15 pass) joins the readout's baseline-centered top-1 to each turn's tag
       -> cohort faithfulness (centered + raw), per-family recall, per-task, vs the majority-class
       + uniform baselines; excludes `none` tags.
-- [~] RUNNING: VJP capture (`run_jlens_nvfp4.sh --lens-kind public`, layers 16-47, pos -1,
-      general-vocab scored tokens, max-model-len 32768) over the 293 boundaries ->
-      artifacts/cohort-perturn-readout-v3.json. GPU util oscillates 18%<->100% (host-bound
-      per-layer readout between GPU prefills); one-shot, acceptable. Next: score -> report v3.
+- [x] CAPTURE DONE: VJP capture (`run_jlens_nvfp4.sh --lens-kind public`, layers 16-47, pos -1,
+      general-vocab scored tokens, max-model-len 32768) over the 293 boundaries in ~7 min
+      (prefix caching across same-task turns) -> artifacts/cohort-perturn-readout-v3.json (606 MB,
+      293 exps x 32 layers x 63 scored_tokens; status:"failed" = expected lens marker).
+- [x] **COHORT FAITHFULNESS COMPUTED (n=290; report v3 = docs/JLENS_COHORT_FAITHFULNESS_REPORT_v3.md).**
+      Baseline-centered top-1 vs tag = **0.307** (4.3x uniform 0.071); raw = 0.448 (~= majority-class
+      baseline 0.493 -> raw is base-rate). VERDICT: **partial, CONCEPT-DEPENDENT faithfulness** —
+      the lens genuinely encodes `verification` (centered recall 0.784, barely below raw 0.882 ->
+      real, not base-rate) and `substitution` (0.714; centering UNMASKS it), moderately encodes
+      failure_confirmation/dependency/focused_validation, but does NOT encode the
+      localize/edit/repair/resolve family (source_edit 0.48 raw -> 0.04 centered = pure base-rate
+      artifact; repair 0.05; task_resolution 0.0). Coverage caveat: 293/535, early/mid bias
+      (resolve/validate thinly measured). Levers noted for the user: per-layer sweep (all-layer
+      averaging may dilute), richer/per-family vocab, full-coverage bounded-context cross-check.
+      Suite: my 22 cohort-pipeline tests green (unrelated counterfactual/parked-epistemic tests
+      error only on missing readout-venv deps: transformers/safetensors/pytest/openai-harmony).
+- [x] STOP: per-turn cohort faithfulness is in report v3 + suite green -> loop stopped.
 
 **Loop discipline unchanged:** pause on a NEW design fork (e.g. the mapping being
 too ambiguous, or the cohort-scale decision); stop when the faithfulness result is
