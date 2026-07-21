@@ -317,7 +317,16 @@ readout). Plus the Qwen tagger on each task's CoT. Then faithfulness across task
       fragile reconstruction, no separate tokenizer. Caveat: proxy dumps exist for some runs
       only + are globally numbered -> need dump->task/turn mapping. `render_request` core is
       generic; the single-task hard-wiring is only validation constants.
-- [ ] Generalize + SPEED-optimize the VJP capture: batch across tasks/boundaries, keep
+- [x] **The multitask capture pipeline ALREADY EXISTS — no from-scratch build.**
+      `run_swe_multitask_c1_pilot.sh` -> `materialize_swe_multitask_c1_probes.py` (builds
+      the prompts-file from the SAME proxy dumps) -> `run_jlens_nvfp4.sh` (VJP capture) ->
+      per-task public/native-report.json. J checkpoint exists + is task-independent
+      (`.cache/Qwen3.6-27B-jlens-nvfp4-ste-n10-fp32.pt`). RAN `--prepare-only` (CPU): built
+      8 C1 prompts (xarray, scikit-learn, django-13297, ...), 1 boundary/task. Pipeline
+      proven. To get per-turn faithfulness: extend to per-turn boundaries (proxy dumps are
+      already per-request/turn) at the end-of-thinking, then run the GPU capture
+      (coordinate GPU with the tagger server — capture loads its own vLLM).
+- [ ] Build the per-turn prompts-file + run the VJP capture over the cohort: batch across tasks/boundaries, keep
       GPU util high (profile; target >0.78 effective, fix host-bound stalls), capture only
       the per-turn concept boundaries (not all offsets) to cut cost.
 - [ ] Generalize the probe/concept-chain readout per task; tag each task's CoT.
