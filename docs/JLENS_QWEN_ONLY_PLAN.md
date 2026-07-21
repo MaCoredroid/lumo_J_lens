@@ -269,10 +269,18 @@ Both Qwen-only; drops the hand-curated event->concept mapping.
       auto-tagger vs hand-curated labels = **6/9 = 0.67 strict, 8/9 = 0.89
       adjacency-aware** (1 defensible miss, turn 3). The tagger reliably reproduces the
       hand labels -> trustworthy to scale. Server on 9952 (systemd lumo_j_lens_qwen27b).
-- [ ] Generalize `materialize_swe_intermediate_probes.py` to run over cohort tasks
-      (concept-probe capture, GPU) — the long-running monitored job.
-- [ ] Run tagger + probe-gen over the cohort; compute cohort faithfulness
-      (tagged concept vs internal centered top-1) + report v3.
+- [!] **CAPTURE-COST FORK (paused for user, 2026-07-20).** Assessed the cohort capture:
+      - Tagger side is CHEAP: 143 cohort task traces exist under runs/.../per_task/
+        (astropy, sympy, ...); the tagger can run cohort-wide (~1300 Qwen calls, ~20 min).
+      - Internal side is HEAVY + not done: NO cohort concept-probe capture exists;
+        `materialize_swe_intermediate_probes.py` hard-errors off one-task; the
+        Jacobian-lens readout capture (swe_task_state_readout.py) must be generalized +
+        run over ~15k cohort boundaries (demo = 293 boundaries / 149 MB; cohort ~50x =
+        many hours GPU + ~9 GB). This is the "capture cost" pause fork.
+      Options surfaced: (A) scaled-down 5-10 tasks -> n>1, ~1 hr GPU (recommended first);
+      (B) full N60 -> hours GPU + big pipeline work; (C) tagger-only cohort
+      characterization now (cheap, no faithfulness); (D) stop at the validated tagger.
+- [ ] Compute cohort faithfulness (tagged concept vs internal centered top-1) + report v3.
 - PAUSE on genuine design forks (taxonomy fit, poor tagger agreement, capture-cost).
 - STOP when cohort faithfulness is computed + in the report, green.
 
