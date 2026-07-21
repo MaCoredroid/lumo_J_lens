@@ -291,8 +291,12 @@ Pipeline to generalize off single-task (each currently hard-wired to swe-sympy-1
 -> `materialize_swe_intermediate_probes.py` (probe reports) -> `concept_chain.py` (17-family
 readout). Plus the Qwen tagger on each task's CoT. Then faithfulness across tasks.
 - [x] Robust cohort trace reader `swe_task_state_v4_cohort_traces.py` (+ test):
-      handles the heterogeneous corpus (JSON list / JSONL / empty, ~17 runs) and
-      extracts per-turn CoT. **Survey: 20 usable tasks / 535 turns** (django, matplotlib,
+      reads the qwen-code trace corpus and extracts per-turn CoT. CORRECTION (user
+      caught this): the traces are NOT heterogeneous JSON/JSONL — they are ONE clean
+      format, a JSON ARRAY of qwen-code stream events per task (qwen3.6-27b via the
+      qwen-code CLI). Across ~17 runs: 44 clean json-array traces + 39 EMPTY (0-byte)
+      files from failed/superseded runs (swe_multitask_c1_host v1/v2/v5/v7 empty;
+      v3/v4 populated). No JSONL exists; the reader's jsonl branch is dead code (harmless). **Survey: 20 usable tasks / 535 turns** (django, matplotlib,
       seaborn, requests, xarray, astropy...) — a real statistical cohort, not n=1. At
       ~0.54s/boundary the 535-boundary capture is ~tens of minutes. NOTE: the pipeline
       is hand-curated deeper than events (per-task hashes/stage-names/counts in
