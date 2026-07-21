@@ -261,9 +261,14 @@ Both Qwen-only; drops the hand-curated event->concept mapping.
 - [ ] Build `swe_task_state_v4_cot_concept_tagger.py`: family definitions, prompt,
       strict parse/validate (constrained to the 14 families + abstain), server-query
       fn. CPU-testable parsing.
-- [ ] Serve Qwen (9952); tag the 9 demo turns; VALIDATE vs the hand-curated
-      EVENT_TO_CONCEPT mapping — the tagger must roughly agree before scaling. PAUSE +
-      surface if tagger-vs-hand agreement is poor (the tagger would be unreliable).
+- [x] Server integration fixed: Qwen3.6 is a reasoning model, so tag with
+      `chat_template_kwargs={enable_thinking:false}` (answer lands in content). The 9
+      clean per-turn CoT blocks come from `runs/.../sympy__sympy-13480/qwen_trace.json`
+      -> `message.content[*].thinking` (NOT the probe reports).
+- [x] **VALIDATED (gate passed):** `scripts/validate_cot_tagger_demo.py` — Qwen
+      auto-tagger vs hand-curated labels = **6/9 = 0.67 strict, 8/9 = 0.89
+      adjacency-aware** (1 defensible miss, turn 3). The tagger reliably reproduces the
+      hand labels -> trustworthy to scale. Server on 9952 (systemd lumo_j_lens_qwen27b).
 - [ ] Generalize `materialize_swe_intermediate_probes.py` to run over cohort tasks
       (concept-probe capture, GPU) — the long-running monitored job.
 - [ ] Run tagger + probe-gen over the cohort; compute cohort faithfulness

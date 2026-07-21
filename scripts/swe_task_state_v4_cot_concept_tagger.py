@@ -88,7 +88,11 @@ def tag_cot_text(
         "model": model,
         "messages": build_prompt(cot_text),
         "temperature": 0,
-        "max_tokens": 8,
+        "max_tokens": 16,
+        # Qwen3.6 is served with a reasoning parser; disable thinking so the
+        # classification answer lands directly in message.content (not consumed as
+        # reasoning tokens) and the short token budget suffices.
+        "chat_template_kwargs": {"enable_thinking": False},
     }
     request = urllib.request.Request(
         f"{base_url}/chat/completions",
