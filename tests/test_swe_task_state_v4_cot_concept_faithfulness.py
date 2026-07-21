@@ -55,6 +55,18 @@ class RealTaskFaithfulnessTests(unittest.TestCase):
             self.assertGreaterEqual(r[key], 0.0)
             self.assertLessEqual(r[key], 1.0)
 
+    def test_enrichments_present(self):
+        r = self.result
+        # native_j agreement reported alongside public_j
+        self.assertIsNotNone(r["faithfulness_top1_agreement_native_j_all"])
+        # uncertain (lower-confidence) mapping reported separately
+        self.assertIn("uncertain_mapping", r)
+        self.assertIn("n_mapped_events_aligned", r["uncertain_mapping"])
+        # the focused_validation degeneracy is quantified over all boundaries
+        bias = r["focused_validation_bias"]
+        self.assertEqual(bias["n_boundaries"], 10)
+        self.assertGreater(bias["public_j_top1_is_focused_validation"], 0.4)
+
     def test_known_boundaries(self):
         by_event = {row["event"]: row for row in self.result["per_event"]}
         # task_resolved: internal top-1 encodes task_resolution -> a genuine match

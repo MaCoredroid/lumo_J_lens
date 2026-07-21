@@ -117,16 +117,15 @@ def _nearest_boundary(
     return min(same_turn, key=lambda b: abs(b["offset"] - offset))
 
 
-def score_faithfulness(
-    *,
-    concept_path: Path = CONCEPT_CHAIN_ARTIFACT,
-    trajectory_path: Path | None = None,
-    mapping: dict[str, str] | None = None,
-) -> dict[str, Any]:
-    mapping = EVENT_TO_CONCEPT if mapping is None else mapping
-    boundaries = load_concept_boundaries(concept_path)
-    coords = _event_coordinates(trajectory_path)
+def _rate(items: list[dict[str, Any]], key: str) -> float | None:
+    return (sum(1 for r in items if r[key]) / len(items)) if items else None
 
+
+def _score_mapping(
+    boundaries: list[dict[str, Any]],
+    coords: dict[str, tuple[int, int]],
+    mapping: dict[str, str],
+) -> dict[str, Any]:
     rows = []
     for event, concept in mapping.items():
         if event not in coords:
@@ -141,28 +140,65 @@ def score_faithfulness(
                 "cot_implied_concept": concept,
                 "aligned_boundary": {"request_index": b["request_index"], "offset": b["offset"]},
                 "internal_public_j_top1": b["public_j_top1"],
+                "internal_native_j_top1": b["native_j_top1"],
                 "match_top1": b["public_j_top1"] == concept,
+                "match_top1_native_j": b["native_j_top1"] == concept,
                 "match_topk": concept in b["public_j_topk"],
                 "paired_strict_pass": b["paired_strict_pass"],
                 "human_positive_concept_ids": b["human_positive_concept_ids"],
                 "cot_agrees_with_human_label": concept in b["human_positive_concept_ids"],
             }
         )
-
-    def _rate(items: list[dict[str, Any]], key: str) -> float | None:
-        return (sum(1 for r in items if r[key]) / len(items)) if items else None
-
     strict = [r for r in rows if r["paired_strict_pass"]]
     return {
-        "task": "swe-sympy-13480",
-        "reliability_status": "descriptive_single_task_uncalibrated",
         "n_mapped_events_aligned": len(rows),
         "n_on_strict_fidelity_boundaries": len(strict),
         "faithfulness_top1_agreement_all": _rate(rows, "match_top1"),
         "faithfulness_top1_agreement_strict": _rate(strict, "match_top1"),
+        "faithfulness_top1_agreement_native_j_all": _rate(rows, "match_top1_native_j"),
         "faithfulness_topk_agreement_all": _rate(rows, "match_topk"),
         "free_event_vs_human_label_agreement": _rate(rows, "cot_agrees_with_human_label"),
         "per_event": rows,
+    }
+
+
+def _focused_validation_bias(boundaries: list[dict[str, Any]]) -> dict[str, Any]:
+    n = len(boundaries)
+    if n == 0:
+        return {}
+    return {
+        "note": "public_j collapses onto focused_validation regardless of the boundary",
+        "n_boundaries": n,
+        "public_j_top1_is_focused_validation": (
+            sum(1 for b in boundaries if b["public_j_top1"] == "focused_validation") / n
+        ),
+        "native_j_top1_is_focused_validation": (
+            sum(1 for b in boundaries if b["native_j_top1"] == "focused_validation") / n
+        ),
+    }
+
+
+def score_faithfulness(
+    *,
+    concept_path: Path = CONCEPT_CHAIN_ARTIFACT,
+    trajectory_path: Path | None = None,
+    mapping: dict[str, str] | None = None,
+) -> dict[str, Any]:
+    boundaries = load_concept_boundaries(concept_path)
+    coords = _event_coordinates(trajectory_path)
+    headline = _score_mapping(
+        boundaries, coords, EVENT_TO_CONCEPT if mapping is None else mapping
+    )
+    uncertain = _score_mapping(boundaries, coords, UNCERTAIN_EVENT_TO_CONCEPT)
+    return {
+        "task": "swe-sympy-13480",
+        "reliability_status": "descriptive_single_task_uncalibrated",
+        **headline,
+        "uncertain_mapping": {
+            "note": "lower-confidence event->concept; excluded from the headline",
+            **uncertain,
+        },
+        "focused_validation_bias": _focused_validation_bias(boundaries),
     }
 
 

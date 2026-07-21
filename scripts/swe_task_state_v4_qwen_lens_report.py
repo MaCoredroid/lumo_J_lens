@@ -126,12 +126,16 @@ def build_report(*, permutations: int = 2000) -> dict[str, Any]:
             "distinct_from": "the lens_reliability_flag above (which is probe-vs-probe, not faithfulness)",
             "result": (
                 "WEAK/PARTIAL: internal top-1 matches the CoT-implied concept "
-                f"{faith['faithfulness_top1_agreement_all']:.2f} of the time "
-                f"({faith['n_mapped_events_aligned']} events; "
+                f"{faith['faithfulness_top1_agreement_all']:.2f} of the time (public_j) / "
+                f"{faith['faithfulness_top1_agreement_native_j_all']:.2f} (native_j) "
+                f"across {faith['n_mapped_events_aligned']} events; "
                 f"{faith['faithfulness_top1_agreement_strict']:.2f} on strict-fidelity "
-                f"boundaries). Free CoT events agree with human labels "
+                f"boundaries. Free CoT events agree with human labels "
                 f"{faith['free_event_vs_human_label_agreement']:.2f}, but the internal "
-                "readout tracks neither reliably."
+                "readout tracks neither reliably. Root cause: public_j collapses onto "
+                f"focused_validation on "
+                f"{faith['focused_validation_bias']['public_j_top1_is_focused_validation']:.1f} "
+                "of boundaries (a degenerate bias)."
             ),
             **faith,
         }

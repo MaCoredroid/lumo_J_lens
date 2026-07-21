@@ -168,11 +168,18 @@ turn-1 diagnosis (reads focused_validation); public_j has a focused_validation b
       (~1.0), but the internal readout tracks neither reliably, and public_j has a
       focused_validation bias (7/10). i.e. on this task the lens does NOT reliably
       encode what the CoT claims — the falsifying result the design doc foreshadowed.
-- [ ] (enrichment) report the uncertain-mapping events separately; add native_j
-      agreement + the focused_validation-bias note.
-- [ ] **DESIGN FORK (surface, don't guess):** cohort-scale faithfulness requires
-      running the concept-chain lens over the N60 cohort — heavy, and the single-task
-      result is already weak. Ask the user whether it's worth it before doing.
+- [x] (enrichment) uncertain-mapping events reported separately (top-1 0.25, n=4 —
+      even weaker); native_j agreement added (0.33, also weak — not a public_j
+      artifact); focused_validation-bias quantified (public_j collapses to
+      focused_validation on 6/10 boundaries, native_j 3/10 — the degenerate root
+      cause of the weak faithfulness). All in report v2. Suite 224 passed.
+
+**P4 enrichments COMPLETE. Only the cohort-scale fork remains → loop STOPPED.**
+- [ ] **DESIGN FORK (user):** cohort-scale faithfulness requires running the
+      concept-chain lens over the N60 cohort — heavy, and the single-task result is
+      already weak with a degenerate public_j bias. Is it worth scaling, or is
+      "the concept-chain lens does not faithfully track the CoT" a sufficient finding
+      to record and move on? Do NOT start without the user.
 
 **Loop discipline unchanged:** pause on a NEW design fork (e.g. the mapping being
 too ambiguous, or the cohort-scale decision); stop when the faithfulness result is
