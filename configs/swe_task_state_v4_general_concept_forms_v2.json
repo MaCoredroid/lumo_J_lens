@@ -1,0 +1,667 @@
+{
+  "kind": "swe_task_state_v4_general_concept_forms_v2",
+  "task_independent": true,
+  "n_families_scorable": 14,
+  "unscorable_families": [],
+  "shared_tokens_dropped": [],
+  "families": {
+    "source_localization": [
+      {
+        "form": "locate",
+        "surface": " locate",
+        "token_id": 23748
+      },
+      {
+        "form": "where",
+        "surface": " where",
+        "token_id": 1332
+      },
+      {
+        "form": "search",
+        "surface": " search",
+        "token_id": 2624
+      },
+      {
+        "form": "locating",
+        "surface": " locating",
+        "token_id": 69449
+      },
+      {
+        "form": "pinpoint",
+        "surface": " pinpoint",
+        "token_id": 64289
+      },
+      {
+        "form": "find",
+        "surface": " find",
+        "token_id": 1423
+      },
+      {
+        "form": "look",
+        "surface": " look",
+        "token_id": 1353
+      },
+      {
+        "form": "grep",
+        "surface": " grep",
+        "token_id": 20049
+      },
+      {
+        "form": "inspect",
+        "surface": " inspect",
+        "token_id": 23331
+      },
+      {
+        "form": "examine",
+        "surface": " examine",
+        "token_id": 20321
+      },
+      {
+        "form": "trace",
+        "surface": " trace",
+        "token_id": 11319
+      },
+      {
+        "form": "hunt",
+        "surface": " hunt",
+        "token_id": 18500
+      },
+      {
+        "form": "explore",
+        "surface": " explore",
+        "token_id": 12804
+      },
+      {
+        "form": "scan",
+        "surface": " scan",
+        "token_id": 8307
+      }
+    ],
+    "substitution_operation": [
+      {
+        "form": "replace",
+        "surface": " replace",
+        "token_id": 8032
+      },
+      {
+        "form": "substitute",
+        "surface": " substitute",
+        "token_id": 26782
+      },
+      {
+        "form": "swap",
+        "surface": " swap",
+        "token_id": 13881
+      },
+      {
+        "form": "replacing",
+        "surface": " replacing",
+        "token_id": 24101
+      },
+      {
+        "form": "swapping",
+        "surface": " swapping",
+        "token_id": 61569
+      },
+      {
+        "form": "replaced",
+        "surface": " replaced",
+        "token_id": 12215
+      },
+      {
+        "form": "swapped",
+        "surface": " swapped",
+        "token_id": 55045
+      }
+    ],
+    "located_source": [
+      {
+        "form": "located",
+        "surface": " located",
+        "token_id": 7172
+      },
+      {
+        "form": "here",
+        "surface": " here",
+        "token_id": 1532
+      },
+      {
+        "form": "spotted",
+        "surface": " spotted",
+        "token_id": 28588
+      },
+      {
+        "form": "found",
+        "surface": " found",
+        "token_id": 1669
+      },
+      {
+        "form": "culprit",
+        "surface": " culprit",
+        "token_id": 71660
+      },
+      {
+        "form": "offending",
+        "surface": " offending",
+        "token_id": 67211
+      },
+      {
+        "form": "responsible",
+        "surface": " responsible",
+        "token_id": 8220
+      }
+    ],
+    "defined_identifier": [
+      {
+        "form": "identifier",
+        "surface": " identifier",
+        "token_id": 12448
+      },
+      {
+        "form": "variable",
+        "surface": " variable",
+        "token_id": 3759
+      },
+      {
+        "form": "attribute",
+        "surface": " attribute",
+        "token_id": 6816
+      },
+      {
+        "form": "symbol",
+        "surface": " symbol",
+        "token_id": 7489
+      },
+      {
+        "form": "method",
+        "surface": " method",
+        "token_id": 1654
+      },
+      {
+        "form": "parameter",
+        "surface": " parameter",
+        "token_id": 5555
+      },
+      {
+        "form": "argument",
+        "surface": " argument",
+        "token_id": 5515
+      },
+      {
+        "form": "keyword",
+        "surface": " keyword",
+        "token_id": 15698
+      },
+      {
+        "form": "property",
+        "surface": " property",
+        "token_id": 3234
+      },
+      {
+        "form": "field",
+        "surface": " field",
+        "token_id": 2002
+      }
+    ],
+    "runtime_name_failure": [
+      {
+        "form": "undefined",
+        "surface": " undefined",
+        "token_id": 5438
+      },
+      {
+        "form": "crash",
+        "surface": " crash",
+        "token_id": 9626
+      },
+      {
+        "form": "traceback",
+        "surface": " traceback",
+        "token_id": 44521
+      },
+      {
+        "form": "exception",
+        "surface": " exception",
+        "token_id": 4531
+      },
+      {
+        "form": "broken",
+        "surface": " broken",
+        "token_id": 10548
+      },
+      {
+        "form": "typo",
+        "surface": " typo",
+        "token_id": 82170
+      },
+      {
+        "form": "raises",
+        "surface": " raises",
+        "token_id": 24096
+      },
+      {
+        "form": "raised",
+        "surface": " raised",
+        "token_id": 8953
+      }
+    ],
+    "failure_confirmation": [
+      {
+        "form": "fails",
+        "surface": " fails",
+        "token_id": 14107
+      },
+      {
+        "form": "reproduce",
+        "surface": " reproduce",
+        "token_id": 22090
+      },
+      {
+        "form": "reproduced",
+        "surface": " reproduced",
+        "token_id": 52783
+      },
+      {
+        "form": "failing",
+        "surface": " failing",
+        "token_id": 20738
+      },
+      {
+        "form": "repro",
+        "surface": " repro",
+        "token_id": 50949
+      },
+      {
+        "form": "failure",
+        "surface": " failure",
+        "token_id": 7652
+      },
+      {
+        "form": "breaks",
+        "surface": " breaks",
+        "token_id": 17758
+      },
+      {
+        "form": "confirmed",
+        "surface": " confirmed",
+        "token_id": 10457
+      },
+      {
+        "form": "manifests",
+        "surface": " manifests",
+        "token_id": 80360
+      }
+    ],
+    "source_edit": [
+      {
+        "form": "edit",
+        "surface": " edit",
+        "token_id": 4351
+      },
+      {
+        "form": "modify",
+        "surface": " modify",
+        "token_id": 5427
+      },
+      {
+        "form": "change",
+        "surface": " change",
+        "token_id": 2222
+      },
+      {
+        "form": "editing",
+        "surface": " editing",
+        "token_id": 15205
+      },
+      {
+        "form": "rewrite",
+        "surface": " rewrite",
+        "token_id": 17591
+      },
+      {
+        "form": "update",
+        "surface": " update",
+        "token_id": 2560
+      },
+      {
+        "form": "patch",
+        "surface": " patch",
+        "token_id": 10582
+      },
+      {
+        "form": "adjust",
+        "surface": " adjust",
+        "token_id": 7265
+      },
+      {
+        "form": "alter",
+        "surface": " alter",
+        "token_id": 11263
+      },
+      {
+        "form": "modifying",
+        "surface": " modifying",
+        "token_id": 44504
+      },
+      {
+        "form": "changing",
+        "surface": " changing",
+        "token_id": 9722
+      }
+    ],
+    "repair": [
+      {
+        "form": "fix",
+        "surface": " fix",
+        "token_id": 4884
+      },
+      {
+        "form": "repair",
+        "surface": " repair",
+        "token_id": 12368
+      },
+      {
+        "form": "correct",
+        "surface": " correct",
+        "token_id": 4252
+      },
+      {
+        "form": "fixing",
+        "surface": " fixing",
+        "token_id": 34082
+      },
+      {
+        "form": "correcting",
+        "surface": " correcting",
+        "token_id": 78571
+      },
+      {
+        "form": "address",
+        "surface": " address",
+        "token_id": 2534
+      },
+      {
+        "form": "remedy",
+        "surface": " remedy",
+        "token_id": 37843
+      },
+      {
+        "form": "fixed",
+        "surface": " fixed",
+        "token_id": 8097
+      },
+      {
+        "form": "corrected",
+        "surface": " corrected",
+        "token_id": 34773
+      }
+    ],
+    "verification": [
+      {
+        "form": "verify",
+        "surface": " verify",
+        "token_id": 9845
+      },
+      {
+        "form": "check",
+        "surface": " check",
+        "token_id": 1716
+      },
+      {
+        "form": "validate",
+        "surface": " validate",
+        "token_id": 9307
+      },
+      {
+        "form": "confirm",
+        "surface": " confirm",
+        "token_id": 7440
+      },
+      {
+        "form": "verifying",
+        "surface": " verifying",
+        "token_id": 66532
+      },
+      {
+        "form": "checking",
+        "surface": " checking",
+        "token_id": 12910
+      },
+      {
+        "form": "ensure",
+        "surface": " ensure",
+        "token_id": 5790
+      },
+      {
+        "form": "assert",
+        "surface": " assert",
+        "token_id": 1992
+      },
+      {
+        "form": "validating",
+        "surface": " validating",
+        "token_id": 66350
+      },
+      {
+        "form": "double",
+        "surface": " double",
+        "token_id": 1923
+      }
+    ],
+    "broad_success": [
+      {
+        "form": "works",
+        "surface": " works",
+        "token_id": 4138
+      },
+      {
+        "form": "succeed",
+        "surface": " succeed",
+        "token_id": 11655
+      },
+      {
+        "form": "robust",
+        "surface": " robust",
+        "token_id": 21094
+      },
+      {
+        "form": "everything",
+        "surface": " everything",
+        "token_id": 4156
+      },
+      {
+        "form": "overall",
+        "surface": " overall",
+        "token_id": 7830
+      },
+      {
+        "form": "correctly",
+        "surface": " correctly",
+        "token_id": 12083
+      },
+      {
+        "form": "properly",
+        "surface": " properly",
+        "token_id": 9971
+      },
+      {
+        "form": "fine",
+        "surface": " fine",
+        "token_id": 6699
+      },
+      {
+        "form": "cleanly",
+        "surface": " cleanly",
+        "token_id": 93531
+      },
+      {
+        "form": "smoothly",
+        "surface": " smoothly",
+        "token_id": 37136
+      }
+    ],
+    "dependency_unavailable": [
+      {
+        "form": "unavailable",
+        "surface": " unavailable",
+        "token_id": 33829
+      },
+      {
+        "form": "missing",
+        "surface": " missing",
+        "token_id": 7167
+      },
+      {
+        "form": "install",
+        "surface": " install",
+        "token_id": 4433
+      },
+      {
+        "form": "absent",
+        "surface": " absent",
+        "token_id": 26334
+      },
+      {
+        "form": "dependency",
+        "surface": " dependency",
+        "token_id": 23285
+      },
+      {
+        "form": "lacking",
+        "surface": " lacking",
+        "token_id": 30043
+      },
+      {
+        "form": "unset",
+        "surface": " unset",
+        "token_id": 17462
+      }
+    ],
+    "focused_validation": [
+      {
+        "form": "specific",
+        "surface": " specific",
+        "token_id": 3050
+      },
+      {
+        "form": "targeted",
+        "surface": " targeted",
+        "token_id": 16609
+      },
+      {
+        "form": "focused",
+        "surface": " focused",
+        "token_id": 10419
+      },
+      {
+        "form": "narrow",
+        "surface": " narrow",
+        "token_id": 14590
+      },
+      {
+        "form": "particular",
+        "surface": " particular",
+        "token_id": 3820
+      },
+      {
+        "form": "precise",
+        "surface": " precise",
+        "token_id": 22825
+      },
+      {
+        "form": "isolated",
+        "surface": " isolated",
+        "token_id": 23443
+      },
+      {
+        "form": "dedicated",
+        "surface": " dedicated",
+        "token_id": 11886
+      }
+    ],
+    "test_success": [
+      {
+        "form": "passed",
+        "surface": " passed",
+        "token_id": 5642
+      },
+      {
+        "form": "succeeds",
+        "surface": " succeeds",
+        "token_id": 48396
+      },
+      {
+        "form": "passing",
+        "surface": " passing",
+        "token_id": 11946
+      },
+      {
+        "form": "green",
+        "surface": " green",
+        "token_id": 5983
+      },
+      {
+        "form": "passes",
+        "surface": " passes",
+        "token_id": 15734
+      },
+      {
+        "form": "succeeded",
+        "surface": " succeeded",
+        "token_id": 24526
+      },
+      {
+        "form": "OK",
+        "surface": " OK",
+        "token_id": 10092
+      }
+    ],
+    "task_resolution": [
+      {
+        "form": "resolved",
+        "surface": " resolved",
+        "token_id": 19072
+      },
+      {
+        "form": "done",
+        "surface": " done",
+        "token_id": 2725
+      },
+      {
+        "form": "complete",
+        "surface": " complete",
+        "token_id": 4434
+      },
+      {
+        "form": "finished",
+        "surface": " finished",
+        "token_id": 7807
+      },
+      {
+        "form": "solved",
+        "surface": " solved",
+        "token_id": 27050
+      },
+      {
+        "form": "completed",
+        "surface": " completed",
+        "token_id": 7888
+      },
+      {
+        "form": "ready",
+        "surface": " ready",
+        "token_id": 5354
+      },
+      {
+        "form": "accomplished",
+        "surface": " accomplished",
+        "token_id": 25400
+      },
+      {
+        "form": "wrapped",
+        "surface": " wrapped",
+        "token_id": 18880
+      }
+    ]
+  }
+}
