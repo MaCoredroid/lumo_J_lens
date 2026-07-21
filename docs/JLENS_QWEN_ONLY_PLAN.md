@@ -359,8 +359,20 @@ readout). Plus the Qwen tagger on each task's CoT. Then faithfulness across task
       reads a VJP-lens readout, computes each family's mean form/layer log-prob (concept-chain
       convention) over the general vocab, ranks, LOO baseline-centers -> top-1 per boundary.
       Reuses the concept-chain math; works on ANY task's readout. Full suite: 243 passed.
-- [ ] Per-turn prompts-file (proxy dumps + thinking continuation, end-of-thinking) with these
-      forms as scored vocab; run the public+native capture; then cohort faithfulness vs tagger. + run
+- [!] **BLOCKER (paused for user, 2026-07-21): no clean per-task per-turn prompt source.**
+      Exact per-turn prompts need the exact request messages, but: proxy dumps are globally
+      numbered + interleaved + don't self-identify their task (unmappable); the per-task
+      qwen-code chats/*.jsonl is incomplete (3 records for django-13297); the trace has the
+      conversation but no token counts to validate reconstruction + uncertain full system prompt.
+      So an EXACT 535-turn prompts-file is a real data-engineering wall. Everything else is built
+      + proven (tagger 535 tags, general vocab 14/14, general scorer, GPU capture). Options:
+      (A) BEST-EFFORT per-turn: reconstruct approximate prompts from the trace (concept readout
+          is a diagnostic, likely robust to minor prompt diffs) -> n~535, some imprecision;
+      (B) CLEAN n=8 via C1: reuse the fully-proven C1 pipeline with the general vocab swapped in
+          as score_token_ids -> a clean cohort faithfulness at the C1 boundary (n=8), coarser
+          boundary-to-tag alignment;
+      (C) accept the deliverable (all components + validated tagger + demo faithfulness 0.44/0.60)
+          + this honest finding; stop. + run
       the public+native capture over the cohort; then generalize concept_chain's input
       binding to score the cohort reports; then faithfulness vs the tagger tags.: batch across tasks/boundaries, keep
       GPU util high (profile; target >0.78 effective, fix host-bound stalls), capture only
