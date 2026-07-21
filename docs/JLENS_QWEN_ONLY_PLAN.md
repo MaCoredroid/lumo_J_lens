@@ -82,13 +82,26 @@ PYTHONPATH=/home/mark/.cache/uv/archive-v0/Yn5oTX4avDWYV_JW/lib/python3.12/site-
 calibrated confidence + latent doubt indices + the observed epistemic timeline —
 all Qwen-only, all free.
 
-**P2 — faithfulness / confidence readout (the real lens value)**
-- [ ] Define faithfulness/confidence targets from FREE signals only, e.g.:
-      does the latent doubt index rise where the CoT hedges; does the stated
-      diagnosis boundary coincide with the action-prediction margin; does
-      confidence predict eventual task success.
-- [ ] Fit/evaluate on held-out with the free action/outcome labels. Report
-      calibration + whether the latent signal adds over the CoT text alone.
+**P2 — faithfulness = surface-vs-internal divergence** (user decision 2026-07-20)
+Faithfulness metric = per-boundary `source_disagreement` = normalized
+JSD(`sequence_logit_probabilities`, `sequence_j_probabilities`) ∈ [0,1] — where the
+public-token story diverges from the internal-J story. Already computed by
+`reasoning_trace._source_disagreement`; needs per-boundary diagnostics carrying
+BOTH source distributions.
+- [x] Located the source: the per-boundary `sequence_logit` and `sequence_j`
+      probability distributions are produced by the per-source decoders in
+      `swe_task_state_v4_observable_decoder.py` / `..._evaluator.py` (each a 136-dim
+      action-word-probe baseline: sequence_logit = ordinary logit, sequence_j =
+      public-J). NOT in the report artifacts (those are summaries). Next: run those
+      decoders to emit per-boundary per-source probabilities as the divergence input.
+- [ ] Compute `source_disagreement` per boundary across the trajectory; scale to
+      the N60 development cohort (the single captured task is not enough for stats).
+- [ ] Evaluate whether HIGH divergence flags meaningful structure, using only free
+      signals: (a) does it concentrate at epistemic-event boundaries
+      (diagnosis/bug/patch/fix milestones via the CoT reader join); (b) does it
+      coincide with detours/non-advancing steps; (c) how it distributes across
+      regions (reasoning vs visible vs tool). Report effect sizes + a permutation
+      null (divergence-vs-random-boundary) so a signal isn't over-claimed.
 
 **P3 — report**
 - [ ] One Qwen-only J-lens report: per-boundary action + CoT + latent
