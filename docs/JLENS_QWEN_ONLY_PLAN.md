@@ -277,10 +277,27 @@ Both Qwen-only; drops the hand-curated event->concept mapping.
         Jacobian-lens readout capture (swe_task_state_readout.py) must be generalized +
         run over ~15k cohort boundaries (demo = 293 boundaries / 149 MB; cohort ~50x =
         many hours GPU + ~9 GB). This is the "capture cost" pause fork.
-      Options surfaced: (A) scaled-down 5-10 tasks -> n>1, ~1 hr GPU (recommended first);
-      (B) full N60 -> hours GPU + big pipeline work; (C) tagger-only cohort
-      characterization now (cheap, no faithfulness); (D) stop at the validated tagger.
-- [ ] Compute cohort faithfulness (tagged concept vs internal centered top-1) + report v3.
+- [x] **DECISION (user): do the FULL cohort, optimized for speed** (per the GPU-util
+      standard — no low-util captures). **Cost corrected (was over-estimated):** the
+      capture is the NVFP4 VJP lens (`run_jlens_nvfp4.py` + `fp8_live_vjp.py` /
+      `nvfp4_packed_vjp.py`) via vLLM forward hooks with a PRECOMPUTED J matrix (no live
+      backward). Demo = 159s / 293 boundaries (~0.54s/bnd), 10 captured layers, gpu-util
+      0.78, fp8 kv. Cohort capturing per-turn boundaries (~60 tasks x ~10) ≈ 30 min–2 hr,
+      NOT hours-plural. Feasible + monitorable.
+
+## P7b — full cohort capture, optimized (user, 2026-07-20)
+Pipeline to generalize off single-task (each currently hard-wired to swe-sympy-13480):
+`materialize_swe_jlens_prompts.py` (trace->prompts) -> `run_jlens_nvfp4.py` (VJP capture)
+-> `materialize_swe_intermediate_probes.py` (probe reports) -> `concept_chain.py` (17-family
+readout). Plus the Qwen tagger on each task's CoT. Then faithfulness across tasks.
+- [ ] Generalize the prompt materializer for an arbitrary task's qwen_trace.json.
+- [ ] Generalize + SPEED-optimize the VJP capture: batch across tasks/boundaries, keep
+      GPU util high (profile; target >0.78 effective, fix host-bound stalls), capture only
+      the per-turn concept boundaries (not all offsets) to cut cost.
+- [ ] Generalize the probe/concept-chain readout per task; tag each task's CoT.
+- [ ] Cohort faithfulness (tagged vs internal centered top-1), n = tasks x turns; report v3.
+- Monitor loop (/loop 20m): report capture progress each fire; PAUSE only on a real
+  generalization blocker or if effective GPU util stays low after a fix.
 - PAUSE on genuine design forks (taxonomy fit, poor tagger agreement, capture-cost).
 - STOP when cohort faithfulness is computed + in the report, green.
 
