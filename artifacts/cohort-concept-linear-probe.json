@@ -1,0 +1,132 @@
+{
+  "kind": "concept_linear_probe_groupkfold",
+  "layers": [
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47
+  ],
+  "C": 0.05,
+  "folds": 5,
+  "n_turns": 532,
+  "n_features": 219,
+  "held_out_accuracy": 0.5395,
+  "held_out_macro_recall": 0.3787,
+  "per_family": {
+    "source_localization": {
+      "n": 206,
+      "recall": 0.655,
+      "confused_with": {
+        "failure_confirmation": 20,
+        "located_source": 14
+      }
+    },
+    "verification": {
+      "n": 135,
+      "recall": 0.57,
+      "confused_with": {
+        "broad_success": 12,
+        "dependency_unavailable": 8
+      }
+    },
+    "source_edit": {
+      "n": 51,
+      "recall": 0.353,
+      "confused_with": {
+        "repair": 14,
+        "substitution_operation": 5
+      }
+    },
+    "repair": {
+      "n": 33,
+      "recall": 0.212,
+      "confused_with": {
+        "source_edit": 13,
+        "task_resolution": 4
+      }
+    },
+    "broad_success": {
+      "n": 22,
+      "recall": 0.545,
+      "confused_with": {
+        "test_success": 3,
+        "verification": 3
+      }
+    },
+    "failure_confirmation": {
+      "n": 19,
+      "recall": 0.421,
+      "confused_with": {
+        "verification": 4,
+        "source_localization": 3
+      }
+    },
+    "dependency_unavailable": {
+      "n": 16,
+      "recall": 0.625,
+      "confused_with": {
+        "source_edit": 3,
+        "verification": 1
+      }
+    },
+    "task_resolution": {
+      "n": 15,
+      "recall": 0.8,
+      "confused_with": {
+        "verification": 2,
+        "broad_success": 1
+      }
+    },
+    "focused_validation": {
+      "n": 12,
+      "recall": 0.167,
+      "confused_with": {
+        "dependency_unavailable": 3,
+        "verification": 2
+      }
+    },
+    "test_success": {
+      "n": 7,
+      "recall": 0.286,
+      "confused_with": {
+        "broad_success": 2,
+        "focused_validation": 1
+      }
+    },
+    "substitution_operation": {
+      "n": 7,
+      "recall": 0.0,
+      "confused_with": {
+        "source_edit": 2,
+        "dependency_unavailable": 2
+      }
+    },
+    "defined_identifier": {
+      "n": 6,
+      "recall": 0.667,
+      "confused_with": {
+        "source_localization": 1,
+        "source_edit": 1
+      }
+    },
+    "located_source": {
+      "n": 2,
+      "recall": 0.0,
+      "confused_with": {
+        "source_localization": 1,
+        "substitution_operation": 1
+      }
+    },
+    "runtime_name_failure": {
+      "n": 1,
+      "recall": 0.0,
+      "confused_with": {
+        "substitution_operation": 1
+      }
+    }
+  }
+}
