@@ -46,10 +46,19 @@ against the captured `<think>` text.
 
 ## Work plan (loop advances one step per iteration; verify each)
 **P0 — retire + baseline**
-- [ ] Formalize retirement of the multi-model control path in the design doc.
-- [ ] Run the existing Qwen-only test suite (reasoning_trace + observable_* +
-      calibration/evaluator) → record what passes; establish the current baseline
-      output of the lens on the captured trajectory.
+- [x] Retirement of the multi-model control path recorded (this doc + `[[jlens-qwen-only-cot-free]]`).
+- [x] Qwen-only test suite baseline (2026-07-20): **197 passed, 1 skipped, 98
+      subtests** across the 21 non-multi-model `test_swe_task_state_v4_*` files.
+      Stack is healthy.
+
+**Canonical readout test command** (the readout stack needs SciPy/sklearn, which
+live in `.venv-readout-v2`; pytest lives in the vllm-side uv archive — combine them):
+```
+QT=$(ls tests/test_swe_task_state_v4_*.py | grep -viE 'epistemic_chain|sealed|adjudicat|counterfactual|controls_v2|control_executor|native_vllm|native_smoke')
+PYTHONPATH=/home/mark/.cache/uv/archive-v0/Yn5oTX4avDWYV_JW/lib/python3.12/site-packages \
+  .venv-readout-v2/bin/python -m pytest -q $QT
+```
+(pytest 9.1.1, scipy 1.18.0, sklearn 1.9.0, numpy 2.5.1 — the pinned readout env.)
 
 **P1 — wire the free CoT into the lens output**
 - [ ] Add a trajectory reader that extracts, per boundary, the `<think>` text +
