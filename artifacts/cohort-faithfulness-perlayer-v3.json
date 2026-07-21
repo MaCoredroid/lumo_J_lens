@@ -1,0 +1,282 @@
+{
+  "kind": "swe_task_state_v4_cohort_faithfulness_perlayer_v3",
+  "report": "/home/mark/lumo_J_lens/artifacts/cohort-perturn-readout-v3.json",
+  "n_turns": 290,
+  "n_layers": 32,
+  "all_layer_avg_centered": 0.307,
+  "best_layer": 41,
+  "best_layer_centered": 0.3793,
+  "best_layer_raw": 0.4448,
+  "best_band": {
+    "band": "38-47",
+    "n_layers": 10,
+    "faithfulness_centered": 0.3724
+  },
+  "bands": [
+    {
+      "band": "44-47",
+      "n_layers": 4,
+      "faithfulness_centered": 0.3621
+    },
+    {
+      "band": "42-47",
+      "n_layers": 6,
+      "faithfulness_centered": 0.3517
+    },
+    {
+      "band": "40-47",
+      "n_layers": 8,
+      "faithfulness_centered": 0.3621
+    },
+    {
+      "band": "38-47",
+      "n_layers": 10,
+      "faithfulness_centered": 0.3724
+    },
+    {
+      "band": "36-47",
+      "n_layers": 12,
+      "faithfulness_centered": 0.3655
+    },
+    {
+      "band": "32-47",
+      "n_layers": 16,
+      "faithfulness_centered": 0.3414
+    },
+    {
+      "band": "39-43",
+      "n_layers": 5,
+      "faithfulness_centered": 0.3655
+    },
+    {
+      "band": "40-44",
+      "n_layers": 5,
+      "faithfulness_centered": 0.369
+    },
+    {
+      "band": "38-45",
+      "n_layers": 8,
+      "faithfulness_centered": 0.3724
+    }
+  ],
+  "per_layer": [
+    {
+      "layer": 16,
+      "faithfulness_centered": 0.1621,
+      "faithfulness_raw": 0.0552
+    },
+    {
+      "layer": 17,
+      "faithfulness_centered": 0.1966,
+      "faithfulness_raw": 0.1828
+    },
+    {
+      "layer": 18,
+      "faithfulness_centered": 0.1897,
+      "faithfulness_raw": 0.131
+    },
+    {
+      "layer": 19,
+      "faithfulness_centered": 0.2,
+      "faithfulness_raw": 0.1931
+    },
+    {
+      "layer": 20,
+      "faithfulness_centered": 0.1759,
+      "faithfulness_raw": 0.3379
+    },
+    {
+      "layer": 21,
+      "faithfulness_centered": 0.1828,
+      "faithfulness_raw": 0.1897
+    },
+    {
+      "layer": 22,
+      "faithfulness_centered": 0.1862,
+      "faithfulness_raw": 0.2931
+    },
+    {
+      "layer": 23,
+      "faithfulness_centered": 0.1724,
+      "faithfulness_raw": 0.2897
+    },
+    {
+      "layer": 24,
+      "faithfulness_centered": 0.1931,
+      "faithfulness_raw": 0.4586
+    },
+    {
+      "layer": 25,
+      "faithfulness_centered": 0.1828,
+      "faithfulness_raw": 0.4103
+    },
+    {
+      "layer": 26,
+      "faithfulness_centered": 0.2138,
+      "faithfulness_raw": 0.4414
+    },
+    {
+      "layer": 27,
+      "faithfulness_centered": 0.231,
+      "faithfulness_raw": 0.3517
+    },
+    {
+      "layer": 28,
+      "faithfulness_centered": 0.2379,
+      "faithfulness_raw": 0.3655
+    },
+    {
+      "layer": 29,
+      "faithfulness_centered": 0.2759,
+      "faithfulness_raw": 0.3414
+    },
+    {
+      "layer": 30,
+      "faithfulness_centered": 0.2793,
+      "faithfulness_raw": 0.2345
+    },
+    {
+      "layer": 31,
+      "faithfulness_centered": 0.2586,
+      "faithfulness_raw": 0.0931
+    },
+    {
+      "layer": 32,
+      "faithfulness_centered": 0.269,
+      "faithfulness_raw": 0.1103
+    },
+    {
+      "layer": 33,
+      "faithfulness_centered": 0.269,
+      "faithfulness_raw": 0.2172
+    },
+    {
+      "layer": 34,
+      "faithfulness_centered": 0.2655,
+      "faithfulness_raw": 0.2966
+    },
+    {
+      "layer": 35,
+      "faithfulness_centered": 0.3034,
+      "faithfulness_raw": 0.3517
+    },
+    {
+      "layer": 36,
+      "faithfulness_centered": 0.3172,
+      "faithfulness_raw": 0.3517
+    },
+    {
+      "layer": 37,
+      "faithfulness_centered": 0.3138,
+      "faithfulness_raw": 0.3862
+    },
+    {
+      "layer": 38,
+      "faithfulness_centered": 0.3448,
+      "faithfulness_raw": 0.3966
+    },
+    {
+      "layer": 39,
+      "faithfulness_centered": 0.369,
+      "faithfulness_raw": 0.4241
+    },
+    {
+      "layer": 40,
+      "faithfulness_centered": 0.3724,
+      "faithfulness_raw": 0.4172
+    },
+    {
+      "layer": 41,
+      "faithfulness_centered": 0.3793,
+      "faithfulness_raw": 0.4448
+    },
+    {
+      "layer": 42,
+      "faithfulness_centered": 0.3621,
+      "faithfulness_raw": 0.4138
+    },
+    {
+      "layer": 43,
+      "faithfulness_centered": 0.3552,
+      "faithfulness_raw": 0.4207
+    },
+    {
+      "layer": 44,
+      "faithfulness_centered": 0.3448,
+      "faithfulness_raw": 0.4414
+    },
+    {
+      "layer": 45,
+      "faithfulness_centered": 0.3586,
+      "faithfulness_raw": 0.4241
+    },
+    {
+      "layer": 46,
+      "faithfulness_centered": 0.3448,
+      "faithfulness_raw": 0.4207
+    },
+    {
+      "layer": 47,
+      "faithfulness_centered": 0.3586,
+      "faithfulness_raw": 0.4034
+    }
+  ],
+  "best_layer_per_family_recall": {
+    "source_localization": {
+      "n": 143,
+      "recall_centered": 0.364
+    },
+    "verification": {
+      "n": 51,
+      "recall_centered": 0.706
+    },
+    "source_edit": {
+      "n": 25,
+      "recall_centered": 0.08
+    },
+    "repair": {
+      "n": 19,
+      "recall_centered": 0.053
+    },
+    "dependency_unavailable": {
+      "n": 14,
+      "recall_centered": 0.286
+    },
+    "failure_confirmation": {
+      "n": 11,
+      "recall_centered": 0.545
+    },
+    "substitution_operation": {
+      "n": 7,
+      "recall_centered": 0.714
+    },
+    "broad_success": {
+      "n": 7,
+      "recall_centered": 0.429
+    },
+    "task_resolution": {
+      "n": 4,
+      "recall_centered": 0.0
+    },
+    "focused_validation": {
+      "n": 2,
+      "recall_centered": 0.5
+    },
+    "defined_identifier": {
+      "n": 2,
+      "recall_centered": 0.0
+    },
+    "located_source": {
+      "n": 2,
+      "recall_centered": 0.0
+    },
+    "test_success": {
+      "n": 2,
+      "recall_centered": 0.0
+    },
+    "runtime_name_failure": {
+      "n": 1,
+      "recall_centered": 0.0
+    }
+  }
+}

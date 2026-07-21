@@ -89,3 +89,25 @@ concentrated, not uniform.
 
 Artifacts: `artifacts/cohort-faithfulness-v3.json` (+ `-records.json`),
 readout `artifacts/cohort-perturn-readout-v3.json`.
+
+## Lever 1 addendum — per-layer sweep (2026-07-21)
+
+The 0.31 headline averages layers 16–47. Re-scoring the **same** readout one layer at a
+time (`cohort_faithfulness_perlayer.py`) shows the concept signal is **sharply late-layer
+localized** — centered faithfulness rises monotonically with depth:
+
+```
+L16 0.162 ... L30 0.279 ... L38 0.345  L39 0.369  L40 0.372  L41 0.379  L42 0.362 ... L47 0.359
+```
+
+- **Best single layer L41 = 0.379 centered** (vs 0.307 all-layer-avg — +23% relative, free).
+- Bands re-dilute: best band 38–47 = 0.372, 40–44 = 0.369 — all below the single L41. The peak
+  is sharp; averaging in weaker layers only hurts.
+- At L41 the faithfulness **broadens** across concepts, not just verification:
+  source_localization 0.245→**0.364**, failure_confirmation 0.273→**0.545**,
+  broad_success 0.143→**0.429**, dependency 0.143→0.286; verification stays strong (0.706),
+  substitution 0.714. Only edit/repair/resolve stay weak (≤0.08).
+
+Takeaway: the all-layer average understated faithfulness by diluting a real late-layer
+signal. **L41 is the readout depth of record** for the follow-on levers. Artifact:
+`artifacts/cohort-faithfulness-perlayer-v3.json`.
