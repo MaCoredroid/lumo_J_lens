@@ -290,7 +290,16 @@ Pipeline to generalize off single-task (each currently hard-wired to swe-sympy-1
 `materialize_swe_jlens_prompts.py` (trace->prompts) -> `run_jlens_nvfp4.py` (VJP capture)
 -> `materialize_swe_intermediate_probes.py` (probe reports) -> `concept_chain.py` (17-family
 readout). Plus the Qwen tagger on each task's CoT. Then faithfulness across tasks.
-- [ ] Generalize the prompt materializer for an arbitrary task's qwen_trace.json.
+- [x] Robust cohort trace reader `swe_task_state_v4_cohort_traces.py` (+ test):
+      handles the heterogeneous corpus (JSON list / JSONL / empty, ~17 runs) and
+      extracts per-turn CoT. **Survey: 20 usable tasks / 535 turns** (django, matplotlib,
+      seaborn, requests, xarray, astropy...) — a real statistical cohort, not n=1. At
+      ~0.54s/boundary the 535-boundary capture is ~tens of minutes. NOTE: the pipeline
+      is hand-curated deeper than events (per-task hashes/stage-names/counts in
+      materialize_swe_jlens_prompts) -> the cohort path is a STREAMLINED capture reusing
+      the lens core (VJP + J projection + concept scoring) at AUTO per-turn boundaries,
+      not a replay of the hand-curated single-task machinery.
+- [ ] Tag the 535 cohort turns with the validated Qwen tagger (cheap; the tagger side).
 - [ ] Generalize + SPEED-optimize the VJP capture: batch across tasks/boundaries, keep
       GPU util high (profile; target >0.78 effective, fix host-bound stalls), capture only
       the per-turn concept boundaries (not all offsets) to cut cost.
