@@ -195,9 +195,28 @@ turn-1 diagnosis (reads focused_validation); public_j has a focused_validation b
       into `concept_chain.py` itself (heavier; re-runs the lens). And residual misses
       are partly semantic-adjacency (source_localization vs located_source) + offset
       alignment — a family-group match would raise agreement further.
-- [ ] **RE-OPENED FORK (user):** now that the probe fix roughly recovers a moderate
-      faithfulness signal, is cohort-scale worth it (bake the baseline fix into
-      concept_chain.py + run over N60)? Surface, do not start without the user.
+## P6 — bake the baseline fix into concept_chain.py (user, 2026-07-20)
+Make the lens emit baseline-corrected rankings itself, not just a post-hoc re-rank.
+**Feasibility (investigated):** re-runnable from the present intermediate reports
+(.cache/swe_jlens_intermediate/{analysis,public-report,native-report,prompts}.json);
+the config pins INPUTS not the source, so no source-hash update; 499-line
+test_swe_task_state_v4_concept_chain.py must stay green (or be updated for the new
+ranking). **Baseline choice:** `_report_scores` emits a raw absolute mean log-prob and
+NO null-context/prior baseline exists in the data — a true null-context baseline needs
+a NEW reference capture (out of scope now). So bake **cross-boundary background
+centering** (each family minus its mean over the run's boundaries) at the ranking step;
+this is a legitimate empirical background baseline AT COHORT SCALE (circular only for a
+tiny single-run). Document the caveat in-code.
+- [ ] Inject family-mean centering between `_report_scores` and `_ranking` in
+      `_build_concept_chain` (localized; keep raw scores + fidelity gates intact).
+- [ ] Re-run the lens -> regenerate common-ontology-chain.json; verify the
+      focused_validation collapse is gone in the LENS's own output and selection
+      diversifies. Update the concept_chain tests for the new ranking.
+- [ ] Re-point the faithfulness module to the lens's now-corrected top-1 (drop the
+      post-hoc re-rank), confirm 0.44/0.60-ish carries through; update report v3.
+- [ ] PAUSE if the change would weaken the strict fail-closed selection contract or a
+      test reveals an integrity issue — surface, don't force.
+- [ ] Then the cohort-scale fork (run the corrected lens over N60) is the user's call.
 
 **Loop discipline unchanged:** pause on a NEW design fork (e.g. the mapping being
 too ambiguous, or the cohort-scale decision); stop when the faithfulness result is
