@@ -1,0 +1,140 @@
+{
+  "action_gauge": {
+    "classes": [
+      "inspect",
+      "edit",
+      "check"
+    ],
+    "per_source": {
+      "history_only": {
+        "weighted_accuracy": 0.7519457993321794,
+        "weighted_auprc": 0.4772129264770825,
+        "weighted_auroc": 0.7321730038251518
+      },
+      "sequence_j": {
+        "weighted_accuracy": 0.77303743650768,
+        "weighted_auprc": 0.6578171325455839,
+        "weighted_auroc": 0.8648226597160228
+      },
+      "sequence_logit": {
+        "weighted_accuracy": 0.7756107489351517,
+        "weighted_auprc": 0.6613325885808702,
+        "weighted_auroc": 0.8654994790662744
+      },
+      "sequence_logit_j": {
+        "weighted_accuracy": 0.7716552410850573,
+        "weighted_auprc": 0.6724043172401856,
+        "weighted_auroc": 0.8711000803218333
+      }
+    },
+    "primary_forecast": "sequence_logit_j",
+    "row_count": 1570,
+    "target": "prospective same-request next observable action"
+  },
+  "faithfulness_surface_vs_internal": {
+    "claim": "high divergence flags lens error (pooled forecast mispredicts the agent's next action)",
+    "divergence_mean_on_correct": 0.009075335388248996,
+    "divergence_mean_on_error": 0.014452170364993178,
+    "divergence_overall_weighted_mean": 0.010303107474739078,
+    "error_definition": "pooled sequence_logit_j argmax != agent next-action label",
+    "error_detection_auc": 0.631087354263581,
+    "error_minus_correct_effect": 0.0053768349767441825,
+    "metric": "source_disagreement = normalized JSD(sequence_logit, sequence_j)",
+    "n_correct": 1238,
+    "n_error": 332,
+    "n_rows": 1570,
+    "permutation_p_value": 0.0001999600079984003,
+    "permutations": 5000
+  },
+  "free_cot_timeline_demo": {
+    "epistemic_chain": [
+      {
+        "events": [
+          "diagnosis_named"
+        ],
+        "stage": "initial_task_analysis",
+        "turn": 1
+      },
+      {
+        "events": [
+          "source_location_reaffirmed"
+        ],
+        "stage": "source_location_known",
+        "turn": 2
+      },
+      {
+        "events": [
+          "bug_recognized",
+          "correct_identifier_named",
+          "reproduction_planned"
+        ],
+        "stage": "buggy_source_inspected_def_use_correction",
+        "turn": 3
+      },
+      {
+        "events": [
+          "failure_confirmed",
+          "patch_target_named"
+        ],
+        "stage": "failure_reproduced",
+        "turn": 4
+      },
+      {
+        "events": [
+          "fix_verification_planned"
+        ],
+        "stage": "patch_applied",
+        "turn": 5
+      },
+      {
+        "events": [
+          "fix_working",
+          "original_reproduction_passed"
+        ],
+        "stage": "smoke_fix_verified",
+        "turn": 6
+      },
+      {
+        "events": [
+          "broader_values_passed"
+        ],
+        "stage": "broader_values_verified",
+        "turn": 7
+      },
+      {
+        "events": [
+          "pytest_unavailable"
+        ],
+        "stage": "pytest_unavailable",
+        "turn": 8
+      },
+      {
+        "events": [
+          "focused_test_passed",
+          "task_resolved"
+        ],
+        "stage": "focused_sympy_test_passed",
+        "turn": 9
+      }
+    ],
+    "n_boundaries": 293,
+    "n_turns": 9,
+    "trajectory": "swe_jlens_trajectory_prompts.json"
+  },
+  "kind": "jlens_qwen_only_report_v1",
+  "limitations": [
+    "action gauge + faithfulness are cohort-scale (1570 rows); the free-CoT timeline below is a single demonstrative task.",
+    "event-concentration / region evals are NOT run at cohort scale: the 1570-row cohort carries only repository/request_index/task per row, not per-row region or semantic-event tags.",
+    "faithfulness effect is small in absolute JSD (sources usually agree) but statistically significant; it is a flag, not a calibrated error rate."
+  ],
+  "provenance": {
+    "action_phase_artifact_sha256": "ea95117d93e3f1416092bc21cddc846bc1013cc3e5ebe3939a0c8ba7c2c0a0a9"
+  },
+  "scope": {
+    "external_annotators_used": false,
+    "gpt_oss_or_mistral_used": false,
+    "human_labels_used": false,
+    "labels_are_free_from_trajectory": true,
+    "subject_model_family": "qwen"
+  }
+}

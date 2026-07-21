@@ -112,9 +112,17 @@ BOTH source distributions.
       the single demo trajectory). Check whether cohort-wide event tags exist; if
       not, this is descriptive-only on the demo trajectory. Non-blocking for P3.
 
-**P3 — report**
-- [ ] One Qwen-only J-lens report: per-boundary action + CoT + latent
-      confidence/doubt, with the faithfulness evaluation. This is the deliverable.
+**P3 — report** ✅ COMPLETE
+- [x] `scripts/swe_task_state_v4_qwen_lens_report.py` (+ test, 4 pass) →
+      `artifacts/jlens-qwen-only-report-v1.json`. Synthesizes, all Qwen-only / all
+      free: (1) action gauge — weighted accuracy history_only 0.752 →
+      sequence_logit 0.776 / sequence_j 0.773 / pooled sequence_logit_j 0.772
+      (pooled best AUPRC 0.672 vs 0.477 baseline); (2) faithfulness — divergence
+      flags lens error, AUC 0.631, permutation p ≈ 2e-4; (3) the free demo
+      epistemic timeline; plus scope (no GPT-OSS/Mistral/human labels) and honest
+      limitations (event-concentration not cohort-scale).
+
+**Loop stop condition met: P3 report exists and its eval is green.**
 
 ## Loop discipline
 - Advance concrete build/test/eval steps autonomously; commit + push each step.
