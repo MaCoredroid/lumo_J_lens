@@ -70,10 +70,17 @@ PYTHONPATH=/home/mark/.cache/uv/archive-v0/Yn5oTX4avDWYV_JW/lib/python3.12/site-
 - [ ] (follow-on) optionally decode the verbatim `<think>` text per turn
       (needs the Qwen tokenizer or `public-report.json`) — deferred; the
       structured event timeline above is the higher-signal, self-labeled part.
-- [ ] Extend the reasoning_trace output so each prediction row carries the
-      observed reasoning timeline ALONGSIDE the latent indices
-      (entropy/ambivalence/JS), aligned by turn/offset. Labels stay
-      evaluation-only; never let CoT text feed the predictor.
+- [x] Join module `scripts/swe_task_state_v4_lens_report_join.py` (+ test, 4 pass):
+      `attach_reasoning_context(trace_rows, turns)` augments each
+      `build_reasoning_trace` output row (aligned by `boundary.request_index`)
+      with its turn's observed stage + semantic events, ALONGSIDE the latent
+      `proxies` (entropy/ambivalence/source-disagreement). Reasoning_trace left
+      untouched; observed context is a report annotation, not a predictor input.
+      Full Qwen-only suite: 207 passed, 1 skipped, 98 subtests.
+
+**P1 COMPLETE.** Each lens prediction now carries: predicted action/phase +
+calibrated confidence + latent doubt indices + the observed epistemic timeline —
+all Qwen-only, all free.
 
 **P2 — faithfulness / confidence readout (the real lens value)**
 - [ ] Define faithfulness/confidence targets from FREE signals only, e.g.:
