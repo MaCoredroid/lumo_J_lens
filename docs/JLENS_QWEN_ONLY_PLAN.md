@@ -61,12 +61,19 @@ PYTHONPATH=/home/mark/.cache/uv/archive-v0/Yn5oTX4avDWYV_JW/lib/python3.12/site-
 (pytest 9.1.1, scipy 1.18.0, sklearn 1.9.0, numpy 2.5.1 — the pinned readout env.)
 
 **P1 — wire the free CoT into the lens output**
-- [ ] Add a trajectory reader that extracts, per boundary, the `<think>` text +
-      the reasoning-event markers + the next-action label from
-      `swe_jlens_trajectory` (read-only; no new capture).
-- [ ] Extend the reasoning_trace output so each boundary carries the observed CoT
-      snippet + events ALONGSIDE the latent indices (entropy/ambivalence/JS).
-      Keep labels evaluation-only; never let CoT text feed the predictor.
+- [x] Trajectory reader `scripts/swe_task_state_v4_trajectory_cot_reader.py`
+      (+ test, 6 pass): read-only, extracts per boundary the stage / region /
+      reasoning-event markers, and a per-turn epistemic timeline. Verified on the
+      captured trajectory (9 turns, 293 boundaries): diagnosis_named ->
+      bug_recognized -> correct_identifier_named -> patch_target_named ->
+      fix_working -> task_resolved. Evaluation/observation-only; no predictor input.
+- [ ] (follow-on) optionally decode the verbatim `<think>` text per turn
+      (needs the Qwen tokenizer or `public-report.json`) — deferred; the
+      structured event timeline above is the higher-signal, self-labeled part.
+- [ ] Extend the reasoning_trace output so each prediction row carries the
+      observed reasoning timeline ALONGSIDE the latent indices
+      (entropy/ambivalence/JS), aligned by turn/offset. Labels stay
+      evaluation-only; never let CoT text feed the predictor.
 
 **P2 — faithfulness / confidence readout (the real lens value)**
 - [ ] Define faithfulness/confidence targets from FREE signals only, e.g.:
