@@ -73,7 +73,7 @@ def _action_gauge(artifact_path: Path) -> dict[str, Any]:
 
 def build_report(*, permutations: int = 2000) -> dict[str, Any]:
     sources = divergence.load_action_phase_sources(ACTION_PHASE_ARTIFACT)
-    faithfulness = divergence.evaluate_divergence_flags_error(
+    reliability = divergence.evaluate_divergence_flags_error(
         sources, permutations=permutations
     )
     report: dict[str, Any] = {
@@ -86,21 +86,28 @@ def build_report(*, permutations: int = 2000) -> dict[str, Any]:
             "labels_are_free_from_trajectory": True,
         },
         "action_gauge": _action_gauge(ACTION_PHASE_ARTIFACT),
-        "faithfulness_surface_vs_internal": {
+        "lens_reliability_flag": {
             "metric": "source_disagreement = normalized JSD(sequence_logit, sequence_j)",
-            "claim": "high divergence flags lens error (pooled forecast mispredicts the agent's next action)",
-            **faithfulness,
+            "claim": "high probe disagreement flags lens error (pooled forecast mispredicts the agent's next action)",
+            "interpretation": (
+                "an uncertainty / trust gauge, NOT a CoT-faithfulness measure. Both "
+                "sequence_logit and sequence_j are INTERNAL activation probes (ordinary "
+                "logit vs Jacobian), so this is probe-vs-probe disagreement, not "
+                "stated-reasoning vs actual-computation. Disagreement-predicts-error is "
+                "a generic ensemble-uncertainty effect. Real CoT-faithfulness is a "
+                "separate target: CoT-event <-> internal-concept agreement (in progress)."
+            ),
+            **reliability,
         },
         "provenance": {
             "action_phase_artifact_sha256": _sha256_file(ACTION_PHASE_ARTIFACT),
         },
         "limitations": [
-            "action gauge + faithfulness are cohort-scale (1570 rows); the free-CoT "
+            "action gauge + reliability flag are cohort-scale (1570 rows); the free-CoT "
             "timeline below is a single demonstrative task.",
-            "event-concentration / region evals are NOT run at cohort scale: the "
-            "1570-row cohort carries only repository/request_index/task per row, not "
-            "per-row region or semantic-event tags.",
-            "faithfulness effect is small in absolute JSD (sources usually agree) but "
+            "the reliability flag is NOT a faithfulness measure (see its interpretation); "
+            "CoT-faithfulness is a separate, harder target being built.",
+            "the reliability effect is small in absolute JSD (probes usually agree) but "
             "statistically significant; it is a flag, not a calibrated error rate.",
         ],
     }
@@ -133,17 +140,17 @@ def main(argv: Any = None) -> int:
     args.output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
 
     gauge = report["action_gauge"]["per_source"]
-    faith = report["faithfulness_surface_vs_internal"]
+    flag = report["lens_reliability_flag"]
     print(f"Qwen-only J-lens report -> {args.output}")
     print(
         "  action gauge (weighted acc): "
         + ", ".join(f"{k}={v['weighted_accuracy']:.3f}" for k, v in gauge.items())
     )
     print(
-        f"  faithfulness: divergence flags error AUC={faith['error_detection_auc']:.3f}"
-        f" p={faith['permutation_p_value']:.2g}"
-        f" (error {faith['divergence_mean_on_error']:.4f} vs correct"
-        f" {faith['divergence_mean_on_correct']:.4f})"
+        f"  reliability flag (NOT faithfulness): probe disagreement flags error"
+        f" AUC={flag['error_detection_auc']:.3f} p={flag['permutation_p_value']:.2g}"
+        f" (error {flag['divergence_mean_on_error']:.4f} vs correct"
+        f" {flag['divergence_mean_on_correct']:.4f})"
     )
     return 0
 

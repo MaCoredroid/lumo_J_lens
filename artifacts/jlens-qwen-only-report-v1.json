@@ -31,21 +31,6 @@
     "row_count": 1570,
     "target": "prospective same-request next observable action"
   },
-  "faithfulness_surface_vs_internal": {
-    "claim": "high divergence flags lens error (pooled forecast mispredicts the agent's next action)",
-    "divergence_mean_on_correct": 0.009075335388248996,
-    "divergence_mean_on_error": 0.014452170364993178,
-    "divergence_overall_weighted_mean": 0.010303107474739078,
-    "error_definition": "pooled sequence_logit_j argmax != agent next-action label",
-    "error_detection_auc": 0.631087354263581,
-    "error_minus_correct_effect": 0.0053768349767441825,
-    "metric": "source_disagreement = normalized JSD(sequence_logit, sequence_j)",
-    "n_correct": 1238,
-    "n_error": 332,
-    "n_rows": 1570,
-    "permutation_p_value": 0.0001999600079984003,
-    "permutations": 5000
-  },
   "free_cot_timeline_demo": {
     "epistemic_chain": [
       {
@@ -122,10 +107,26 @@
     "trajectory": "swe_jlens_trajectory_prompts.json"
   },
   "kind": "jlens_qwen_only_report_v1",
+  "lens_reliability_flag": {
+    "claim": "high probe disagreement flags lens error (pooled forecast mispredicts the agent's next action)",
+    "divergence_mean_on_correct": 0.009075335388248996,
+    "divergence_mean_on_error": 0.014452170364993178,
+    "divergence_overall_weighted_mean": 0.010303107474739078,
+    "error_definition": "pooled sequence_logit_j argmax != agent next-action label",
+    "error_detection_auc": 0.631087354263581,
+    "error_minus_correct_effect": 0.0053768349767441825,
+    "interpretation": "an uncertainty / trust gauge, NOT a CoT-faithfulness measure. Both sequence_logit and sequence_j are INTERNAL activation probes (ordinary logit vs Jacobian), so this is probe-vs-probe disagreement, not stated-reasoning vs actual-computation. Disagreement-predicts-error is a generic ensemble-uncertainty effect. Real CoT-faithfulness is a separate target: CoT-event <-> internal-concept agreement (in progress).",
+    "metric": "source_disagreement = normalized JSD(sequence_logit, sequence_j)",
+    "n_correct": 1238,
+    "n_error": 332,
+    "n_rows": 1570,
+    "permutation_p_value": 0.0001999600079984003,
+    "permutations": 5000
+  },
   "limitations": [
-    "action gauge + faithfulness are cohort-scale (1570 rows); the free-CoT timeline below is a single demonstrative task.",
-    "event-concentration / region evals are NOT run at cohort scale: the 1570-row cohort carries only repository/request_index/task per row, not per-row region or semantic-event tags.",
-    "faithfulness effect is small in absolute JSD (sources usually agree) but statistically significant; it is a flag, not a calibrated error rate."
+    "action gauge + reliability flag are cohort-scale (1570 rows); the free-CoT timeline below is a single demonstrative task.",
+    "the reliability flag is NOT a faithfulness measure (see its interpretation); CoT-faithfulness is a separate, harder target being built.",
+    "the reliability effect is small in absolute JSD (probes usually agree) but statistically significant; it is a flag, not a calibrated error rate."
   ],
   "provenance": {
     "action_phase_artifact_sha256": "ea95117d93e3f1416092bc21cddc846bc1013cc3e5ebe3939a0c8ba7c2c0a0a9"

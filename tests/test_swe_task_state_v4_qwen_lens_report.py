@@ -30,14 +30,15 @@ class QwenLensReportTests(unittest.TestCase):
             gauge["history_only"]["weighted_auprc"],
         )
 
-    def test_faithfulness_result_present(self):
-        faith = self.report["faithfulness_surface_vs_internal"]
-        self.assertIn("source_disagreement", faith["metric"])
-        self.assertGreaterEqual(faith["permutation_p_value"], 0.0)
-        self.assertLessEqual(faith["permutation_p_value"], 1.0)
-        self.assertGreaterEqual(faith["error_detection_auc"], 0.0)
-        self.assertLessEqual(faith["error_detection_auc"], 1.0)
-        self.assertEqual(faith["n_error"] + faith["n_correct"], faith["n_rows"])
+    def test_reliability_flag_present_and_scoped_as_not_faithfulness(self):
+        flag = self.report["lens_reliability_flag"]
+        self.assertIn("source_disagreement", flag["metric"])
+        self.assertIn("NOT a CoT-faithfulness", flag["interpretation"])
+        self.assertGreaterEqual(flag["permutation_p_value"], 0.0)
+        self.assertLessEqual(flag["permutation_p_value"], 1.0)
+        self.assertGreaterEqual(flag["error_detection_auc"], 0.0)
+        self.assertLessEqual(flag["error_detection_auc"], 1.0)
+        self.assertEqual(flag["n_error"] + flag["n_correct"], flag["n_rows"])
 
     def test_free_cot_timeline_and_limitations(self):
         self.assertTrue(self.report["limitations"])
