@@ -1,0 +1,105 @@
+{
+  "kind": "superconcept_faithfulness",
+  "layer": 44,
+  "grouping": {
+    "locate": [
+      "source_localization",
+      "located_source",
+      "defined_identifier"
+    ],
+    "modify_code": [
+      "source_edit",
+      "repair",
+      "substitution_operation"
+    ],
+    "verify_check": [
+      "verification",
+      "focused_validation",
+      "failure_confirmation"
+    ],
+    "success_resolve": [
+      "broad_success",
+      "test_success",
+      "task_resolution"
+    ],
+    "fault": [
+      "runtime_name_failure",
+      "dependency_unavailable"
+    ]
+  },
+  "n_turns": 532,
+  "faithfulness_centered": 0.5902,
+  "baseline_uniform": 0.2,
+  "per_super": {
+    "locate": {
+      "n": 214,
+      "recall": 0.701,
+      "confused_with": [
+        [
+          "modify_code",
+          0.112
+        ],
+        [
+          "fault",
+          0.089
+        ]
+      ]
+    },
+    "verify_check": {
+      "n": 166,
+      "recall": 0.446,
+      "confused_with": [
+        [
+          "success_resolve",
+          0.241
+        ],
+        [
+          "fault",
+          0.145
+        ]
+      ]
+    },
+    "modify_code": {
+      "n": 91,
+      "recall": 0.725,
+      "confused_with": [
+        [
+          "success_resolve",
+          0.088
+        ],
+        [
+          "fault",
+          0.066
+        ]
+      ]
+    },
+    "success_resolve": {
+      "n": 44,
+      "recall": 0.455,
+      "confused_with": [
+        [
+          "verify_check",
+          0.341
+        ],
+        [
+          "modify_code",
+          0.114
+        ]
+      ]
+    },
+    "fault": {
+      "n": 17,
+      "recall": 0.235,
+      "confused_with": [
+        [
+          "modify_code",
+          0.412
+        ],
+        [
+          "success_resolve",
+          0.176
+        ]
+      ]
+    }
+  }
+}

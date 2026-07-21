@@ -1,0 +1,291 @@
+{
+  "kind": "faithfulness_confusion",
+  "layer": 44,
+  "vocab": "/home/mark/lumo_J_lens/configs/swe_task_state_v4_general_concept_forms_v2.json",
+  "by_true_family": {
+    "source_localization": {
+      "n": 206,
+      "recall": 0.461,
+      "predicted_as": [
+        {
+          "family": "source_localization",
+          "frac": 0.461
+        },
+        {
+          "family": "focused_validation",
+          "frac": 0.126
+        },
+        {
+          "family": "located_source",
+          "frac": 0.102
+        },
+        {
+          "family": "failure_confirmation",
+          "frac": 0.058
+        }
+      ]
+    },
+    "verification": {
+      "n": 135,
+      "recall": 0.615,
+      "predicted_as": [
+        {
+          "family": "verification",
+          "frac": 0.615
+        },
+        {
+          "family": "task_resolution",
+          "frac": 0.081
+        },
+        {
+          "family": "focused_validation",
+          "frac": 0.059
+        },
+        {
+          "family": "dependency_unavailable",
+          "frac": 0.059
+        }
+      ]
+    },
+    "source_edit": {
+      "n": 51,
+      "recall": 0.235,
+      "predicted_as": [
+        {
+          "family": "substitution_operation",
+          "frac": 0.471
+        },
+        {
+          "family": "source_edit",
+          "frac": 0.235
+        },
+        {
+          "family": "repair",
+          "frac": 0.137
+        },
+        {
+          "family": "source_localization",
+          "frac": 0.059
+        }
+      ]
+    },
+    "repair": {
+      "n": 33,
+      "recall": 0.121,
+      "predicted_as": [
+        {
+          "family": "substitution_operation",
+          "frac": 0.303
+        },
+        {
+          "family": "task_resolution",
+          "frac": 0.121
+        },
+        {
+          "family": "source_edit",
+          "frac": 0.121
+        },
+        {
+          "family": "repair",
+          "frac": 0.121
+        }
+      ]
+    },
+    "broad_success": {
+      "n": 22,
+      "recall": 0.045,
+      "predicted_as": [
+        {
+          "family": "verification",
+          "frac": 0.409
+        },
+        {
+          "family": "focused_validation",
+          "frac": 0.227
+        },
+        {
+          "family": "task_resolution",
+          "frac": 0.182
+        },
+        {
+          "family": "source_localization",
+          "frac": 0.091
+        }
+      ]
+    },
+    "failure_confirmation": {
+      "n": 19,
+      "recall": 0.368,
+      "predicted_as": [
+        {
+          "family": "failure_confirmation",
+          "frac": 0.368
+        },
+        {
+          "family": "substitution_operation",
+          "frac": 0.158
+        },
+        {
+          "family": "runtime_name_failure",
+          "frac": 0.105
+        },
+        {
+          "family": "focused_validation",
+          "frac": 0.105
+        }
+      ]
+    },
+    "dependency_unavailable": {
+      "n": 16,
+      "recall": 0.062,
+      "predicted_as": [
+        {
+          "family": "substitution_operation",
+          "frac": 0.5
+        },
+        {
+          "family": "focused_validation",
+          "frac": 0.125
+        },
+        {
+          "family": "test_success",
+          "frac": 0.125
+        },
+        {
+          "family": "verification",
+          "frac": 0.062
+        }
+      ]
+    },
+    "task_resolution": {
+      "n": 15,
+      "recall": 0.333,
+      "predicted_as": [
+        {
+          "family": "task_resolution",
+          "frac": 0.333
+        },
+        {
+          "family": "substitution_operation",
+          "frac": 0.2
+        },
+        {
+          "family": "verification",
+          "frac": 0.2
+        },
+        {
+          "family": "broad_success",
+          "frac": 0.2
+        }
+      ]
+    },
+    "focused_validation": {
+      "n": 12,
+      "recall": 0.5,
+      "predicted_as": [
+        {
+          "family": "focused_validation",
+          "frac": 0.5
+        },
+        {
+          "family": "verification",
+          "frac": 0.25
+        },
+        {
+          "family": "repair",
+          "frac": 0.083
+        },
+        {
+          "family": "substitution_operation",
+          "frac": 0.083
+        }
+      ]
+    },
+    "test_success": {
+      "n": 7,
+      "recall": 0.0,
+      "predicted_as": [
+        {
+          "family": "verification",
+          "frac": 0.429
+        },
+        {
+          "family": "task_resolution",
+          "frac": 0.286
+        },
+        {
+          "family": "source_edit",
+          "frac": 0.143
+        },
+        {
+          "family": "focused_validation",
+          "frac": 0.143
+        }
+      ]
+    },
+    "substitution_operation": {
+      "n": 7,
+      "recall": 0.714,
+      "predicted_as": [
+        {
+          "family": "substitution_operation",
+          "frac": 0.714
+        },
+        {
+          "family": "test_success",
+          "frac": 0.143
+        },
+        {
+          "family": "repair",
+          "frac": 0.143
+        }
+      ]
+    },
+    "defined_identifier": {
+      "n": 6,
+      "recall": 0.0,
+      "predicted_as": [
+        {
+          "family": "source_localization",
+          "frac": 0.5
+        },
+        {
+          "family": "located_source",
+          "frac": 0.167
+        },
+        {
+          "family": "repair",
+          "frac": 0.167
+        },
+        {
+          "family": "substitution_operation",
+          "frac": 0.167
+        }
+      ]
+    },
+    "located_source": {
+      "n": 2,
+      "recall": 0.0,
+      "predicted_as": [
+        {
+          "family": "focused_validation",
+          "frac": 0.5
+        },
+        {
+          "family": "substitution_operation",
+          "frac": 0.5
+        }
+      ]
+    },
+    "runtime_name_failure": {
+      "n": 1,
+      "recall": 0.0,
+      "predicted_as": [
+        {
+          "family": "repair",
+          "frac": 1.0
+        }
+      ]
+    }
+  }
+}
