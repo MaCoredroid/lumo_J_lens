@@ -326,7 +326,14 @@ readout). Plus the Qwen tagger on each task's CoT. Then faithfulness across task
       proven. To get per-turn faithfulness: extend to per-turn boundaries (proxy dumps are
       already per-request/turn) at the end-of-thinking, then run the GPU capture
       (coordinate GPU with the tagger server — capture loads its own vLLM).
-- [ ] Build the per-turn prompts-file + run the VJP capture over the cohort: batch across tasks/boundaries, keep
+- [x] **GPU CAPTURE PROVEN END-TO-END on real cohort data.** Stopped the tagger server
+      (GPU handoff), ran `run_jlens_nvfp4.sh --lens-kind public` on the 8 C1 prompts:
+      8 experiments x 32 layers (16-47) in **54 s**, valid per-layer jacobian_lens/logit_lens
+      + scored_vocabulary (status:"failed" is the expected lens-readout marker concept_chain
+      requires). The biggest P7b risk (fragile capture generalization) is RETIRED.
+- [ ] Build the per-turn prompts-file (all per-turn proxy dumps at end-of-thinking) + run
+      the public+native capture over the cohort; then generalize concept_chain's input
+      binding to score the cohort reports; then faithfulness vs the tagger tags.: batch across tasks/boundaries, keep
       GPU util high (profile; target >0.78 effective, fix host-bound stalls), capture only
       the per-turn concept boundaries (not all offsets) to cut cost.
 - [ ] Generalize the probe/concept-chain readout per task; tag each task's CoT.
