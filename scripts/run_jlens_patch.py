@@ -36,7 +36,7 @@ def _rj():
 _RJ = _rj()
 
 
-def load_llm(*, max_model_len: int = 4096):
+def load_llm(*, max_model_len: int = 4096, gpu_mem: float = 0.82):
     from huggingface_hub import snapshot_download
     from vllm import LLM
 
@@ -46,12 +46,12 @@ def load_llm(*, max_model_len: int = 4096):
         tokenizer=model_path,
         dtype="bfloat16",
         quantization="modelopt_fp4",
-        gpu_memory_utilization=0.85,
+        gpu_memory_utilization=gpu_mem,
         max_model_len=max_model_len,
-        max_num_batched_tokens=max_model_len,
+        max_num_batched_tokens=4096,  # chunked prefill (memory-safe); injection is chunk-aware
         max_num_seqs=1,
         enforce_eager=True,
-        enable_chunked_prefill=False,  # keep short prompts in ONE prefill -> last row == final position
+        enable_chunked_prefill=True,
         enable_prefix_caching=False,
         language_model_only=True,
         gdn_prefill_backend="triton",
@@ -75,17 +75,29 @@ def _install_patch_hooks(model: Any) -> None:
     _, text_model = _RJ._text_model_parts(model)
     model._patch_cap = {}
     model._patch_cap_on = False
-    model._patch_inj = {}       # layer -> list of (row_index, delta tensor) to add to branch_output
+    model._patch_cap_full = False   # store full rows (short prompts) vs only the final position
+    model._patch_inj = {}           # layer -> list of (row_index, delta tensor) to add to branch_output
+    model._patch_prompt_len = 0     # for chunk-aware injection under chunked prefill
+    model._patch_prefill_seen = 0
     model._patch_handles = []
+    first_layer = min(_RJ.CAPTURE_LAYERS)
 
     def make_hook(layer: int):
         def hook(_module: Any, _inputs: Any, output: Any):
             branch_output, residual = output
+            n = branch_output.shape[0]
+            is_prefill = n > 1
+            # count prefill rows once per chunk (layer 0 fires first) so we know the LAST chunk
+            if layer == first_layer and is_prefill:
+                model._patch_prefill_seen += n
             if model._patch_cap_on:
                 post = branch_output + residual
-                model._patch_cap[layer] = post.detach().float().cpu()  # full (all positions)
+                sl = post if model._patch_cap_full else post[-1:]
+                model._patch_cap[layer] = sl.detach().float().cpu()
             edits = model._patch_inj.get(layer)
-            if edits:
+            # inject only on the LAST prefill chunk (which holds the final position); the patched
+            # residual updates the KV cache there, so it propagates into decode without re-patching.
+            if edits and is_prefill and model._patch_prefill_seen >= model._patch_prompt_len:
                 bo = branch_output.clone()
                 for pos, delta in edits:
                     bo[pos] = bo[pos] + delta.to(dtype=bo.dtype, device=bo.device)
@@ -112,11 +124,17 @@ def _arm_inject(model: Any, inj: dict[int, Any]) -> None:
     model._patch_inj = inj
 
 
+def _arm_prefill(model, prompt_len: int) -> None:
+    model._patch_prompt_len = prompt_len
+    model._patch_prefill_seen = 0
+
+
 def greedy_token(llm, token_ids: list[int], text: str, *, capture: bool = False,
                  inject: dict[int, Any] | None = None) -> int:
     """Run a max_tokens=1 prefill -> greedy next-token id. inject = {layer: [(pos, delta), ...]}."""
     from vllm import SamplingParams, TokensPrompt
 
+    llm.apply_model(lambda m: _arm_prefill(m, len(token_ids)))
     llm.apply_model(lambda m: _arm_capture(m, capture))
     llm.apply_model(lambda m: _arm_inject(m, inject or {}))
     outputs = llm.generate(
@@ -133,6 +151,23 @@ def capture_all_layers(llm, token_ids: list[int], text: str) -> dict[int, Any]:
     """Return {layer: full post-block residual (all positions)} for one prompt."""
     greedy_token(llm, token_ids, text, capture=True)
     return llm.apply_model(_read_captures)[0]
+
+
+def generate_text(llm, token_ids: list[int], text: str, *, max_tokens: int = 96,
+                  inject: dict[int, Any] | None = None) -> str:
+    """Greedy-generate up to max_tokens; inject (prefill only) if given. Returns the decoded text."""
+    from vllm import SamplingParams, TokensPrompt
+
+    llm.apply_model(lambda m: _arm_prefill(m, len(token_ids)))
+    llm.apply_model(lambda m: _arm_capture(m, False))
+    llm.apply_model(lambda m: _arm_inject(m, inject or {}))
+    outputs = llm.generate(
+        [TokensPrompt(prompt_token_ids=token_ids, prompt=text)],
+        SamplingParams(max_tokens=max_tokens, temperature=0, seed=0),
+        use_tqdm=False,
+    )
+    llm.apply_model(lambda m: _arm_inject(m, {}))
+    return outputs[0].outputs[0].text
 
 
 def _encode(tok, text: str) -> list[int]:
