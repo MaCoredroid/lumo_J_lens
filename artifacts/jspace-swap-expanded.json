@@ -1,0 +1,51 @@
+{
+  "kind": "jspace_swap_experiment",
+  "band": [
+    16,
+    40
+  ],
+  "n_pairs": 72,
+  "clean_items": 9,
+  "flip": {
+    "full": {
+      "strict_rate": 0.083,
+      "loose_rate": 0.986,
+      "n": 72
+    },
+    "dJ_raw": {
+      "strict_rate": 0.125,
+      "loose_rate": 0.972,
+      "n": 72
+    },
+    "dperp_raw": {
+      "strict_rate": 0.0,
+      "loose_rate": 0.972,
+      "n": 72
+    },
+    "dJ_nm": {
+      "strict_rate": 0.125,
+      "loose_rate": 0.972,
+      "n": 72
+    },
+    "dperp_nm": {
+      "strict_rate": 0.0,
+      "loose_rate": 0.972,
+      "n": 72
+    },
+    "rand_row_nm": {
+      "strict_rate": 0.0,
+      "loose_rate": 0.972,
+      "n": 72
+    },
+    "rand_ker_nm": {
+      "strict_rate": 0.0,
+      "loose_rate": 0.986,
+      "n": 72
+    },
+    "noop": {
+      "strict_rate": 0.0,
+      "loose_rate": 0.0,
+      "n": 72
+    }
+  }
+}
