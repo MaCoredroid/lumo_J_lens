@@ -153,6 +153,25 @@ def capture_all_layers(llm, token_ids: list[int], text: str) -> dict[int, Any]:
     return llm.apply_model(_read_captures)[0]
 
 
+def next_logprobs(llm, token_ids: list[int], text: str, *, top_k: int = 30,
+                  inject: dict[int, Any] | None = None):
+    """Return ({token_id: logprob} for the top_k next tokens, greedy_token_id). Optional prefill inject."""
+    from vllm import SamplingParams, TokensPrompt
+
+    llm.apply_model(lambda m: _arm_prefill(m, len(token_ids)))
+    llm.apply_model(lambda m: _arm_capture(m, False))
+    llm.apply_model(lambda m: _arm_inject(m, inject or {}))
+    outputs = llm.generate(
+        [TokensPrompt(prompt_token_ids=token_ids, prompt=text)],
+        SamplingParams(max_tokens=1, temperature=0, seed=0, logprobs=top_k),
+        use_tqdm=False,
+    )
+    llm.apply_model(lambda m: _arm_inject(m, {}))
+    o = outputs[0].outputs[0]
+    lp = {tid: v.logprob for tid, v in (o.logprobs[0] or {}).items()}
+    return lp, o.token_ids[0]
+
+
 def generate_text(llm, token_ids: list[int], text: str, *, max_tokens: int = 96,
                   inject: dict[int, Any] | None = None) -> str:
     """Greedy-generate up to max_tokens; inject (prefill only) if given. Returns the decoded text."""
