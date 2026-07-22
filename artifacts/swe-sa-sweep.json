@@ -1,0 +1,231 @@
+{
+  "kind": "swe_state_action_swap",
+  "band": [
+    16,
+    40
+  ],
+  "alphas": [
+    3.0,
+    8.0,
+    20.0
+  ],
+  "force_cmd": true,
+  "n_train_locate": 16,
+  "n_train_modify": 16,
+  "n_test": 8,
+  "norm_diag": [
+    {
+      "layer": 16,
+      "norm_delta": 7.56,
+      "norm_dJ": 3.07,
+      "norm_dperp": 6.91,
+      "norm_residual": 46.52
+    },
+    {
+      "layer": 28,
+      "norm_delta": 12.76,
+      "norm_dJ": 7.44,
+      "norm_dperp": 10.37,
+      "norm_residual": 50.51
+    },
+    {
+      "layer": 40,
+      "norm_delta": 22.3,
+      "norm_dJ": 17.08,
+      "norm_dperp": 14.4,
+      "norm_residual": 61.61
+    }
+  ],
+  "summary": {
+    "baseline": {
+      "dist": {
+        "locate": 2,
+        "modify": 0,
+        "none": 6
+      },
+      "modify": 0.0,
+      "locate": 0.25,
+      "valid": 0.25
+    },
+    "full@3.0": {
+      "dist": {
+        "locate": 0,
+        "modify": 0,
+        "none": 8
+      },
+      "modify": 0.0,
+      "locate": 0.0,
+      "valid": 0.0
+    },
+    "dJ@3.0": {
+      "dist": {
+        "locate": 0,
+        "modify": 0,
+        "none": 8
+      },
+      "modify": 0.0,
+      "locate": 0.0,
+      "valid": 0.0
+    },
+    "dperp@3.0": {
+      "dist": {
+        "locate": 1,
+        "modify": 0,
+        "none": 7
+      },
+      "modify": 0.0,
+      "locate": 0.125,
+      "valid": 0.125
+    },
+    "rand_row@3.0": {
+      "dist": {
+        "locate": 2,
+        "modify": 0,
+        "none": 6
+      },
+      "modify": 0.0,
+      "locate": 0.25,
+      "valid": 0.25
+    },
+    "rand_ker@3.0": {
+      "dist": {
+        "locate": 0,
+        "modify": 0,
+        "none": 8
+      },
+      "modify": 0.0,
+      "locate": 0.0,
+      "valid": 0.0
+    },
+    "noop@3.0": {
+      "dist": {
+        "locate": 2,
+        "modify": 0,
+        "none": 6
+      },
+      "modify": 0.0,
+      "locate": 0.25,
+      "valid": 0.25
+    },
+    "full@8.0": {
+      "dist": {
+        "locate": 0,
+        "modify": 0,
+        "none": 8
+      },
+      "modify": 0.0,
+      "locate": 0.0,
+      "valid": 0.0
+    },
+    "dJ@8.0": {
+      "dist": {
+        "locate": 0,
+        "modify": 0,
+        "none": 8
+      },
+      "modify": 0.0,
+      "locate": 0.0,
+      "valid": 0.0
+    },
+    "dperp@8.0": {
+      "dist": {
+        "locate": 0,
+        "modify": 0,
+        "none": 8
+      },
+      "modify": 0.0,
+      "locate": 0.0,
+      "valid": 0.0
+    },
+    "rand_row@8.0": {
+      "dist": {
+        "locate": 0,
+        "modify": 0,
+        "none": 8
+      },
+      "modify": 0.0,
+      "locate": 0.0,
+      "valid": 0.0
+    },
+    "rand_ker@8.0": {
+      "dist": {
+        "locate": 1,
+        "modify": 0,
+        "none": 7
+      },
+      "modify": 0.0,
+      "locate": 0.125,
+      "valid": 0.125
+    },
+    "noop@8.0": {
+      "dist": {
+        "locate": 2,
+        "modify": 0,
+        "none": 6
+      },
+      "modify": 0.0,
+      "locate": 0.25,
+      "valid": 0.25
+    },
+    "full@20.0": {
+      "dist": {
+        "locate": 0,
+        "modify": 0,
+        "none": 8
+      },
+      "modify": 0.0,
+      "locate": 0.0,
+      "valid": 0.0
+    },
+    "dJ@20.0": {
+      "dist": {
+        "locate": 0,
+        "modify": 0,
+        "none": 8
+      },
+      "modify": 0.0,
+      "locate": 0.0,
+      "valid": 0.0
+    },
+    "dperp@20.0": {
+      "dist": {
+        "locate": 2,
+        "modify": 0,
+        "none": 6
+      },
+      "modify": 0.0,
+      "locate": 0.25,
+      "valid": 0.25
+    },
+    "rand_row@20.0": {
+      "dist": {
+        "locate": 1,
+        "modify": 0,
+        "none": 7
+      },
+      "modify": 0.0,
+      "locate": 0.125,
+      "valid": 0.125
+    },
+    "rand_ker@20.0": {
+      "dist": {
+        "locate": 1,
+        "modify": 0,
+        "none": 7
+      },
+      "modify": 0.0,
+      "locate": 0.125,
+      "valid": 0.125
+    },
+    "noop@20.0": {
+      "dist": {
+        "locate": 2,
+        "modify": 0,
+        "none": 6
+      },
+      "modify": 0.0,
+      "locate": 0.25,
+      "valid": 0.25
+    }
+  }
+}

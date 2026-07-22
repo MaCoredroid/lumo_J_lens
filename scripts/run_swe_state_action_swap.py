@@ -41,13 +41,17 @@ _JD = _load("jspace_decompose", "scripts/jspace_decompose.py")
 
 
 def classify(text: str) -> str:
-    loc = sum(text.count(k) for k in LOC_KW)
-    mod = sum(text.count(k) for k in MOD_KW)
-    if mod > loc:
-        return "modify"
-    if loc > mod:
-        return "locate"
-    return "none"
+    """Classify by the EARLIEST action keyword (the first thing the agent moves to do)."""
+    best_pos, best = len(text) + 1, "none"
+    for kw in LOC_KW:
+        i = text.find(kw)
+        if 0 <= i < best_pos:
+            best_pos, best = i, "locate"
+    for kw in MOD_KW:
+        i = text.find(kw)
+        if 0 <= i < best_pos:
+            best_pos, best = i, "modify"
+    return best
 
 
 def _split(prompts):
@@ -64,7 +68,7 @@ def _split(prompts):
     return train, test
 
 
-def run(llm, *, band: list[int], n_train: int, n_test: int, alpha: float) -> dict[str, Any]:
+def run(llm, *, band: list[int], n_train: int, n_test: int, alphas: list[float], force_cmd: bool = False) -> dict[str, Any]:
     import torch
 
     tok = llm.get_tokenizer()
@@ -96,48 +100,60 @@ def run(llm, *, band: list[int], n_train: int, n_test: int, alpha: float) -> dic
         del J_L
         torch.cuda.empty_cache()
 
-    # per-layer J/non-J split of the concept direction, each scaled to alpha * ||residual[L]|| (norm-matched)
-    variants = {c: {} for c in ["full", "dJ", "dperp", "rand_row", "rand_ker", "noop"]}
+    # base J/non-J directions, NORM-MATCHED at the concept-difference scale (like the factual case).
+    # Injection = alpha * base; sweep alpha to find the window (too small -> recovers, too big -> garbles).
+    bdir = {c: {} for c in ["full", "dJ", "dperp", "rand_row", "rand_ker"]}
+    diag = []
     for L in band:
         P_J = projectors[L]
         dJ, dperp = _JD.decompose(delta[L], P_J)
-        scale = alpha * float(torch.linalg.norm(mloc[L]))         # target injection norm
-        def unit(x):
-            n = torch.linalg.norm(x)
-            return x * (scale / n) if n > 1e-6 else x
-        rr, rk = _JD.random_in_subspaces(P_J, torch.tensor(scale), seed_vec=torch.flip(delta[L], dims=[0]))
-        variants["full"][L] = unit(delta[L])
-        variants["dJ"][L] = unit(dJ)
-        variants["dperp"][L] = unit(dperp)
-        variants["rand_row"][L] = rr
-        variants["rand_ker"][L] = rk
-        variants["noop"][L] = torch.zeros_like(delta[L])
+        dJ_nm, dperp_nm = _JD.norm_match(dJ, dperp)                # both at sqrt(||dJ||*||dperp||)
+        g = float(torch.linalg.norm(dJ_nm))
+        rr, rk = _JD.random_in_subspaces(P_J, torch.tensor(g), seed_vec=torch.flip(delta[L], dims=[0]))
+        bdir["full"][L] = delta[L]
+        bdir["dJ"][L] = dJ_nm
+        bdir["dperp"][L] = dperp_nm
+        bdir["rand_row"][L] = rr
+        bdir["rand_ker"][L] = rk
+        if L in (16, 28, 40):
+            diag.append({"layer": L, "norm_delta": round(float(torch.linalg.norm(delta[L])), 2),
+                         "norm_dJ": round(float(torch.linalg.norm(dJ)), 2),
+                         "norm_dperp": round(float(torch.linalg.norm(dperp)), 2),
+                         "norm_residual": round(float(torch.linalg.norm(mloc[L])), 2)})
 
-    conds = list(variants)
-    dist = {c: Counter_like() for c in ["baseline"] + conds}
+    conds = ["full", "dJ", "dperp", "rand_row", "rand_ker", "noop"]
+    dist = {k: Counter_like() for k in ["baseline"] + [f"{c}@{a}" for a in alphas for c in conds]}
     per_trial = []
+    # force the agent to the command-choice point so the NEXT tokens are the action itself
+    # (tightest test: inject the concept right where the command is chosen, read it immediately).
+    preamble = tok.encode("</think>\n\n<tool_call>\n<function=run_shell_command>\n<parameter=command>\n", add_special_tokens=False)
+    gen_tokens = 90 if not force_cmd else 18
+
     for p in test:
-        ids, text = p["token_ids"], tok.decode(p["token_ids"])
-        base = classify(_P.generate_text(llm, ids, text, max_tokens=110))
+        ids0 = p["token_ids"]
+        ids = ids0 + preamble if force_cmd else ids0
+        text = tok.decode(ids)
+        base = classify(_P.generate_text(llm, ids, text, max_tokens=gen_tokens))
         dist["baseline"].add(base)
         row = {"task": p["metadata"]["task"], "turn": p["metadata"]["turn"], "baseline": base, "res": {}}
-        for c in conds:
-            inj = {L: [(-1, variants[c][L].to(torch.bfloat16))] for L in band}
-            act = classify(_P.generate_text(llm, ids, text, max_tokens=110, inject=inj))
-            dist[c].add(act)
-            row["res"][c] = act
+        for a in alphas:
+            for c in conds:
+                injd = {} if c == "noop" else {L: [(-1, (a * bdir[c][L]).to(torch.bfloat16))] for L in band}
+                act = classify(_P.generate_text(llm, ids, text, max_tokens=gen_tokens, inject=injd))
+                dist[f"{c}@{a}"].add(act)
+                row["res"][f"{c}@{a}"] = act
         per_trial.append(row)
 
-    def modify_rate(c):
-        d = dist[c]
-        return round(d.c["modify"] / max(1, d.total()), 3)
+    def rates(k):
+        d = dist[k].c
+        n = max(1, sum(d.values()))
+        return {"dist": d, "modify": round(d["modify"] / n, 3), "locate": round(d["locate"] / n, 3),
+                "valid": round((d["locate"] + d["modify"]) / n, 3)}
 
     return {
-        "kind": "swe_state_action_swap", "band": [band[0], band[-1]], "alpha": alpha,
+        "kind": "swe_state_action_swap", "band": [band[0], band[-1]], "alphas": alphas, "force_cmd": force_cmd,
         "n_train_locate": len(loc_tr), "n_train_modify": len(mod_tr), "n_test": len(test),
-        "action_dist": {c: dist[c].c for c in dist},
-        "modify_rate": {c: modify_rate(c) for c in dist},
-        "per_trial": per_trial,
+        "norm_diag": diag, "summary": {k: rates(k) for k in dist}, "per_trial": per_trial,
     }
 
 
@@ -155,22 +171,27 @@ def main() -> int:
     ap.add_argument("--band", type=int, nargs=2, default=[16, 40])
     ap.add_argument("--n-train", type=int, default=20)
     ap.add_argument("--n-test", type=int, default=15)
-    ap.add_argument("--alpha", type=float, default=1.0)
+    ap.add_argument("--alphas", type=float, nargs="+", default=[3.0, 8.0, 20.0])
+    ap.add_argument("--force-cmd", action="store_true", help="inject at the command-choice point; read the immediate command")
     ap.add_argument("--out", type=Path, default=ROOT / "artifacts/swe-state-action-swap.json")
     args = ap.parse_args()
 
     llm = _P.load_llm(max_model_len=32768, gpu_mem=0.82)
     band = list(range(args.band[0], args.band[1] + 1))
-    result = run(llm, band=band, n_train=args.n_train, n_test=args.n_test, alpha=args.alpha)
+    result = run(llm, band=band, n_train=args.n_train, n_test=args.n_test, alphas=args.alphas, force_cmd=args.force_cmd)
     trials = result.pop("per_trial")
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(result, indent=2) + "\n")
     (args.out.parent / (args.out.stem + "-trials.json")).write_text(json.dumps(trials))
-    print(f"n_train_loc={result['n_train_locate']} n_train_mod={result['n_train_modify']} "
-          f"n_test={result['n_test']} alpha={result['alpha']} band={result['band']}")
-    print("condition       action_dist{locate,modify,none}   modify_rate")
-    for c in ["baseline", "full", "dJ", "dperp", "rand_row", "rand_ker", "noop"]:
-        print(f"  {c:12s} {result['action_dist'][c]}   {result['modify_rate'][c]}")
+    s = result["summary"]
+    print(f"n_test={result['n_test']} band={result['band']} force_cmd={result['force_cmd']} alphas={result['alphas']}")
+    print("norm diag:", result["norm_diag"])
+    print(f"  baseline: modify={s['baseline']['modify']} locate={s['baseline']['locate']} valid={s['baseline']['valid']}  {s['baseline']['dist']}")
+    print(f"{'key':18s} {'modify':>7s} {'locate':>7s} {'valid':>7s}")
+    for a in result["alphas"]:
+        for c in ["full", "dJ", "dperp", "rand_row", "rand_ker", "noop"]:
+            k = f"{c}@{a}"
+            print(f"  {k:18s} {s[k]['modify']:>7.3f} {s[k]['locate']:>7.3f} {s[k]['valid']:>7.3f}")
     return 0
 
 
