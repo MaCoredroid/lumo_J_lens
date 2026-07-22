@@ -1,0 +1,80 @@
+{
+  "kind": "swe_action_steer",
+  "band": [
+    16,
+    40
+  ],
+  "alphas": [
+    2.0,
+    6.0
+  ],
+  "n_train": 30,
+  "n_test": 15,
+  "base_margin_mean": 9.811,
+  "shift": {
+    "caa_full@2.0": {
+      "mean_shift": -11.035,
+      "n": 15
+    },
+    "caa_dJ@2.0": {
+      "mean_shift": -9.81,
+      "n": 15
+    },
+    "caa_dperp@2.0": {
+      "mean_shift": -9.881,
+      "n": 15
+    },
+    "lda_dJ@2.0": {
+      "mean_shift": -16.389,
+      "n": 15
+    },
+    "lda_dperp@2.0": {
+      "mean_shift": -1.43,
+      "n": 15
+    },
+    "rand_row@2.0": {
+      "mean_shift": -9.81,
+      "n": 15
+    },
+    "rand_ker@2.0": {
+      "mean_shift": 7.937,
+      "n": 15
+    },
+    "noop@2.0": {
+      "mean_shift": 0.0,
+      "n": 15
+    },
+    "caa_full@6.0": {
+      "mean_shift": -9.81,
+      "n": 15
+    },
+    "caa_dJ@6.0": {
+      "mean_shift": -9.81,
+      "n": 15
+    },
+    "caa_dperp@6.0": {
+      "mean_shift": -9.81,
+      "n": 15
+    },
+    "lda_dJ@6.0": {
+      "mean_shift": -9.81,
+      "n": 15
+    },
+    "lda_dperp@6.0": {
+      "mean_shift": -9.81,
+      "n": 15
+    },
+    "rand_row@6.0": {
+      "mean_shift": -9.81,
+      "n": 15
+    },
+    "rand_ker@6.0": {
+      "mean_shift": -9.81,
+      "n": 15
+    },
+    "noop@6.0": {
+      "mean_shift": 0.0,
+      "n": 15
+    }
+  }
+}

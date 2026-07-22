@@ -78,3 +78,40 @@ not steer the agent's action.** Stronger steering methods remain open.
 Scripts: `run_swe_state_action_swap.py` (+ `.sh`), `run_jlens_patch.py` (chunk-aware write hook),
 `jspace_decompose.py`. Results: `artifacts/swe-sa-sweep.json`, `swe-sa-diag.json`, `swe-sa-forcecmd.json`.
 Contrast: the positive factual result in `docs/JSPACE_SWAP_REPRODUCTION.md`.
+
+## Decisive test — trained vectors + sensitive logit metric (2026-07-22)
+
+To rule out that the null was an artifact of (a) the crude mean-difference vector or (b) the coarse
+free-generation metric, we redid it with both fixed: **trained** steering vectors (CAA contrastive
+mean-difference and a covariance-aware shrinkage-LDA direction) and a **sensitive logit metric** —
+the action-propensity margin `logprob(grep) − logprob(sed)` at the forced command position (baseline
++9.8 on locate turns), read directly from the next-token logprobs (no generation). J/non-J split,
+norm-matched, injected across L16–40; random-in-row(J)/ker(J) controls; α ∈ {2, 6}; n=15 held-out
+locate turns (`run_swe_action_steer.py`, `artifacts/swe-action-steer.json`).
+
+**The null holds for the principled vector.** At α=2 (mean margin-shift toward modify; more negative
+= more modify):
+
+| condition | mean shift | reading |
+|---|---:|---|
+| CAA Δ_J | −9.81 | **identical, per-turn, to random row(J)** → no concept-specificity |
+| CAA Δ_⊥ | −9.88 | ≈ Δ_J; inconsistent sign across turns |
+| random in row(J) | −9.81 | = CAA Δ_J |
+| random in ker(J) | +7.94 | *less* disruptive (non-J directions perturb less) |
+| LDA Δ_J | −16.39 | driven entirely by django turns (−30 to −45); astropy just garbles |
+| LDA Δ_⊥ | −1.43 | ~no shift |
+| no-op | 0.00 | sanity |
+
+At α=6 every condition = −9.81 (total garble). The decisive facts: **CAA Δ_J is bit-for-bit
+identical to a random row(J) vector on every turn** — so the J-space *concept* component carries no
+action-steering signal beyond a generic output-sensitive perturbation (it garbles the output; the
+metric saturates at −base_margin). CAA Δ_J ≈ CAA Δ_⊥, and neither steers systematically toward
+modify. The only positive signal (LDA Δ_J) is **task-specific** (django only, not astropy) and
+confounded with overfitting the 5120-dim covariance from 60 samples — not general concept steering.
+
+**Conclusion (rigorous):** the earlier null was NOT a metric or weak-vector artifact. Even a trained
+steering vector read with a sensitive logit metric shows no reliable J-space concept-steering of the
+agent's action; J-space injections merely garble (output-sensitive), non-J perturb less, and neither
+biases toward the counterfactual action. Correlational faithfulness ≠ causal control — confirmed.
+(Open wrinkle: the overfit LDA-django effect hints that a *task-tuned* direction might steer; a
+general concept-steering effect is absent.) Scripts: `run_swe_action_steer.py`, `run_swe_action_probe.py`.
