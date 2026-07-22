@@ -97,6 +97,11 @@ it.** And it cleanly separates the two regimes where naive intuition would confl
 
 - Factual repro is qualitative (mechanism), not the exact 61/28 — needs trained residual concept
   probes + Anthropic's precise protocol.
-- The state→action null is "*this* concept vector doesn't steer," not "nothing can": the overfit
-  **LDA-django** hint suggests a *task-tuned* direction might steer — one run would characterize it.
-- Small n in the causal tests; coarse SWE action space; single-locus prefill injection.
+- The state→action null is airtight for concept-vector steering: the one apparent positive
+  (LDA-django) was **characterized and closed as an overfit + metric artifact** — under LDA-J the
+  agent still emits LOCATE actions (rephrased "grep_search tool"), zero modify commands, and the
+  effect collapses to garbage under leave-django-out (`JSPACE_STATE_ACTION.md`). Methodological
+  lesson: a logit margin can move without the action moving; generate the actual action to be sure.
+- Small n in the causal tests; coarse SWE action space; single-locus prefill injection. (A
+  fundamentally different intervention — e.g. persistent decode-time steering — remains untested, but
+  no simple concept-vector edit steers this agent.)

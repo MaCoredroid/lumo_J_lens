@@ -1,0 +1,339 @@
+{
+  "kind": "lda_characterize",
+  "alpha": 2.0,
+  "n_train": 36,
+  "n_django_train_loc": 25,
+  "n_django_train_mod": 12,
+  "by_group": {
+    "django": {
+      "baseline": {
+        "locate": 6,
+        "modify": 0,
+        "both": 0,
+        "garbage/neutral": 0
+      },
+      "caa_all_dJ": {
+        "locate": 0,
+        "modify": 0,
+        "both": 0,
+        "garbage/neutral": 6
+      },
+      "lda_all_dJ": {
+        "locate": 4,
+        "modify": 0,
+        "both": 0,
+        "garbage/neutral": 2
+      },
+      "lda_nodj_dJ": {
+        "locate": 1,
+        "modify": 0,
+        "both": 0,
+        "garbage/neutral": 5
+      }
+    },
+    "astropy": {
+      "baseline": {
+        "locate": 5,
+        "modify": 0,
+        "both": 0,
+        "garbage/neutral": 1
+      },
+      "caa_all_dJ": {
+        "locate": 1,
+        "modify": 0,
+        "both": 0,
+        "garbage/neutral": 5
+      },
+      "lda_all_dJ": {
+        "locate": 4,
+        "modify": 1,
+        "both": 0,
+        "garbage/neutral": 1
+      },
+      "lda_nodj_dJ": {
+        "locate": 1,
+        "modify": 0,
+        "both": 0,
+        "garbage/neutral": 5
+      }
+    }
+  },
+  "trials": [
+    {
+      "group": "django",
+      "task": "django__django-13297",
+      "turn": 1,
+      "cmd": {
+        "baseline": {
+          "class": "locate",
+          "gen": "find . -type f -name \"*.py\" | head -20 && echo \"---\" &&"
+        },
+        "caa_all_dJ": {
+          "class": "garbage/neutral",
+          "gen": "  </parameter> <parameter=description> Check current directory </param"
+        },
+        "lda_all_dJ": {
+          "class": "garbage/neutral",
+          "gen": " use the todo_write tool to plan this task </parameter> <parameter=des"
+        },
+        "lda_nodj_dJ": {
+          "class": "garbage/neutral",
+          "gen": "  </parameter> <parameter=description> Initial workspace check </param"
+        }
+      }
+    },
+    {
+      "group": "django",
+      "task": "django__django-13297",
+      "turn": 2,
+      "cmd": {
+        "baseline": {
+          "class": "locate",
+          "gen": "cd /testbed && grep -r \"SimpleLazyObject\" django/ --include=\"*.py"
+        },
+        "caa_all_dJ": {
+          "class": "garbage/neutral",
+          "gen": "  </parameter> <parameter=description>  </parameter> </function> </too"
+        },
+        "lda_all_dJ": {
+          "class": "locate",
+          "gen": " use the grep_search tool instead </parameter> <parameter=description>"
+        },
+        "lda_nodj_dJ": {
+          "class": "garbage/neutral",
+          "gen": "  </parameter> <parameter=description> Placeholder </parameter> </func"
+        }
+      }
+    },
+    {
+      "group": "django",
+      "task": "django__django-13297",
+      "turn": 3,
+      "cmd": {
+        "baseline": {
+          "class": "locate",
+          "gen": "cd /testbed && cat django/views/generic/base.py </parameter> <paramete"
+        },
+        "caa_all_dJ": {
+          "class": "garbage/neutral",
+          "gen": "  </think>  <tool_call> <function=read_file> <parameter=file_path> /te"
+        },
+        "lda_all_dJ": {
+          "class": "locate",
+          "gen": " use the read_file tool instead </parameter> <parameter=description> U"
+        },
+        "lda_nodj_dJ": {
+          "class": "garbage/neutral",
+          "gen": "  </think>  <tool_call> <function=read_file> <parameter=file_path> /te"
+        }
+      }
+    },
+    {
+      "group": "django",
+      "task": "django__django-13297",
+      "turn": 5,
+      "cmd": {
+        "baseline": {
+          "class": "locate",
+          "gen": "grep -r \"_wrap_url_kwargs\\|wrap_url_kwargs\" /testbed/tests/ --include"
+        },
+        "caa_all_dJ": {
+          "class": "garbage/neutral",
+          "gen": "  </parameter> </function> </tool_call>"
+        },
+        "lda_all_dJ": {
+          "class": "locate",
+          "gen": " use the grep_search tool instead </parameter> <parameter=description>"
+        },
+        "lda_nodj_dJ": {
+          "class": "garbage/neutral",
+          "gen": "  </parameter> <parameter=description> Check for related tests </param"
+        }
+      }
+    },
+    {
+      "group": "django",
+      "task": "django__django-13297",
+      "turn": 6,
+      "cmd": {
+        "baseline": {
+          "class": "locate",
+          "gen": "grep -r \"get_context_data\\|TemplateView\\|_wrap_url_kwargs\\|Removed"
+        },
+        "caa_all_dJ": {
+          "class": "garbage/neutral",
+          "gen": "  </parameter> <parameter=description> Empty command </parameter> </fu"
+        },
+        "lda_all_dJ": {
+          "class": "locate",
+          "gen": " use the grep_search tool instead </parameter> <parameter=description>"
+        },
+        "lda_nodj_dJ": {
+          "class": "garbage/neutral",
+          "gen": "  </parameter> <parameter=description> Empty command </parameter> </fu"
+        }
+      }
+    },
+    {
+      "group": "django",
+      "task": "django__django-13297",
+      "turn": 7,
+      "cmd": {
+        "baseline": {
+          "class": "locate",
+          "gen": "grep -r \"TemplateView\\|get_context_data\" /testbed/tests/view_tests/ --"
+        },
+        "caa_all_dJ": {
+          "class": "garbage/neutral",
+          "gen": "  </parameter> <parameter=description> Empty command </parameter> </fu"
+        },
+        "lda_all_dJ": {
+          "class": "garbage/neutral",
+          "gen": " use the glob tool instead </parameter> <parameter=description> Search"
+        },
+        "lda_nodj_dJ": {
+          "class": "locate",
+          "gen": "     [RESPONSE]     find /testbed/tests/view_tests -name \"*.py\""
+        }
+      }
+    },
+    {
+      "group": "astropy",
+      "task": "astropy__astropy-14539",
+      "turn": 1,
+      "cmd": {
+        "baseline": {
+          "class": "locate",
+          "gen": "find /testbed -type f -name \"*.py\" | xargs grep -l \"FIT"
+        },
+        "caa_all_dJ": {
+          "class": "garbage/neutral",
+          "gen": "  </parameter> <parameter=description>  </parameter> </function> </too"
+        },
+        "lda_all_dJ": {
+          "class": "locate",
+          "gen": " use the find tool instead </parameter> <parameter=description> placeh"
+        },
+        "lda_nodj_dJ": {
+          "class": "garbage/neutral",
+          "gen": "  </parameter> <parameter=description>  </parameter> </function> </too"
+        }
+      }
+    },
+    {
+      "group": "astropy",
+      "task": "astropy__astropy-14539",
+      "turn": 2,
+      "cmd": {
+        "baseline": {
+          "class": "garbage/neutral",
+          "gen": "cd /testbed && python -c \" from astropy.io import fits col = fits"
+        },
+        "caa_all_dJ": {
+          "class": "garbage/neutral",
+          "gen": "  </parameter> <parameter=description>  </parameter> </function> </too"
+        },
+        "lda_all_dJ": {
+          "class": "garbage/neutral",
+          "gen": " use todo_write to plan this task </parameter> <parameter=description>"
+        },
+        "lda_nodj_dJ": {
+          "class": "garbage/neutral",
+          "gen": "  </parameter> <parameter=description> Empty </parameter> </function>"
+        }
+      }
+    },
+    {
+      "group": "astropy",
+      "task": "astropy__astropy-14539",
+      "turn": 3,
+      "cmd": {
+        "baseline": {
+          "class": "locate",
+          "gen": "cd /testbed && grep -n \"VLA\\|VARY\\|variable.*length"
+        },
+        "caa_all_dJ": {
+          "class": "garbage/neutral",
+          "gen": "  </parameter> <parameter=description> Empty </parameter> </function>"
+        },
+        "lda_all_dJ": {
+          "class": "locate",
+          "gen": " use the read_file tool instead </parameter> <parameter=description> S"
+        },
+        "lda_nodj_dJ": {
+          "class": "garbage/neutral",
+          "gen": "  </parameter> <parameter=description> Empty command </parameter> </fu"
+        }
+      }
+    },
+    {
+      "group": "astropy",
+      "task": "astropy__astropy-14539",
+      "turn": 5,
+      "cmd": {
+        "baseline": {
+          "class": "locate",
+          "gen": "grep -n \"class TableDataDiff\" astropy/io/fits/diff.py </parameter"
+        },
+        "caa_all_dJ": {
+          "class": "garbage/neutral",
+          "gen": "  </parameter> <parameter=description> Empty command </parameter> </fu"
+        },
+        "lda_all_dJ": {
+          "class": "locate",
+          "gen": " use grep -n \"class TableDataDiff\" astropy/io/fits/diff.py </"
+        },
+        "lda_nodj_dJ": {
+          "class": "garbage/neutral",
+          "gen": "  </parameter> <parameter=description> Empty command </parameter> </fu"
+        }
+      }
+    },
+    {
+      "group": "astropy",
+      "task": "astropy__astropy-14539",
+      "turn": 6,
+      "cmd": {
+        "baseline": {
+          "class": "locate",
+          "gen": "sed -n '1227,1577p' astropy/io/fits"
+        },
+        "caa_all_dJ": {
+          "class": "locate",
+          "gen": "  sed -n '1227,1400p' astropy/io/f"
+        },
+        "lda_all_dJ": {
+          "class": "locate",
+          "gen": " use sed to read lines 1227-1400 </parameter> "
+        },
+        "lda_nodj_dJ": {
+          "class": "locate",
+          "gen": "  sed -n '1227,1577p' astropy/io/f"
+        }
+      }
+    },
+    {
+      "group": "astropy",
+      "task": "astropy__astropy-14539",
+      "turn": 7,
+      "cmd": {
+        "baseline": {
+          "class": "locate",
+          "gen": "grep -rn '\"Q\"' astropy/io/fits/ --include=\"*.py\" | grep"
+        },
+        "caa_all_dJ": {
+          "class": "garbage/neutral",
+          "gen": "  </parameter> </function> </tool_call>"
+        },
+        "lda_all_dJ": {
+          "class": "modify",
+          "gen": " use the edit tool </parameter> <parameter=description> Check for VLA "
+        },
+        "lda_nodj_dJ": {
+          "class": "garbage/neutral",
+          "gen": "  </parameter> </function> </tool_call>"
+        }
+      }
+    }
+  ]
+}

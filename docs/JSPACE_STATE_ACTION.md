@@ -113,5 +113,24 @@ confounded with overfitting the 5120-dim covariance from 60 samples — not gene
 steering vector read with a sensitive logit metric shows no reliable J-space concept-steering of the
 agent's action; J-space injections merely garble (output-sensitive), non-J perturb less, and neither
 biases toward the counterfactual action. Correlational faithfulness ≠ causal control — confirmed.
-(Open wrinkle: the overfit LDA-django effect hints that a *task-tuned* direction might steer; a
-general concept-steering effect is absent.) Scripts: `run_swe_action_steer.py`, `run_swe_action_probe.py`.
+Scripts: `run_swe_action_steer.py`, `run_swe_action_probe.py`.
+
+## LDA-django wrinkle — closed as an artifact (2026-07-22)
+
+The one apparent positive (LDA Δ_J shifting the grep−sed margin toward sed, but only on django) was
+characterized two ways (`run_swe_lda_characterize.py`): (1) train LDA *excluding* django and test on
+django (leave-django-out); (2) generate the ACTUAL command, not just the margin.
+
+- **The margin shift was not a modify action.** Under LDA Δ_J on django test turns, the generated
+  commands are *`"use the grep_search tool instead"`*, *`"use the read_file tool instead"`*,
+  *`"use the glob tool instead"`* — **still LOCATE actions**, rephrased from shell `grep` to the
+  `grep_search`/`read_file` tools. That drops the literal `grep` token, which moved the grep−sed
+  margin *without changing the action type*. **Zero modify commands** on django (0/6); 1/6 on
+  astropy (noise). Baseline was 6/6 locate.
+- **Leave-django-out collapses to garbage** (django `lda_nodj_dJ`: 5/6 garbage) — no generalizable
+  steering direction.
+
+**Verdict:** overfitting + a flawed proxy, not real steering. The state→action null is **airtight**:
+no J-space (or non-J) concept injection — CAA or LDA — produces a genuine locate→modify action.
+**Methodological lesson:** a logit margin can move without the action moving (phrasing shifts), so
+generating the actual action is the ground truth. Result: `artifacts/swe-lda-characterize.json`.
