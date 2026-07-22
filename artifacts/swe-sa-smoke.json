@@ -1,0 +1,57 @@
+{
+  "kind": "swe_state_action_swap",
+  "band": [
+    16,
+    40
+  ],
+  "alpha": 1.0,
+  "n_train_locate": 4,
+  "n_train_modify": 4,
+  "n_test": 3,
+  "action_dist": {
+    "baseline": {
+      "locate": 3,
+      "modify": 0,
+      "none": 0
+    },
+    "full": {
+      "locate": 1,
+      "modify": 0,
+      "none": 2
+    },
+    "dJ": {
+      "locate": 3,
+      "modify": 0,
+      "none": 0
+    },
+    "dperp": {
+      "locate": 1,
+      "modify": 0,
+      "none": 2
+    },
+    "rand_row": {
+      "locate": 2,
+      "modify": 0,
+      "none": 1
+    },
+    "rand_ker": {
+      "locate": 3,
+      "modify": 0,
+      "none": 0
+    },
+    "noop": {
+      "locate": 3,
+      "modify": 0,
+      "none": 0
+    }
+  },
+  "modify_rate": {
+    "baseline": 0.0,
+    "full": 0.0,
+    "dJ": 0.0,
+    "dperp": 0.0,
+    "rand_row": 0.0,
+    "rand_ker": 0.0,
+    "noop": 0.0
+  }
+}
