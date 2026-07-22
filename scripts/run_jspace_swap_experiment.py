@@ -36,8 +36,8 @@ _P = _load("run_jlens_patch", "scripts/run_jlens_patch.py")
 _JD = _load("jspace_decompose", "scripts/jspace_decompose.py")
 
 
-def _clean_items(llm, tok) -> list[dict]:
-    items = json.loads(MULTIHOP.read_text())["items"]
+def _clean_items(llm, tok, data_path: Path = MULTIHOP) -> list[dict]:
+    items = json.loads(Path(data_path).read_text())["items"]
     clean = []
     for it in items:
         ids = tok.encode(it["prompt"], add_special_tokens=True)
@@ -61,14 +61,22 @@ def _minimal_pairs(clean: list[dict], *, max_diff: int) -> list[tuple[dict, dict
     return pairs
 
 
-def run(llm, *, band: list[int], max_diff: int, max_pairs: int) -> dict[str, Any]:
+def run(llm, *, band: list[int], max_diff: int, max_pairs: int, data_path: Path = MULTIHOP) -> dict[str, Any]:
     import torch
 
     tok = llm.get_tokenizer()
-    clean = _clean_items(llm, tok)
+    clean = _clean_items(llm, tok, data_path)
     pairs = _minimal_pairs(clean, max_diff=max_diff)[:max_pairs]
 
-    projectors = {L: _JD.row_space_projector(_JD.load_J(L, device="cuda"))[0] for L in band}
+    # compute each J-space projector on GPU (fast SVD), then move to CPU so it doesn't
+    # compete with the model for VRAM; decomposition runs on CPU (captures are already CPU).
+    projectors = {}
+    for L in band:
+        J_L = _JD.load_J(L, device="cuda")
+        P_J, _, _ = _JD.row_space_projector(J_L)
+        projectors[L] = P_J.cpu()
+        del J_L, P_J
+        torch.cuda.empty_cache()
 
     conditions = ["full", "dJ_raw", "dperp_raw", "dJ_nm", "dperp_nm", "rand_row_nm", "rand_ker_nm", "noop"]
     agg = {c: {"strict": 0, "loose": 0, "n": 0} for c in conditions}
@@ -83,7 +91,7 @@ def run(llm, *, band: list[int], max_diff: int, max_pairs: int) -> dict[str, Any
         for L in band:
             P_J = projectors[L]
             for p in diff:
-                delta = (h_pp[L][p] - h_p[L][p]).to("cuda", dtype=torch.float32)
+                delta = (h_pp[L][p] - h_p[L][p]).float()  # CPU (captures are on CPU)
                 dJ, dperp = _JD.decompose(delta, P_J)
                 dJ_nm, dperp_nm = _JD.norm_match(dJ, dperp)
                 rr, rk = _JD.random_in_subspaces(P_J, torch.linalg.norm(dJ_nm), seed_vec=torch.flip(delta, dims=[0]))
@@ -113,12 +121,13 @@ def main() -> int:
     ap.add_argument("--band", type=int, nargs=2, default=[16, 40])
     ap.add_argument("--max-diff", type=int, default=3)
     ap.add_argument("--max-pairs", type=int, default=40)
+    ap.add_argument("--data", type=Path, default=MULTIHOP)
     ap.add_argument("--out", type=Path, default=ROOT / "artifacts/jspace-swap-experiment.json")
     args = ap.parse_args()
 
     llm = _P.load_llm()
     band = list(range(args.band[0], args.band[1] + 1))
-    result = run(llm, band=band, max_diff=args.max_diff, max_pairs=args.max_pairs)
+    result = run(llm, band=band, max_diff=args.max_diff, max_pairs=args.max_pairs, data_path=args.data)
     trials = result.pop("per_trial")
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(result, indent=2) + "\n")
