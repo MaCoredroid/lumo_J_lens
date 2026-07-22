@@ -1,0 +1,129 @@
+{
+  "p_text": "Fact: The chemical symbol for the element with atomic number 29 is ",
+  "pprime_text": "Fact: The chemical symbol for the element with atomic number 26 is ",
+  "C": " Cu",
+  "tid_C": 25616,
+  "Cp": "2",
+  "tid_Cp": 17,
+  "both_hops_distinct": true,
+  "zero_ablate_layer": 28,
+  "zero_ablate_token": "2",
+  "zero_ablate_changed": true,
+  "transplant_sweep": [
+    {
+      "layer": 10,
+      "token": "2",
+      "flipped_to_Cp": true,
+      "changed": true
+    },
+    {
+      "layer": 12,
+      "token": "2",
+      "flipped_to_Cp": true,
+      "changed": true
+    },
+    {
+      "layer": 14,
+      "token": "2",
+      "flipped_to_Cp": true,
+      "changed": true
+    },
+    {
+      "layer": 16,
+      "token": "2",
+      "flipped_to_Cp": true,
+      "changed": true
+    },
+    {
+      "layer": 18,
+      "token": " Cu",
+      "flipped_to_Cp": false,
+      "changed": false
+    },
+    {
+      "layer": 20,
+      "token": "2",
+      "flipped_to_Cp": true,
+      "changed": true
+    },
+    {
+      "layer": 22,
+      "token": " Cu",
+      "flipped_to_Cp": false,
+      "changed": false
+    },
+    {
+      "layer": 24,
+      "token": "2",
+      "flipped_to_Cp": true,
+      "changed": true
+    },
+    {
+      "layer": 26,
+      "token": "2",
+      "flipped_to_Cp": true,
+      "changed": true
+    },
+    {
+      "layer": 28,
+      "token": "2",
+      "flipped_to_Cp": true,
+      "changed": true
+    },
+    {
+      "layer": 30,
+      "token": "2",
+      "flipped_to_Cp": true,
+      "changed": true
+    },
+    {
+      "layer": 32,
+      "token": "2",
+      "flipped_to_Cp": true,
+      "changed": true
+    },
+    {
+      "layer": 34,
+      "token": "2",
+      "flipped_to_Cp": true,
+      "changed": true
+    },
+    {
+      "layer": 36,
+      "token": "2",
+      "flipped_to_Cp": true,
+      "changed": true
+    },
+    {
+      "layer": 38,
+      "token": "2",
+      "flipped_to_Cp": true,
+      "changed": true
+    },
+    {
+      "layer": 40,
+      "token": "2",
+      "flipped_to_Cp": true,
+      "changed": true
+    },
+    {
+      "layer": 42,
+      "token": "2",
+      "flipped_to_Cp": true,
+      "changed": true
+    },
+    {
+      "layer": 44,
+      "token": "2",
+      "flipped_to_Cp": true,
+      "changed": true
+    },
+    {
+      "layer": 46,
+      "token": "2",
+      "flipped_to_Cp": true,
+      "changed": true
+    }
+  ],
+  "n_layers_flipped_to_Cp": 17
+}
